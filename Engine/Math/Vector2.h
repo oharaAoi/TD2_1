@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 
 struct Vector2 final {
 	float x;
@@ -66,5 +67,9 @@ struct Vector2 final {
 		x *= obj;
 		y *= obj;
 		return *this;
+	}
+
+	float Length() {
+		return std::sqrt((this->x * this->x) + (this->y * this->y));
 	}
 };

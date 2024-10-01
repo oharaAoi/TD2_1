@@ -10,12 +10,7 @@ void GameScene::Init() {
 	camera_ = std::make_unique<Camera>();
 
 	sphere_ = Engine::CreateSphere(16);
-
-	roughness_ = 0.5f;
-	metallic_ = 0.5f;
-
-	lightKind_ = 0;
-
+	
 	soundData_ = Engine::LoadSE("Resources/Audio/fanfare.wav");
 	bgmData_ = Engine::LoadBGM("Resources/Audio/fanfare.wav");
 }
@@ -58,6 +53,10 @@ void GameScene::Update() {
 
 	Vector2 joyStickLeft = Input::GetLeftJoyStick();
 	Vector2 joyStickRight = Input::GetRightJoyStick();
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+// ImGui
+//////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef _DEBUG
 	ImGui::Begin("Input");
 	ImGui::Text("LX : %f  LY : %f", joyStickLeft.x, joyStickLeft.y);
@@ -71,24 +70,7 @@ void GameScene::Update() {
 	}
 
 	ImGui::End();
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	// ImGui
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	ImGui::Begin("Setting");
-
-	if (ImGui::CollapsingHeader("materials")) {
-		ImGui::DragFloat("metallic", &metallic_, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("roughness", &roughness_, 0.01f, 0.0f, 1.0f);
-	}
-
-	ImGui::End();
 #endif
-
-	/*model_->ImGuiDraw("floor");
-	sphere_->ImGuiDraw("Sphere");
-	sphereModel_->ImGuiDraw("sphereModel");
-	teapotModel_->ImGuiDraw("teapot");*/
 }
 
 void GameScene::Draw() const {

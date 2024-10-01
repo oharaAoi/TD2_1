@@ -85,7 +85,9 @@ void TestScene::Draw() const {
 #pragma region Sprite
 
 	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	if (Input::GetPressPadTrigger(BUTTON_A)) {
 	sprite_->Draw();
+	}
 	
 #pragma endregion
 

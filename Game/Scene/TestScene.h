@@ -6,8 +6,6 @@
 #include "Engine/Utilities/DrawUtils.h"
 #include "Engine/GameObject/BaseGameObject.h"
 #include "Game/Camera/Camera.h"
-#include "Engine/ParticleSystem/Emitter.h"
-#include "Engine/ParticleSystem/ParticleField.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
 
 class TestScene 

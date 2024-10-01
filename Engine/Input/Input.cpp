@@ -212,32 +212,41 @@ int Input::GetWheel() {
 // ---------------------------------------------------------------
 // ↓　ゲームパッドのボタンの取得
 // ---------------------------------------------------------------
-bool Input::GetIsPadTrigger(int triggerNum) {
-	if ((gamepadState_.Gamepad.wButtons & triggerNum) &&
-		!(preGamepadState_.Gamepad.wButtons & triggerNum)) {
-
+bool Input::GetIsPadTrigger(const XInputButtons& bottons) {
+	if ((gamepadState_.Gamepad.wButtons & bottons) &&
+		!(preGamepadState_.Gamepad.wButtons & bottons)) {
 		return true;
 	}
 
 	return false;
 }
 
+bool Input::GetPressPadTrigger(const XInputButtons& bottons) {
+	if ((gamepadState_.Gamepad.wButtons & bottons) &&
+		(preGamepadState_.Gamepad.wButtons & bottons)) {
+		return true;
+	}
+	return false;
+}
+
 Vector2 Input::GetLeftJoyStick() {
-	float LX = gamepadState_.Gamepad.sThumbLX;
-	float LY = gamepadState_.Gamepad.sThumbLY;
+	Vector2 result;
+	result.x = static_cast<float>(gamepadState_.Gamepad.sThumbLX / std::numeric_limits<SHORT>::max());
+	result.y = static_cast<float>(gamepadState_.Gamepad.sThumbLY / std::numeric_limits<SHORT>::max());
 
-	if (std::abs(LX) < DEADZONE) LX = 0;
-	if (std::abs(LY) < DEADZONE) LY = 0;
-
-	return Vector2(LX, LY);
+	if (result.Length() < DEADZONE) {
+		result = {0,0};
+	}
+	return result;
 }
 
 Vector2 Input::GetRightJoyStick() {
-	float RX = gamepadState_.Gamepad.sThumbRX;
-	float RY = gamepadState_.Gamepad.sThumbRY;
+	Vector2 result;
+	result.x = static_cast<float>(gamepadState_.Gamepad.sThumbRX / std::numeric_limits<SHORT>::max());
+	result.y = static_cast<float>(gamepadState_.Gamepad.sThumbRY / std::numeric_limits<SHORT>::max());
 
-	if (std::abs(RX) < DEADZONE) RX = 0;
-	if (std::abs(RY) < DEADZONE) RY = 0;
-
-	return Vector2(RX, RY);
+	if (result.Length() < DEADZONE) {
+		result = { 0,0 };
+	}
+	return result;
 }

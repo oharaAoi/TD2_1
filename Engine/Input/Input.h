@@ -1,16 +1,34 @@
 #pragma once
 #define DIRECTINPUT_VERSION 0x0800
+#define NOMINMAX
 #include <dinput.h>
 #include <wrl.h>
 #include <memory>
 #include <cassert>
 #include <Xinput.h>
-
+#include <limits>
 #include "Engine/Math/Vector2.h"
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "Xinput.lib")
+
+enum XInputButtons {
+	DPAD_UP = 0x0001,
+	DPAD_DOWN = 0x0002,
+	DPAD_LEFT = 0x0004,
+	DPAD_RIGHT = 0x0008,
+	START = 0x0010,
+	BACK = 0x0020,
+	L_THUMB = 0x0040,
+	R_THUMB = 0x0080,
+	L_SHOULDER = 0x0100,
+	R_SHOULDER = 0x0200,
+	BUTTON_A = 0x1000,
+	BUTTON_B = 0x2000,
+	BUTTON_X = 0x4000,
+	BUTTON_Y = 0x8000
+};
 
 // デッドゾーン
 const float DEADZONE = 8000;
@@ -109,7 +127,9 @@ public: // 入力
 	// ↓　ゲームパッド
 	// ---------------------------------------------------------------
 	// ゲームパッドのボタンを取得
-	static bool GetIsPadTrigger(int triggerNum);
+	static bool GetIsPadTrigger(const XInputButtons& bottons);
+	// ゲームパッドのボタンを取得(長押し)
+	static bool GetPressPadTrigger(const XInputButtons& bottons);
 	// 左ジョイスティックの値の取得
 	static Vector2 GetLeftJoyStick();
 	// 右ジョイスティックの値の取得
