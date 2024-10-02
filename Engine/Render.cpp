@@ -78,7 +78,7 @@ void Render::DrawModel(Model* model, const WorldTransform& worldTransform) {
 	model->Draw(commandList_, worldTransform, viewProjection_.get());
 }
 
-void Render::DrawAnimationModel(Model* model, const Skinning& skinning, const WorldTransform& worldTransform) {
+void Render::DrawAnimationModel(Model* model, const Skinning* skinning, const WorldTransform& worldTransform) {
 	lightGroup_->Draw(commandList_, 5);
 	model->DrawSkinning(commandList_, skinning, worldTransform, viewProjection_.get());
 }
@@ -91,14 +91,6 @@ void Render::DrawParticle(BaseParticle* baseParticle, const uint32_t& numInstanc
 	baseParticle->Draw(commandList_, numInstance);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//// ↓　GameObjectの描画
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//void Render::DrawBaseGameObject(BaseGameObject* gameObject, const WorldTransform& worldTransform) {
-//	lightGroup_->Draw(commandList_, 4);
-//	gameObject->Draw(commandList_, worldTransform, viewProjection_.get());
-//}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　線の描画

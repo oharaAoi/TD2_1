@@ -12,9 +12,14 @@ void Triangle::Init(ID3D12Device* device, const Mesh::Vertices& vertex) {
 	mesh_ = std::make_unique<Mesh>();
 	material_ = std::make_unique<Material>();
 
-	mesh_->Init(device, sizeof(Mesh::VertexData) * 3, 3);
+	std::vector<Mesh::VertexData> vertices;
+	std::vector<uint32_t> indices;
+	vertices.resize(3);
+	indices.resize(3);
+
+	mesh_->Init(device, vertices, indices);
 	material_->Init(device);
-	
+
 	// vertexの設定
 	Mesh::VertexData* vertexData = mesh_->GetVertexData();
 	// 左下
@@ -42,7 +47,7 @@ void Triangle::Init(ID3D12Device* device, const Mesh::Vertices& vertex) {
 }
 
 void Triangle::Update() {
-	
+
 }
 
 void Triangle::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform& worldTransform, const ViewProjection* viewProjection) {
@@ -55,11 +60,9 @@ void Triangle::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform
 	commandList->DrawIndexedInstanced(3, 1, 0, 0, 0);
 }
 
-#ifdef _DEBUG
 void Triangle::ImGuiDraw(const std::string& name) {
 	if (ImGui::TreeNode(name.c_str())) {
 		material_->ImGuiDraw();
 		ImGui::TreePop();
 	}
 }
-#endif

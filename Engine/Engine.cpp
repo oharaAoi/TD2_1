@@ -1,10 +1,7 @@
 #include "Engine.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
-#ifdef _DEBUG
-#include "Engine/Manager/ImGuiManager.h"
-#endif
 
-Engine::Engine(){}
+Engine::Engine() {}
 
 Engine::~Engine() {}
 
@@ -21,9 +18,7 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	// ↓インスタンスの生成
 	winApp_ = WinApp::GetInstance();
 	dxCommon_ = DirectXCommon::GetInstacne();
-#ifdef _DEBUG
 	imguiManager_ = ImGuiManager::GetInstacne();
-#endif
 	textureManager_ = TextureManager::GetInstance();
 	input_ = Input::GetInstance();
 	render_ = Render::GetInstacne();
@@ -55,9 +50,7 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	// dxcommon
 	dxCommon_->Setting(dxDevice_->GetDevice(), dxCommands_.get(), descriptorHeap_.get(), renderTarget_.get());
 	// ImGui
-#ifdef _DEBUG
 	imguiManager_->Init(winApp_->GetHwnd(), dxDevice_->GetDevice(), dxCommon_->GetSwapChainBfCount(), descriptorHeap_->GetSRVHeap());
-#endif
 	// renderTarget
 	renderTarget_->Init(dxDevice_->GetDevice(), descriptorHeap_.get(), dxCommon_->GetSwapChain().Get());
 	// texture
@@ -66,7 +59,7 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	graphicsPipelines_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), shaders_.get());
 	primitivePipeline_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), shaders_->GetShaderData(Shader::Primitive));
 	// CS
-	computeShader_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), descriptorHeap_.get(),renderTarget_->GetOffScreenSRVHandle(RenderTargetType::OffScreen_RenderTarget), shaders_.get());
+	computeShader_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), descriptorHeap_.get(), renderTarget_->GetOffScreenSRVHandle(RenderTargetType::OffScreen_RenderTarget), shaders_.get());
 	// input
 	input_->Init(winApp_->GetWNDCLASS(), winApp_->GetHwnd());
 	// audio
@@ -103,9 +96,7 @@ void Engine::Finalize() {
 	dxCommon_->Finalize();
 	dxDevice_->Finalize();
 
-#ifdef _DEBUG
 	imguiManager_->Finalize();
-#endif
 	textureManager_->Finalize();
 	winApp_->Finalize();
 
@@ -117,7 +108,6 @@ void Engine::Finalize() {
 // ↓　ImGuiを描画する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef _DEBUG
 void Engine::DrawImGui() {
 	ImGui::Begin("Engine");
 
@@ -125,7 +115,6 @@ void Engine::DrawImGui() {
 
 	ImGui::End();
 }
-#endif
 
 bool Engine::ProcessMessage() {
 	return  winApp_->ProcessMessage();
@@ -137,16 +126,12 @@ bool Engine::ProcessMessage() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::BeginFrame() {
-#ifdef _DEBUG
 	imguiManager_->Begin();
-#endif
 	dxCommon_->Begin();
 
 	input_->Update();
 
-#ifdef _DEBUG
 	DrawImGui();
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,10 +143,8 @@ void Engine::EndFrame() {
 }
 
 void Engine::EndImGui() {
-#ifdef _DEBUG
 	imguiManager_->End();
 	imguiManager_->Draw(dxCommands_->GetCommandList());
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +168,7 @@ void Engine::EndRenderTexture() {
 		// computeShaderで加工したTextureを描画する
 		renderTexture_->Draw(dxCommands_->GetCommandList(), computeShader_->GetShaderResourceHandleGPU());
 		//----------------------------------------------------------------
-		
+
 		// リソースの状態をShaderResourceから書き込める状態にする(SR→UA)
 		computeShader_->TransitionUAVResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
@@ -250,9 +233,9 @@ WorldTransform Engine::CreateWorldTransform() {
 	return result;
 }
 
-Skinning Engine::CreateSkinning(const Skeleton& skeleton, Mesh* mesh, std::map<std::string, Skinning::JointWeightData>& skinClusterData) {
-	Skinning result;
-	result.CreateSkinCluster(dxDevice_->GetDevice(), skeleton, mesh, descriptorHeap_.get(), skinClusterData);
+std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* model) {
+	std::unique_ptr<Skinning> result = std::make_unique<Skinning>();
+	result->CreateSkinCluster(dxDevice_->GetDevice(), skeleton, model->GetMesh(0), descriptorHeap_.get(), model->GetSkinClusterData());
 	return result;
 }
 
@@ -276,7 +259,7 @@ void Engine::SetPipeline(const PipelineKind& kind) {
 		break;
 	case PipelineKind::kSpritePipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
-		
+
 		break;
 	case PipelineKind::kSkinningPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::SkinningPipeline, dxCommands_->GetCommandList());

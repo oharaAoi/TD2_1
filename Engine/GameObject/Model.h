@@ -17,6 +17,7 @@
 #include "Engine/Assets/ViewProjection.h"
 #include "Engine/Manager/TextureManager.h"
 #include "Engine/Lib/Transform.h"
+#include "Engine/Math/MyMatrix.h"
 #include "Engine/Utilities/AnimationUtils.h"
 
 class Model {
@@ -45,11 +46,13 @@ public:
 	void Init(ID3D12Device* device, const std::string& directorPath, const std::string& fileName);
 	void Update();
 	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform& worldTransform, const ViewProjection* viewprojection);
-	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning& skinning, const WorldTransform& worldTransform, const ViewProjection* viewprojection);
+	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform& worldTransform, const ViewProjection* viewprojection);
 
-#ifdef _DEBUG
+	/// <summary>
+	/// ImGuiを編集する
+	/// </summary>
+	/// <param name="name">: 動かす対象の名前</param>
 	void ImGuiDraw(const std::string& name);
-#endif
 
 	/// <summary>
 	/// assimpでのNode解析
@@ -97,7 +100,7 @@ public:
 
 	bool GetHasTexture() const { return hasTexture_; }
 
-	std::string GetRootNodeName() { return rootNode_.name; }
+	const std::string& GetRootNodeName() const { return rootNode_.name; }
 
 	Node& GetNode() { return rootNode_; }
 
@@ -111,7 +114,7 @@ private:
 	std::vector<std::unique_ptr<Mesh>> meshArray_;
 	// テクスチャの情報を持っている
 	std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;
-	
+
 	std::map<std::string, Skinning::JointWeightData> skinClusterData_;
 	// ノード
 	Node rootNode_;

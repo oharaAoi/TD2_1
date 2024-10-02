@@ -90,7 +90,7 @@ void TestScene::Draw() const {
 #pragma endregion
 
 	Engine::SetPipeline(PipelineKind::kSkinningPipeline);
-	testObj_->DrawSKinning();
+	testObj_->Draw();
 }
 
 #ifdef _DEBUG

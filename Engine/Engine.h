@@ -11,10 +11,9 @@
 #include "Engine/DirectX/Pipeline/GraphicsPipelines.h"
 #include "Engine/ComputeShader/ComputeShader.h"
 #include "Engine/DirectX/Pipeline/PrimitivePipeline.h"
+#include "Engine/Manager/ImGuiManager.h"
 #include "Engine/Manager/TextureManager.h"
 #include "Engine/Input/Input.h"
-// GameObject
-#include "Engine/GameObject/BaseGameObject.h"
 #include "Engine/GameObject/Model.h"
 #include "Engine/GameObject/Sphere.h"
 #include "Engine/2d/Sprite.h"
@@ -48,9 +47,7 @@ public:
 
 	static void Finalize();
 
-#ifdef _DEBUG
 	static void DrawImGui();
-#endif
 
 public:
 
@@ -95,8 +92,9 @@ public:
 	static std::unique_ptr<BaseParticle> CreateBaseParticle(const std::string& directoryPath, const std::string& fileName, const uint32_t& instanceNum);
 	// ワールドトランスフォームを作成
 	static WorldTransform CreateWorldTransform();
+	// Skinningの作成
+	static std::unique_ptr<Skinning> CreateSkinning(Skeleton* skeleton, Model* model);
 
-	static Skinning CreateSkinning(const Skeleton& skeleton, Mesh* mesh, std::map<std::string, Skinning::JointWeightData>& skinClusterData);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 描画系
@@ -192,9 +190,7 @@ namespace {
 
 	WinApp* winApp_ = nullptr;
 	DirectXCommon* dxCommon_ = nullptr;
-#ifdef _DEBUG
 	ImGuiManager* imguiManager_ = nullptr;
-#endif
 	Input* input_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	// dxDevice

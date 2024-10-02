@@ -9,10 +9,14 @@ Sphere::~Sphere() {
 void Sphere::Init(ID3D12Device* device, const uint32_t& division) {
 	mesh_ = std::make_unique<Mesh>();
 	material_ = std::make_unique<Material>();
-	
-	vertexCount_ = division * division * 6;
 
-	mesh_->Init(device, sizeof(Mesh::VertexData) * vertexCount_, vertexCount_);
+	vertexCount_ = division * division * 6;
+	std::vector<Mesh::VertexData> vertices;
+	std::vector<uint32_t> indices;
+	vertices.resize(vertexCount_);
+	indices.resize(vertexCount_);
+
+	mesh_->Init(device, vertices, indices);
 	material_->Init(device);
 
 	const float kLonEvery = float(M_PI) * 2.0f / float(division);// fai
@@ -87,7 +91,7 @@ void Sphere::Init(ID3D12Device* device, const uint32_t& division) {
 }
 
 void Sphere::Update() {
-	
+
 }
 
 void Sphere::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform& worldTransform, const ViewProjection* viewProjection) {
@@ -102,11 +106,9 @@ void Sphere::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform& 
 	commandList->DrawIndexedInstanced(vertexCount_, 1, 0, 0, 0);
 }
 
-#ifdef _DEBUG
 void Sphere::ImGuiDraw(const std::string& name) {
 	if (ImGui::TreeNode(name.c_str())) {
 		material_->ImGuiDraw();
 		ImGui::TreePop();
 	}
 }
-#endif
