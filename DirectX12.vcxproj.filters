@@ -363,6 +363,12 @@
     <ClCompile Include="Engine\Assets\AnimetionClip.cpp">
       <Filter>Engine\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Collider\Collider.cpp">
+      <Filter>Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Manager\CollisionManager.cpp">
+      <Filter>Engine\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -643,6 +649,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Assets\AnimetionClip.h">
       <Filter>Engine\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\Collider.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Manager\CollisionManager.h">
+      <Filter>Engine\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

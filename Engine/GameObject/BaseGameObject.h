@@ -7,6 +7,8 @@
 #include "Engine/GameObject/Model.h"
 #include "Engine/Assets/WorldTransform.h"
 #include "Engine/Assets/Animetor.h"
+#include "Engine/Math/MyMatrix.h"
+#include "Engine/Collider/Collider.h"
 
 class BaseGameObject {
 public:

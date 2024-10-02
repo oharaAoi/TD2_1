@@ -14,7 +14,7 @@ public: // データ構造体
 	/// </summary>
 	struct AccelerationField {
 		Vector3 acceleration; // 加速度
-		AABB area;			  // 範囲
+		AABB area = { {0,0,0}, 1.5f };			  // 範囲
 	};
 
 public:

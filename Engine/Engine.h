@@ -28,6 +28,7 @@
 enum class PipelineKind {
 	kNormalPipeline,
 	kTexturelessPipeline,
+	kPrimitivePiPeline,
 	kPBRPipeline,
 	kParticlePipeline,
 	kSpritePipeline,

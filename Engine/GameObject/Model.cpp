@@ -27,10 +27,6 @@ void Model::Init(ID3D12Device* device, const std::string& directorPath, const st
 void Model::Update() {
 	currentAnimationTime_ += rootNode_.animationsData.tickPerSecond * kDeltaTime_;
 	currentAnimationTime_ = fmod(currentAnimationTime_, rootNode_.animationsData.duration);
-
-	//AnimationUpdate();
-	/*Matrix4x4 mat = MakeAffineMatrix(localTransform_);
-	rootNode_.localMatrix = mat;*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

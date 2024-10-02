@@ -110,6 +110,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Assets\WorldTransform.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Collider\BoxCollider.cpp" />
+    <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\ComputeShader\BaseCSResource.cpp" />
     <ClCompile Include="Engine\ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Engine\ComputeShader\ComputeShaderPipeline.cpp" />
@@ -142,6 +143,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Light\Phong.cpp" />
     <ClCompile Include="Engine\Light\PointLight.cpp" />
     <ClCompile Include="Engine\Light\SpotLight.cpp" />
+    <ClCompile Include="Engine\Manager\CollisionManager.cpp" />
     <ClCompile Include="Engine\Manager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Manager\ModelManager.cpp" />
     <ClCompile Include="Engine\Manager\SceneManager.cpp" />
@@ -197,6 +199,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Assets\WorldTransform.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\Collider\BoxCollider.h" />
+    <ClInclude Include="Engine\Collider\Collider.h" />
     <ClInclude Include="Engine\ComputeShader\BaseCSResource.h" />
     <ClInclude Include="Engine\ComputeShader\ComputeShader.h" />
     <ClInclude Include="Engine\ComputeShader\ComputeShaderPipeline.h" />
@@ -230,6 +233,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Light\Phong.h" />
     <ClInclude Include="Engine\Light\PointLight.h" />
     <ClInclude Include="Engine\Light\SpotLight.h" />
+    <ClInclude Include="Engine\Manager\CollisionManager.h" />
     <ClInclude Include="Engine\Manager\ImGuiManager.h" />
     <ClInclude Include="Engine\Manager\ModelManager.h" />
     <ClInclude Include="Engine\Manager\SceneManager.h" />

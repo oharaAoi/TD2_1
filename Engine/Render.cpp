@@ -97,7 +97,6 @@ void Render::DrawParticle(BaseParticle* baseParticle, const uint32_t& numInstanc
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Render::DrawLine(const Vector3& p1, const Vector3& p2, const Vector4& color, const Matrix4x4& vpMat) {
-	primitivePipelines_->Draw(commandList_);
 	primitiveDrawer_->Draw(commandList_, p1, p2, color, vpMat);
 }
 

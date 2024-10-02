@@ -80,7 +80,7 @@ void EffectSystemEditer::Update() {
 		++effectDataListIter;
 	}
 
-	DrawGrid(effectSystemCamera_->GetViewMatrix(), effectSystemCamera_->GetProjectionMatrix());
+	//DrawGrid(effectSystemCamera_->GetViewMatrix(), effectSystemCamera_->GetProjectionMatrix());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,11 +101,11 @@ void EffectSystemEditer::Draw() const {
 		// -------------------------------------------------
 		// ↓ エミッターの更新
 		// -------------------------------------------------
-		for (std::list<std::unique_ptr<Emitter>>::const_iterator emitterListIter = effectDataListIter->emitterList.begin();
+		/*for (std::list<std::unique_ptr<Emitter>>::const_iterator emitterListIter = effectDataListIter->emitterList.begin();
 			 emitterListIter != effectDataListIter->emitterList.end();) {
 			(*emitterListIter)->Draw(effectSystemCamera_->GetViewMatrix() * effectSystemCamera_->GetProjectionMatrix());
 			++emitterListIter;
-		}
+		}*/
 
 		++effectDataListIter;
 	}
@@ -121,7 +121,7 @@ void EffectSystemEditer::Draw() const {
 void EffectSystemEditer::CreateEffect() {
 	EffectData effectData;
 	std::unique_ptr<BaseEffect> effect = std::make_unique<BaseEffect>();
-	effect->Init("./Resources/Effect/", "particle.obj", 100);
+	effect->Init("./Engine/Resources/Effect/", "particle.obj", 100);
 	std::unique_ptr<Emitter> emitter = std::make_unique<Emitter>(effect.get());
 
 	effectData.emitterList.push_back(std::move(emitter));

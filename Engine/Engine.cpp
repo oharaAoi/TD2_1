@@ -251,6 +251,9 @@ void Engine::SetPipeline(const PipelineKind& kind) {
 	case PipelineKind::kTexturelessPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::TextureLessPipeline, dxCommands_->GetCommandList());
 		break;
+	case PipelineKind::kPrimitivePiPeline:
+		primitivePipeline_->Draw(dxCommands_->GetCommandList());
+		break;
 	case PipelineKind::kPBRPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::PBRPipeline, dxCommands_->GetCommandList());
 		break;

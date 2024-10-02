@@ -11,20 +11,27 @@ void TestScene::Init() {
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
 	testObj_->SetObject("walk.gltf");
-	testObj_->SetAnimater("./Resources/Animation/", "walk.gltf");
+	testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+
+	testObj2_ = std::make_unique<BaseGameObject>();
+	testObj2_->Init();
+	testObj2_->SetObject("skin.obj");
 
 	sprite_ = Engine::CreateSprite({128, 128}, {256, 256});
 	sprite_->SetTexture("uvChecker.png");
+
+	collisionManager_ = std::make_unique<CollisionManager>();
 }
 
 void TestScene::Load() {
 	// modelのload
-	ModelManager::LoadModel("./Resources/Develop/", "plane.obj");
-	ModelManager::LoadModel("./Resources/Develop/", "SquarePyramid.obj");
-	ModelManager::LoadModel("./Resources/Animation/", "walk.gltf");
-	//ModelManager::LoadModel("./Resources/Animation/", "simpleSkin.gltf");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "plane.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	ModelManager::LoadModel("./Engine/Resources/Animation/", "walk.gltf");
+	
 	// textureのload
-	TextureManager::LoadTextureFile("./Resources/Develop/", "uvChecker.png");
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +56,7 @@ void TestScene::Update() {
 	// ↓ 行列の更新
 	// -------------------------------------------------
 	testObj_->Update();
+	testObj2_->Update();
 	
 	sprite_->Update();
 
@@ -61,12 +69,14 @@ void TestScene::Update() {
 }
 
 void TestScene::Draw() const {
-	//DrawGrid(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+	
+	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
 
 #pragma region NormalPipeline
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//testObj_->Draw();
+	testObj2_->Draw();
 	
 #pragma endregion
 

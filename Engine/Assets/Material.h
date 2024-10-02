@@ -77,6 +77,8 @@ public:
 	/// <param name="materialData"></param>
 	void SetMaterialData(ModelMaterialData materialData);
 
+	void SetColor(const Vector4& color) { material_->color = color; }
+
 private:
 
 	ComPtr<ID3D12Resource> materialBuffer_;
