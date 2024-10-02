@@ -31,7 +31,7 @@ void Skeleton::Update() {
 			joint.skeltonSpaceMat = joint.localMat;
 		}
 
-		obj_[oi]->GetTransform().Update(joint.skeltonSpaceMat);
+		//obj_[oi]->GetTransform().Update(joint.skeltonSpaceMat);
 		oi++;
 	}
 }

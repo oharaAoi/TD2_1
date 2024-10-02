@@ -29,10 +29,9 @@ public:
 #endif // _DEBUG
 
 	void SetObject(const std::string& objName);
-
 	void SetAnimater(const std::string& directoryPath, const std::string& objName);
 
-	WorldTransform& GetTransform() { return transform_; }
+	const WorldTransform& GetTransform() const { return transform_; }
 
 protected:
 

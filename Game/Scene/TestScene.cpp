@@ -22,7 +22,7 @@ void TestScene::Load() {
 	ModelManager::LoadModel("./Resources/Develop/", "plane.obj");
 	ModelManager::LoadModel("./Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Resources/Animation/", "walk.gltf");
-	ModelManager::LoadModel("./Resources/Animation/", "simpleSkin.gltf");
+	//ModelManager::LoadModel("./Resources/Animation/", "simpleSkin.gltf");
 	// textureのload
 	TextureManager::LoadTextureFile("./Resources/Develop/", "uvChecker.png");
 }
@@ -85,9 +85,7 @@ void TestScene::Draw() const {
 #pragma region Sprite
 
 	Engine::SetPipeline(PipelineKind::kSpritePipeline);
-	if (Input::GetPressPadTrigger(BUTTON_A)) {
 	sprite_->Draw();
-	}
 	
 #pragma endregion
 

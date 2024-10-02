@@ -3,9 +3,7 @@
 #include <d3d12.h>
 #include <wrl.h>
 #include <string>
-// DirectX
 #include "Engine/Utilities/DirectXUtils.h"
-// math
 #include "Engine/Math/Matrix4x4.h"
 #include "Engine/Math/MyMath.h"
 #include "Engine/Manager/ImGuiManager.h"
@@ -21,12 +19,6 @@ struct WorldTransformData {
 };
 
 class WorldTransform {
-public:
-
-	Vector3 scale_;
-	Quaternion rotation_;
-	Vector3 translation_;
-
 public:
 
 	WorldTransform();
@@ -46,9 +38,28 @@ public:
 	/// <param name="mat"></param>
 	void AdaptToGLTF(const Matrix4x4& mat) const;
 
+public:
+
+	void SetParent(const Matrix4x4& parentMat);
+
 	void SetMatrix(const Matrix4x4& mat);
+	void SetScale(const Vector3& scale) { scale_ = scale; }
+	void SetTranslaion(const Vector3& translation) { translation_ = translation; }
+	void SetQuaternion(const Quaternion& quaternion) { rotation_ = quaternion; }
+
+	const Vector3 GetScale() const { return scale_; }
+	const Vector3 GetTranslation() const { return translation_; }
+	const Quaternion GetQuaternion() const { return rotation_; }
+	const Matrix4x4 GetWorldMatrix() const { return worldMat_; }
 
 private:
+
+	Vector3 scale_;
+	Quaternion rotation_;
+	Vector3 translation_;
+	Matrix4x4 worldMat_;
+
+	const Matrix4x4* parentMat_ = nullptr;
 
 	ComPtr<ID3D12Resource> cBuffer_;
 	WorldTransformData* data_;

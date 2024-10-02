@@ -16,18 +16,18 @@ void Material::Init(ID3D12Device* device) {
 	// ↓Materialの設定
 	// ---------------------------------------------------------------
 	materialBuffer_ = CreateBufferResource(device, sizeof(PBRMaterial));
-	materialBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&pbrMaterial_));
+	materialBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&material_));
 	// 色を決める
-	pbrMaterial_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	pbrMaterial_->enableLighting = false;
-	pbrMaterial_->uvTransform = MakeIdentity4x4();
-	pbrMaterial_->shininess = 0;
+	material_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	material_->enableLighting = false;
+	material_->uvTransform = MakeIdentity4x4();
+	material_->shininess = 0;
 
-	pbrMaterial_->diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	pbrMaterial_->specularColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	material_->diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	material_->specularColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	pbrMaterial_->roughness = 0.5f;
-	pbrMaterial_->metallic = 0.5f;
+	material_->roughness = 0.5f;
+	material_->metallic = 0.5f;
 
 	uvTranslation_ = { 0,0,0 };
 	uvScale_ = { 1,1,1 };
@@ -35,7 +35,7 @@ void Material::Init(ID3D12Device* device) {
 }
 
 void Material::Update(const Matrix4x4& uvTransform) {
-	pbrMaterial_->uvTransform = uvTransform;
+	material_->uvTransform = uvTransform;
 }
 
 void Material::Draw(ID3D12GraphicsCommandList* commandList) {
@@ -47,35 +47,35 @@ void Material::ImGuiDraw() {
 	ImGui::DragFloat2("uvTranslate", &uvTranslation_.x, 0.01f, -10.0f, 10.0f);
 	ImGui::DragFloat2("uvScale", &uvScale_.x, 0.01f, -10.0f, 10.0f);
 	ImGui::SliderAngle("UvRotate", &uvRotation_.z);
-	ImGui::ColorEdit3("color", &pbrMaterial_->color.x);
-	ImGui::Combo("Lighting", &pbrMaterial_->enableLighting, "None\0Lambert\0HalfLambert");
+	ImGui::ColorEdit3("color", &material_->color.x);
+	ImGui::Combo("Lighting", &material_->enableLighting, "None\0Lambert\0HalfLambert");
 
-	pbrMaterial_->uvTransform = MakeAffineMatrix(kTransform(uvScale_, uvRotation_, uvTranslation_));
+	material_->uvTransform = MakeAffineMatrix(kTransform(uvScale_, uvRotation_, uvTranslation_));
 }
 #endif
 
 void Material::SetMaterialData(ModelMaterialData materialData) {
 	materialData_ = materialData;
 
-	pbrMaterial_->color = materialData_.albedo;
-	pbrMaterial_->enableLighting = true;
-	pbrMaterial_->uvTransform = MakeIdentity4x4();
+	material_->color = materialData_.albedo;
+	material_->enableLighting = true;
+	material_->uvTransform = MakeIdentity4x4();
 	// 反射用素
-	pbrMaterial_->diffuseColor = materialData_.diffuse;
-	pbrMaterial_->specularColor = materialData_.specular;
+	material_->diffuseColor = materialData_.diffuse;
+	material_->specularColor = materialData_.specular;
 
-	pbrMaterial_->roughness = 0.5f;
-	pbrMaterial_->metallic = 0.5f;
-	pbrMaterial_->shininess = 0;
+	material_->roughness = 0.5f;
+	material_->metallic = 0.5f;
+	material_->shininess = 0;
 
-	pbrMaterial_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	pbrMaterial_->enableLighting = true;
-	pbrMaterial_->uvTransform = MakeIdentity4x4();
-	pbrMaterial_->shininess = 50;
+	material_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	material_->enableLighting = true;
+	material_->uvTransform = MakeIdentity4x4();
+	material_->shininess = 50;
 
-	pbrMaterial_->diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	pbrMaterial_->specularColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	material_->diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	material_->specularColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	pbrMaterial_->roughness = 0.5f;
-	pbrMaterial_->metallic = 0.5f;
+	material_->roughness = 0.5f;
+	material_->metallic = 0.5f;
 }

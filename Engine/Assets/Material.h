@@ -67,7 +67,7 @@ public:
 
 public:
 
-	PBRMaterial* GetBaseMaterial() { return pbrMaterial_; }
+	PBRMaterial* GetBaseMaterial() { return material_; }
 
 	ModelMaterialData GetMateriaData() { return materialData_; }
 
@@ -80,7 +80,7 @@ public:
 private:
 
 	ComPtr<ID3D12Resource> materialBuffer_;
-	PBRMaterial* pbrMaterial_;
+	PBRMaterial* material_;
 
 	// materialData
 	ModelMaterialData materialData_;
