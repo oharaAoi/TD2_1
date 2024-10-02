@@ -34,6 +34,6 @@ void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::st
 
 #ifdef _DEBUG
 void BaseGameObject::Debug_Gui() {
-	transform_.ImGuiDraw();
+	transform_.Debug_Gui();
 }
 #endif // _DEBUG

@@ -33,7 +33,7 @@ void WorldTransform::Draw(ID3D12GraphicsCommandList* commandList) const {
 }
 
 #ifdef _DEBUG
-void WorldTransform::ImGuiDraw() {
+void WorldTransform::Debug_Gui() {
 	ImGui::DragFloat3("scale", &scale_.x, 0.1f);
 	ImGui::DragFloat3("rotation", &rotation_.x, 0.1f);
 	ImGui::DragFloat3("translation", &translation_.x, 0.1f);
@@ -42,10 +42,6 @@ void WorldTransform::ImGuiDraw() {
 
 void WorldTransform::Finalize() {
 	cBuffer_.Reset();
-}
-
-void WorldTransform::AdaptToGLTF(const Matrix4x4& mat) const {
-	data_->matWorld = mat * data_->matWorld;
 }
 
 void WorldTransform::SetParent(const Matrix4x4& parentMat) {

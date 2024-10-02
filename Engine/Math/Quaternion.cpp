@@ -58,6 +58,30 @@ Quaternion Quaternion::AngleAxis(const float& angle, const Vector3& axis) {
 	);
 }
 
+Quaternion Quaternion::EulerToQuaternion(const Vector3& euler) {
+	// オイラー角をラジアンに変換（角度の場合）
+	float halfPitch = euler.x * toRadian;
+	float halfYaw = euler.y * toRadian;
+	float halfRoll = euler.z * toRadian;
+
+	// 三角関数の計算
+	float cosPitch = cos(halfPitch);
+	float sinPitch = sin(halfPitch);
+	float cosYaw = cos(halfYaw);
+	float sinYaw = sin(halfYaw);
+	float cosRoll = cos(halfRoll);
+	float sinRoll = sin(halfRoll);
+
+	// クォータニオンの計算
+	Quaternion q;
+	q.w = cosYaw * cosPitch * cosRoll + sinYaw * sinPitch * sinRoll;
+	q.x = cosYaw * sinPitch * cosRoll + sinYaw * cosPitch * sinRoll;
+	q.y = sinYaw * cosPitch * cosRoll - cosYaw * sinPitch * sinRoll;
+	q.z = cosYaw * cosPitch * sinRoll - sinYaw * sinPitch * cosRoll;
+
+	return q.Normalize();  // 正規化して返す
+}
+
 Quaternion Quaternion::FromToRotation(const Vector3& fromDire, const Vector3& toDire) {
 	// 外積を用いて軸ベクトルを求める
 	Vector3 axis = Cross(fromDire, toDire);

@@ -48,11 +48,9 @@ public:
 	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform& worldTransform, const ViewProjection* viewprojection);
 	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform& worldTransform, const ViewProjection* viewprojection);
 
-	/// <summary>
-	/// ImGuiを編集する
-	/// </summary>
-	/// <param name="name">: 動かす対象の名前</param>
-	void ImGuiDraw(const std::string& name);
+#ifdef _DEBUG
+	void Debug_Gui(const std::string& name);
+#endif
 
 	/// <summary>
 	/// assimpでのNode解析
@@ -61,25 +59,6 @@ public:
 	/// <returns></returns>
 	Node ReadNode(aiNode* node, const aiScene* scene);
 
-public:
-
-	/// <summary>
-	/// meshの情報を読み込む
-	/// </summary>
-	/// <param name="filePath">ファイルパス</param>
-	/// <param name="device">デバイス</param>
-	/// <returns></returns>
-	std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& filePath, ID3D12Device* device);
-
-	/// <summary>
-	/// materialの情報を読み込む
-	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="fileName"></param>
-	/// <param name="device"></param>
-	/// <returns></returns>
-	std::unordered_map<std::string, std::unique_ptr<Material>> LoadMaterialData(const std::string& directoryPath, const std::string& fileName, ID3D12Device* device);
-
 	/// <summary>
 	/// assimpを使用してモデルファイルをを読む
 	/// </summary>
@@ -87,14 +66,6 @@ public:
 	/// <param name="fileName"></param>
 	/// <param name="device"></param>
 	void LoadObj(const std::string& directoryPath, const std::string& fileName, ID3D12Device* device);
-
-	void LoadAnimation(const std::string& directoryPath, const std::string& fileName);
-
-	/// <summary>
-	/// アニメーションの更新を行う
-	/// </summary>
-	/// <returns></returns>
-	void AnimationUpdate();
 
 public:
 
@@ -126,6 +97,4 @@ private:
 
 	// アニメーションの時間
 	float currentAnimationTime_ = 0;
-	bool isBack = false;
-	kTransform localTransform_ = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f },{0.0f, 0.0f, 0.0f} };
 };

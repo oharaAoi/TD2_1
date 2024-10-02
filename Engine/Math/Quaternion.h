@@ -30,6 +30,8 @@ public:
 	/// <returns></returns>
 	static Quaternion AngleAxis(const float& angle, const Vector3& axis);
 
+	static Quaternion EulerToQuaternion(const Vector3& euler);
+
 	/// <summary>
 	/// fromからtoへの回転を返す
 	/// </summary>

@@ -29,14 +29,9 @@ public:
 	void Update(const Matrix4x4& mat = MakeIdentity4x4());
 	void Draw(ID3D12GraphicsCommandList* commandList) const;
 
-	void ImGuiDraw();
-
-
-	/// <summary>
-	/// gltfファイルで読み込んだモデルのLoacalMatを適応させる
-	/// </summary>
-	/// <param name="mat"></param>
-	void AdaptToGLTF(const Matrix4x4& mat) const;
+#ifdef _DEBUG
+	void Debug_Gui();
+#endif
 
 public:
 
