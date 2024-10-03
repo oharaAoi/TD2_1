@@ -43,7 +43,7 @@ void Render::Update() {
 // ↓　三角形の描画
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Render::DrawTriangle(Triangle* triangle, const WorldTransform& worldTransform) {
+void Render::DrawTriangle(Triangle* triangle, const WorldTransform* worldTransform) {
 	lightGroup_->Draw(commandList_, 4);
 	triangle->Draw(commandList_, worldTransform, viewProjection_.get());
 }
@@ -60,7 +60,7 @@ void Render::DrawSprite(Sprite* sprite) {
 // ↓　球体の描画
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Render::DrawSphere(Sphere* sphere, const WorldTransform& worldTransform) {
+void Render::DrawSphere(Sphere* sphere, const WorldTransform* worldTransform) {
 	lightGroup_->Draw(commandList_, 4);
 	sphere->Draw(commandList_, worldTransform, viewProjection_.get());
 }
@@ -69,7 +69,7 @@ void Render::DrawSphere(Sphere* sphere, const WorldTransform& worldTransform) {
 // ↓　モデルの描画
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Render::DrawModel(Model* model, const WorldTransform& worldTransform) {
+void Render::DrawModel(Model* model, const WorldTransform* worldTransform) {
 	if (model->GetHasTexture()) {
 		lightGroup_->Draw(commandList_, 4);
 	} else {
@@ -78,7 +78,7 @@ void Render::DrawModel(Model* model, const WorldTransform& worldTransform) {
 	model->Draw(commandList_, worldTransform, viewProjection_.get());
 }
 
-void Render::DrawAnimationModel(Model* model, const Skinning* skinning, const WorldTransform& worldTransform) {
+void Render::DrawAnimationModel(Model* model, const Skinning* skinning, const WorldTransform* worldTransform) {
 	lightGroup_->Draw(commandList_, 5);
 	model->DrawSkinning(commandList_, skinning, worldTransform, viewProjection_.get());
 }

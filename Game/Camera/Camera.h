@@ -2,6 +2,7 @@
 #include "Engine/Math/MyMatrix.h"
 #include "Engine/Math/MyMath.h"
 #include "Engine/Lib/Transform.h"
+#include "Engine/Assets/WorldTransform.h"
 #include "Engine/Input/Input.h"
 #include "Engine/Manager/ImGuiManager.h"
 
@@ -16,6 +17,10 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+
+#ifdef _DEBUG
+	void Debug_Gui();
+#endif
 
 public:
 
@@ -50,7 +55,11 @@ public:
 		return { matViewInverse.m[3][0], matViewInverse.m[3][1] ,matViewInverse.m[3][2] };
 	}
 
+	void SetTarget(WorldTransform* target) { target_ = target; }
+
 private:
+
+	WorldTransform* target_;
 
 	kTransform transform_;
 

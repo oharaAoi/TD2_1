@@ -60,14 +60,21 @@ void Camera::Update() {
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
 	translateMat_ = MakeTranslateMatrix(transform_.translate);
 
-	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
+	cameraMatrix_ = scaleMat_ * rotateMat_ * translateMat_;
+
+	if (target_ != nullptr) {
+		cameraMatrix_ *= target_->GetWorldMatrix();
+	}
+
 	viewMatrix_ = Inverse(cameraMatrix_);
 	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(1280) / float(720), 0.1f, 100.0f);
 
 	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
 	viewMatrix2D_ = MakeIdentity4x4();
+}
 
 #ifdef _DEBUG
+void Camera::Debug_Gui() {
 	ImGui::Begin("Camera");
 	if (ImGui::Button("Reset")) {
 		transform_ = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -9.0f} };
@@ -79,11 +86,8 @@ void Camera::Update() {
 	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
 
 	ImGui::End();
+}
 #endif
-}
-
-void Camera::Draw() {
-}
 
 /////////////////////////////////////////////////////////////////
 // 

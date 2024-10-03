@@ -38,7 +38,7 @@ public:
 	/// </summary>
 	/// <param name="triangle">: 三角形のポインタ</param>
 	/// <param name="worldTransform">: worldTrnasform</param>
-	static void DrawTriangle(Triangle* triangle, const WorldTransform& worldTransform);
+	static void DrawTriangle(Triangle* triangle, const WorldTransform* worldTransform);
 
 	/// <summary>
 	/// Spriteの描画
@@ -51,17 +51,17 @@ public:
 	/// </summary>
 	/// <param name="sphere">: sphereのポインタ</param>
 	/// <param name="worldTransform">: worldTransform</param>
-	static void DrawSphere(Sphere* sphere, const WorldTransform& worldTransform);
+	static void DrawSphere(Sphere* sphere, const WorldTransform* worldTransform);
 
 	/// <summary>
 	/// モデルの描画
 	/// </summary>
 	/// <param name="model">: モデルのポインタ</param>
 	/// <param name="worldTransform">: worldTransform</param>
-	static void DrawModel(Model* model, const WorldTransform& worldTransform);
+	static void DrawModel(Model* model, const WorldTransform* worldTransform);
 
-	static void DrawAnimationModel(Model* model, const Skinning& skeleton, const WorldTransform& worldTransform);
-	static void DrawAnimationModel(Model* model, const Skinning* skeleton, const WorldTransform& worldTransform);
+	static void DrawAnimationModel(Model* model, const Skinning& skeleton, const WorldTransform* worldTransform);
+	static void DrawAnimationModel(Model* model, const Skinning* skeleton, const WorldTransform* worldTransform);
 
 	/// <summary>
 	/// Particleの描画

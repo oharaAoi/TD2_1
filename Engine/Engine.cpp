@@ -227,9 +227,9 @@ std::unique_ptr<BaseParticle> Engine::CreateBaseParticle(const std::string& dire
 	return particle;
 }
 
-WorldTransform Engine::CreateWorldTransform() {
-	WorldTransform result;
-	result.Init(dxDevice_->GetDevice());
+std::unique_ptr<WorldTransform> Engine::CreateWorldTransform() {
+	std::unique_ptr<WorldTransform> result = std::make_unique<WorldTransform>();
+	result->Init(dxDevice_->GetDevice());
 	return result;
 }
 

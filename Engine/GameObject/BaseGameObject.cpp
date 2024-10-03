@@ -12,14 +12,16 @@ void BaseGameObject::Update() {
 	if (animetor_ != nullptr) {
 		animetor_->Update();
 	}
-	transform_.Update();
+	transform_->Update();
 }
 
 void BaseGameObject::Draw() const {
 	if (animetor_ == nullptr) {
-		Render::DrawModel(model_, transform_);
+		Engine::SetPipeline(PipelineKind::kNormalPipeline);
+		Render::DrawModel(model_, transform_.get());
 	} else {
-		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_);
+		Engine::SetPipeline(PipelineKind::kSkinningPipeline);
+		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get());
 	}
 }
 
@@ -34,6 +36,6 @@ void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::st
 
 #ifdef _DEBUG
 void BaseGameObject::Debug_Gui() {
-	transform_.Debug_Gui();
+	transform_->Debug_Gui();
 }
 #endif // _DEBUG

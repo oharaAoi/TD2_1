@@ -5,6 +5,7 @@
 #include "Engine/Utilities/DrawUtils.h"
 #include "Engine/GameObject/BaseGameObject.h"
 #include "Game/Camera/Camera.h"
+#include "Game/Camera/DebugCamera.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/CollisionManager.h"
 
@@ -32,6 +33,7 @@ private:
 
 	// カメラ----------------------------------------------
 	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
 	// ゲームオブジェクト -----------------------------------
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;

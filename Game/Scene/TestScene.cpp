@@ -20,6 +20,8 @@ void TestScene::Init() {
 	sprite_ = Engine::CreateSprite({128, 128}, {256, 256});
 	sprite_->SetTexture("uvChecker.png");
 
+	camera_->SetTarget(testObj_->GetTransform());
+
 	collisionManager_ = std::make_unique<CollisionManager>();
 }
 
@@ -39,7 +41,15 @@ void TestScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void TestScene::Update() {
 	// -------------------------------------------------
-	// ↓ カメラの更新
+	// ↓ オブジェクトの更新
+	// -------------------------------------------------
+	testObj_->Update();
+	testObj2_->Update();
+	
+	sprite_->Update();
+
+	// -------------------------------------------------
+	// ↓ Cameraの更新
 	// -------------------------------------------------
 	camera_->Update();
 	Render::SetEyePos(camera_->GetWorldTranslate());
@@ -52,16 +62,9 @@ void TestScene::Update() {
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
-	// -------------------------------------------------
-	// ↓ 行列の更新
-	// -------------------------------------------------
-	testObj_->Update();
-	testObj2_->Update();
-	
-	sprite_->Update();
 
 	// -------------------------------------------------
-	// ↓ の更新
+	// ↓ Debugの表示
 	// -------------------------------------------------
 #ifdef _DEBUG
 	ImGuiDraw();
@@ -113,5 +116,6 @@ void TestScene::ImGuiDraw() {
 	sprite_->Debug_Gui();
 	ImGui::End();
 
+	camera_->Debug_Gui();
 }
 #endif
