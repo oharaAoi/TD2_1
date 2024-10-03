@@ -1,6 +1,7 @@
 #include "ModelManager.h"
 
 std::unordered_map<std::string, std::unique_ptr<Model>> ModelManager::modelMap_;
+std::vector<std::string> ModelManager::modelNameList_;
 
 ModelManager::~ModelManager() {}
 
@@ -26,5 +27,6 @@ Model* ModelManager::GetModel(const std::string& modelName) {
 		assert("not find Model!");
 	}
 
+	modelNameList_.push_back(modelName);
 	return modelMap_[modelName].get();
 }

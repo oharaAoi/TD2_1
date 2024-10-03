@@ -167,6 +167,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Utilities\DirectXUtils.cpp" />
     <ClCompile Include="Engine\Utilities\DrawUtils.cpp" />
     <ClCompile Include="Engine\Utilities\Loader.cpp" />
+    <ClCompile Include="Engine\Utilities\AdjustmentItem.cpp" />
     <ClCompile Include="Engine\Utilities\Shader.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
     <ClCompile Include="Externals\ImGui\imgui.cpp" />
@@ -178,6 +179,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Externals\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Camera\DebugCamera.cpp" />
+    <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp" />
+    <ClCompile Include="Game\GameObject\BasePlacementObject.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\TestScene.cpp" />
@@ -264,6 +267,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utilities\DirectXUtils.h" />
     <ClInclude Include="Engine\Utilities\DrawUtils.h" />
     <ClInclude Include="Engine\Utilities\Loader.h" />
+    <ClInclude Include="Engine\Utilities\AdjustmentItem.h" />
     <ClInclude Include="Engine\Utilities\Shader.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Enviroment.h" />
@@ -277,6 +281,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Externals\ImGui\imstb_truetype.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Camera\DebugCamera.h" />
+    <ClInclude Include="Game\Editer\PlacementObjectEditer.h" />
+    <ClInclude Include="Game\GameObject\BasePlacementObject.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\TestScene.h" />

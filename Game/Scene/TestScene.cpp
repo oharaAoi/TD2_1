@@ -23,6 +23,10 @@ void TestScene::Init() {
 	camera_->SetTarget(testObj_->GetTransform());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
+	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
+	placementObjEditer_->Init();
+
+	adjustment_->GetInstance()->Init("testScene");
 }
 
 void TestScene::Load() {
@@ -30,6 +34,7 @@ void TestScene::Load() {
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "plane.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Engine/Resources/Animation/", "walk.gltf");
 	
 	// textureのload
@@ -47,6 +52,8 @@ void TestScene::Update() {
 	testObj2_->Update();
 	
 	sprite_->Update();
+
+	placementObjEditer_->Update();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -69,6 +76,7 @@ void TestScene::Update() {
 #ifdef _DEBUG
 	ImGuiDraw();
 #endif
+
 }
 
 void TestScene::Draw() const {
@@ -80,6 +88,7 @@ void TestScene::Draw() const {
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//testObj_->Draw();
 	testObj2_->Draw();
+	placementObjEditer_->Draw();
 	
 #pragma endregion
 

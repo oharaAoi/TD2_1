@@ -9,6 +9,9 @@
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/CollisionManager.h"
 
+#include "Game/Editer/PlacementObjectEditer.h"
+#include "Engine/Utilities/AdjustmentItem.h"
+
 
 class TestScene 
 : public BaseScene {
@@ -31,16 +34,20 @@ public:
 
 private:
 
-	// カメラ----------------------------------------------
+	// camera ----------------------------------------------
 	std::unique_ptr<Camera> camera_ = nullptr;
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
-	// ゲームオブジェクト -----------------------------------
+	// gameObject -----------------------------------
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;
 	std::unique_ptr<BaseGameObject> testObj2_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
-	// マネジャー ------------------------------------------
+	// Manager ------------------------------------------
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+
+	// editer ------------------------------------------
+	std::unique_ptr<PlacementObjectEditer> placementObjEditer_ = nullptr;
+	std::unique_ptr<AdjustmentItem> adjustment_ = nullptr;
 };
 

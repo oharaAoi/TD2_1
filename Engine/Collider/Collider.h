@@ -10,7 +10,7 @@ class Collider {
 public:
 
 	Collider();
-	~Collider();
+	virtual ~Collider();
 
 	/// <summary>
 	/// 衝突時に呼ばれる関数

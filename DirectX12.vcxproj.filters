@@ -106,6 +106,12 @@
     <Filter Include="Engine\ParticleSystem\Field">
       <UniqueIdentifier>{74c8d076-9996-47da-9754-be95ab9f5d45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Editer">
+      <UniqueIdentifier>{7108b175-9124-427e-9626-c4a56873e080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObject">
+      <UniqueIdentifier>{d6993e86-a683-4a51-928a-bc0d52541341}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -371,6 +377,15 @@
     </ClCompile>
     <ClCompile Include="Game\Camera\DebugCamera.cpp">
       <Filter>Game\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\BasePlacementObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utilities\AdjustmentItem.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -661,6 +676,15 @@
     </ClInclude>
     <ClInclude Include="Game\Camera\DebugCamera.h">
       <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BasePlacementObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Editer\PlacementObjectEditer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utilities\AdjustmentItem.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

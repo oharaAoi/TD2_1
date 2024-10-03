@@ -39,6 +39,7 @@ public:
 private:
 
 	static std::unordered_map<std::string, std::unique_ptr<Model>> modelMap_;
+	static std::vector<std::string> modelNameList_;
 
 };
 
