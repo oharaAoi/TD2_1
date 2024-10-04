@@ -47,7 +47,7 @@ void Material::ImGuiDraw() {
 	ImGui::DragFloat2("uvTranslate", &uvTranslation_.x, 0.01f, -10.0f, 10.0f);
 	ImGui::DragFloat2("uvScale", &uvScale_.x, 0.01f, -10.0f, 10.0f);
 	ImGui::SliderAngle("UvRotate", &uvRotation_.z);
-	ImGui::ColorEdit3("color", &material_->color.x);
+	ImGui::ColorEdit4("color", &material_->color.x);
 	ImGui::Combo("Lighting", &material_->enableLighting, "None\0Lambert\0HalfLambert");
 
 	material_->uvTransform = MakeAffineMatrix(kTransform(uvScale_, uvRotation_, uvTranslation_));

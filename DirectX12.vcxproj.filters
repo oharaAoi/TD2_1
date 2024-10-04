@@ -378,14 +378,14 @@
     <ClCompile Include="Game\Camera\DebugCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Utilities\AdjustmentItem.cpp">
+      <Filter>Engine\Utilities</Filter>
+    </ClCompile>
     <ClCompile Include="Game\GameObject\BasePlacementObject.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Utilities\AdjustmentItem.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Editer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -677,14 +677,14 @@
     <ClInclude Include="Game\Camera\DebugCamera.h">
       <Filter>Game\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\BasePlacementObject.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Utilities\AdjustmentItem.h">
+      <Filter>Engine\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Game\Editer\PlacementObjectEditer.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Utilities\AdjustmentItem.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Game\GameObject\BasePlacementObject.h">
+      <Filter>Game\Editer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

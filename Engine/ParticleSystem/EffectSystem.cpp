@@ -78,6 +78,9 @@ void EffectSystem::Update() {
 	// ↓ ImGuiの描画
 	// -------------------------------------------------
 	//particle_->ImGuiDraw();
+#ifdef _DEBUG
+	Debug_Gui();
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +109,6 @@ void EffectSystem::Draw() const {
 
 		++effectDataListIter;
 	}
-	
 	particleField_->Draw(viewMat_ * projectionMat_);
 }
 
@@ -137,6 +139,12 @@ void EffectSystem::SetViewProjectionMatrix(const Matrix4x4& viewMat, const Matri
 // ↓　Syetemのための関数群
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef _DEBUG
+void EffectSystem::Debug_Gui() {
+	ImGui::Begin("Engine");
+	ImGui::Checkbox("openEffectEditer", &isEffectEditer_);
+	ImGui::End();
+}
+
 void EffectSystem::EditerInit(RenderTarget* renderTarget, DescriptorHeap* descriptorHeaps, DirectXCommands* dxCommands, ID3D12Device* device) {
 	editer_ = std::make_unique<EffectSystemEditer>(renderTarget, descriptorHeaps, dxCommands, device);
 }

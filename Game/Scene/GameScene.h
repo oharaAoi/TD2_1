@@ -1,11 +1,10 @@
 #pragma once
 #include "Engine.h"
 #include "Game/Scene/BaseScene.h"
-// lib
 #include "Engine/Lib/Transform.h"
-#include "Engine/Utilities/DrawUtils.h"
-// gameObject
 #include "Game/Camera/Camera.h"
+#include "Game/Camera/DebugCamera.h"
+#include "Engine/ParticleSystem/EffectSystem.h"
 
 class GameScene 
 	: public BaseScene {
@@ -22,7 +21,6 @@ public:
 private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
-	std::unique_ptr<Sphere> sphere_ = nullptr;
 
 	// ---------- sound ---------- //
 	SeData soundData_;

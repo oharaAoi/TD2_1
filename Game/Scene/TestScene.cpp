@@ -6,23 +6,20 @@ TestScene::~TestScene() {}
 void TestScene::Init() {
 	// カメラ -------------------------------------------------------------------
 	camera_ = std::make_unique<Camera>();
-	/*sphereModel_ = Engine::CreateModel("sphere_Block.obj");*/
 	
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
 	testObj_->SetObject("walk.gltf");
 	testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 
-	testObj2_ = std::make_unique<BaseGameObject>();
-	testObj2_->Init();
-	testObj2_->SetObject("skin.obj");
-
-	sprite_ = Engine::CreateSprite({128, 128}, {256, 256});
-	sprite_->SetTexture("uvChecker.png");
+	world_ = std::make_unique<BaseGameObject>();
+	world_->Init();
+	world_->SetObject("Test_World.obj");
 
 	camera_->SetTarget(testObj_->GetTransform());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
+
 	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
 	placementObjEditer_->Init();
 
@@ -34,7 +31,10 @@ void TestScene::Load() {
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "plane.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "Test_World.obj");
+
 	ModelManager::LoadModel("./Engine/Resources/Animation/", "walk.gltf");
 	
 	// textureのload
@@ -49,10 +49,8 @@ void TestScene::Update() {
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
-	testObj2_->Update();
+	world_->Update();
 	
-	sprite_->Update();
-
 	placementObjEditer_->Update();
 
 	// -------------------------------------------------
@@ -86,15 +84,8 @@ void TestScene::Draw() const {
 #pragma region NormalPipeline
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
-	//testObj_->Draw();
-	testObj2_->Draw();
 	placementObjEditer_->Draw();
-	
-#pragma endregion
-
-#pragma region Textureless
-
-	Engine::SetPipeline(PipelineKind::kTexturelessPipeline);
+	world_->Draw();
 
 #pragma endregion
 
@@ -107,22 +98,14 @@ void TestScene::Draw() const {
 #pragma region Sprite
 
 	Engine::SetPipeline(PipelineKind::kSpritePipeline);
-	sprite_->Draw();
 	
 #pragma endregion
-
-	Engine::SetPipeline(PipelineKind::kSkinningPipeline);
-	testObj_->Draw();
 }
 
 #ifdef _DEBUG
 void TestScene::ImGuiDraw() {
 	ImGui::Begin("GameObjects");
-	testObj_->Debug_Gui();
-	ImGui::End();
-
-	ImGui::Begin("Sprite");
-	sprite_->Debug_Gui();
+	world_->Debug_Gui();
 	ImGui::End();
 
 	camera_->Debug_Gui();

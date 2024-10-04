@@ -40,9 +40,8 @@ private:
 
 	// gameObject -----------------------------------
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;
-	std::unique_ptr<BaseGameObject> testObj2_ = nullptr;
-	std::unique_ptr<Sprite> sprite_ = nullptr;
-
+	std::unique_ptr<BaseGameObject> world_ = nullptr;
+	
 	// Manager ------------------------------------------
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 

@@ -42,6 +42,8 @@ public:
 	void CreateEffect();
 
 #ifdef _DEBUG
+	void Debug_Gui();
+
 	void EditerInit(RenderTarget* renderTarget, DescriptorHeap* descriptorHeaps, DirectXCommands* dxCommands, ID3D12Device* device);
 
 public:	// ImGui上でEffectだけを描画するための処理をする関数
@@ -59,6 +61,8 @@ public: // accessor
 	void SetCameraMatrix(const Matrix4x4& cameraMat) { cameraMat_ = cameraMat; }
 	void SetViewProjectionMatrix(const Matrix4x4& viewMat, const Matrix4x4& projection);
 
+	const bool GetIsEffectEditer() const { return isEffectEditer_; }
+
 private:
 
 	std::unique_ptr<ParticleField> particleField_ = nullptr;
@@ -67,6 +71,8 @@ private:
 	Matrix4x4 cameraMat_;
 	Matrix4x4 viewMat_;
 	Matrix4x4 projectionMat_;
+
+	bool isEffectEditer_ = false;
 
 	// ------------------- ImGui上でEffectを作成するために必要な変数 ------------------- //
 	D3D12_RESOURCE_BARRIER barrier_;

@@ -37,5 +37,6 @@ void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::st
 #ifdef _DEBUG
 void BaseGameObject::Debug_Gui() {
 	transform_->Debug_Gui();
+	model_->Debug_Gui("Test");
 }
 #endif // _DEBUG
