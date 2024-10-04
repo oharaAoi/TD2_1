@@ -25,7 +25,6 @@ void Player::Init() {
 
 	AdaptAdjustmentItem();
 
-	transform_->SetTranslaion({ -4.0f,5.0f, 0.0f });
 	Quaternion playerQuaternion = Quaternion::AngleAxis(90.0f, {0,1,0});
 	transform_->SetQuaternion(playerQuaternion);
 }
@@ -86,6 +85,10 @@ void Player::LookAtDirection(const float& angle) {
 	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion(), moveRotation, lookAtT_);
 	transform_->SetQuaternion(slerp);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　調整項目を適応させる
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::AdaptAdjustmentItem() {
 	const char* groupName = "Player";
