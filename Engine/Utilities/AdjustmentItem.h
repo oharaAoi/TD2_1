@@ -38,6 +38,8 @@ public:
 	void Init(const std::string& nowScene);
 	void Update();
 
+	void CreateGroup(const std::string& groupName);
+
 	void LoadAllFile();
 	void Load(const std::string& fileName);
 	void Save(const std::string& fileName);

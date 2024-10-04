@@ -13,7 +13,7 @@ void SceneManager::Finalize() {
 void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
-
+	
 	scene_ = std::make_unique<GameScene>();
 	scene_->Load();
 	scene_->Init();
@@ -25,6 +25,8 @@ void SceneManager::Init() {
 void SceneManager::Run() {
 	while (Engine::ProcessMessage()) {
 		Engine::BeginFrame();
+
+		Input::GetInstance()->Update();
 
 		// ------------------------------------ //
 		// 更新処理

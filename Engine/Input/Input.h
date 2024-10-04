@@ -8,6 +8,7 @@
 #include <Xinput.h>
 #include <limits>
 #include "Engine/Math/Vector2.h"
+#include "Engine/Math/MyMath.h"
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -31,7 +32,7 @@ enum XInputButtons {
 };
 
 // デッドゾーン
-const float DEADZONE = 8000;
+const float DEADZONE = 0.1f;
 
 class Input {
 public:
@@ -134,6 +135,8 @@ public: // 入力
 	static Vector2 GetLeftJoyStick();
 	// 右ジョイスティックの値の取得
 	static Vector2 GetRightJoyStick();
+	// コントローラーと繋がっているか
+	static bool IsControllerConnected();
 
 private:
 	// DirectInputオブジェクトの生成

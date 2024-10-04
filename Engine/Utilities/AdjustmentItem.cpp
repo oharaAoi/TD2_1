@@ -37,6 +37,10 @@ void AdjustmentItem::Update() {
 		return;
 	}
 
+	if (ImGui::Button("Reload")) {
+		LoadAllFile();
+	}
+
 	if (!ImGui::BeginMenuBar()) { return; }
 
 	// ------------------------------------------
@@ -100,6 +104,10 @@ void AdjustmentItem::Update() {
 	ImGui::EndMenuBar();
 	ImGui::End();
 #endif // _DEBUG
+}
+
+void AdjustmentItem::CreateGroup(const std::string& groupName) {
+	data_[groupName];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,75 +1,75 @@
 #pragma once
 #include <cmath>
 
-struct Vector2 final {
-	float x;
-	float y;
+class Vector2 final {
+public:
+    float x;
+    float y;
 
-	// =============================================
-	/// <summary>
-	/// 加算
-	/// </summary>
-	/// <param name="obj"></param>
-	/// <returns></returns>
-	Vector2 operator+(const Vector2& obj) const { return Vector2(x + obj.x, y + obj.y); }
+    // コンストラクタ
+    Vector2(float x = 0.0f, float y = 0.0f) : x(x), y(y) {}
 
-	Vector2 operator+(const float& obj) const { return Vector2(x + obj, y + obj); }
+    // 加算
+    Vector2 operator+(const Vector2& obj) const { return Vector2(x + obj.x, y + obj.y); }
+    Vector2 operator+(float obj) const { return Vector2(x + obj, y + obj); }
 
-	Vector2 operator+=(const Vector2& obj) {
-		x += obj.x;
-		y += obj.y;
-		return *this;
-	}
+    // 加算代入
+    Vector2& operator+=(const Vector2& obj) {
+        x += obj.x;
+        y += obj.y;
+        return *this;
+    }
+    Vector2& operator+=(float obj) {
+        x += obj;
+        y += obj;
+        return *this;
+    }
 
-	Vector2 operator+=(const float& obj) {
-		x += obj;
-		y += obj;
-		return *this;
-	}
+    // 減算
+    Vector2 operator-(const Vector2& obj) const { return Vector2(x - obj.x, y - obj.y); }
+    Vector2 operator-(float obj) const { return Vector2(x - obj, y - obj); }
 
-	/// <summary>
-	/// 減算
-	/// </summary>
-	/// <param name="obj"></param>
-	/// <returns></returns>
-	Vector2 operator-(const Vector2& obj) const { return Vector2(x - obj.x, y - obj.y); }
+    // 減算代入
+    Vector2& operator-=(const Vector2& obj) {
+        x -= obj.x;
+        y -= obj.y;
+        return *this;
+    }
+    Vector2& operator-=(float obj) {
+        x -= obj;
+        y -= obj;
+        return *this;
+    }
 
-	Vector2 operator-(const float& obj) const { return Vector2(x - obj, y - obj); }
+    // 乗算
+    Vector2 operator*(const Vector2& obj) const { return Vector2(x * obj.x, y * obj.y); }
+    Vector2 operator*(float obj) const { return Vector2(x * obj, y * obj); }
 
-	Vector2 operator-=(const Vector2& obj) {
-		x -= obj.x;
-		y -= obj.y;
-		return *this;
-	}
+    // 乗算代入
+    Vector2& operator*=(const Vector2& obj) {
+        x *= obj.x;
+        y *= obj.y;
+        return *this;
+    }
+    Vector2& operator*=(float obj) {
+        x *= obj;
+        y *= obj;
+        return *this;
+    }
 
-	Vector2 operator-=(const float& obj) {
-		x -= obj;
-		y -= obj;
-		return *this;
-	}
+    // ベクトルの長さ
+    float Length() const {
+        return std::sqrt((x * x) + (y * y));
+    }
 
-	/// <summary>
-	/// 乗算
-	/// </summary>
-	/// <param name="obj"></param>
-	/// <returns></returns>
-	Vector2 operator*(const Vector2& obj) const { return Vector2(x * obj.x, y * obj.y); }
+    Vector2 Normalize() const {
+        Vector2 result;
+        float len = this->Length();
+        if (len != 0) {
+            result.x /= len;
+            result.y /= len;
+        }
 
-	Vector2 operator*(const float& obj) const { return Vector2(x * obj, y * obj); }
-
-	Vector2 operator*=(const Vector2& obj) {
-		x *= obj.x;
-		y *= obj.y;
-		return *this;
-	}
-
-	Vector2 operator*=(const float& obj) {
-		x *= obj;
-		y *= obj;
-		return *this;
-	}
-
-	float Length() {
-		return std::sqrt((this->x * this->x) + (this->y * this->y));
-	}
+        return result;
+    }
 };

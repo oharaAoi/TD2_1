@@ -231,22 +231,35 @@ bool Input::GetPressPadTrigger(const XInputButtons& bottons) {
 
 Vector2 Input::GetLeftJoyStick() {
 	Vector2 result;
-	result.x = static_cast<float>(gamepadState_.Gamepad.sThumbLX / std::numeric_limits<SHORT>::max());
-	result.y = static_cast<float>(gamepadState_.Gamepad.sThumbLY / std::numeric_limits<SHORT>::max());
+	result.x = (float)gamepadState_.Gamepad.sThumbLX / std::numeric_limits<SHORT>::max();
+	result.y = (float)gamepadState_.Gamepad.sThumbLY / std::numeric_limits<SHORT>::max();
 
 	if (result.Length() < DEADZONE) {
-		result = {0,0};
+		result = { 0,0 };
 	}
+
 	return result;
 }
 
 Vector2 Input::GetRightJoyStick() {
 	Vector2 result;
-	result.x = static_cast<float>(gamepadState_.Gamepad.sThumbRX / std::numeric_limits<SHORT>::max());
-	result.y = static_cast<float>(gamepadState_.Gamepad.sThumbRY / std::numeric_limits<SHORT>::max());
+	result.x = (float)gamepadState_.Gamepad.sThumbRX / std::numeric_limits<SHORT>::max();
+	result.y = (float)gamepadState_.Gamepad.sThumbRY / std::numeric_limits<SHORT>::max();
 
 	if (result.Length() < DEADZONE) {
-		result = { 0,0 };
+		result = {0,0};
 	}
+
 	return result;
+}
+
+bool Input::IsControllerConnected() {
+	XINPUT_STATE state;
+	// XInputGetStateでコントローラーの状態を取得
+	DWORD result = XInputGetState(0, &state);
+	// 接続されていない場合はERROR_DEVICE_NOT_CONNECTEDが返る
+	if (result == ERROR_DEVICE_NOT_CONNECTED) {
+		return false;
+	}
+	return true;
 }

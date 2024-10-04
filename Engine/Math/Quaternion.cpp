@@ -60,9 +60,9 @@ Quaternion Quaternion::AngleAxis(const float& angle, const Vector3& axis) {
 
 Quaternion Quaternion::EulerToQuaternion(const Vector3& euler) {
 	// オイラー角をラジアンに変換（角度の場合）
-	float halfPitch = euler.x * toRadian;
-	float halfYaw = euler.y * toRadian;
-	float halfRoll = euler.z * toRadian;
+	float halfPitch = euler.x * 0.5f;
+	float halfYaw = euler.y * 0.5f;
+	float halfRoll = euler.z * 0.5f;
 
 	// 三角関数の計算
 	float cosPitch = cos(halfPitch);

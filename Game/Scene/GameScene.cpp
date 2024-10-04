@@ -8,6 +8,8 @@ GameScene::~GameScene() {}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Init() {
+	AdjustmentItem::GetInstance()->Init("GameScene");
+
 	// -------------------------------------------------
 	// ↓ カメラの更新
 	// -------------------------------------------------
@@ -19,10 +21,8 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	ground_ = std::make_unique<Ground>();
 	waterSpace_ = std::make_unique<WaterSpace>();
-	testobj_ = std::make_unique<BaseGameObject>();
-	testobj_->Init();
-	testobj_->SetObject("skin.obj");
-	testobj_->GetTransform()->SetTranslaion({ 0,5.0f, 0.0f });
+
+	player_ = std::make_unique<Player>();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +40,8 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
+	AdjustmentItem::GetInstance()->Update();
+
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
@@ -56,9 +58,10 @@ void GameScene::Update() {
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
+	player_->Update();
+
 	ground_->Update();
 	waterSpace_->Update();
-	testobj_->Update();
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -81,7 +84,7 @@ void GameScene::Draw() const {
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	ground_->Draw();
-	testobj_->Draw();
+	player_->Draw();
 
 	// このクラスは一番最後に描画
 	waterSpace_->Draw();
@@ -104,7 +107,7 @@ void GameScene::Draw() const {
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui() {
 	ImGui::Begin("GameScene");
-	waterSpace_->Debug_Gui();
+	player_->Debug_Gui();
 	ImGui::End();
 }
 #endif

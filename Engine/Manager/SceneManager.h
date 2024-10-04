@@ -6,6 +6,7 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/ModelManager.h"
+#include "Engine/Input/Input.h"
 
 /// <summary>
 /// シーンを管理するクラス

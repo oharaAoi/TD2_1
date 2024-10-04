@@ -6,6 +6,7 @@
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Game/GameObject/Ground.h"
 #include "Game/GameObject/WaterSpace.h"
+#include "Game/GameObject/Player.h"
 
 
 class GameScene 
@@ -33,7 +34,7 @@ private:
 	// ---------- gameobject ---------- //
 	std::unique_ptr<Ground> ground_ = nullptr;
 	std::unique_ptr<WaterSpace> waterSpace_ = nullptr;
-	std::unique_ptr<BaseGameObject> testobj_ = nullptr;
+	std::unique_ptr<Player> player_ = nullptr;
 
 	// ---------- sound ---------- //
 	SeData soundData_;
