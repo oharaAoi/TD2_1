@@ -31,12 +31,17 @@ public:
 
 	WorldTransform* GetTransform() { return transform_.get(); }
 
+	void SetColor(const Vector4& color);
+
 protected:
 
 	Model* model_;
+	std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;	// 後で変えたい
 
 	std::unique_ptr<WorldTransform> transform_;
 	std::unique_ptr<Animetor> animetor_ = nullptr;
 
 	bool isAnimation_ = false;
+
+	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 };

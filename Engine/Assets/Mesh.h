@@ -76,7 +76,7 @@ public:
 	uint32_t* GetIndexData() { return indexData_; }
 
 	void SetUseMaterial(const std::string& usemtl) { useMaterial_ = usemtl; }
-	std::string GetUseMaterial() const { return useMaterial_; }
+	const std::string GetUseMaterial() const { return useMaterial_; }
 
 private:
 	// VertexBuffer

@@ -1,10 +1,12 @@
 #pragma once
 #include "Engine.h"
 #include "Game/Scene/BaseScene.h"
-#include "Engine/Lib/Transform.h"
 #include "Game/Camera/Camera.h"
 #include "Game/Camera/DebugCamera.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
+#include "Game/GameObject/Ground.h"
+#include "Game/GameObject/WaterSpace.h"
+
 
 class GameScene 
 	: public BaseScene {
@@ -18,9 +20,20 @@ public:
 	void Update() override;
 	void Draw() const override;
 
+#ifdef _DEBUG
+	void Debug_Gui();
+#endif 
+
 private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	bool isDebug_ = true;
+
+	// ---------- gameobject ---------- //
+	std::unique_ptr<Ground> ground_ = nullptr;
+	std::unique_ptr<WaterSpace> waterSpace_ = nullptr;
+	std::unique_ptr<BaseGameObject> testobj_ = nullptr;
 
 	// ---------- sound ---------- //
 	SeData soundData_;

@@ -29,11 +29,11 @@ void Model::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // 描画関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void Model::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewProjection) {
+void Model::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewProjection, const std::unordered_map<std::string, std::unique_ptr<Material>>& materialArray) {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		meshArray_[oi]->Draw(commandList);
-		materialArray_[meshArray_[oi]->GetUseMaterial()]->Draw(commandList);
+		materialArray.at(meshArray_[oi]->GetUseMaterial())->Draw(commandList);
 
 		worldTransform->Draw(commandList);
 		viewProjection->Draw(commandList);

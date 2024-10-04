@@ -69,13 +69,13 @@ void Render::DrawSphere(Sphere* sphere, const WorldTransform* worldTransform) {
 // ↓　モデルの描画
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Render::DrawModel(Model* model, const WorldTransform* worldTransform) {
+void Render::DrawModel(Model* model, const WorldTransform* worldTransform, const std::unordered_map<std::string, std::unique_ptr<Material>>& materialArray_) {
 	if (model->GetHasTexture()) {
 		lightGroup_->Draw(commandList_, 4);
 	} else {
 		lightGroup_->Draw(commandList_, 3);
 	}
-	model->Draw(commandList_, worldTransform, viewProjection_.get());
+	model->Draw(commandList_, worldTransform, viewProjection_.get(), materialArray_);
 }
 
 void Render::DrawAnimationModel(Model* model, const Skinning* skinning, const WorldTransform* worldTransform) {

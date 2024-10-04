@@ -31,7 +31,6 @@ void TestScene::Load() {
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "plane.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "Test_World.obj");
 

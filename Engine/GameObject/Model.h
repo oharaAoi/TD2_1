@@ -45,7 +45,7 @@ public:
 
 	void Init(ID3D12Device* device, const std::string& directorPath, const std::string& fileName);
 	void Update();
-	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewprojection);
+	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::unordered_map<std::string, std::unique_ptr<Material>>& materialArray);
 	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform* worldTransform, const ViewProjection* viewprojection);
 
 #ifdef _DEBUG
@@ -78,6 +78,19 @@ public:
 	std::map<std::string, Skinning::JointWeightData>& GetSkinClusterData() { return skinClusterData_; }
 
 	Mesh* GetMesh(const uint32_t& index) { return meshArray_[index].get(); }
+
+	std::unordered_map<std::string, std::unique_ptr<Material>> copyMaterialArray() {
+
+		std::unordered_map<std::string, std::unique_ptr<Material>> copy;
+
+		// マップの各要素をディープコピー
+		for (const auto& pair : this->materialArray_) {
+			copy[pair.first] = pair.second->clone(); // ディープコピー
+		}
+
+		return copy;
+	}
+
 
 private:
 

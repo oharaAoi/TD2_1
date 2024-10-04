@@ -387,6 +387,12 @@
     <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp">
       <Filter>Game\Editer</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameObject\Ground.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\WaterSpace.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -685,6 +691,12 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\BasePlacementObject.h">
       <Filter>Game\Editer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Ground.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\WaterSpace.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

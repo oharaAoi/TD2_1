@@ -3,10 +3,7 @@
 #include "Engine/Math/MyMath.h"
 #include "Engine/Lib/Transform.h"
 #include "Engine/Assets/WorldTransform.h"
-#include "Engine/Input/Input.h"
-#include "Engine/Manager/ImGuiManager.h"
-
-const float kCameraMoveSpeed_ = 0.05f;
+#include "Enviroment.h"
 
 class Camera {
 public:
@@ -16,30 +13,10 @@ public:
 
 	void Init();
 	void Update();
-	void Draw();
 
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
-
-public:
-
-	/// <summary>
-	/// カメラを動かす
-	/// </summary>
-	void TransitionMove();
-
-	/// <summary>
-	/// カメラを回転させる
-	/// </summary>
-	void RotateMove();
-
-	/// <summary>
-	/// マウスのスクロールで移動する
-	/// </summary>
-	void ScrollMove();
-
-public:
 
 	Matrix4x4 GetCameraMatrix() const { return cameraMatrix_; }
 
@@ -73,14 +50,4 @@ private:
 	// 2d
 	Matrix4x4 projectionMatrix2D_;
 	Matrix4x4 viewMatrix2D_;
-
-	// ---------------------------------------------------------------
-	// ↓ デバックカメラで使う変数
-	// ---------------------------------------------------------------
-	bool debugCameraMode_ = true;
-	Vector3 lookPosition_;
-	Vector2 mousePosition_;
-	Vector2 rotateMousePosition_;
-
-	bool isMove = false;
 };

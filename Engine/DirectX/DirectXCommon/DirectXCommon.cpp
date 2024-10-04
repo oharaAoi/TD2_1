@@ -105,6 +105,9 @@ void DirectXCommon::SetSwapChain() {
 	ID3D12GraphicsCommandList* commandList = dxCommands_->GetCommandList();
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = descriptorHeaps_->GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
 	commandList->OMSetRenderTargets(1, &renderTarget_->GetRtvHandles(backBufferIndex).handleCPU, false, &dsvHandle);
+	float clearColor[] = { 0.1f, 0.25f, 0.5f, 1.0f };
+	// RenderTargetはoffScreen用のRenderTargetを指定しておく
+	commandList->ClearRenderTargetView(renderTarget_->GetRtvHandles(backBufferIndex).handleCPU, clearColor, 0, nullptr);
 }
 
 void DirectXCommon::End() {

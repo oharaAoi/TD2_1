@@ -58,7 +58,7 @@ public:
 	/// </summary>
 	/// <param name="model">: モデルのポインタ</param>
 	/// <param name="worldTransform">: worldTransform</param>
-	static void DrawModel(Model* model, const WorldTransform* worldTransform);
+	static void DrawModel(Model* model, const WorldTransform* worldTransform, const std::unordered_map<std::string, std::unique_ptr<Material>>& materialArray_);
 
 	static void DrawAnimationModel(Model* model, const Skinning& skeleton, const WorldTransform* worldTransform);
 	static void DrawAnimationModel(Model* model, const Skinning* skeleton, const WorldTransform* worldTransform);

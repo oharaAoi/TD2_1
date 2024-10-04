@@ -1,6 +1,7 @@
 #include "DebugCamera.h"
 
 DebugCamera::DebugCamera() {
+	Init();
 }
 
 DebugCamera::~DebugCamera() {
@@ -14,8 +15,10 @@ void DebugCamera::Init() {
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
 		{0 , 0, 0.0f},
-		{0.0f, 0.0f, -15.0f}
+		{0.0f, 4.0f, -30.0f}
 	};
+
+	startCameraPosition_ = transform_.translate;
 
 	// 行列の生成
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
@@ -39,14 +42,16 @@ void DebugCamera::Init() {
 void DebugCamera::Update() {
 	ScrollMove();
 	TransitionMove();
-	RotateMove();
 
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
 	translateMat_ = MakeTranslateMatrix(transform_.translate);
 
-	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
+	cameraMatrix_ =scaleMat_ * rotateMat_ * translateMat_;
 	viewMatrix_ = Inverse(cameraMatrix_);
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(1280) / float(720), 0.1f, 100.0f);
+
+	RotateMove();
+
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 0.1f, 100.0f);
 
 #ifdef _DEBUG
 	ImGui::Begin("Debug_Camera");
@@ -58,7 +63,7 @@ void DebugCamera::Update() {
 
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
-
+	
 	ImGui::End();
 #endif
 }
@@ -95,7 +100,7 @@ void DebugCamera::TransitionMove() {
 void DebugCamera::RotateMove() {
 	if (Input::IsPressMouse(1)) {
 		Vector3 normalizeDiff{};
-		Vector3 offset = { 0.0f, 0.0f, -10.0f };
+		Vector3 offset = startCameraPosition_;
 		const float speed = 0.015f;
 		// マウスの位置を得る
 		Vector2 mousePos = Input::GetMousePosition();
@@ -116,7 +121,7 @@ void DebugCamera::RotateMove() {
 
 		/// -------------------------------------------------------------------------
 		// 旋回させる
-		offset = TransformNormal(Vector3(0, 0, -10.0f), rotateMat_);
+		offset = TransformNormal(startCameraPosition_, rotateMat_);
 		// 位置を動かす
 		transform_.translate = lookPosition_ + offset;
 

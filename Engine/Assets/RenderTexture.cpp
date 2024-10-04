@@ -65,7 +65,7 @@ void RenderTexture::Init(ID3D12Device* device) {
 
 	transformData_->wvp = Matrix4x4(
 		MakeAffineMatrix(transform)
-		* MakeIdentity4x4()
+		* Inverse(MakeAffineMatrix(transform))
 		* MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f)
 	);
 }

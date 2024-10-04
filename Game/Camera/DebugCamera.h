@@ -4,6 +4,7 @@
 #include "Engine/Lib/Transform.h"
 #include "Enviroment.h"
 #include "Engine/Input/Input.h"
+#include "Engine/Lib/GameTimer.h"
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 #endif
@@ -66,6 +67,7 @@ private:
 	Vector3 lookPosition_;
 	Vector2 mousePosition_;
 	Vector2 rotateMousePosition_;
+	Vector3 startCameraPosition_;
 
 	bool isMove = false;
 };

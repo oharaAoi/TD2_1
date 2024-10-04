@@ -71,13 +71,17 @@ public:
 
 	ModelMaterialData GetMateriaData() { return materialData_; }
 
+	void SetColor(const Vector4& color) { material_->color = color; }
+
 	/// <summary>
 	/// materialDataをセットする
 	/// </summary>
 	/// <param name="materialData"></param>
 	void SetMaterialData(ModelMaterialData materialData);
 
-	void SetColor(const Vector4& color) { material_->color = color; }
+	std::unique_ptr<Material> clone() const {
+		return std::make_unique<Material>(*this); // ディープコピーを行う
+	}
 
 private:
 
