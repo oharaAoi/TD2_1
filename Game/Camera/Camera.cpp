@@ -10,8 +10,8 @@ Camera::~Camera() {
 void Camera::Init() {
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
-		{-1.0f , 0, 0.0f},
-		{0.0f, 0.0f, -15.0f}
+		{0 , 0, 0.0f},
+		{0.0f, 4.0f, -30.0f}
 	};
 
 	// 行列の生成
@@ -45,8 +45,6 @@ void Camera::Update() {
 
 	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
 	viewMatrix2D_ = MakeIdentity4x4();
-
-	Debug_Gui();
 }
 
 #ifdef _DEBUG

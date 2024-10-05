@@ -132,3 +132,5 @@ Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, 
 /// <param name="maxDepth"></param>
 /// <returns></returns>
 Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth);
+
+Vector3 GetEulerAnglesFromRotationMat(const Matrix4x4& R);

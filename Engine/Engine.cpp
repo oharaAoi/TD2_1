@@ -18,7 +18,6 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	// ↓インスタンスの生成
 	winApp_ = WinApp::GetInstance();
 	dxCommon_ = DirectXCommon::GetInstacne();
-	imguiManager_ = ImGuiManager::GetInstacne();
 	textureManager_ = TextureManager::GetInstance();
 	input_ = Input::GetInstance();
 	render_ = Render::GetInstacne();
@@ -49,8 +48,6 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 
 	// dxcommon
 	dxCommon_->Setting(dxDevice_->GetDevice(), dxCommands_.get(), descriptorHeap_.get(), renderTarget_.get());
-	// ImGui
-	imguiManager_->Init(winApp_->GetHwnd(), dxDevice_->GetDevice(), dxCommon_->GetSwapChainBfCount(), descriptorHeap_->GetSRVHeap());
 	// renderTarget
 	renderTarget_->Init(dxDevice_->GetDevice(), descriptorHeap_.get(), dxCommon_->GetSwapChain().Get());
 	// texture
@@ -70,6 +67,8 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	renderTexture_->Init(dxDevice_->GetDevice());
 
 #ifdef _DEBUG
+	imguiManager_ = ImGuiManager::GetInstacne();
+	imguiManager_->Init(winApp_->GetHwnd(), dxDevice_->GetDevice(), dxCommon_->GetSwapChainBfCount(), descriptorHeap_->GetSRVHeap());
 	EffectSystem::GetInstacne()->EditerInit(renderTarget_.get(), descriptorHeap_.get(), dxCommands_.get(), dxDevice_->GetDevice());
 #endif
 	Log("Engine Initialize compulete!\n");
@@ -95,8 +94,9 @@ void Engine::Finalize() {
 	dxCommands_->Finalize();
 	dxCommon_->Finalize();
 	dxDevice_->Finalize();
-
+#ifdef _DEBUG
 	imguiManager_->Finalize();
+#endif
 	textureManager_->Finalize();
 	winApp_->Finalize();
 
@@ -108,6 +108,7 @@ void Engine::Finalize() {
 // ↓　ImGuiを描画する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef _DEBUG
 void Engine::DrawImGui() {
 	ImGui::Begin("Engine");
 
@@ -115,6 +116,7 @@ void Engine::DrawImGui() {
 
 	ImGui::End();
 }
+#endif
 
 bool Engine::ProcessMessage() {
 	return  winApp_->ProcessMessage();
@@ -126,12 +128,16 @@ bool Engine::ProcessMessage() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::BeginFrame() {
+#ifdef _DEBUG
 	imguiManager_->Begin();
+#endif
 	dxCommon_->Begin();
 
 	input_->Update();
 
+#ifdef _DEBUG
 	DrawImGui();
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,8 +149,10 @@ void Engine::EndFrame() {
 }
 
 void Engine::EndImGui() {
+#ifdef _DEBUG
 	imguiManager_->End();
 	imguiManager_->Draw(dxCommands_->GetCommandList());
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +274,10 @@ void Engine::SetPipeline(const PipelineKind& kind) {
 		break;
 	case PipelineKind::kSkinningPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::SkinningPipeline, dxCommands_->GetCommandList());
+		break;
 
+	case PipelineKind::kWaterSpacePipeline:
+		graphicsPipelines_->SetPipeline(PipelineType::WaterSpacePipeline, dxCommands_->GetCommandList());
 		break;
 	}
 }
@@ -309,4 +320,14 @@ void Engine::ReStartBGM(const BgmData& soundData) {
 
 void Engine::StopBGM(const BgmData& soundData) {
 	audio_->StopAudio(soundData.pSourceVoice);
+}
+
+ID3D12Device* Engine::GetDevice() {
+	// TODO: return ステートメントをここに挿入します
+	return dxDevice_->GetDevice();
+}
+
+ ID3D12GraphicsCommandList* Engine::GetCommandList() {
+	// TODO: return ステートメントをここに挿入します
+	return dxCommands_->GetCommandList();
 }

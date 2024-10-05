@@ -16,6 +16,7 @@ void Shader::Init() {
 	Load("Engine/HLSL/PBR.VS.hlsl", "Engine/HLSL/PBR.PS.hlsl", Shader::PBR);
 	Load("Engine/HLSL/Particle.VS.hlsl", "Engine/HLSL/Particle.PS.hlsl", Shader::Particle);
 	Load("Engine/HLSL/Sprite.VS.hlsl", "Engine/HLSL/Sprite.PS.hlsl", Shader::Sprite);
+	Load("Engine/HLSL/WaterSpace.VS.hlsl", "Engine/HLSL/WaterSpace.PS.hlsl", Shader::WaterSpace);
 
 	// CS
 	Load("Engine/HLSL/GrayScale.CS.hlsl", CsShaderName::GrayScale);

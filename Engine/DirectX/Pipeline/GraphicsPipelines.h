@@ -9,7 +9,8 @@ enum class PipelineType {
 	ParticlePipeline,
 	PBRPipeline,
 	SpritePipeline,
-	SkinningPipeline
+	SkinningPipeline,
+	WaterSpacePipeline
 };
 
 class GraphicsPipelines {

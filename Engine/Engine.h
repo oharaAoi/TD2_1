@@ -32,7 +32,8 @@ enum class PipelineKind {
 	kPBRPipeline,
 	kParticlePipeline,
 	kSpritePipeline,
-	kSkinningPipeline
+	kSkinningPipeline,
+	kWaterSpacePipeline
 };
 
 class EffectSystem;
@@ -47,8 +48,9 @@ public:
 	static void Initialize(uint32_t backBufferWidth, int32_t backBufferHeight);
 
 	static void Finalize();
-
+#ifdef _DEBUG
 	static void DrawImGui();
+#endif
 
 public:
 
@@ -176,6 +178,13 @@ public:
 	/// <param name="soundData">音声データをまとめた構造体</param>
 	static void StopBGM(const BgmData& soundData);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	// 苦肉の策
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	static ID3D12Device* GetDevice();
+	static ID3D12GraphicsCommandList* GetCommandList();
+
 private:
 
 };
@@ -191,7 +200,9 @@ namespace {
 
 	WinApp* winApp_ = nullptr;
 	DirectXCommon* dxCommon_ = nullptr;
+#ifdef _DEBUG
 	ImGuiManager* imguiManager_ = nullptr;
+#endif
 	Input* input_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	// dxDevice

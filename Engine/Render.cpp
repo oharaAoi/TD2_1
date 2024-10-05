@@ -100,6 +100,10 @@ void Render::DrawLine(const Vector3& p1, const Vector3& p2, const Vector4& color
 	primitiveDrawer_->Draw(commandList_, p1, p2, color, vpMat);
 }
 
+void Render::DrawLightGroup(const int& startIndex) {
+	lightGroup_->DrawLi(commandList_, startIndex);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　設定系の関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,4 +118,8 @@ void Render::SetViewProjection2D(const Matrix4x4& view, const Matrix4x4& project
 
 void Render::SetEyePos(const Vector3& eyePos) {
 	lightGroup_->SetEyePos(eyePos);
+}
+
+const ViewProjection* Render::GetViewProjection(){
+	return viewProjection_.get();
 }

@@ -79,6 +79,8 @@ public:
 	/// <param name="vpMat">: viewProjection</param>
 	static void DrawLine(const Vector3& p1, const Vector3& p2, const Vector4& color, const Matrix4x4& vpMat);
 
+	static void DrawLightGroup(const int& startIndex);
+
 	//==================================================================================
 	// ↓　設定系
 	//==================================================================================
@@ -98,6 +100,8 @@ public:
 	static void SetViewProjection2D(const Matrix4x4& view, const Matrix4x4& projection);
 
 	static void SetEyePos(const Vector3& eyePos);
+
+	static const ViewProjection* GetViewProjection();
 
 private:
 

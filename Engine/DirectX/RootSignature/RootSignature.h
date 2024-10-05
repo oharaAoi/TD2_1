@@ -21,7 +21,8 @@ enum class RootSignatureType {
 	Sprite,
 	PBR,
 	ComputeShader,
-	ComputeShaderBlend
+	ComputeShaderBlend,
+	WaterSpace
 };
 
 class RootSignature {
@@ -87,6 +88,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	ComPtr<ID3D12RootSignature> CreateBlendShaderRootSignature();
+
+	/// <summary>
+	/// 波を打つ
+	/// </summary>
+	/// <returns></returns>
+	ComPtr<ID3D12RootSignature> CreateWaterSpaceRootSignature();
 
 public:
 

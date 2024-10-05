@@ -53,6 +53,8 @@ void DebugCamera::Update() {
 
 	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 0.1f, 100.0f);
 
+	transform_.rotate = GetEulerAnglesFromRotationMat(rotateMat_);
+
 #ifdef _DEBUG
 	ImGui::Begin("Debug_Camera");
 	if (ImGui::Button("Reset")) {

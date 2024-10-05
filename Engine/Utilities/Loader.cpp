@@ -3,8 +3,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& filePath, ID3D12Device* device) {
+std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& directoryPath, const std::string& fileName, ID3D12Device* device) {
 	Assimp::Importer importer;
+	std::string filePath = directoryPath + fileName;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 	assert(scene->HasMeshes()); // meshがないのは対応しない
 
@@ -27,23 +28,22 @@ std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& filePath, I
 		// ↓ faceの解析をする
 		// -------------------------------------------------
 		std::vector<Mesh::VertexData> vertices;
-
+		vertices.resize(mesh->mNumVertices);
 		// vertexの解析を行う
-		for (uint32_t element = 0; element < mesh->mNumVertices; ++element) {
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
 			//uint32_t vertexIndex = .mIndices[element];
-			aiVector3D& position = mesh->mVertices[element];
-			aiVector3D& normal = mesh->mNormals[element];
-			aiVector3D& texcoord = mesh->mTextureCoords[0][element];
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
+			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+			aiVector3D& tangent = mesh->mTangents[vertexIndex];
 
-			Mesh::VertexData vertex;
-			vertex.pos = { position.x, position.y, position.z, 1.0f };
-			vertex.normal = { normal.x, normal.y, normal.z };
-			vertex.texcoord = { texcoord.x, texcoord.y };
+			vertices[vertexIndex].pos = { position.x, position.y, position.z, 1.0f };
+			vertices[vertexIndex].normal = { normal.x, normal.y, normal.z };
+			vertices[vertexIndex].texcoord = { texcoord.x, texcoord.y };
+			vertices[vertexIndex].tangent = { tangent.x, tangent.y, tangent.z };
 
-			vertex.pos.z *= -1.0f;
-			vertex.normal.z *= -1.0f;
-
-			triangle.push_back(vertex);
+			vertices[vertexIndex].pos.x *= -1.0f;
+			vertices[vertexIndex].normal.x *= -1.0f;
 		}
 
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
@@ -72,11 +72,9 @@ std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& filePath, I
 				useMaterial.push_back(nameStr);
 			}
 		}
-
 		// nodeの解析
-		meshVertices.push_back(triangle);
+		meshVertices.push_back(vertices);
 	}
-
 
 	std::vector<std::unique_ptr<Mesh>> result;
 	for (uint32_t oi = 0; oi < meshVertices.size(); oi++) {

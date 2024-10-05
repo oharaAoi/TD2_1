@@ -7,9 +7,8 @@ void BaseParticle::Finalize() {
 }
 
 void BaseParticle::Init(ID3D12Device* device, const std::string& directorPath, const std::string& fileName, const uint32_t& instanceNum) {
-	std::string path = directorPath + "/" + fileName;
 	materialArray_ = LoadMaterialData(directorPath, fileName, device);
-	meshArray_ = LoadVertexData(path, device);
+	meshArray_ = LoadVertexData(directorPath, fileName, device);
 
 	kNumInstance_ = instanceNum;
 

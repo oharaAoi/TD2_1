@@ -106,9 +106,11 @@ void Sphere::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* 
 	commandList->DrawIndexedInstanced(vertexCount_, 1, 0, 0, 0);
 }
 
+#ifdef _DEBUG
 void Sphere::ImGuiDraw(const std::string& name) {
 	if (ImGui::TreeNode(name.c_str())) {
 		material_->ImGuiDraw();
 		ImGui::TreePop();
 	}
 }
+#endif

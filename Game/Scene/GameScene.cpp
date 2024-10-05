@@ -21,6 +21,7 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	ground_ = std::make_unique<Ground>();
 	waterSpace_ = std::make_unique<WaterSpace>();
+	waterSpace_->Init("./Game/Resources/Model/", "waterSpace.obj");
 
 	player_ = std::make_unique<Player>();
 }
@@ -31,7 +32,6 @@ void GameScene::Init() {
 
 void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 }
 
@@ -86,15 +86,20 @@ void GameScene::Draw() const {
 	ground_->Draw();
 	player_->Draw();
 
-	// このクラスは一番最後に描画
-	waterSpace_->Draw();
-
 #pragma endregion
 
 #pragma region PBR
 
 	Engine::SetPipeline(PipelineKind::kPBRPipeline);
 	//Engine::DrawModel(sphereModel_.get());
+#pragma endregion
+
+
+#pragma region WaterSpace
+
+	Engine::SetPipeline(PipelineKind::kWaterSpacePipeline);
+	// このクラスは一番最後に描画
+	waterSpace_->Draw();
 #pragma endregion
 	
 }
@@ -107,7 +112,11 @@ void GameScene::Draw() const {
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui() {
 	ImGui::Begin("GameScene");
+	ImGui::Checkbox("isDebugCamera", &isDebug_);
 	player_->Debug_Gui();
+
+	waterSpace_->Debug_Gui();
+
 	ImGui::End();
 }
 #endif

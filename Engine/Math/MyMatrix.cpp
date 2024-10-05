@@ -378,3 +378,24 @@ Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& w
 
     return result;
 }
+
+
+Vector3 GetEulerAnglesFromRotationMat(const Matrix4x4& R) {
+    Vector3 angles;
+
+    // Pitch (x軸の回転)
+    angles.x = std::asin(-R.m[2][0]);
+
+    // ジンバルロックのチェック
+    if (std::cos(angles.x) > 0.0001) {
+        // Pitchが ±90 度でない場合 (ジンバルロックではない)
+        angles.z = std::atan2(R.m[2][1], R.m[2][2]); // Roll (z軸の回転)
+        angles.y = std::atan2(R.m[1][0], R.m[0][0]); // Yaw (y軸の回転)
+    } else {
+        // Pitchが ±90 度の場合 (ジンバルロック)
+        angles.z = 0.0f; // Rollは定義できないので0にする
+        angles.y = std::atan2(-R.m[0][1], R.m[1][1]); // Yawの特別なケース
+    }
+
+    return angles;
+}

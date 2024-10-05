@@ -60,9 +60,11 @@ void Triangle::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform
 	commandList->DrawIndexedInstanced(3, 1, 0, 0, 0);
 }
 
+#ifdef _DEBUG
 void Triangle::ImGuiDraw(const std::string& name) {
 	if (ImGui::TreeNode(name.c_str())) {
 		material_->ImGuiDraw();
 		ImGui::TreePop();
 	}
 }
+#endif

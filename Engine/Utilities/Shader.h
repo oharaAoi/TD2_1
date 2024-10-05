@@ -16,7 +16,8 @@ public:
 		Phong,
 		PBR,
 		Particle,
-		Sprite
+		Sprite,
+		WaterSpace
 	};
 
 	enum CsShaderName {

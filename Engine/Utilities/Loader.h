@@ -16,7 +16,7 @@
 /// <param name="filePath">ファイルパス</param>
 /// <param name="device">デバイス</param>
 /// <returns></returns>
-std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& filePath, ID3D12Device* device);
+std::vector<std::unique_ptr<Mesh>> LoadVertexData(const std::string& directoryPath, const std::string& fileName, ID3D12Device* device);
 
 /// <summary>
 /// materialの情報を読み込む

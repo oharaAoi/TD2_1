@@ -20,8 +20,8 @@ void TestScene::Init() {
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
-	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
-	placementObjEditer_->Init();
+	/*placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
+	placementObjEditer_->Init();*/
 
 	adjustment_->GetInstance()->Init("testScene");
 }
@@ -50,7 +50,7 @@ void TestScene::Update() {
 	testObj_->Update();
 	world_->Update();
 	
-	placementObjEditer_->Update();
+	//placementObjEditer_->Update();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -83,7 +83,7 @@ void TestScene::Draw() const {
 #pragma region NormalPipeline
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
-	placementObjEditer_->Draw();
+	//placementObjEditer_->Draw();
 	world_->Draw();
 
 #pragma endregion

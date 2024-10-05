@@ -112,6 +112,9 @@
     <Filter Include="Game\GameObject">
       <UniqueIdentifier>{d6993e86-a683-4a51-928a-bc0d52541341}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\HLSL\CS">
+      <UniqueIdentifier>{42b3d390-a5b5-4fdb-9aa3-87577ea7826c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -742,24 +745,26 @@
     <FxCompile Include="Engine\HLSL\Sprite.VS.hlsl">
       <Filter>Engine\HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\HLSL\GrayScale.CS.hlsl">
-      <Filter>Engine\HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\HLSL\Blend.CS.hlsl">
-      <Filter>Engine\HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\HLSL\VerticalBlur.CS.hlsl">
-      <Filter>Engine\HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\HLSL\HorizontalBlur.CS.hlsl">
-      <Filter>Engine\HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\HLSL\DepthOfField.CS.hlsl">
-      <Filter>Engine\HLSL</Filter>
-    </FxCompile>
     <FxCompile Include="Engine\HLSL\SkinningObject3d.VS.hlsl">
       <Filter>Engine\HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\HLSL\Blend.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\DepthOfField.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\GrayScale.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\HorizontalBlur.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\VerticalBlur.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\WaterSpace.VS.hlsl" />
+    <FxCompile Include="Engine\HLSL\WaterSpace.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\ImGui\LICENSE.txt">
@@ -782,5 +787,6 @@
     <None Include="Engine\HLSL\Sprite.2d.hlsli">
       <Filter>Engine\HLSL</Filter>
     </None>
+    <None Include="Engine\HLSL\WaterSpace.hlsli" />
   </ItemGroup>
 </Project>

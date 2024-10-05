@@ -177,10 +177,6 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 				uint32_t vertexIndex = face.mIndices[element];
 				meshIndices[scene->mNumMeshes - 1].push_back(vertexIndex);
 			}
-			/*for (uint32_t element = 0; element < face.mNumIndices; ++element) {
-				uint32_t vertexIndex = face.mIndices[face.mNumIndices - 1 - element];
-				meshIndices[scene->mNumMeshes - 1].push_back(vertexIndex);
-			}*/
 		}
 
 		// -------------------------------------------------
