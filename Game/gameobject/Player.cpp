@@ -17,16 +17,20 @@ void Player::Init() {
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
-
 	adjustmentItem_->AddItem(groupName, "position", transform_->GetTranslation());
 	adjustmentItem_->AddItem(groupName, "velocity", velocity_);
 	adjustmentItem_->AddItem(groupName, "moveSpeed", moveSpeed_);
 	adjustmentItem_->AddItem(groupName, "lookAtT", lookAtT_);
+	adjustmentItem_->AddItem(groupName, "radius", radius_);
 
 	AdaptAdjustmentItem();
 
 	Quaternion playerQuaternion = Quaternion::AngleAxis(90.0f, {0,1,0});
 	transform_->SetQuaternion(playerQuaternion);
+
+	isMove_ = false;
+
+	radius_ = 1.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +38,9 @@ void Player::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update() {
-	Move();
+	if (isMove_) {
+		Move();
+	}
 
 	BaseGameObject::Update();
 }
@@ -96,6 +102,12 @@ void Player::AdaptAdjustmentItem() {
 	moveSpeed_ = adjustmentItem_->GetValue<float>(groupName, "moveSpeed");
 	velocity_ = adjustmentItem_->GetValue<Vector3>(groupName, "velocity");
 	lookAtT_ = adjustmentItem_->GetValue<float>(groupName, "lookAtT");
+	radius_ = adjustmentItem_->GetValue<float>(groupName, "radius");
+}
+
+const Vector3 Player::GetWorldTranslation(const Vector3& offset) const {
+	//return Transform(offset, transform_->GetWorldMatrix());
+	return transform_->GetTranslation();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,9 +123,19 @@ void Player::Debug_Gui() {
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.1f);
+	ImGui::DragFloat("radius", &radius_, 0.1f);
 
 	if (ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();
+	}
+
+
+	ImGui::Checkbox("isMove", &isMove_);
+
+	if (hitWaterSurface_) {
+		ImGui::Text("Hit");
+	} else {
+		ImGui::Text("not Hit");
 	}
 
 	ImGui::End();
