@@ -11,19 +11,25 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	// -------------------------------------------------
-	// ↓ カメラの更新
+	// ↓ cameraの初期化
 	// -------------------------------------------------
 	camera_ = std::make_unique<Camera>();
 	debugCamera_ = std::make_unique<DebugCamera>();
 
 	// -------------------------------------------------
-	// ↓ オブジェクトの初期化
+	// ↓ gameObjectの初期化
 	// -------------------------------------------------
 	ground_ = std::make_unique<Ground>();
 	waterSpace_ = std::make_unique<WaterSpace>();
 	waterSpace_->Init("./Game/Resources/Model/", "waterSpace.obj");
 
 	player_ = std::make_unique<Player>();
+
+	// -------------------------------------------------
+	// ↓ managerの初期化
+	// -------------------------------------------------
+	collisionManager_ = std::make_unique<CollisionManager>();
+	collisionManager_->AddCollider(player_.get());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +70,11 @@ void GameScene::Update() {
 	waterSpace_->Update();
 
 	// -------------------------------------------------
+	// ↓ 当たり判定を取る
+	// -------------------------------------------------
+	PlayerWaveCollision();
+
+	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
@@ -80,6 +91,17 @@ void GameScene::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const {
+#pragma region Primitive
+	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
+	if (Collider::isColliderBoxDraw_) {
+		if (!isDebug_) {
+			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+		} else {
+			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+		}
+	}
+#pragma endregion
+
 #pragma region NormalPipeline
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
@@ -105,6 +127,29 @@ void GameScene::Draw() const {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　波とPlayerの判定
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GameScene::PlayerWaveCollision() {
+	float minLenght = 999;
+	for (size_t oi = 0; oi < waterSpace_->GetWorldTopFaceList().size(); ++oi) {
+		// playerのY座標と波の面のY座標との最短の距離を求める
+		Vector3 distans = player_->GetTransform()->GetTranslation() - waterSpace_->GetWorldTopFaceList()[oi];
+		distans.z = 0;
+		float length = std::abs(distans.Length());
+		if (length < minLenght) {
+			minLenght = length;
+		}
+	}
+
+	if (minLenght < player_->GetRadius()) {
+		player_->SetHitWaterSurface(true);
+	} else {
+		player_->SetHitWaterSurface(false);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　Debug表示
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -113,9 +158,14 @@ void GameScene::Draw() const {
 void GameScene::Debug_Gui() {
 	ImGui::Begin("GameScene");
 	ImGui::Checkbox("isDebugCamera", &isDebug_);
+	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 	player_->Debug_Gui();
 
 	waterSpace_->Debug_Gui();
+
+	if (!isDebug_) {
+		camera_->Debug_Gui();
+	}
 
 	ImGui::End();
 }

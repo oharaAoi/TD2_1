@@ -25,6 +25,7 @@ public:
     WaterSpace();
     ~WaterSpace();
 
+    void Finalize();
     void Init(const std::string& directorPath, const std::string& fileName);
     void Update();
     void Draw() const;
@@ -32,6 +33,10 @@ public:
 #ifdef _DEBUG
     void Debug_Gui();
 #endif // _DEBUG
+
+public:
+
+    const std::vector<Vector3>& GetWorldTopFaceList() { return worldTopFaceList_; }
 
 private:
 
@@ -42,5 +47,9 @@ private:
     std::vector<std::unique_ptr<Mesh>> meshArray_;
     std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;
     std::unique_ptr<WorldTransform> transform_;
+
+    // 水中の元のBoxとなる上面の位置配列
+    std::vector<Vector3> topFaceList_;
+    std::vector<Vector3> worldTopFaceList_;
 };
 

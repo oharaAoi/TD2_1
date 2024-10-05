@@ -9,6 +9,10 @@
 class Collider {
 public:
 
+	static bool isColliderBoxDraw_;
+
+public:
+
 	Collider();
 	virtual ~Collider();
 
@@ -30,7 +34,7 @@ public:
 	void SetIsHitting(const bool& hit) { isHitting_ = hit; }
 	const bool GetIsHitting() const { return isHitting_; }
 
-private:
+protected:
 
 	// 半径
 	float radius_ = 1.0f;

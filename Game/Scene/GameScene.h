@@ -7,6 +7,7 @@
 #include "Game/GameObject/Ground.h"
 #include "Game/GameObject/WaterSpace.h"
 #include "Game/GameObject/Player.h"
+#include "Engine/Manager/CollisionManager.h"
 
 
 class GameScene 
@@ -25,6 +26,8 @@ public:
 	void Debug_Gui();
 #endif 
 
+	void PlayerWaveCollision();
+
 private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
@@ -35,6 +38,9 @@ private:
 	std::unique_ptr<Ground> ground_ = nullptr;
 	std::unique_ptr<WaterSpace> waterSpace_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
+
+	// ---------- manager ---------- //
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 	// ---------- sound ---------- //
 	SeData soundData_;

@@ -3,10 +3,12 @@
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/Input/Input.h"
 #include "Engine/Lib/GameTimer.h"
+#include "Engine/Collider/Collider.h"
 
 
 class Player :
-    public BaseGameObject {
+    public BaseGameObject,
+    public Collider{
 public:
 
     Player();
@@ -16,14 +18,21 @@ public:
     void Update() override;
     void Draw() const override;
 
-#ifdef _DEBUG
-    void Debug_Gui();
-#endif // _DEBUG
-
     void Move();
     void LookAtDirection(const float& angle);
 
     void AdaptAdjustmentItem();
+
+    void OnCollision([[maybe_unused]] Collider* other) override {};
+    const Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const;
+
+public:
+
+    void SetHitWaterSurface(const bool& ishit) { hitWaterSurface_ = ishit; }
+
+#ifdef _DEBUG
+    void Debug_Gui();
+#endif // _DEBUG
 
 private:
 
@@ -33,5 +42,9 @@ private:
     float moveSpeed_;
 
     float lookAtT_;
+
+    bool hitWaterSurface_;
+
+    bool isMove_;
 };
 

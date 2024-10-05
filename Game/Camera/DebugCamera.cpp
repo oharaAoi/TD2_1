@@ -15,7 +15,7 @@ void DebugCamera::Init() {
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
 		{0 , 0, 0.0f},
-		{0.0f, 4.0f, -30.0f}
+		{0.0f, 5.0f, -30.0f}
 	};
 
 	startCameraPosition_ = transform_.translate;
