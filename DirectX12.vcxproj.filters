@@ -763,8 +763,15 @@
     <FxCompile Include="Engine\HLSL\VerticalBlur.CS.hlsl">
       <Filter>Engine\HLSL\CS</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\HLSL\WaterSpace.VS.hlsl" />
-    <FxCompile Include="Engine\HLSL\WaterSpace.PS.hlsl" />
+    <FxCompile Include="Engine\HLSL\ResultRender.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\WaterSpace.PS.hlsl">
+      <Filter>Engine\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\WaterSpace.VS.hlsl">
+      <Filter>Engine\HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\ImGui\LICENSE.txt">
@@ -787,6 +794,8 @@
     <None Include="Engine\HLSL\Sprite.2d.hlsli">
       <Filter>Engine\HLSL</Filter>
     </None>
-    <None Include="Engine\HLSL\WaterSpace.hlsli" />
+    <None Include="Engine\HLSL\WaterSpace.hlsli">
+      <Filter>Engine\HLSL</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -30,13 +30,6 @@ public:
 	/// <param name="commandList">: コマンドリスト</param>
 	virtual void ConfigureResource(ID3D12GraphicsCommandList* commandList);
 
-	/// <summary>
-	/// 参照するResourceをコマンドリストに積む
-	/// </summary>
-	/// <param name="commandList">コマンドリスト</param>
-	/// <param name="handleGPU">参照するResourceのアドレス</param>
-	virtual void ConfigureReferenceResource(ID3D12GraphicsCommandList* commandList, const D3D12_GPU_DESCRIPTOR_HANDLE& handleGPU);
-
 	void ConfigureResultSRVResource(ID3D12GraphicsCommandList* commandList);
 
 	/// <summary>

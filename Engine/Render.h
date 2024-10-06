@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/DirectX/RTV/RenderTarget.h"
 #include "Engine/2d/Triangle.h"
 #include "Engine/2d/Sprite.h"
 #include "Engine/GameObject/Sphere.h"
@@ -25,11 +26,12 @@ public:
 	/// <returns></returns>
 	static Render* GetInstacne();
 
-	void Init(ID3D12GraphicsCommandList* commandList, ID3D12Device* device, PrimitivePipeline* primitive);
-
 	void Finalize();
-
+	void Init(ID3D12GraphicsCommandList* commandList, ID3D12Device* device, PrimitivePipeline* primitive, RenderTarget* renderTarget);
 	static void Update();
+
+	static void Begin();
+	static void SetRenderTarget(const RenderTargetType& type);
 
 public:
 
@@ -105,6 +107,7 @@ public:
 
 private:
 
+	RenderTarget* renderTarget_ = nullptr;
 
 };
 

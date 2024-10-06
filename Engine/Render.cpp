@@ -15,10 +15,11 @@ Render* Render::GetInstacne() {
 	return &instance;
 }
 
-void Render::Init(ID3D12GraphicsCommandList* commandList, ID3D12Device* device, PrimitivePipeline* primitive) {
+void Render::Init(ID3D12GraphicsCommandList* commandList, ID3D12Device* device, PrimitivePipeline* primitive, RenderTarget* renderTarget) {
 	assert(commandList);
 	commandList_ = commandList;
 	primitivePipelines_ = primitive;
+	GetInstacne()->renderTarget_ = renderTarget;
 
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection2D_ = std::make_unique<ViewProjection>();
@@ -37,6 +38,14 @@ void Render::Init(ID3D12GraphicsCommandList* commandList, ID3D12Device* device, 
 void Render::Update() {
 	lightGroup_->Update();
 	primitiveDrawer_->SetUseIndex(0);
+}
+
+void Render::Begin() {
+	GetInstacne()->renderTarget_->SetRenderTarget(commandList_, RenderTargetType::Object3D_RenderTarget);
+}
+
+void Render::SetRenderTarget(const RenderTargetType& type) {
+	GetInstacne()->renderTarget_->SetRenderTarget(commandList_, type);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -17,6 +17,7 @@ public:
 	GameScene();
 	~GameScene();
 
+	void Finalize() override;
 	void Init() override;
 	void Load()  override;
 	void Update() override;
@@ -38,6 +39,7 @@ private:
 	std::unique_ptr<Ground> ground_ = nullptr;
 	std::unique_ptr<WaterSpace> waterSpace_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
+	std::unique_ptr<Sprite> sprite_;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

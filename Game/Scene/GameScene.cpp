@@ -3,6 +3,10 @@
 GameScene::GameScene() {}
 GameScene::~GameScene() {}
 
+void GameScene::Finalize() {
+	waterSpace_->Finalize();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,11 +29,16 @@ void GameScene::Init() {
 
 	player_ = std::make_unique<Player>();
 
+	sprite_ = Engine::CreateSprite({200, 200} , {128, 128});
+	sprite_->SetTexture("uvChecker.png");
+
 	// -------------------------------------------------
 	// ↓ managerの初期化
 	// -------------------------------------------------
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
+
+	Engine::SetComputeShader(CSKind::GrayScale);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,6 +48,8 @@ void GameScene::Init() {
 void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +79,8 @@ void GameScene::Update() {
 
 	ground_->Update();
 	waterSpace_->Update();
+
+	sprite_->Update();
 
 	// -------------------------------------------------
 	// ↓ 当たり判定を取る
@@ -110,20 +123,24 @@ void GameScene::Draw() const {
 
 #pragma endregion
 
-#pragma region PBR
-
-	Engine::SetPipeline(PipelineKind::kPBRPipeline);
-	//Engine::DrawModel(sphereModel_.get());
-#pragma endregion
-
-
 #pragma region WaterSpace
 
 	Engine::SetPipeline(PipelineKind::kWaterSpacePipeline);
 	// このクラスは一番最後に描画
 	waterSpace_->Draw();
+
 #pragma endregion
-	
+
+	// CSを実行する
+	Engine::RunCS();
+
+#pragma region Sprite
+
+	Render::SetRenderTarget(Sprite2D_RenderTarget);
+	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	sprite_->Draw();
+
+#pragma endregion
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

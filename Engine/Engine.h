@@ -74,7 +74,7 @@ public:
 	/// <summary>
 	/// offScreenRenderingの処理を行う
 	/// </summary>
-	static void EndRenderTexture();
+	static void DrawRenderTexture();
 
 
 public:
@@ -103,7 +103,10 @@ public:
 	// 描画系
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
-	//static void DrawGameObject(BaseGameObject* gameObject, const GameObjectKind& kind);
+	/// <summary>
+	/// CSを行う
+	/// </summary>
+	static void RunCS();
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 設定系
@@ -114,6 +117,12 @@ public:
 	/// </summary>
 	/// <param name="kind">設定するパイプライン</param>
 	static void SetPipeline(const PipelineKind& kind);
+
+	/// <summary>
+	/// 行いたいCSを設定する
+	/// </summary>
+	/// <param name="kind"></param>
+	static void SetComputeShader(const CSKind& kind);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// sound系
@@ -227,7 +236,5 @@ namespace {
 
 	// オフスクリーンレンダリングで生成したTextureを描画するクラス
 	std::unique_ptr<RenderTexture> renderTexture_ = nullptr;
-
-	static bool isRunCS_ = false;
 }
 

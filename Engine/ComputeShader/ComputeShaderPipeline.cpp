@@ -17,6 +17,8 @@ void ComputeShaderPipeline::Init(ID3D12Device* device, DirectXCompiler* dxCompil
 	// rootSignatureの作成
 	if (type == CsPipelineType::Blend_Pipeline) {
 		rootSignature_ = std::make_unique<RootSignature>(device_, RootSignatureType::ComputeShaderBlend);
+	} else if(type == CsPipelineType::Result_Pipeline) {
+		rootSignature_ = std::make_unique<RootSignature>(device_, RootSignatureType::CSReultRenderBlend);
 	} else {
 		rootSignature_ = std::make_unique<RootSignature>(device_, RootSignatureType::ComputeShader);
 	}
