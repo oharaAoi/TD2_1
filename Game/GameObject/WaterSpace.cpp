@@ -98,7 +98,6 @@ void WaterSpace::Draw() const {
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		meshArray_[oi]->Draw(commandList);
 		materialArray_.at(meshArray_[oi]->GetUseMaterial())->Draw(commandList);
-
 		transform_->Draw(commandList);
 		Render::GetViewProjection()->Draw(commandList);
 

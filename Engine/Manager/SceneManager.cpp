@@ -58,7 +58,7 @@ void SceneManager::Run() {
 		// ------------------------------------ //
 		// フレーム終了処理
 		// ------------------------------------ //
-		Engine::EndRenderTexture();
+		Engine::DrawRenderTexture();
 		Engine::EndImGui();
 
 		#ifdef _DEBUG

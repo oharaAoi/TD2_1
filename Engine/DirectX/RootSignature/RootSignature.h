@@ -22,6 +22,7 @@ enum class RootSignatureType {
 	PBR,
 	ComputeShader,
 	ComputeShaderBlend,
+	CSReultRenderBlend,
 	WaterSpace
 };
 
@@ -88,6 +89,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	ComPtr<ID3D12RootSignature> CreateBlendShaderRootSignature();
+
+	/// <summary>
+	/// コンピュートシェーダ用
+	/// </summary>
+	/// <returns></returns>
+	ComPtr<ID3D12RootSignature> CreateResultRenderRootSignature();
 
 	/// <summary>
 	/// 波を打つ

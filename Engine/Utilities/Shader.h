@@ -25,7 +25,8 @@ public:
 		HorizontalBlur,
 		VerticalBlur,
 		DepthOfField,
-		Blend
+		Blend,
+		Result
 	};
 
 	// 構造体

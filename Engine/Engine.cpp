@@ -56,15 +56,15 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	graphicsPipelines_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), shaders_.get());
 	primitivePipeline_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), shaders_->GetShaderData(Shader::Primitive));
 	// CS
-	computeShader_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), descriptorHeap_.get(), renderTarget_->GetOffScreenSRVHandle(RenderTargetType::OffScreen_RenderTarget), shaders_.get());
+	computeShader_->Init(dxDevice_->GetDevice(), dxCompiler_.get(), descriptorHeap_.get(), renderTarget_->GetOffScreenSRVHandle(RenderTargetType::Object3D_RenderTarget), shaders_.get());
 	// input
 	input_->Init(winApp_->GetWNDCLASS(), winApp_->GetHwnd());
 	// audio
 	audio_->Init();
 
-	render_->Init(dxCommands_->GetCommandList(), dxDevice_->GetDevice(), primitivePipeline_.get());
+	render_->Init(dxCommands_->GetCommandList(), dxDevice_->GetDevice(), primitivePipeline_.get(), renderTarget_.get());
 
-	renderTexture_->Init(dxDevice_->GetDevice());
+	renderTexture_->Init(dxDevice_->GetDevice(), descriptorHeap_.get());
 
 #ifdef _DEBUG
 	imguiManager_ = ImGuiManager::GetInstacne();
@@ -111,9 +111,6 @@ void Engine::Finalize() {
 #ifdef _DEBUG
 void Engine::DrawImGui() {
 	ImGui::Begin("Engine");
-
-	ImGui::Checkbox("RunCS", &isRunCS_);
-
 	ImGui::End();
 }
 #endif
@@ -131,8 +128,11 @@ void Engine::BeginFrame() {
 #ifdef _DEBUG
 	imguiManager_->Begin();
 #endif
+	Render::Begin();
 	dxCommon_->Begin();
 
+	// リソースの状態をShaderResourceから書き込める状態にする(SR→UA)
+	
 	input_->Update();
 
 #ifdef _DEBUG
@@ -159,33 +159,19 @@ void Engine::EndImGui() {
 // ↓　offScreenRenderingの処理をこの関数内で行う
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Engine::EndRenderTexture() {
-	// offScreenRenderingのResourceの状態を変更する
-	dxCommon_->ChangeOffScreenResource();
+void Engine::DrawRenderTexture() {
+	// 最終描画のTextureをShaderで読める状態にする
+	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	// object3DとSprite2DのRenderTargetを合成する
+	computeShader_->BlendRenderTarget(dxCommands_->GetCommandList(), renderTarget_->GetOffScreenSRVHandle(Sprite2D_RenderTarget).handleGPU, renderTexture_->GetUAV());
 	// これから書き込む画面をバックバッファに変更する
 	dxCommon_->SetSwapChain();
-
-	if (isRunCS_) {
-		//----------------------------------------------------------------
-		// computerShaderを実行する
-		computeShader_->RunComputeShader(dxCommands_->GetCommandList());
-		//----------------------------------------------------------------
-
-		// スプライト用のパイプラインの設定
-		graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
-		// computeShaderで加工したTextureを描画する
-		renderTexture_->Draw(dxCommands_->GetCommandList(), computeShader_->GetShaderResourceHandleGPU());
-		//----------------------------------------------------------------
-
-		// リソースの状態をShaderResourceから書き込める状態にする(SR→UA)
-		computeShader_->TransitionUAVResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-
-	} else {
-		// スプライト用のパイプラインの設定
-		graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
-		// offScreenRenderingで書き込んだTextureを描画する
-		renderTexture_->Draw(dxCommands_->GetCommandList(), renderTarget_->GetOffScreenSRVHandle(RenderTargetType::OffScreen_RenderTarget).handleGPU);
-	}
+	// スプライト用のパイプラインの設定
+	graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
+	// computeShaderで加工したTextureを描画する
+	renderTexture_->Draw(dxCommands_->GetCommandList());
+	// 最終描画のTextureを書き込み可能状態にする
+	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,6 +234,14 @@ std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* mode
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　CSの設定
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Engine::RunCS() {
+	computeShader_->RunComputeShader(dxCommands_->GetCommandList());
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　パイプラインの設定
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -280,6 +274,14 @@ void Engine::SetPipeline(const PipelineKind& kind) {
 		graphicsPipelines_->SetPipeline(PipelineType::WaterSpacePipeline, dxCommands_->GetCommandList());
 		break;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　CSの設定
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Engine::SetComputeShader(const CSKind& kind) {
+	computeShader_->SetComputeShader(kind);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,7 +329,7 @@ ID3D12Device* Engine::GetDevice() {
 	return dxDevice_->GetDevice();
 }
 
- ID3D12GraphicsCommandList* Engine::GetCommandList() {
+ID3D12GraphicsCommandList* Engine::GetCommandList() {
 	// TODO: return ステートメントをここに挿入します
 	return dxCommands_->GetCommandList();
 }

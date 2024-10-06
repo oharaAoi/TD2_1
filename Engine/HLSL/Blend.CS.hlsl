@@ -12,11 +12,3 @@ void CSmain(uint3 id : SV_DispatchThreadID){
 
 	outputBuffer[pixelCoordinate] = textureColor;
 }
-
-// -------------------------------------------------
-// ↓ Textureから高さと横幅を取得する
-// -------------------------------------------------
-//uint width, height;
-//	gTexture.GetDimensions(width, height);
-//float2 uv = float2(pixelCoordinate) / float2(width, height);
-//float4 textureColor = gTexture.Sample(gSampler, uv);

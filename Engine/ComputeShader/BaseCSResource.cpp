@@ -18,10 +18,6 @@ void BaseCSResource::ConfigureResource(ID3D12GraphicsCommandList* commandList) {
 	commandList->SetComputeRootConstantBufferView(2, cBuffer_->GetGPUVirtualAddress());
 }
 
-void BaseCSResource::ConfigureReferenceResource(ID3D12GraphicsCommandList* commandList, const D3D12_GPU_DESCRIPTOR_HANDLE& handleGPU) {
-	commandList->SetComputeRootDescriptorTable(0, handleGPU);
-}
-
 void BaseCSResource::ConfigureResultSRVResource(ID3D12GraphicsCommandList* commandList) {
 	uint32_t index = static_cast<uint32_t>(bufferHandles_.size()) - 1;
 	commandList->SetComputeRootDescriptorTable(0, bufferHandles_[index].srvAddress.handleGPU);

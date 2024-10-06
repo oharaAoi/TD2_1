@@ -15,11 +15,6 @@ public:
 
 	void Finalize();
 
-	/// <summary>
-	/// 初期化関数
-	/// </summary>
-	/// <param name="device"></param>
-	/// <param name="dxHeap"></param>
 	void Init(ID3D12Device* device, DescriptorHeap* dxHeap) override;
 
 	/// <summary>

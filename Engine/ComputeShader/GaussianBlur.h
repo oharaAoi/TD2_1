@@ -41,9 +41,8 @@ public:
 
 private:
 	// 横ブラーをかけるResource。これもUAV→SRVなどの手順を踏む必要がある
-	ComPtr<ID3D12Resource> horizontalResource_;
-	DescriptorHeap::DescriptorHandles uavHorizontalAddress_;
-	DescriptorHeap::DescriptorHandles srvHorizontalAddress_;
+	//DescriptorHeap::DescriptorHandles uavHorizontalAddress_;
+	//DescriptorHeap::DescriptorHandles srvHorizontalAddress_;
 
 	GaussianBlurData* data_;
 
