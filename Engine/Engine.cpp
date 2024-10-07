@@ -160,6 +160,7 @@ void Engine::EndImGui() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::DrawRenderTexture() {
+	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// 最終描画のTextureをShaderで読める状態にする
 	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	// object3DとSprite2DのRenderTargetを合成する
@@ -172,6 +173,9 @@ void Engine::DrawRenderTexture() {
 	renderTexture_->Draw(dxCommands_->GetCommandList());
 	// 最終描画のTextureを書き込み可能状態にする
 	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,6 +242,7 @@ std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* mode
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::RunCS() {
+	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	computeShader_->RunComputeShader(dxCommands_->GetCommandList());
 }
 

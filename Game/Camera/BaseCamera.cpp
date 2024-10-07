@@ -24,6 +24,3 @@ void BaseCamera::Update() {
 	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(kWindowWidth_), float(kWindowHeight_), 0.0f, 100.0f);
 	viewMatrix2D_ = MakeIdentity4x4();
 }
-
-void BaseCamera::Draw() {
-}
