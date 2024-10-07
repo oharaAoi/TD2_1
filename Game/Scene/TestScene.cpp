@@ -23,6 +23,11 @@ void TestScene::Init() {
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
+	range_ = { 222, 222 };
+	leftTop_ = { 0,0 };
+	sprite_ = Engine::CreateSprite({ 200, 200 }, { 222, 222 });
+	sprite_->SetTexture("sample.png");
+
 	/*placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
 	placementObjEditer_->Init();*/
 
@@ -41,6 +46,7 @@ void TestScene::Load() {
 	
 	// textureのload
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +60,8 @@ void TestScene::Update() {
 	world_->Update();
 	
 	//placementObjEditer_->Update();
+
+	sprite_->Update();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -87,7 +95,7 @@ void TestScene::Draw() const {
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//placementObjEditer_->Draw();
-	world_->Draw();
+	testObj_->Draw();
 
 #pragma endregion
 
@@ -102,6 +110,11 @@ void TestScene::Draw() const {
 	Engine::SetPipeline(PipelineKind::kSpritePipeline);
 	
 #pragma endregion
+
+	Render::SetRenderTarget(Sprite2D_RenderTarget);
+	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	sprite_->Draw();
+
 }
 
 #ifdef _DEBUG
@@ -109,6 +122,10 @@ void TestScene::ImGuiDraw() {
 	ImGui::Begin("GameObjects");
 	world_->Debug_Gui();
 	ImGui::End();
+
+	sprite_->Debug_Gui();
+	ImGui::DragFloat2("range", &range_.x, 1.0f);
+	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
 	camera_->Debug_Gui();
 }

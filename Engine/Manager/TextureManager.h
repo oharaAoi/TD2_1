@@ -5,11 +5,11 @@
 #include <map>
 #include <Externals/DirectXTex/DirectXTex.h>
 #include <Externals/DirectXTex/d3dx12.h>
-
 #include "Engine/Utilities/Convert.h"
 #include "Engine/Utilities/DirectXUtils.h"
 #include "Engine/DirectX/Descriptor/DescriptorHeap.h"
 #include "Engine/DirectX/DirectXDevice/DirectXDevice.h"
+#include "Engine/Math/Vector2.h"
 
 template<typename T>
 using ComPtr = Microsoft::WRL::ComPtr <T>;
@@ -80,19 +80,22 @@ public:
 	/// <returns></returns>
 	static D3D12_RESOURCE_DESC CreateResourceDesc(const DirectX::TexMetadata& metadata);
 
-	uint32_t GetSRVDataIndex() { return static_cast<uint32_t>(srvData_.size()); }
+	uint32_t GetSRVDataIndex() { return static_cast<uint32_t>(textureData_.size()); }
+
+	const Vector2 GetTextureSize(const std::string& filePath);
 
 private:
 
-	struct SRVData {
+	struct TextureData {
 		ComPtr<ID3D12Resource> textureResource_ = nullptr;
 		ComPtr<ID3D12Resource> intermediateResource_ = nullptr;
 
 		DescriptorHeap::DescriptorHandles address_;
+		Vector2 textureSize_;
 	};
 
 	//std::vector<SRVData> srvData_;
-	static std::map<std::string, SRVData> srvData_;
+	static std::unordered_map<std::string, TextureData> textureData_;
 
 	// 生成で使う変数
 	static std::shared_ptr<DirectXDevice> device_;

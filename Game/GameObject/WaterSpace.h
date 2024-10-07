@@ -27,8 +27,10 @@ public:
 
     void Finalize();
     void Init(const std::string& directorPath, const std::string& fileName);
-    void Update();
+    void Update(const float& playerVelocityX);
     void Draw() const;
+
+    void Move(const float& playerVelocityX);
 
 #ifdef _DEBUG
     void Debug_Gui();

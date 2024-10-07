@@ -35,12 +35,12 @@ void ComputeShader::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 
-	computeShaderPipelineMap_[CsPipelineType::GrayScale_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::GrayScale), CsPipelineType::GrayScale_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::HorizontalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::HorizontalBlur), CsPipelineType::HorizontalBlur_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::VerticalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::VerticalBlur), CsPipelineType::VerticalBlur_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::DepthOfField_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::DepthOfField), CsPipelineType::DepthOfField_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Blend), CsPipelineType::Blend_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Result), CsPipelineType::Result_Pipeline);
+	computeShaderPipelineMap_[CsPipelineType::GrayScale_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::GrayScale), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::HorizontalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::HorizontalBlur), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::VerticalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::VerticalBlur), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::DepthOfField_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::DepthOfField), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Blend), RootSignatureType::ComputeShaderBlend);
+	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Result), RootSignatureType::CSReultRenderBlend);
 
 	// postEffectの作成
 	grayScale_ = std::make_unique<GrayScale>(groupCountX_, groupCountY_, computeShaderPipelineMap_[CsPipelineType::GrayScale_Pipeline].get());
@@ -69,6 +69,11 @@ void ComputeShader::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ComputeShader::RunComputeShader(ID3D12GraphicsCommandList* commandList) {
+	if (isCsReset_) {
+		executeCsArray_.clear();
+		isCsReset_ = false;
+	}
+
 	if (executeCsArray_.empty()) {return;}
 	// 先頭の配列に元となるResourceのSRVを指定する
 	executeCsArray_[0]->SetReferenceResourceHandles(runCsResourceAddress_);
@@ -97,8 +102,6 @@ void ComputeShader::RunComputeShader(ID3D12GraphicsCommandList* commandList) {
 	commandList->SetComputeRootDescriptorTable(1, uavRenderAddress_.handleGPU);
 	commandList->Dispatch(groupCountX_, groupCountY_, 1);
 
-	TransitionResourceState(commandList, resultResource_.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
 	// ----------------------------------------------------------------------
 	// ↓ 使用したエフェクトのResourceを元に戻す
 	// ----------------------------------------------------------------------
@@ -112,8 +115,14 @@ void ComputeShader::RunComputeShader(ID3D12GraphicsCommandList* commandList) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ComputeShader::BlendRenderTarget(ID3D12GraphicsCommandList* commandList, const D3D12_GPU_DESCRIPTOR_HANDLE& spriteGpuHandle, const D3D12_GPU_DESCRIPTOR_HANDLE& rendrerGpuHandle) {
+	TransitionResourceState(commandList, resultResource_.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	
 	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->SetPipelineState(commandList);
-	commandList->SetComputeRootDescriptorTable(0, srvRenderAddress_.handleGPU);
+	if (executeCsArray_.empty()) {
+		commandList->SetComputeRootDescriptorTable(0, runCsResourceAddress_.handleGPU);
+	} else {
+		commandList->SetComputeRootDescriptorTable(0, srvRenderAddress_.handleGPU);
+	}
 	commandList->SetComputeRootDescriptorTable(1, spriteGpuHandle);
 	commandList->SetComputeRootDescriptorTable(2, rendrerGpuHandle);
 	commandList->Dispatch(groupCountX_, groupCountY_, 1);

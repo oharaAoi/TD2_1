@@ -1,27 +1,22 @@
 #include "ComputeShaderPipeline.h"
 
-ComputeShaderPipeline::ComputeShaderPipeline() {}
-ComputeShaderPipeline::~ComputeShaderPipeline() {}
+ComputeShaderPipeline::ComputeShaderPipeline() {
+	rootSignature_ = std::make_unique<RootSignature>();
+}
+ComputeShaderPipeline::~ComputeShaderPipeline() { Finalize(); }
 
 void ComputeShaderPipeline::Finalize() {
+	rootSignature_->Finalize();
 }
 
 void ComputeShaderPipeline::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 								 DescriptorHeap* dxHeap, const std::string& computeShaderPath,
-								 const CsPipelineType& type
-) {
+								 const RootSignatureType& type) {
 	device_ = device;
 	dxCompiler_ = dxCompiler;
 	dxHeap_ = dxHeap;
 
-	// rootSignatureの作成
-	if (type == CsPipelineType::Blend_Pipeline) {
-		rootSignature_ = std::make_unique<RootSignature>(device_, RootSignatureType::ComputeShaderBlend);
-	} else if(type == CsPipelineType::Result_Pipeline) {
-		rootSignature_ = std::make_unique<RootSignature>(device_, RootSignatureType::CSReultRenderBlend);
-	} else {
-		rootSignature_ = std::make_unique<RootSignature>(device_, RootSignatureType::ComputeShader);
-	}
+	rootSignature_->Initialize(device, type);
 	// shaderを読む
 	computeShaderBlob_ = dxCompiler_->CsShaderCompile(computeShaderPath);
 

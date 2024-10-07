@@ -33,13 +33,16 @@ private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
-	bool isDebug_ = true;
+	bool isDebug_ = false;
 
 	// ---------- gameobject ---------- //
 	std::unique_ptr<Ground> ground_ = nullptr;
 	std::unique_ptr<WaterSpace> waterSpace_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Sprite> sprite_;
+
+	Vector2 range_;
+	Vector2 leftTop_;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

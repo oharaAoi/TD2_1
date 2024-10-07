@@ -67,7 +67,18 @@ void Sprite::Init(ID3D12Device* device, const Mesh::RectVetices& rect) {
 	);
 }
 
-void Sprite::Update() {
+void Sprite::Update(const Vector2& rectRange, const Vector2& leftTop) {
+	materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
+
+	Vector2 drawRange = textureSize_;
+	if (rectRange.x != 0 && rectRange.y != 0) {
+		drawRange = rectRange;
+	}
+	materialData_->uvTransform.m[0][0] = drawRange.x / textureSize_.x;	// Xスケーリング
+	materialData_->uvTransform.m[1][1] = drawRange.y/ textureSize_.y;	// Yスケーリング
+	materialData_->uvTransform.m[3][0] = leftTop.x / textureSize_.x;	// Xオフセット
+	materialData_->uvTransform.m[3][1] = leftTop.y / textureSize_.y;	// Yオフセット
+
 	transformData_->wvp = Matrix4x4(
 		MakeAffineMatrix(transform_)
 		* MakeIdentity4x4()
@@ -89,6 +100,25 @@ void Sprite::Draw(ID3D12GraphicsCommandList* commandList) {
 	commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
+void Sprite::SetTexture(const std::string& fileName) {
+	textureName_ = fileName;
+	textureSize_ = TextureManager::GetInstance()->GetTextureSize(fileName);
+}
+
+void Sprite::RestTextureSize(const Vector2& centerPos, const Vector2& size) {
+	Mesh::RectVetices rect = {
+		{centerPos.x - (size.x / 2.0f), centerPos.y - (size.y / 2.0f), 0.0f, 1.0f},
+		{centerPos.x + (size.x / 2.0f), centerPos.y - (size.y / 2.0f), 0.0f, 1.0f},
+		{centerPos.x - (size.x / 2.0f), centerPos.y + (size.y / 2.0f), 0.0f, 1.0f},
+		{centerPos.x + (size.x / 2.0f), centerPos.y + (size.y / 2.0f), 0.0f, 1.0f},
+	};
+
+	vertexData_[0].pos = rect.leftBottom;
+	vertexData_[1].pos = rect.leftTop;
+	vertexData_[2].pos = rect.rightBottom; // 右下
+	vertexData_[3].pos = rect.rightTop;		// 右上
+}
+
 #ifdef _DEBUG
 void Sprite::Debug_Gui() {
 	ImGui::DragFloat2("translation", &transform_.translate.x, 2.0f);
@@ -98,8 +128,6 @@ void Sprite::Debug_Gui() {
 		ImGui::DragFloat2("uvTranslation", &uvTransform_.translate.x, 0.1f);
 		ImGui::DragFloat2("uvScale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
 		ImGui::SliderAngle("uvRotation", &uvTransform_.rotate.z);
-
-		materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
 		ImGui::TreePop();
 	}
 

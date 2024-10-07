@@ -61,6 +61,7 @@ public:
 private:
 	// rootSignature
 	std::unique_ptr<RootSignature> rootSignature_ = nullptr;
+	ComPtr<ID3D12RootSignature> rootSignaturePtr_ = nullptr;
 
 	// inputLayout
 	InputLayout inputLayout_;
