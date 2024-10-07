@@ -33,7 +33,7 @@ private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
-	bool isDebug_ = true;
+	bool isDebug_ = false;
 
 	// ---------- gameobject ---------- //
 	std::unique_ptr<Ground> ground_ = nullptr;

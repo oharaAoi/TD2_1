@@ -7,44 +7,45 @@
 
 
 class Player :
-    public BaseGameObject,
-    public Collider{
+	public BaseGameObject,
+	public Collider {
 public:
 
-    Player();
-    ~Player();
+	Player();
+	~Player();
 
-    void Init() override;
-    void Update() override;
-    void Draw() const override;
+	void Init() override;
+	void Update() override;
+	void Draw() const override;
 
-    void Move();
-    void LookAtDirection(const float& angle);
+	void Move();
+	void LookAtDirection(const float& angle);
 
-    void AdaptAdjustmentItem();
+	void AdaptAdjustmentItem();
 
-    void OnCollision([[maybe_unused]] Collider* other) override {};
-    const Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const;
+	void OnCollision([[maybe_unused]] Collider* other) override {};
+	const Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const;
 
 public:
 
-    void SetHitWaterSurface(const bool& ishit) { hitWaterSurface_ = ishit; }
+	void SetHitWaterSurface(const bool& ishit) { hitWaterSurface_ = ishit; }
+
+	const Vector3 GetMoveVelocity() const { return velocity_ * moveSpeed_; }
 
 #ifdef _DEBUG
-    void Debug_Gui();
+	void Debug_Gui();
 #endif // _DEBUG
 
 private:
 
-    AdjustmentItem* adjustmentItem_;
+	AdjustmentItem* adjustmentItem_;
 
-    Vector3 velocity_;
-    float moveSpeed_;
+	// パラメータ
+	Vector3 velocity_;
+	float moveSpeed_;
+	float lookAtT_;
 
-    float lookAtT_;
-
-    bool hitWaterSurface_;
-
-    bool isMove_;
+	bool hitWaterSurface_;
+	bool isMove_;
 };
 

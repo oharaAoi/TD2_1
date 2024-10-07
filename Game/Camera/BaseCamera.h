@@ -6,18 +6,22 @@
 #include "Enviroment.h"
 #include "Engine/Lib/GameTimer.h"
 
-class Camera {
+/// <summary>
+/// BaseとなるCamera
+/// </summary>
+class BaseCamera {
 public:
 
-	Camera();
-	~Camera();
+	BaseCamera() = default;
+	virtual ~BaseCamera();
 
-	void Init();
-	void Update();
+	virtual void Finalize();
+	virtual void Init();
+	virtual void Update();
 
 #ifdef _DEBUG
-	void Debug_Gui();
-#endif
+	virtual void Debug_Gui() {};
+#endif // _DEBUG
 
 	Matrix4x4 GetCameraMatrix() const { return cameraMatrix_; }
 
@@ -35,9 +39,7 @@ public:
 
 	void SetTarget(WorldTransform* target) { target_ = target; }
 
-private:
-
-	Vector3 offset_;
+protected:
 
 	WorldTransform* target_;
 
@@ -53,4 +55,6 @@ private:
 	// 2d
 	Matrix4x4 projectionMatrix2D_;
 	Matrix4x4 viewMatrix2D_;
+
 };
+

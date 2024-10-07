@@ -40,6 +40,8 @@ void GameScene::Init() {
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
 
+	camera_->SetTarget(player_->GetTransform());
+
 	Engine::SetComputeShader(CSKind::GrayScale);
 }
 
@@ -80,8 +82,9 @@ void GameScene::Update() {
 	// -------------------------------------------------
 	player_->Update();
 
+	ground_->SetPlayerVelocityX(player_->GetMoveVelocity().x);
 	ground_->Update();
-	waterSpace_->Update();
+	waterSpace_->Update(player_->GetMoveVelocity().x);
 
 	sprite_->Update(range_, leftTop_);
 

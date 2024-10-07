@@ -14,6 +14,8 @@ void Camera::Init() {
 		{0.0f, 4.0f, -30.0f}
 	};
 
+	offset_ = transform_.translate;
+
 	// 行列の生成
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
 	rotateMat_ = MakeRotateXYZMatrix(transform_.rotate);
@@ -30,20 +32,29 @@ void Camera::Init() {
 }
 
 void Camera::Update() {
+	// -------------------------------------------------
+	// ↓ Targetがいたら
+	// -------------------------------------------------
+	if (target_ != nullptr) {
+		transform_.translate.x = target_->GetTranslation().x + offset_.x;
+	}
+
+	// -------------------------------------------------
+	// ↓ Transformの更新
+	// -------------------------------------------------
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
 	rotateMat_ = MakeRotateXYZMatrix(transform_.rotate);
 	translateMat_ = MakeTranslateMatrix(transform_.translate);
 
 	cameraMatrix_ = scaleMat_ * rotateMat_ * translateMat_;
 
-	if (target_ != nullptr) {
-		cameraMatrix_ *= target_->GetWorldMatrix();
-	}
-
+	// -------------------------------------------------
+	// ↓ 行列の更新
+	// -------------------------------------------------
 	viewMatrix_ = Inverse(cameraMatrix_);
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(1280) / float(720), 0.1f, 100.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 0.1f, 100.0f);
 
-	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
+	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(kWindowWidth_), float(kWindowHeight_), 0.0f, 100.0f);
 	viewMatrix2D_ = MakeIdentity4x4();
 }
 

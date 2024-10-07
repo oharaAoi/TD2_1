@@ -402,6 +402,9 @@
     <ClCompile Include="Engine\DirectX\RootSignature\RootSignatureBuilder.cpp">
       <Filter>Engine\DirectX\RootSignature</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Camera\BaseCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -695,12 +698,6 @@
     <ClInclude Include="Engine\Utilities\AdjustmentItem.h">
       <Filter>Engine\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Editer\PlacementObjectEditer.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\BasePlacementObject.h">
-      <Filter>Game\Editer</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameObject\Ground.h">
       <Filter>Game\GameObject</Filter>
     </ClInclude>
@@ -712,6 +709,15 @@
     </ClInclude>
     <ClInclude Include="Engine\DirectX\RootSignature\RootSignatureBuilder.h">
       <Filter>Engine\DirectX\RootSignature</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\BaseCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Editer\PlacementObjectEditer.h">
+      <Filter>Game\Editer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\BasePlacementObject.h">
+      <Filter>Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

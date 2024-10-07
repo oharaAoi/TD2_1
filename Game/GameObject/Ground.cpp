@@ -21,6 +21,7 @@ void Ground::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Ground::Update() {
+	Move();
 	BaseGameObject::Update();
 }
 
@@ -30,6 +31,12 @@ void Ground::Update() {
 
 void Ground::Draw() const {
 	BaseGameObject::Draw();
+}
+
+void Ground::Move() {
+	Vector3 translate = transform_->GetTranslation();
+	translate.x += playerVelocityX_ * GameTimer::DeltaTime();
+	transform_->SetTranslaion(translate);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
