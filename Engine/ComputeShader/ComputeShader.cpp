@@ -35,12 +35,12 @@ void ComputeShader::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 
-	computeShaderPipelineMap_[CsPipelineType::GrayScale_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::GrayScale), CsPipelineType::GrayScale_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::HorizontalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::HorizontalBlur), CsPipelineType::HorizontalBlur_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::VerticalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::VerticalBlur), CsPipelineType::VerticalBlur_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::DepthOfField_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::DepthOfField), CsPipelineType::DepthOfField_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Blend), CsPipelineType::Blend_Pipeline);
-	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Result), CsPipelineType::Result_Pipeline);
+	computeShaderPipelineMap_[CsPipelineType::GrayScale_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::GrayScale), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::HorizontalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::HorizontalBlur), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::VerticalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::VerticalBlur), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::DepthOfField_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::DepthOfField), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Blend), RootSignatureType::ComputeShaderBlend);
+	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Result), RootSignatureType::CSReultRenderBlend);
 
 	// postEffectの作成
 	grayScale_ = std::make_unique<GrayScale>(groupCountX_, groupCountY_, computeShaderPipelineMap_[CsPipelineType::GrayScale_Pipeline].get());

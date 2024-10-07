@@ -95,7 +95,7 @@ void TestScene::Draw() const {
 
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//placementObjEditer_->Draw();
-	world_->Draw();
+	testObj_->Draw();
 
 #pragma endregion
 

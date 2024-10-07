@@ -83,7 +83,7 @@ void GameScene::Update() {
 	ground_->Update();
 	waterSpace_->Update();
 
-	sprite_->Update();
+	sprite_->Update(range_, leftTop_);
 
 	// -------------------------------------------------
 	// ↓ 当たり判定を取る

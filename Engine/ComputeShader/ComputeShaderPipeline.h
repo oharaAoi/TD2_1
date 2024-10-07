@@ -38,7 +38,7 @@ public:
 	/// <param name="computeShaderPath">シェーダーのパス</param>
 	void Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 			  DescriptorHeap* dxHeap, const std::string& computeShaderPath,
-			  const CsPipelineType& type
+			  const RootSignatureType& type
 	);
 
 	/// <summary>

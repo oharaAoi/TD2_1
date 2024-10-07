@@ -399,6 +399,9 @@
     <ClCompile Include="Game\GameObject\Player.cpp">
       <Filter>Game\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\DirectX\RootSignature\RootSignatureBuilder.cpp">
+      <Filter>Engine\DirectX\RootSignature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -706,6 +709,9 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\Player.h">
       <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DirectX\RootSignature\RootSignatureBuilder.h">
+      <Filter>Engine\DirectX\RootSignature</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
