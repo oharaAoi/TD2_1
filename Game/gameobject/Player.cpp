@@ -39,7 +39,10 @@ void Player::Init() {
 
 void Player::Update() {
 	if (isMove_) {
+		velocity_.x = 1.0f;
 		Move();
+	} else {
+		velocity_.x = 0.0f;
 	}
 
 	BaseGameObject::Update();
@@ -106,8 +109,7 @@ void Player::AdaptAdjustmentItem() {
 }
 
 const Vector3 Player::GetWorldTranslation(const Vector3& offset) const {
-	//return Transform(offset, transform_->GetWorldMatrix());
-	return transform_->GetTranslation();
+	return Transform(offset, transform_->GetWorldMatrix());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
