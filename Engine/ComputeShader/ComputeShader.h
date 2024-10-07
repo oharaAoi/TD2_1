@@ -46,6 +46,11 @@ public:
 	void SetComputeShader(const CSKind& kind);
 
 	/// <summary>
+	/// 行うCSをReset
+	/// </summary>
+	void ResetComputeShader() { isCsReset_ = true; }
+
+	/// <summary>
 	/// 最終的に描画するResourceを作成する
 	/// </summary>
 	void CreateBlendResource();
@@ -94,5 +99,7 @@ private:
 
 	UINT groupCountX_;
 	UINT groupCountY_;
+
+	bool isCsReset_;
 };
 

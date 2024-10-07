@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/Math/Vector2.h"
 #include "Engine/Assets/Mesh.h"
 #include "Engine/Lib/Transform.h"
 #include "Engine/Manager/TextureManager.h"
@@ -32,7 +33,12 @@ public:
 	~Sprite();
 
 	void Init(ID3D12Device* device, const Mesh::RectVetices& rect);
-	void Update();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="rectRange">: 描画する範囲</param>
+	/// <param name="leftTop">: 左上座標</param>
+	void Update(const Vector2& rectRange = { 0.0f, 0.0f }, const Vector2& leftTop = {0.0f, 0.0f});
 	void Draw();
 
 	/// <summary>
@@ -47,7 +53,9 @@ public:
 
 public:
 
-	void SetTexture(const std::string& fileName) { textureName_ = fileName; };
+	void SetTexture(const std::string& fileName);
+
+	void RestTextureSize(const Vector2& centerPos, const Vector2& size);
 
 private:
 
@@ -72,4 +80,7 @@ private:
 	kTransform uvTransform_;
 
 	std::string textureName_;
+
+	// Textureのサイズ
+	Vector2 textureSize_;
 };

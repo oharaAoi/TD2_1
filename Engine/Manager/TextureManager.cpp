@@ -1,6 +1,6 @@
 #include "TextureManager.h"
 
-std::map<std::string, TextureManager::SRVData> TextureManager::srvData_;
+std::unordered_map<std::string, TextureManager::TextureData> TextureManager::textureData_;
 std::shared_ptr<DirectXDevice> TextureManager::device_ = nullptr;
 std::shared_ptr<DescriptorHeap> TextureManager::dxHeap_ = nullptr;
 ID3D12GraphicsCommandList* TextureManager::commandList_ = nullptr;
@@ -17,7 +17,7 @@ void TextureManager::Init(std::shared_ptr<DirectXDevice> device, ID3D12GraphicsC
 	device_ = device;
 	dxHeap_ = dxHeap;
 
-	srvData_.clear();
+	textureData_.clear();
 
 	commandList_ = commandList;
 
@@ -65,7 +65,7 @@ void TextureManager::Init(std::shared_ptr<DirectXDevice> device, ID3D12GraphicsC
 }
 
 void TextureManager::Finalize() {
-	for (auto& data : srvData_) {
+	for (auto& data : textureData_) {
 		data.second.textureResource_.Reset();
 		data.second.intermediateResource_.Reset();
 	}
@@ -77,14 +77,14 @@ void TextureManager::Finalize() {
 void TextureManager::LoadTextureFile(const std::string& directoryPath, const std::string& filePath) {
 
 	// 一度読み込んだファイルか確認する
-	auto it = srvData_.find(filePath);
-	if (it != srvData_.end()) {
+	auto it = textureData_.find(filePath);
+	if (it != textureData_.end()) {
 		return;
 	}
 
 	Log("Begin Load Texture\n");
 	Log("Texture  [" + filePath + "]\n");
-	SRVData data{};
+	TextureData data{};
 
 	DirectX::ScratchImage mipImage = LoadTexture(directoryPath, filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
@@ -111,9 +111,11 @@ void TextureManager::LoadTextureFile(const std::string& directoryPath, const std
 	// ------------------------------------------------------------
 	// SRVを作成するDescriptorHeapの場所を求める
 	data.address_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	data.textureSize_.x = static_cast<float>(metadata.width);
+	data.textureSize_.y = static_cast<float>(metadata.height);
 	
 	// 配列に入れる
-	srvData_[filePath] = data;
+	textureData_[filePath] = data;
 
 	// 生成
 	device_->GetDevice()->CreateShaderResourceView(data.textureResource_.Get(), &srvDesc, data.address_.handleCPU);
@@ -142,7 +144,7 @@ DirectX::ScratchImage TextureManager::LoadTexture(const std::string& directoryPa
 //	White1x1のTextureを読み込む
 /////////////////////////////////////////////////////////////////////////////////////////////
 void TextureManager::LoadWhite1x1Texture(const std::string& directoryPath, const std::string& filePath, ID3D12GraphicsCommandList* commandList) {
-	SRVData data{};
+	TextureData data{};
 
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertWString(directoryPath + filePath);
@@ -173,9 +175,11 @@ void TextureManager::LoadWhite1x1Texture(const std::string& directoryPath, const
 	// ------------------------------------------------------------
 	// SRVを作成するDescriptorHeapの場所を求める
 	data.address_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	data.textureSize_.x = static_cast<float>(metadata.width);
+	data.textureSize_.y = static_cast<float>(metadata.height);
 
 	// mapに値を代入
-	srvData_.emplace(filePath, data);
+	textureData_.emplace(filePath, data);
 
 	// 生成
 	device_->GetDevice()->CreateShaderResourceView(data.textureResource_.Get(), &srvDesc, data.address_.handleCPU);
@@ -226,8 +230,11 @@ D3D12_RESOURCE_DESC TextureManager::CreateResourceDesc(const DirectX::TexMetadat
 	return desc;
 }
 
+const Vector2 TextureManager::GetTextureSize(const std::string& filePath) {
+	return  textureData_[filePath].textureSize_;
+}
+
 void TextureManager::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* commandList, const std::string& filePath, const uint32_t& rootParameterIndex) {
-	//commandList->SetGraphicsRootDescriptorTable(3, srvData_[filePath].address_.handleGPU);
-	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvData_[filePath].address_.handleGPU);
+	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, textureData_[filePath].address_.handleGPU);
 }
 

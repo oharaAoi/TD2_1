@@ -29,8 +29,10 @@ void GameScene::Init() {
 
 	player_ = std::make_unique<Player>();
 
-	sprite_ = Engine::CreateSprite({200, 200} , {128, 128});
-	sprite_->SetTexture("uvChecker.png");
+	range_ = { 222, 222 };
+	leftTop_ = {0,0};
+	sprite_ = Engine::CreateSprite({200, 200} , {222, 222});
+	sprite_->SetTexture("sample.png");
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -50,6 +52,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +186,10 @@ void GameScene::Debug_Gui() {
 	if (!isDebug_) {
 		camera_->Debug_Gui();
 	}
+
+	sprite_->Debug_Gui();
+	ImGui::DragFloat2("range", &range_.x, 1.0f);
+	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
 	ImGui::End();
 }

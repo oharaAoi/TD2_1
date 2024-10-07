@@ -41,6 +41,9 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Sprite> sprite_;
 
+	Vector2 range_;
+	Vector2 leftTop_;
+
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
