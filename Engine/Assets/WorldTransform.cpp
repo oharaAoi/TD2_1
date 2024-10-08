@@ -19,7 +19,9 @@ void WorldTransform::Init(ID3D12Device* device) {
 }
 
 void WorldTransform::Update(const Matrix4x4& mat) {
-	worldMat_ = mat * MakeAffineMatrix(scale_, rotation_.Normalize(), translation_);
+	rotation_ = (rotation_ * quaternion_).Normalize();
+	quaternion_ = Quaternion();
+	worldMat_ = mat * MakeAffineMatrix(scale_, rotation_, translation_);
 	if (parentMat_ != nullptr) {
 		worldMat_ *= *parentMat_;
 	}
@@ -35,7 +37,8 @@ void WorldTransform::Draw(ID3D12GraphicsCommandList* commandList) const {
 #ifdef _DEBUG
 void WorldTransform::Debug_Gui() {
 	ImGui::DragFloat3("scale", &scale_.x, 0.1f);
-	ImGui::DragFloat3("rotation", &rotation_.x, 0.1f);
+	ImGui::DragFloat4("rotation", &rotation_.x, 0.1f);
+	ImGui::DragFloat4("quaternion", &quaternion_.x, 0.1f);
 	ImGui::DragFloat3("translation", &translation_.x, 0.1f);
 }
 #endif

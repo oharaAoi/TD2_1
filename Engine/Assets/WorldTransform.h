@@ -51,6 +51,7 @@ private:
 
 	Vector3 scale_;
 	Quaternion rotation_;
+	Quaternion quaternion_;
 	Vector3 translation_;
 	Matrix4x4 worldMat_;
 

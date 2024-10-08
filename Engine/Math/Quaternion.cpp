@@ -157,13 +157,44 @@ Quaternion Quaternion::Slerp(const Quaternion& q1, const Quaternion& q2, const f
 	return result.Normalize();
 }
 
+Vector3 Quaternion::MakeForward() const {
+	float xx = x * x;
+	float yy = y * y;
+	float xz = x * z;
+	float yz = y * z;
+	float wx = w * x;
+	float wy = w * y;
+	return  Vector3(2.0f * (xz + wy), 2.0f * (yz - wx), 1.0f - (2.0f * (xx + yy)));
+}
+
+Vector3 Quaternion::MakeUp() const {
+	float xx = x * x;
+	float zz = z * z;
+	float xy = x * y;
+	float yz = y * z;
+	float wx = w * x;
+	float wz = w * z;
+	return Vector3(2.0f * (xy - wz), 1 - (2.0f * (xx + zz)), 2.0f * (yz + wx));
+}
+
+Vector3 Quaternion::MakeRight() const {
+	float yy = y * y;
+	float zz = z * z;
+	float xy = x * y;
+	float xz = x * z;
+	float wy = w * y;
+	float wz = w * z;
+	return Vector3(1.0f - (2.0f * (yy + zz)), 2.0f * (xy + wz), 2.0f * (xz - wy));
+}
+
 Quaternion Quaternion::operator*(const Quaternion& q2) const {
-	return Quaternion(
-		(this->w * q2.x) - (this->z * q2.y) + (this->y * q2.z) + (this->x * q2.w),
-		(this->z * q2.x) + (this->w * q2.y) - (this->x * q2.z) + (this->y * q2.w),
-		(this->y * q2.x) + (this->x * q2.y) + (this->w * q2.z) + (this->z * q2.w),
-		(this->x * q2.x) - (this->y * q2.y) - (this->z * q2.z) + (this->w * q2.w)
-	);
+	Vector3 v1 = Vector3(this->x, this->y, this->z);
+	Vector3 v2 = Vector3(q2.x, q2.y, q2.z);
+
+	float dot = v1.Dot(v2);
+	float newW = (this->w * q2.w) - v1.Dot(v2);
+	Vector3 vector = v1.Cross(v2) + (v1 * q2.w) + (v2 * this->w);
+	return Quaternion(vector.x, vector.y, vector.z, newW);
 }
 
 Vector3 Quaternion::operator*(const Vector3& v) {

@@ -42,7 +42,7 @@ void GameScene::Init() {
 
 	camera_->SetTarget(player_->GetTransform());
 
-	Engine::SetComputeShader(CSKind::GrayScale);
+	//Engine::SetComputeShader(CSKind::GrayScale);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ void GameScene::Draw() const {
 #pragma endregion
 
 	// CSを実行する
-	Engine::RunCS();
+	//Engine::RunCS();
 
 #pragma region Sprite
 
@@ -193,6 +193,8 @@ void GameScene::Debug_Gui() {
 	sprite_->Debug_Gui();
 	ImGui::DragFloat2("range", &range_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
+
+	debugCamera_->Debug_Gui();
 
 	ImGui::End();
 }

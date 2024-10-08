@@ -106,7 +106,7 @@ struct Vector3 final {
 	}
 
 	float Dot(const Vector3& v1) const {
-		return (this->x + v1.x) + (this->y + v1.y) + (this->z + v1.z);
+		return (this->x * v1.x) + (this->y * v1.y) + (this->z * v1.z);
 	}
 
 	float Dot(const Vector3& v1, const Vector3& v2) const {

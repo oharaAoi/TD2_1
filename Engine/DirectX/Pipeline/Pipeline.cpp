@@ -1,9 +1,6 @@
 #include "Pipeline.h"
 
-Pipeline::Pipeline() {
-	rootSignature_ = std::make_unique<RootSignature>();
-}
-
+Pipeline::Pipeline() {}
 Pipeline::~Pipeline() {}
 
 void Pipeline::Initialize(ID3D12Device* device, DirectXCompiler* dxCompiler,
@@ -12,6 +9,7 @@ void Pipeline::Initialize(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	device_ = device;
 	dxCompiler_ = dxCompiler;
 
+	rootSignature_ = std::make_unique<RootSignature>();
 	rootSignature_->Initialize(device, rootSignatureType);
 	elementDescs = desc;
 	ShaderCompile(shaderData);

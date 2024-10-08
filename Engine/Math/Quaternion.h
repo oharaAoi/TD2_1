@@ -20,6 +20,10 @@ public:
 
 	Matrix4x4 MakeMatrix() const;
 
+	Vector3 MakeForward() const;
+	Vector3 MakeUp() const;
+	Vector3 MakeRight() const;
+
 public:
 
 	/// <summary>
