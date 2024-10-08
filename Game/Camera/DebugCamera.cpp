@@ -66,13 +66,14 @@ void DebugCamera::Debug_Gui() {
 
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::DragFloat4("rotate", &quaternion_.x, 0.01f);
+	ImGui::DragFloat("isMoveSpeed", &isMoveSpeed_, 0.1f, 0.0f, 10.0f);
+	ImGui::DragFloat("sensitivity", &sensitivity_, 0.1f, 0.0f, 10.0f);
+	ImGui::DragFloat("kDedzorn", &dedzorn_, 1.0f, 0.0f, 20.0f);
 	ImGui::Separator();
 	ImGui::DragFloat3("right", &right.x, 0.1f);
 	ImGui::DragFloat3("up", &up.x, 0.1f);
 	ImGui::DragFloat("yaw", &yaw_, 0.1f);
 	ImGui::DragFloat("pitch", &pitch_, 0.1f);
-	ImGui::DragFloat("sensitivity", &sensitivity_, 0.1f, 0.0f, 10.0f);
-	ImGui::DragFloat("kDedzorn", &dedzorn_, 1.0f, 0.0f, 20.0f);
 
 	if(ImGui::Button("Reset")) {
 		transform_ = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 5.0f, -30.0f} };
