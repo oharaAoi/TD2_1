@@ -24,6 +24,13 @@ public:
 	Vector3 MakeUp() const;
 	Vector3 MakeRight() const;
 
+	/// <summary>
+	/// Quaternionからオイラー角
+	/// </summary>
+	/// <returns></returns>
+	Vector3 ToEulerAngles() const;
+
+	Quaternion Conjugate() const;
 public:
 
 	/// <summary>
