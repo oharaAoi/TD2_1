@@ -15,19 +15,24 @@ void Camera::Init() {
 
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
-		{0 , 0, 0.0f},
-		{0.0f, 4.0f, -30.0f}
+		{0.0f, 0.91f, 0.0f},
+		{-20.4f, 0.3f, -25.7f}
 	};
 
 	offset_ = transform_.translate;
 }
 
 void Camera::Update() {
+
 	// -------------------------------------------------
 	// ↓ Targetがいたら
 	// -------------------------------------------------
 	if (target_ != nullptr) {
-		transform_.translate.x = target_->GetTranslation().x + offset_.x;
+		// 目的座標への差分
+		Vector3 dif = (target_->GetTranslation() + offset_) - transform_.translate;
+
+		// 少し遅らせて追従
+		transform_.translate += dif * 0.05f;
 	}
 
 	BaseCamera::Update();

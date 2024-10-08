@@ -1,5 +1,6 @@
 #pragma once
 #include "Game/Camera/BaseCamera.h"
+#include "Game/GameObject/Player.h"
 
 class Camera : public BaseCamera {
 public:
@@ -17,6 +18,7 @@ public:
 
 private:
 
+	Player* pPlayer_ = nullptr;
 	Vector3 offset_;
 
 };

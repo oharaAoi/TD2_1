@@ -4,7 +4,7 @@
 #include "Engine/Input/Input.h"
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Collider/Collider.h"
-
+#include "Easing.h"
 
 class Player :
 	public BaseGameObject,
@@ -45,7 +45,17 @@ private:
 	float moveSpeed_;
 	float lookAtT_;
 
+	// プレイヤーが泳ぐ際のの角度決定に関する変数
+	float pressTime_;
+	float currentAngle_;
+	const float kMaxAngle_ = 3.14f * 0.28f;
+
+	// フラグ
 	bool hitWaterSurface_;
-	bool isMove_;
+	bool isMove_ = true;
+
+public:// アクセッサ
+
+	void SetIsMove(bool flag){ isMove_ = flag; }
 };
 

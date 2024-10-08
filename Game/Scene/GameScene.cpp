@@ -1,17 +1,19 @@
 #include "GameScene.h"
 
-GameScene::GameScene() {}
-GameScene::~GameScene() {}
+GameScene::GameScene(){}
+GameScene::~GameScene(){}
 
-void GameScene::Finalize() {
-	waterSpace_->Finalize();
+void GameScene::Finalize(){
+	for(auto& waterSpace : waterSpace_){
+		waterSpace->Finalize();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Init() {
+void GameScene::Init(){
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	// -------------------------------------------------
@@ -23,16 +25,21 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	// ↓ gameObjectの初期化
 	// -------------------------------------------------
-	ground_ = std::make_unique<Ground>();
-	waterSpace_ = std::make_unique<WaterSpace>();
-	waterSpace_->Init("./Game/Resources/Model/", "waterSpace.obj");
+
+	for(int32_t i = 0; i < kStageModelCount_; i++){
+
+		// 地面
+		ground_[i] = std::make_unique<Ground>();
+		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * 32.0f, 0.0f, 0.0f));
+
+		// 水
+		waterSpace_[i] = std::make_unique<WaterSpace>();
+		waterSpace_[i]->Init("./Game/Resources/Model/", "waterSpace.obj");
+		waterSpace_[i]->SetTranslate(Vector3(i * 32.0f, 0.0f, 0.0f));
+	}
 
 	player_ = std::make_unique<Player>();
 
-	range_ = { 222, 222 };
-	leftTop_ = {0,0};
-	sprite_ = Engine::CreateSprite({200, 200} , {222, 222});
-	sprite_->SetTexture("sample.png");
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -40,16 +47,19 @@ void GameScene::Init() {
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
 
+	// -------------------------------------------------
+	// ↓ ターゲットの設定
+	// -------------------------------------------------
+
 	camera_->SetTarget(player_->GetTransform());
 
-	//Engine::SetComputeShader(CSKind::GrayScale);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　読み込み
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Load() {
+void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 
@@ -61,17 +71,22 @@ void GameScene::Load() {
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Update() {
+void GameScene::Update(){
 	AdjustmentItem::GetInstance()->Update();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	if (!isDebug_) {
+
+	// デバッグカメラが有効でない場合
+	if(isDegugCameraActive_ == false) {
+
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
-	} else {
+
+	} else {// デバッグカメラが有効な場合
+
 		debugCamera_->Update();
 		Render::SetEyePos(debugCamera_->GetWorldTranslate());
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
@@ -82,11 +97,16 @@ void GameScene::Update() {
 	// -------------------------------------------------
 	player_->Update();
 
-	ground_->SetPlayerVelocityX(player_->GetMoveVelocity().x);
-	ground_->Update();
-	waterSpace_->Update(player_->GetMoveVelocity().x);
+	for(auto& ground : ground_){
+		ground->SetPlayerVelocityX(player_->GetMoveVelocity().x);
+		ground->Update();
+	}
 
-	sprite_->Update(range_, leftTop_);
+	for(auto& waterSpace : waterSpace_){
+		waterSpace->Update(player_->GetMoveVelocity().x);
+	}
+
+	EndlessStage();
 
 	// -------------------------------------------------
 	// ↓ 当たり判定を取る
@@ -109,31 +129,50 @@ void GameScene::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Draw() const {
+void GameScene::Draw() const{
 #pragma region Primitive
+
+	/////////////////////////////////
+	// 線の描画
+	/////////////////////////////////
 	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
-	if (Collider::isColliderBoxDraw_) {
-		if (!isDebug_) {
+
+	// コライダーの表示
+	if(Collider::isColliderBoxDraw_) {
+		if(!isDegugCameraActive_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
 		} else {
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
+
 #pragma endregion
 
 #pragma region NormalPipeline
 
+	/////////////////////////////////
+	// 3Dオブジェクトなどの表示(基本ここ)
+	/////////////////////////////////
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
-	ground_->Draw();
+
+	for(auto& ground : ground_){
+		ground->Draw();
+	}
+
 	player_->Draw();
 
 #pragma endregion
 
 #pragma region WaterSpace
 
+	/////////////////////////////////
+	// 水の表示
+	/////////////////////////////////
 	Engine::SetPipeline(PipelineKind::kWaterSpacePipeline);
 	// このクラスは一番最後に描画
-	waterSpace_->Draw();
+	for(auto& waterSpace : waterSpace_){
+		waterSpace->Draw();
+	}
 
 #pragma endregion
 
@@ -142,9 +181,11 @@ void GameScene::Draw() const {
 
 #pragma region Sprite
 
+	/////////////////////////////////
+	// スプライトの表示
+	/////////////////////////////////
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineKind::kSpritePipeline);
-	sprite_->Draw();
 
 #pragma endregion
 }
@@ -153,23 +194,63 @@ void GameScene::Draw() const {
 // ↓　波とPlayerの判定
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::PlayerWaveCollision() {
-	float minLenght = 999;
-	for (size_t oi = 0; oi < waterSpace_->GetWorldTopFaceList().size(); ++oi) {
-		// playerのY座標と波の面のY座標との最短の距離を求める
-		Vector3 distans = player_->GetTransform()->GetTranslation() - waterSpace_->GetWorldTopFaceList()[oi];
-		distans.z = 0;
-		float length = std::abs(distans.Length());
-		if (length < minLenght) {
-			minLenght = length;
+void GameScene::PlayerWaveCollision(){
+	for(auto& waterSpace : waterSpace_){
+
+		// デカい距離で初期化
+		float minLength = 999;
+
+		// 水面との距離を求める
+		for(size_t oi = 0; oi < waterSpace->GetWorldTopFaceList().size(); ++oi) {
+			// playerのY座標と波の面のY座標との最短の距離を求める
+			Vector3 distans = player_->GetTransform()->GetTranslation() - waterSpace->GetWorldTopFaceList()[oi];
+			distans.z = 0;
+			float length = std::abs(distans.Length());
+			if(length < minLength) {
+				minLength = length;
+			}
+		}
+
+		// 距離に応じた水との接触判定
+		if(minLength < player_->GetRadius()) {
+			player_->SetHitWaterSurface(true);
+			break;
+		} else {
+			player_->SetHitWaterSurface(false);
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　ステージをループさせる
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GameScene::EndlessStage(){
+
+	for(int32_t i = 0; i < kStageModelCount_; i++){
+
+		// 通り過ぎたかどうか判定
+		if(ground_[i]->GetTransform()->GetTranslation().x <
+			player_->GetTransform()->GetTranslation().x - stageWidthEvery_
+			){
+
+			Vector3 nextPos{};
+
+			// 次の設置場所を求める
+			if(i - 1 >= 0){
+				nextPos = ground_[i - 1]->GetTransform()->GetTranslation()
+					+ Vector3(stageWidthEvery_, 0.0f, 0.0f);
+			} else{
+				nextPos = ground_[kStageModelCount_ - 1]->GetTransform()->GetTranslation()
+					+ Vector3(stageWidthEvery_, 0.0f, 0.0f);
+			}
+
+			// 配置
+			ground_[i]->GetTransform()->SetTranslaion(nextPos);
+			waterSpace_[i]->SetTranslate(nextPos);
 		}
 	}
 
-	if (minLenght < player_->GetRadius()) {
-		player_->SetHitWaterSurface(true);
-	} else {
-		player_->SetHitWaterSurface(false);
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,21 +259,17 @@ void GameScene::PlayerWaveCollision() {
 
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
-void GameScene::Debug_Gui() {
+void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
-	ImGui::Checkbox("isDebugCamera", &isDebug_);
+	ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
 	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 	player_->Debug_Gui();
 
-	waterSpace_->Debug_Gui();
+	//waterSpace_->Debug_Gui();
 
-	if (!isDebug_) {
+	if(!isDegugCameraActive_) {
 		camera_->Debug_Gui();
 	}
-
-	sprite_->Debug_Gui();
-	ImGui::DragFloat2("range", &range_.x, 1.0f);
-	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
 	debugCamera_->Debug_Gui();
 
