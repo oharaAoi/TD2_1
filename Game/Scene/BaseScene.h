@@ -16,5 +16,10 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() const = 0;
 
+protected:
+
+	bool isPause_ = false;
+	bool isStepFrame_ = false;
+
 };
 
