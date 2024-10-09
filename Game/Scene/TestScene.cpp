@@ -126,14 +126,27 @@ void TestScene::ImGuiDraw() {
 		isPause_ = false;
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("step")) {
-		isStepFrame_ = true;
+	if (isPause_) {
+		if (ImGui::Button("step")) {
+			isStepFrame_ = true;
+		}
 	}
 
 	ImGui::DragFloat2("range", &range_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
 	debugCamera_->Debug_Gui();
+
+	Vector3 point = Vector3(2.1f, -0.9f, 1.3f);
+	Quaternion q = Quaternion::AngleAxis(0.45f, Vector3(1.0f, 0.4f, -0.2f).Normalize());
+	Matrix4x4 qMat = q.MakeMatrix();
+
+	Vector3 rottateByA = q * point;
+	Vector3 B = Transform(point, qMat);
+
+	ImGui::DragFloat3("A", &rottateByA.x, 1.0f);
+	ImGui::DragFloat3("B", &B.x, 1.0f);
+
 	ImGui::End();
 }
 #endif

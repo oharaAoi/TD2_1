@@ -25,8 +25,8 @@ void Player::Init() {
 
 	AdaptAdjustmentItem();
 
-	Quaternion playerQuaternion = Quaternion::AngleAxis(90.0f, {0,1,0});
-	transform_->SetQuaternion(playerQuaternion);
+	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
+	transform_->SetQuaternion(restPoseRotation_);
 
 	isMove_ = false;
 
@@ -71,13 +71,13 @@ void Player::Move() {
 		// 回転処理
 		float targetAngle = std::atan2f(velocity_.x, velocity_.y);
 		LookAtDirection(targetAngle);
-		
+
 	} else {
 		// 移動処理
 		velocity_.y = -1.0f;
 		velocity_.Normalize();
 		translate += velocity_ * moveSpeed_ * GameTimer::DeltaTime();
-		
+
 		// 回転処理
 		float targetAngle = std::atan2f(velocity_.y, velocity_.x);
 		LookAtDirection(targetAngle);
@@ -88,10 +88,10 @@ void Player::Move() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　進行方向を向かせる
 //////////////////////////////////////////////////////////////////////////////////////////////////
- 
+
 void Player::LookAtDirection(const float& angle) {
-	Quaternion moveRotation = Quaternion::EulerToQuaternion({ 0,0,angle }) * Quaternion::AngleAxis(90.0f, { 0,1,0 });
-	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion(), moveRotation, lookAtT_);
+	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
+	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
 	transform_->SetQuaternion(slerp);
 }
 

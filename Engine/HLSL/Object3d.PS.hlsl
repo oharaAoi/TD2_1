@@ -79,7 +79,7 @@ float3 Phong(float RDotE, float3 lightColor)
 	// 反射強度
 	float specularPow = pow(saturate(RDotE), gMaterial.shininess);
 	// 鏡面反射
-	float3 specular = lightColor.rbg * specularPow * float3(1.0f, 1.0f, 1.0f);
+	float3 specular = lightColor.rbg * specularPow;
 
 	return specular;
 }
@@ -110,18 +110,17 @@ PixelShaderOutput main(VertexShaderOutput input)
 		output.color = gMaterial.color * textureColor;
 		return output;
 	}
-	
+	float3 normal = normalize(input.normal);
 	float3 pointLightDirection = normalize(input.worldPos.xyz - gPointLight.position);
 	float3 toEye = normalize(gDirectionalLight.eyePos - input.worldPos.xyz);
-	float3 reflectLight = reflect(gDirectionalLight.direction, normalize(input.normal));
+	float3 reflectLight = reflect(gDirectionalLight.direction, normal);
 	float3 halfVector = normalize(-gDirectionalLight.direction + toEye);
 	
-	float3 normal = normalize(input.normal);
 	float3 lightDire = normalize(gDirectionalLight.direction);
 	
 	float RdotE = dot(reflectLight, toEye);
-	float NdotH = dot(normalize(input.normal), halfVector);
-	float NdotL = dot(normalize(input.normal), normalize(-gDirectionalLight.direction));
+	float NdotH = dot(normal, halfVector);
+	float NdotL = dot(normal, normalize(-gDirectionalLight.direction));
 	
 	float distance = length(gPointLight.position - input.worldPos.xyz);
 	float factor = pow(saturate(-distance / gPointLight.radius + 1.0f), gPointLight.decay);
@@ -180,7 +179,7 @@ PixelShaderOutput main(VertexShaderOutput input)
 	float3 limCol = pow(lim, gDirectionalLight.limPower) * gDirectionalLight.color.rgb * textureColor.rgb * gDirectionalLight.intensity;
 	
 	// --------------------- final --------------------- //
-	output.color.rgb = directionalDiffuse + directionalSpeculer;
+	output.color.rgb = directionalDiffuse;
 	//output.color.rgb += pointDiffuse + pointSpeculer;
 	//output.color.rgb += spotDiffuse + spotSpeculer;
 	//output.color.rgb += limCol;

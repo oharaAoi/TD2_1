@@ -52,7 +52,7 @@ private:
 
 	float yaw_ = 0.0f; 
 	float pitch_ = 0.0f;
-	float sensitivity_ = 10.0f; // 回転感度
+	float sensitivity_ = 0.05f; // 回転感度
 	
 	bool isMove = false;
 

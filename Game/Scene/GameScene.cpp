@@ -65,6 +65,19 @@ void GameScene::Update() {
 	AdjustmentItem::GetInstance()->Update();
 
 	// -------------------------------------------------
+	// ↓ Cameraの更新
+	// -------------------------------------------------
+	if (!isDebug_) {
+		camera_->Update();
+		Render::SetEyePos(camera_->GetWorldTranslate());
+		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+	} else {
+		debugCamera_->Update();
+		Render::SetEyePos(debugCamera_->GetWorldTranslate());
+		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
+	}
+
+	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
 	if (isPause_) {
@@ -77,19 +90,6 @@ void GameScene::Update() {
 		if (!isStepFrame_) {
 			return;
 		}
-	}
-
-	// -------------------------------------------------
-	// ↓ Cameraの更新
-	// -------------------------------------------------
-	if (!isDebug_) {
-		camera_->Update();
-		Render::SetEyePos(camera_->GetWorldTranslate());
-		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
-	} else {
-		debugCamera_->Update();
-		Render::SetEyePos(debugCamera_->GetWorldTranslate());
-		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 	}
 
 	// -------------------------------------------------
@@ -204,9 +204,11 @@ void GameScene::Debug_Gui() {
 	if (ImGui::Button("play")) {
 		isPause_ = false;
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("step")) {
-		isStepFrame_ = true;
+	if (isPause_) {
+		ImGui::SameLine();
+		if (ImGui::Button("step")) {
+			isStepFrame_ = true;
+		}
 	}
 	ImGui::End();
 
