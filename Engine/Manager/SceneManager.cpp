@@ -6,6 +6,7 @@ SceneManager::~SceneManager() {}
 
 void SceneManager::Finalize() {
 	effectSystem_->Finalize();
+	MeshManager::GetInstance()->Finalize();
 	ModelManager::GetInstance()->Finalize();
 	Engine::Finalize();
 }
@@ -14,7 +15,7 @@ void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
 	
-	scene_ = std::make_unique<GameScene>();
+	scene_ = std::make_unique<TestScene>();
 	scene_->Load();
 	scene_->Init();
 

@@ -15,6 +15,12 @@ void TestScene::Init() {
 	testObj_->SetObject("walk.gltf");
 	testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 
+	testObj2_ = std::make_unique<BaseGameObject>();
+	testObj2_->Init();
+	testObj2_->SetObject("walk.gltf");
+	testObj2_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+	testObj2_->GetTransform()->SetTranslaion({ 1.0f, 0.0f, 0.0f });
+
 	collisionManager_ = std::make_unique<CollisionManager>();
 
 	range_ = { 222, 222 };
@@ -66,6 +72,7 @@ void TestScene::Update() {
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
+	testObj2_->Update();
 	
 	//placementObjEditer_->Update();
 
@@ -106,6 +113,7 @@ void TestScene::Draw() const {
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//placementObjEditer_->Draw();
 	testObj_->Draw();
+	testObj2_->Draw();
 	
 #pragma endregion
 
@@ -131,6 +139,8 @@ void TestScene::ImGuiDraw() {
 			isStepFrame_ = true;
 		}
 	}
+
+	testObj_->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
 
 	ImGui::DragFloat2("range", &range_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);

@@ -37,7 +37,7 @@ public:
 protected:
 
 	Model* model_;
-	std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;	// 後で変えたい
+	std::vector<std::unique_ptr<Material>> materials;	// 後で変えたい
 
 	std::unique_ptr<WorldTransform> transform_;
 	std::unique_ptr<Animetor> animetor_ = nullptr;

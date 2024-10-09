@@ -29,17 +29,21 @@ void Model::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // 描画関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void Model::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewProjection, const std::unordered_map<std::string, std::unique_ptr<Material>>& materialArray) {
+void Model::Draw(ID3D12GraphicsCommandList* commandList, 
+				 const WorldTransform* worldTransform, 
+				 const ViewProjection* viewProjection,
+				 const std::vector<std::unique_ptr<Material>>& materials) {
+
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		meshArray_[oi]->Draw(commandList);
-		materialArray.at(meshArray_[oi]->GetUseMaterial())->Draw(commandList);
+		materials[oi]->Draw(commandList);
 
 		worldTransform->Draw(commandList);
 		viewProjection->Draw(commandList);
 
 		if (hasTexture_) {
-			std::string textureName = materialArray_[meshArray_[oi]->GetUseMaterial()]->GetMateriaData().textureFilePath;
+			std::string textureName = materials[oi]->GetMateriaData().textureFilePath;
 			TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 3);
 		}
 
@@ -47,18 +51,23 @@ void Model::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* w
 	}
 }
 
-void Model::DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform* worldTransform, const ViewProjection* viewprojection) {
+void Model::DrawSkinning(ID3D12GraphicsCommandList* commandList,
+						 const Skinning* skinning,
+						 const WorldTransform* worldTransform,
+						 const ViewProjection* viewprojection,
+						 const std::vector<std::unique_ptr<Material>>& materials) {
+
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		skinning->StackCommand(commandList, meshArray_[oi]->GetVBV());
 		meshArray_[oi]->DrawIndex(commandList);
-		materialArray_[meshArray_[oi]->GetUseMaterial()]->Draw(commandList);
+		materials[oi]->Draw(commandList);
 
 		worldTransform->Draw(commandList);
 		viewprojection->Draw(commandList);
 
 		if (hasTexture_) {
-			std::string textureName = materialArray_[meshArray_[oi]->GetUseMaterial()]->GetMateriaData().textureFilePath;
+			std::string textureName = materials[oi]->GetMateriaData().textureFilePath;
 			TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 3);
 		}
 
@@ -77,7 +86,7 @@ void Model::Debug_Gui(const std::string& name) {
 			std::string materialNum = std::to_string(oi);
 			std::string materialName = "material" + materialNum;
 			if (ImGui::TreeNode(materialName.c_str())) {
-				materialArray_[meshArray_[oi]->GetUseMaterial()]->ImGuiDraw();
+				//materialArray_[meshArray_[oi]->GetUseMaterial()]->ImGuiDraw();
 				ImGui::TreePop();
 			}
 		}
@@ -255,22 +264,22 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 	}
 
 	std::vector<std::unique_ptr<Mesh>> result;
+	meshArray_.resize(meshVertices.size());
 	for (uint32_t oi = 0; oi < meshVertices.size(); oi++) {
-		// Meshクラスの宣言
-		std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
-		mesh->Init(device, meshVertices[oi], meshIndices[oi]);
-		// 入れるMeshを初期化する(直すところ)
-		mesh->SetUseMaterial(useMaterial[oi]);
-		// Meshを配列に格納
-		meshArray_.push_back(std::move(mesh));
+		/*mesh->SetUseMaterial(useMaterial[oi]);*/
+		MeshManager::GetInstance()->AddMesh(device, fileName, meshVertices[oi], meshIndices[oi]);
+		meshArray_[oi] = (MeshManager::GetInstance()->GetMesh(fileName));
+		meshArray_[oi]->SetUseMaterial(useMaterial[oi]);
 	}
 
 	std::unordered_map<std::string, std::unique_ptr<Material>> materialResult;// 結果
 	for (uint32_t oi = 0; oi < materials.size(); oi++) {
-		materialResult[materials[oi]] = std::make_unique<Material>();
+		/*materialResult[materials[oi]] = std::make_unique<Material>();
 		materialResult[materials[oi]]->Init(device);
-		materialResult[materials[oi]]->SetMaterialData(materialData[materials[oi]]);
+		materialResult[materials[oi]]->SetMaterialData(materialData[materials[oi]]);*/
+
+		materialData_[materials[oi]] = materialData[materials[oi]];
 	}
 
-	materialArray_ = std::move(materialResult);
+	//materialArray_ = std::move(materialResult);
 }
