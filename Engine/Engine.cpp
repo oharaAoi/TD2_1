@@ -128,11 +128,8 @@ void Engine::BeginFrame() {
 #ifdef _DEBUG
 	imguiManager_->Begin();
 #endif
-	Render::Begin();
 	dxCommon_->Begin();
-
-	// リソースの状態をShaderResourceから書き込める状態にする(SR→UA)
-	
+	Render::Begin();
 	input_->Update();
 
 #ifdef _DEBUG
@@ -160,22 +157,50 @@ void Engine::EndImGui() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::DrawRenderTexture() {
-	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	// 最終描画のTextureをShaderで読める状態にする
-	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	// object3DとSprite2DのRenderTargetを合成する
+	// -------------------------------------------------
+	// ↓ Resourceの状態を切り替える(obj3D, sprite2D, renderTexture)
+	// -------------------------------------------------
+	if (!computeShader_->GetIsRun()) {
+		renderTarget_->TransitionResource(
+			dxCommands_->GetCommandList(),
+			Object3D_RenderTarget,
+			D3D12_RESOURCE_STATE_RENDER_TARGET, 
+			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE
+		);
+	}
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(),
+									  Sprite2D_RenderTarget,
+									  D3D12_RESOURCE_STATE_RENDER_TARGET,
+									  D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+
+	// 最終描画のTextureを書き込み可能状態にする
+	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), 
+									   D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+									   D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	// -------------------------------------------------
+	// ↓ object3DとSprite2Dを最後に映すTextureに合成する
+	// -------------------------------------------------
 	computeShader_->BlendRenderTarget(dxCommands_->GetCommandList(), renderTarget_->GetOffScreenSRVHandle(Sprite2D_RenderTarget).handleGPU, renderTexture_->GetUAV());
+	
+	// -------------------------------------------------
+	// ↓ 映すTextureをpixeslShaderで使えるようにする
+	// -------------------------------------------------
+	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+	// -------------------------------------------------
+	// ↓ 最後に映すTextureの描画
+	// -------------------------------------------------
 	// これから書き込む画面をバックバッファに変更する
 	dxCommon_->SetSwapChain();
-	// スプライト用のパイプラインの設定
 	graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
-	// computeShaderで加工したTextureを描画する
 	renderTexture_->Draw(dxCommands_->GetCommandList());
-	// 最終描画のTextureを書き込み可能状態にする
-	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	// -------------------------------------------------
+	// ↓ Resourceの状態を切り替える(obj3D, sprite2D)
+	// -------------------------------------------------
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +267,7 @@ std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* mode
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::RunCS() {
-	//renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 	computeShader_->RunComputeShader(dxCommands_->GetCommandList());
 }
 

@@ -182,7 +182,40 @@ ComPtr<IDxcBlob> CompilerShader(
 	return shaderBlob;
 }
 
+std::string ResourceStateToString(D3D12_RESOURCE_STATES state) {
+	std::string result;
+
+	if (state & D3D12_RESOURCE_STATE_COMMON) result += "COMMON | ";
+	if (state & D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER) result += "VERTEX_AND_CONSTANT_BUFFER | ";
+	if (state & D3D12_RESOURCE_STATE_INDEX_BUFFER) result += "INDEX_BUFFER | ";
+	if (state & D3D12_RESOURCE_STATE_RENDER_TARGET) result += "RENDER_TARGET | ";
+	if (state & D3D12_RESOURCE_STATE_UNORDERED_ACCESS) result += "UNORDERED_ACCESS | ";
+	if (state & D3D12_RESOURCE_STATE_DEPTH_WRITE) result += "DEPTH_WRITE | ";
+	if (state & D3D12_RESOURCE_STATE_DEPTH_READ) result += "DEPTH_READ | ";
+	if (state & D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE) result += "NON_PIXEL_SHADER_RESOURCE | ";
+	if (state & D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) result += "PIXEL_SHADER_RESOURCE | ";
+	if (state & D3D12_RESOURCE_STATE_STREAM_OUT) result += "STREAM_OUT | ";
+	if (state & D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT) result += "INDIRECT_ARGUMENT | ";
+	if (state & D3D12_RESOURCE_STATE_COPY_DEST) result += "COPY_DEST | ";
+	if (state & D3D12_RESOURCE_STATE_COPY_SOURCE) result += "COPY_SOURCE | ";
+	if (state & D3D12_RESOURCE_STATE_RESOLVE_DEST) result += "RESOLVE_DEST | ";
+	if (state & D3D12_RESOURCE_STATE_RESOLVE_SOURCE) result += "RESOLVE_SOURCE | ";
+	if (state & D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE) result += "RAYTRACING_ACCELERATION_STRUCTURE | ";
+	if (state & D3D12_RESOURCE_STATE_SHADING_RATE_SOURCE) result += "SHADING_RATE_SOURCE | ";
+	if (state & D3D12_RESOURCE_STATE_PRESENT) result += "PRESENT | ";
+	
+	// 末尾の " | " を削除
+	if (!result.empty()) {
+		result = result.substr(0, result.length() - 3);
+	}
+
+	return result;
+}
+
 void TransitionResourceState(ID3D12GraphicsCommandList* commandList, ID3D12Resource* resource, D3D12_RESOURCE_STATES beforState, D3D12_RESOURCE_STATES afterState) {
+	/*Log("ChangeStart ResourceState\n");
+	Log("[" + ResourceStateToString(beforState) + " : ");
+	Log(ResourceStateToString(afterState) + "]");*/
 	D3D12_RESOURCE_BARRIER barrier;
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -196,6 +229,8 @@ void TransitionResourceState(ID3D12GraphicsCommandList* commandList, ID3D12Resou
 	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 	// 張る
 	commandList->ResourceBarrier(1, &barrier);
+
+	//Log("   SUCCESS!!!!!\n");
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index){

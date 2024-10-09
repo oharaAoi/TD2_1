@@ -42,7 +42,7 @@ void GameScene::Init() {
 
 	camera_->SetTarget(player_->GetTransform());
 
-	//Engine::SetComputeShader(CSKind::GrayScale);
+	Engine::SetComputeShader(CSKind::GrayScale);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ void GameScene::Draw() const {
 #pragma endregion
 
 	// CSを実行する
-	//Engine::RunCS();
+	Engine::RunCS();
 
 #pragma region Sprite
 

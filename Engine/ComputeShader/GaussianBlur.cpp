@@ -58,7 +58,7 @@ void GaussianBlur::ConfigureResource(ID3D12GraphicsCommandList* commandList) {
 	// -------------------------------------------------
 	// ↓ 水平方向に掛けたブラーのリソースの状態を変更する
 	// -------------------------------------------------
-	TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, 0);
+	TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, 0);
 	referenceResourceHandles_ = bufferHandles_[0].srvAddress;
 	writeResourceHandles_ = bufferHandles_[1].uavAddress;
 
@@ -70,6 +70,6 @@ void GaussianBlur::ConfigureResource(ID3D12GraphicsCommandList* commandList) {
 	commandList->Dispatch(groupCountX_, groupCountY_, 1);
 
 	writeResourceHandles_ = bufferHandles_[0].uavAddress;
-	TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, 1);
+	TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, 1);
 }
 

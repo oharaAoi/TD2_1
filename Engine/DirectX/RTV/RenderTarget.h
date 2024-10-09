@@ -36,61 +36,25 @@ public:
 	void SetRenderTarget(ID3D12GraphicsCommandList* commandList, const RenderTargetType& type);
 
 	/// <summary>
-	/// バックバッファとフロントバッファのResource作成
+	/// swawChainで使用するRenderTargetを作成する
 	/// </summary>
-	void CreateRenderResource();
+	void CrateSwapChainResource();
 
 	/// <summary>
-	/// バックバッファとフロントバッファのViewの作成
+	/// swawChain以外のRenderTargetを作成する
 	/// </summary>
-	void CreateRenderTargetView();
+	void CreateRenderTarget();
 
-	/// <summary>
-	/// オフスクリーン用のResource作成
-	/// </summary>
-	void CreateOffScreenResource();
-
-	/// <summary>
-	/// オフスクリーン用のViewの作成
-	/// </summary>
-	void CreateOffScreenView();
-
-	/// <summary>
-	/// リソースの状態を変更する
-	/// </summary>
-	/// <param name="commandList">コマンドリスト</param>
-	/// <param name="beforState">変更前の状態</param>
-	/// <param name="afterState">変更後の状態</param>
-	void ChangeOffScreenResource(ID3D12GraphicsCommandList* commandList, const D3D12_RESOURCE_STATES& beforState, const D3D12_RESOURCE_STATES& afterState);
-
-	void ChangeRTVResource(ID3D12GraphicsCommandList* commandList, const RenderTargetType& renderType,  const D3D12_RESOURCE_STATES& beforState, const D3D12_RESOURCE_STATES& afterState);
-
-	/// <summary>
-	/// レンダーターゲットを設定する関数
-	/// </summary>
-	/// <param name="commandList"></param>
-	/// <param name="dsvHandle"></param>
-	void OMSetRenderTarget(ID3D12GraphicsCommandList* commandList, const RenderTargetType& renderType, const D3D12_CPU_DESCRIPTOR_HANDLE& dsvHandle);
+	void TransitionResource(ID3D12GraphicsCommandList* commandList, const RenderTargetType& renderType, const D3D12_RESOURCE_STATES& beforState, const D3D12_RESOURCE_STATES& afterState);
 
 public:
 
 	ID3D12Resource* GetSwapChainRenderResource(const UINT& indexNum) { return swapChainRenderResource_[indexNum].Get(); }
 
-	ID3D12Resource* GetOffScreenRenderResource(const RenderTargetType& type) const {
-		return renderTargetResource_[type].Get();
-	}
-
 	DescriptorHeap::DescriptorHandles& GetRtvHandles(const UINT& indexNum) { return swapChainRTVHandles_[indexNum]; }
 
-	const DescriptorHeap::DescriptorHandles& GetOffScreenHandle(const RenderTargetType& type) const {
-		return RTVHandle_[type];
-	}
-
-	const DescriptorHeap::DescriptorHandles& GetOffScreenSRVHandle(const RenderTargetType& type) const {
-		return SRVHandle_[type];
-	}
-
-	void Transition(ID3D12GraphicsCommandList* commandList, const D3D12_RESOURCE_STATES& beforState, const D3D12_RESOURCE_STATES& afterState);
+	const DescriptorHeap::DescriptorHandles& GetOffScreenHandle(const RenderTargetType& type) const { return RTVHandle_[type]; }
+	const DescriptorHeap::DescriptorHandles& GetOffScreenSRVHandle(const RenderTargetType& type) const { return SRVHandle_[type]; }
 
 private:
 

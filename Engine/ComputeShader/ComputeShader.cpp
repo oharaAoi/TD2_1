@@ -74,7 +74,11 @@ void ComputeShader::RunComputeShader(ID3D12GraphicsCommandList* commandList) {
 		isCsReset_ = false;
 	}
 
-	if (executeCsArray_.empty()) {return;}
+	isRun_ = true;
+	if (executeCsArray_.empty()) {
+		isRun_ = false;
+		return;
+	}
 	// 先頭の配列に元となるResourceのSRVを指定する
 	executeCsArray_[0]->SetReferenceResourceHandles(runCsResourceAddress_);
 
@@ -100,6 +104,7 @@ void ComputeShader::RunComputeShader(ID3D12GraphicsCommandList* commandList) {
 	executeCsArray_[lastIndex]->ConfigureResultSRVResource(commandList);
 	//depthOfField_->ConfigureResultSRVResource(commandList);
 	commandList->SetComputeRootDescriptorTable(1, uavRenderAddress_.handleGPU);
+	//Log("------------------ Dispatch!!!!! ----------------------\n");
 	commandList->Dispatch(groupCountX_, groupCountY_, 1);
 
 	// ----------------------------------------------------------------------
@@ -115,19 +120,24 @@ void ComputeShader::RunComputeShader(ID3D12GraphicsCommandList* commandList) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ComputeShader::BlendRenderTarget(ID3D12GraphicsCommandList* commandList, const D3D12_GPU_DESCRIPTOR_HANDLE& spriteGpuHandle, const D3D12_GPU_DESCRIPTOR_HANDLE& rendrerGpuHandle) {
-	TransitionResourceState(commandList, resultResource_.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	
 	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->SetPipelineState(commandList);
-	if (executeCsArray_.empty()) {
+	if (!isRun_) {
 		commandList->SetComputeRootDescriptorTable(0, runCsResourceAddress_.handleGPU);
 	} else {
+		TransitionResourceState(commandList, resultResource_.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 		commandList->SetComputeRootDescriptorTable(0, srvRenderAddress_.handleGPU);
 	}
+
+
 	commandList->SetComputeRootDescriptorTable(1, spriteGpuHandle);
 	commandList->SetComputeRootDescriptorTable(2, rendrerGpuHandle);
+	//Log("------------------ Dispatch!!!!! ----------------------\n");
 	commandList->Dispatch(groupCountX_, groupCountY_, 1);
 
-	TransitionResourceState(commandList, resultResource_.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	if (isRun_) {
+		TransitionResourceState(commandList, resultResource_.Get(), D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

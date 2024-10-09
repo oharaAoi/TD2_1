@@ -87,7 +87,7 @@ void RenderTexture::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
 
 	// HEAPの設定
 	// Resourceの作成
-	renderResource_ = CerateShaderResource(device, &desc, &heapProperties, D3D12_HEAP_FLAG_ALLOW_DISPLAY, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	renderResource_ = CerateShaderResource(device, &desc, &heapProperties, D3D12_HEAP_FLAG_ALLOW_DISPLAY, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// ------------------------------------------------------------
 	// UAVの設定
