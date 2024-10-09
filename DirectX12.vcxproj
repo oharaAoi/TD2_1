@@ -146,6 +146,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Light\SpotLight.cpp" />
     <ClCompile Include="Engine\Manager\CollisionManager.cpp" />
     <ClCompile Include="Engine\Manager\ImGuiManager.cpp" />
+    <ClCompile Include="Engine\Manager\MeshManager.cpp" />
     <ClCompile Include="Engine\Manager\ModelManager.cpp" />
     <ClCompile Include="Engine\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\Manager\TextureManager.cpp" />
@@ -246,6 +247,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Light\SpotLight.h" />
     <ClInclude Include="Engine\Manager\CollisionManager.h" />
     <ClInclude Include="Engine\Manager\ImGuiManager.h" />
+    <ClInclude Include="Engine\Manager\MeshManager.h" />
     <ClInclude Include="Engine\Manager\ModelManager.h" />
     <ClInclude Include="Engine\Manager\SceneManager.h" />
     <ClInclude Include="Engine\Manager\TextureManager.h" />

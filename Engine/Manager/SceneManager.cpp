@@ -6,6 +6,7 @@ SceneManager::~SceneManager() {}
 
 void SceneManager::Finalize() {
 	effectSystem_->Finalize();
+	MeshManager::GetInstance()->Finalize();
 	ModelManager::GetInstance()->Finalize();
 	Engine::Finalize();
 }

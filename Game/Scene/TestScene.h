@@ -42,6 +42,7 @@ private:
 
 	// gameObject -----------------------------------
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;
+	std::unique_ptr<BaseGameObject> testObj2_ = nullptr;
 	std::unique_ptr<Trail> trail_ = nullptr;
 	
 	// sprite -----------------------------------

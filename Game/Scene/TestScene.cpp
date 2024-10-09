@@ -15,6 +15,12 @@ void TestScene::Init() {
 	testObj_->SetObject("skin.obj");
 	//testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 
+	testObj2_ = std::make_unique<BaseGameObject>();
+	testObj2_->Init();
+	testObj2_->SetObject("walk.gltf");
+	testObj2_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+	testObj2_->GetTransform()->SetTranslaion({ 1.0f, 0.0f, 0.0f });
+
 	collisionManager_ = std::make_unique<CollisionManager>();
 
 	range_ = { 222, 222 };
@@ -69,6 +75,7 @@ void TestScene::Update() {
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
+	testObj2_->Update();
 	trail_->Update();
 	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
 	
@@ -112,6 +119,7 @@ void TestScene::Draw() const {
 	//placementObjEditer_->Draw();
 	testObj_->Draw();
 	trail_->Draw();
+	testObj2_->Draw();
 	
 #pragma endregion
 
@@ -137,6 +145,8 @@ void TestScene::ImGuiDraw() {
 			isStepFrame_ = true;
 		}
 	}
+
+	testObj_->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
 
 	testObj_->Debug_Gui();
 

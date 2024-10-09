@@ -98,6 +98,8 @@ public:
 	// Skinningの作成
 	static std::unique_ptr<Skinning> CreateSkinning(Skeleton* skeleton, Model* model);
 
+	static std::unique_ptr<Material> CreateMaterial(const Material::ModelMaterialData data);
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 描画系

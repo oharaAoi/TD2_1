@@ -16,6 +16,7 @@
 #include "Engine/Assets/WorldTransform.h"
 #include "Engine/Assets/ViewProjection.h"
 #include "Engine/Manager/TextureManager.h"
+#include "Engine/Manager/MeshManager.h"
 #include "Engine/Lib/Transform.h"
 #include "Engine/Math/MyMatrix.h"
 #include "Engine/Utilities/AnimationUtils.h"
@@ -45,8 +46,8 @@ public:
 
 	void Init(ID3D12Device* device, const std::string& directorPath, const std::string& fileName);
 	void Update();
-	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::unordered_map<std::string, std::unique_ptr<Material>>& materialArray);
-	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform* worldTransform, const ViewProjection* viewprojection);
+	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::vector<std::unique_ptr<Material>>& materials);
+	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::vector<std::unique_ptr<Material>>& materials);
 
 #ifdef _DEBUG
 	void Debug_Gui(const std::string& name);
@@ -77,27 +78,18 @@ public:
 
 	std::map<std::string, Skinning::JointWeightData>& GetSkinClusterData() { return skinClusterData_; }
 
-	Mesh* GetMesh(const uint32_t& index) { return meshArray_[index].get(); }
+	Mesh* GetMesh(const uint32_t& index) { return meshArray_[index]; }
 
-	std::unordered_map<std::string, std::unique_ptr<Material>> copyMaterialArray() {
-
-		std::unordered_map<std::string, std::unique_ptr<Material>> copy;
-
-		// マップの各要素をディープコピー
-		for (const auto& pair : this->materialArray_) {
-			copy[pair.first] = pair.second->clone(); // ディープコピー
-		}
-
-		return copy;
-	}
-
+	const Material::ModelMaterialData GetMaterialData(const std::string& name)const {return materialData_.at(name);}
+	const size_t GetMaterialsSize() const { return materialData_.size(); }
 
 private:
 
 	// 頂点バッファやインデックスバッファを持つ
-	std::vector<std::unique_ptr<Mesh>> meshArray_;
+	std::vector<Mesh*> meshArray_;
+	std::unordered_map<std::string, Material::ModelMaterialData> materialData_;
 	// テクスチャの情報を持っている
-	std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;
+	//std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;
 
 	std::map<std::string, Skinning::JointWeightData> skinClusterData_;
 	// ノード

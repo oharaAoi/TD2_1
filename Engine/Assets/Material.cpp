@@ -15,19 +15,13 @@ void Material::Init(ID3D12Device* device) {
 	// ---------------------------------------------------------------
 	// ↓Materialの設定
 	// ---------------------------------------------------------------
-	materialBuffer_ = CreateBufferResource(device, sizeof(PBRMaterial));
+	materialBuffer_ = CreateBufferResource(device, sizeof(MaterialData));
 	materialBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&material_));
 	// 色を決める
 	material_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	material_->enableLighting = false;
 	material_->uvTransform = MakeIdentity4x4();
 	material_->shininess = 0;
-
-	material_->diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	material_->specularColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	material_->roughness = 0.5f;
-	material_->metallic = 0.5f;
 
 	uvTranslation_ = { 0,0,0 };
 	uvScale_ = { 1,1,1 };
@@ -57,25 +51,8 @@ void Material::ImGuiDraw() {
 void Material::SetMaterialData(ModelMaterialData materialData) {
 	materialData_ = materialData;
 
-	material_->color = materialData_.albedo;
-	material_->enableLighting = true;
-	material_->uvTransform = MakeIdentity4x4();
-	// 反射用素
-	material_->diffuseColor = materialData_.diffuse;
-	material_->specularColor = materialData_.specular;
-
-	material_->roughness = 0.5f;
-	material_->metallic = 0.5f;
-	material_->shininess = 0;
-
 	material_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	material_->enableLighting = true;
 	material_->uvTransform = MakeIdentity4x4();
 	material_->shininess = 50;
-
-	material_->diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	material_->specularColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	material_->roughness = 0.5f;
-	material_->metallic = 0.5f;
 }
