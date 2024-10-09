@@ -75,6 +75,8 @@ ComPtr<IDxcBlob> CompilerShader(
 	ComPtr<IDxcIncludeHandler> includeHandler
 );
 
+std::string ResourceStateToString(D3D12_RESOURCE_STATES state);
+
 /// <summary>
 /// リソースのstateを変更する関数
 /// </summary>

@@ -69,6 +69,8 @@ public:
 	/// <param name="rendrerGpuHandle">: 最終描画するTextureのGPUハンドル</param>
 	void BlendRenderTarget(ID3D12GraphicsCommandList* commandList, const D3D12_GPU_DESCRIPTOR_HANDLE& spriteGpuHandle, const D3D12_GPU_DESCRIPTOR_HANDLE& rendrerGpuHandle);
 
+	const bool GetIsRun() const { return isRun_; }
+
 private:
 	// computeShader用のパイプライン
 	std::unordered_map<CsPipelineType, std::unique_ptr<ComputeShaderPipeline>> computeShaderPipelineMap_;
@@ -101,5 +103,6 @@ private:
 	UINT groupCountY_;
 
 	bool isCsReset_;
+	bool isRun_;
 };
 

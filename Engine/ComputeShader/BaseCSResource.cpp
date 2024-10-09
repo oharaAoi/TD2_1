@@ -33,7 +33,7 @@ void BaseCSResource::TransitionUAVResource(ID3D12GraphicsCommandList* commandLis
 
 void BaseCSResource::TransitionAllResourceHandles(ID3D12GraphicsCommandList* commandList) {
 	for (uint32_t oi = 0; oi < bufferHandles_.size(); oi++) {
-		TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, oi);
+		TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, oi);
 	}
 }
 

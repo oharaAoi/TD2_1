@@ -43,7 +43,7 @@ void GrayScale::ConfigureResource(ID3D12GraphicsCommandList* commandList) {
 	pipeline_->SetPipelineState(commandList);
 	BaseCSResource::ConfigureResource(commandList);
 	commandList->Dispatch(groupCountX_, groupCountY_, 1);
-	TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, 0);
+	TransitionUAVResource(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, 0);
 }
 
 void GrayScale::TransitionResource(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES beforState, D3D12_RESOURCE_STATES afterState) {
