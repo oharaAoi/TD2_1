@@ -12,8 +12,8 @@ void TestScene::Init() {
 	
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
-	testObj_->SetObject("walk.gltf");
-	testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+	testObj_->SetObject("skin.obj");
+	//testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
@@ -21,6 +21,9 @@ void TestScene::Init() {
 	leftTop_ = { 0,0 };
 	sprite_ = Engine::CreateSprite({ 200, 200 }, { 222, 222 });
 	sprite_->SetTexture("sample.png");
+
+	trail_ = std::make_unique<Trail>();
+	trail_->Init();
 
 	/*placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
 	placementObjEditer_->Init();*/
@@ -66,6 +69,8 @@ void TestScene::Update() {
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
+	trail_->Update();
+	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
 	
 	//placementObjEditer_->Update();
 
@@ -106,6 +111,7 @@ void TestScene::Draw() const {
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//placementObjEditer_->Draw();
 	testObj_->Draw();
+	trail_->Draw();
 	
 #pragma endregion
 
@@ -125,12 +131,14 @@ void TestScene::ImGuiDraw() {
 	if (ImGui::Button("play")) {
 		isPause_ = false;
 	}
-	ImGui::SameLine();
 	if (isPause_) {
+		ImGui::SameLine();
 		if (ImGui::Button("step")) {
 			isStepFrame_ = true;
 		}
 	}
+
+	testObj_->Debug_Gui();
 
 	ImGui::DragFloat2("range", &range_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);

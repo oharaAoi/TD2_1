@@ -182,6 +182,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Camera\DebugCamera.cpp" />
     <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp" />
+    <ClCompile Include="Game\Effect\Trail.cpp" />
     <ClCompile Include="Game\GameObject\BasePlacementObject.cpp" />
     <ClCompile Include="Game\GameObject\Ground.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
@@ -289,6 +290,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Camera\DebugCamera.h" />
     <ClInclude Include="Game\Editer\PlacementObjectEditer.h" />
+    <ClInclude Include="Game\Effect\Trail.h" />
     <ClInclude Include="Game\GameObject\BasePlacementObject.h" />
     <ClInclude Include="Game\GameObject\Ground.h" />
     <ClInclude Include="Game\GameObject\Player.h" />

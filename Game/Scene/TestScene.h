@@ -11,6 +11,7 @@
 
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Engine/Utilities/AdjustmentItem.h"
+#include  "Game/Effect/Trail.h"
 
 
 class TestScene 
@@ -41,6 +42,7 @@ private:
 
 	// gameObject -----------------------------------
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;
+	std::unique_ptr<Trail> trail_ = nullptr;
 	
 	// sprite -----------------------------------
 	std::unique_ptr<Sprite> sprite_;
