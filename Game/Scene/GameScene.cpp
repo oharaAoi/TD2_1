@@ -65,6 +65,21 @@ void GameScene::Update() {
 	AdjustmentItem::GetInstance()->Update();
 
 	// -------------------------------------------------
+	// ↓ 一時停止時の処理
+	// -------------------------------------------------
+	if (isPause_) {
+		isStepFrame_ = false;
+
+#ifdef _DEBUG
+		Debug_Gui();
+#endif
+		// stepフラグが立っていたら1フレームだけ進める
+		if (!isStepFrame_) {
+			return;
+		}
+	}
+
+	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
 	if (!isDebug_) {
@@ -101,7 +116,9 @@ void GameScene::Update() {
 
 
 #ifdef _DEBUG
-	Debug_Gui();
+	if (!isStepFrame_) {
+		Debug_Gui();
+	}
 #endif
 }
 
@@ -180,6 +197,20 @@ void GameScene::PlayerWaveCollision() {
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui() {
 	ImGui::Begin("GameScene");
+	if (ImGui::Button("stop")) {
+		isPause_ = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("play")) {
+		isPause_ = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("step")) {
+		isStepFrame_ = true;
+	}
+	ImGui::End();
+
+	ImGui::Begin("GameObjects");
 	ImGui::Checkbox("isDebugCamera", &isDebug_);
 	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 	player_->Debug_Gui();

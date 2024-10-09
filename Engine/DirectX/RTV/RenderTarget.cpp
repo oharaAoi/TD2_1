@@ -37,8 +37,8 @@ void RenderTarget::SetRenderTarget(ID3D12GraphicsCommandList* commandList, const
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxHeap_->GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
 	
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles{};
-	rtvHandles = RTVHandle_[type].handleCPU;
-	commandList->OMSetRenderTargets(1, &rtvHandles, false, &dsvHandle);
+	//rtvHandles = RTVHandle_[type].handleCPU;
+	commandList->OMSetRenderTargets(1, &RTVHandle_[type].handleCPU, false, &dsvHandle);
 	// 指定した深度で画面をクリア
 	commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	float clearColor[] = { 0.1f, 0.25f, 0.5f, 0.0f };
@@ -80,7 +80,7 @@ void RenderTarget::CrateSwapChainResource() {
 
 	// リソースの作成
 	for (uint32_t oi = 0; oi < renderTargetNum_; ++oi) {
-		HRESULT hr = device_->CreateCommittedResource(
+		hr = device_->CreateCommittedResource(
 			&heapProperties,
 			D3D12_HEAP_FLAG_ALLOW_DISPLAY,
 			&desc,

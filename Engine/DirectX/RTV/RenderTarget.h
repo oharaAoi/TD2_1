@@ -17,8 +17,8 @@ enum RenderTargetType {
 	Object3D_RenderTarget,
 	Sprite2D_RenderTarget,
 	OffScreen_RenderTarget,
-	DepthOfField_RenderTarget,
 	EffectSystem_RenderTarget,
+	DepthOfField_RenderTarget,
 };
 
 static const uint32_t renderTargetNum_ = sizeof(RenderTargetType);

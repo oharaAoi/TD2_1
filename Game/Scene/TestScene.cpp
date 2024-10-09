@@ -8,18 +8,12 @@ void TestScene::Finalize() {
 
 void TestScene::Init() {
 	// カメラ -------------------------------------------------------------------
-	camera_ = std::make_unique<Camera>();
+	debugCamera_ = std::make_unique<DebugCamera>();
 	
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
 	testObj_->SetObject("walk.gltf");
 	testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
-
-	world_ = std::make_unique<BaseGameObject>();
-	world_->Init();
-	world_->SetObject("Test_World.obj");
-
-	camera_->SetTarget(testObj_->GetTransform());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
@@ -54,35 +48,51 @@ void TestScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void TestScene::Update() {
 	// -------------------------------------------------
+	// ↓ 一時停止時の処理
+	// -------------------------------------------------
+	if (isPause_) {
+		isStepFrame_ = false;
+
+#ifdef _DEBUG
+		ImGuiDraw();
+#endif
+		// stepフラグが立っていたら1フレームだけ進める
+		if (!isStepFrame_) {
+			return;
+		}
+	}
+		
+	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
-	world_->Update();
 	
 	//placementObjEditer_->Update();
 
-	sprite_->Update();
+	sprite_->Update(range_, leftTop_);
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	camera_->Update();
-	Render::SetEyePos(camera_->GetWorldTranslate());
-	Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
-	Render::SetViewProjection2D(camera_->GetViewMatrix2D(), camera_->GetProjectionMatrix2D());
+	debugCamera_->Update();
+	Render::SetEyePos(debugCamera_->GetWorldTranslate());
+	Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
+	Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
-	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
-	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+	EffectSystem::GetInstacne()->SetCameraMatrix(debugCamera_->GetCameraMatrix());
+	EffectSystem::GetInstacne()->SetViewProjectionMatrix(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 
 
 	// -------------------------------------------------
 	// ↓ Debugの表示
 	// -------------------------------------------------
 #ifdef _DEBUG
-	ImGuiDraw();
+	if (!isStepFrame_) {
+		ImGuiDraw();
+	}
 #endif
 
 }
@@ -96,18 +106,6 @@ void TestScene::Draw() const {
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 	//placementObjEditer_->Draw();
 	testObj_->Draw();
-
-#pragma endregion
-
-#pragma region PBR
-
-	Engine::SetPipeline(PipelineKind::kPBRPipeline);
-
-#pragma endregion
-
-#pragma region Sprite
-
-	Engine::SetPipeline(PipelineKind::kSpritePipeline);
 	
 #pragma endregion
 
@@ -120,13 +118,22 @@ void TestScene::Draw() const {
 #ifdef _DEBUG
 void TestScene::ImGuiDraw() {
 	ImGui::Begin("GameObjects");
-	world_->Debug_Gui();
-	ImGui::End();
+	if (ImGui::Button("stop")) {
+		isPause_ = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("play")) {
+		isPause_ = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("step")) {
+		isStepFrame_ = true;
+	}
 
-	sprite_->Debug_Gui();
 	ImGui::DragFloat2("range", &range_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
-	camera_->Debug_Gui();
+	debugCamera_->Debug_Gui();
+	ImGui::End();
 }
 #endif

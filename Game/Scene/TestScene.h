@@ -41,8 +41,7 @@ private:
 
 	// gameObject -----------------------------------
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;
-	std::unique_ptr<BaseGameObject> world_ = nullptr;
-
+	
 	// sprite -----------------------------------
 	std::unique_ptr<Sprite> sprite_;
 	Vector2 range_;
