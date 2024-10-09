@@ -161,13 +161,22 @@ void Engine::DrawRenderTexture() {
 	// ↓ Resourceの状態を切り替える(obj3D, sprite2D, renderTexture)
 	// -------------------------------------------------
 	if (!computeShader_->GetIsRun()) {
-		renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+		renderTarget_->TransitionResource(
+			dxCommands_->GetCommandList(),
+			Object3D_RenderTarget,
+			D3D12_RESOURCE_STATE_RENDER_TARGET, 
+			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE
+		);
 	}
-	renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
-	
-	// 最終描画のTextureを書き込み可能状態にする
-	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(),
+									  Sprite2D_RenderTarget,
+									  D3D12_RESOURCE_STATE_RENDER_TARGET,
+									  D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
+	// 最終描画のTextureを書き込み可能状態にする
+	renderTexture_->TransitionResource(dxCommands_->GetCommandList(), 
+									   D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+									   D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	// -------------------------------------------------
 	// ↓ object3DとSprite2Dを最後に映すTextureに合成する
@@ -184,16 +193,14 @@ void Engine::DrawRenderTexture() {
 	// -------------------------------------------------
 	// これから書き込む画面をバックバッファに変更する
 	dxCommon_->SetSwapChain();
-	// スプライト用のパイプラインの設定
 	graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
-	// computeShaderで加工したTextureを描画する
 	renderTexture_->Draw(dxCommands_->GetCommandList());
 
 	// -------------------------------------------------
 	// ↓ Resourceの状態を切り替える(obj3D, sprite2D)
 	// -------------------------------------------------
-	renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), Sprite2D_RenderTarget, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +267,7 @@ std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* mode
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::RunCS() {
-	renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), Object3D_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 	computeShader_->RunComputeShader(dxCommands_->GetCommandList());
 }
 

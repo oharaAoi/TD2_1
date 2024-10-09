@@ -111,7 +111,7 @@ void EffectSystemEditer::Draw() const {
 	}
 
 	// 最後にImGui上でEffectを描画する
-	renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), EffectSystem_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), EffectSystem_RenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	ImGui::Begin("Render Target View");
 	ImTextureID textureID = reinterpret_cast<ImTextureID>(static_cast<uint64_t>(renderTarget_->GetOffScreenSRVHandle(RenderTargetType::EffectSystem_RenderTarget).handleGPU.ptr));
 	ImGui::Image((void*)textureID, ImVec2(static_cast<float>(640), static_cast<float>(360))); // サイズは適宜調整
@@ -141,7 +141,7 @@ void EffectSystemEditer::Begin() {
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = descriptorHeaps_->GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
 	dsvHandle.ptr += size_t(descriptorHeaps_->GetDescriptorSize()->GetDSV());
 	// RenderTargetを指定する
-	renderTarget_->OMSetRenderTarget(commandList, RenderTargetType::EffectSystem_RenderTarget, dsvHandle);
+	renderTarget_->SetRenderTarget(commandList, RenderTargetType::EffectSystem_RenderTarget);
 	commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	float clearColor[] = { 0.2f, 0.2f, 0.2f, 1.0f };
@@ -150,6 +150,6 @@ void EffectSystemEditer::Begin() {
 }
 
 void EffectSystemEditer::End() {
-	renderTarget_->ChangeRTVResource(dxCommands_->GetCommandList(), EffectSystem_RenderTarget, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	renderTarget_->TransitionResource(dxCommands_->GetCommandList(), EffectSystem_RenderTarget, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 #endif // _DEBUG
