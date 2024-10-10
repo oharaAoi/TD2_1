@@ -20,9 +20,11 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	// ↓ editorの初期化
 	// -------------------------------------------------
+	obstaclesManager_ = std::make_unique<ObstaclesManager>();
+	obstaclesManager_->Init();
 
-	objectEditor_ = std::make_unique<PlacementObjectEditer>();
-	objectEditor_->Init();
+	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
+	placementObjectEditor_->Init(obstaclesManager_.get());
 
 	// -------------------------------------------------
 	// ↓ cameraの初期化
@@ -47,6 +49,10 @@ void GameScene::Init(){
 	}
 
 	player_ = std::make_unique<Player>();
+
+	// trail
+	trail_ = std::make_unique<Trail>();
+	trail_->Init();
 
 
 	// -------------------------------------------------
@@ -106,6 +112,8 @@ void GameScene::Update(){
 
 	#ifdef _DEBUG
 		Debug_Gui();
+		placementObjectEditor_->Update();
+		obstaclesManager_->Update();
 	#endif
 		// stepフラグが立っていたら1フレームだけ進める
 		if(!isStepFrame_) {
@@ -129,6 +137,14 @@ void GameScene::Update(){
 
 	//EndlessStage();
 
+	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
+	obstaclesManager_->Update();
+
+	// trail
+	trail_->Update();
+	trail_->AddTrail(player_->GetTransform()->GetTranslation());
+	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
+
 	// -------------------------------------------------
 	// ↓ 当たり判定を取る
 	// -------------------------------------------------
@@ -146,9 +162,8 @@ void GameScene::Update(){
 		Debug_Gui();
 
 		// editorの処理
+		placementObjectEditor_->Update();
 	}
-
-	objectEditor_->Update();
 
 #endif
 }
@@ -185,14 +200,20 @@ void GameScene::Draw() const{
 #ifdef _DEBUG
 
 	// editorの描画
-	objectEditor_->Draw();
+	placementObjectEditor_->Draw();
 
 #endif // _DEBUG
+
+	obstaclesManager_->Draw();
 
 	for(auto& ground : ground_){
 		ground->Draw();
 	}
 	player_->Draw();
+
+	// effectの描画
+	Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();
 
 #pragma endregion
 
@@ -322,6 +343,8 @@ void GameScene::Debug_Gui(){
 	}
 
 	debugCamera_->Debug_Gui();
+
+	obstaclesManager_->Debug_Gui();
 
 	ImGui::End();
 }

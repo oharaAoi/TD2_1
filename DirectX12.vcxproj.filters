@@ -118,6 +118,9 @@
     <Filter Include="Game\Effect">
       <UniqueIdentifier>{6d2d2e77-3c07-4ec4-815b-55ba7c35564f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Manager">
+      <UniqueIdentifier>{bd10a4a9-14d6-4616-84b8-58f98c735979}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -419,6 +422,9 @@
     </ClCompile>
     <ClCompile Include="Game\GameObject\Item.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Manager\ObstaclesManager.cpp">
+      <Filter>Game\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -736,6 +742,18 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\Item.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Manager\ObstaclesManager.h">
+      <Filter>Game\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Manager\MeshManager.h">
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\Trail.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\BaseCamera.h">
+      <Filter>Game\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

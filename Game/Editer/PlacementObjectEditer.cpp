@@ -1,13 +1,19 @@
 #include "PlacementObjectEditer.h"
 
 PlacementObjectEditer::PlacementObjectEditer() {}
-PlacementObjectEditer::~PlacementObjectEditer() {}
+PlacementObjectEditer::~PlacementObjectEditer() {
+#ifdef _DEBUG
+	debug_BasePlacementObj_.clear();
+	inport_BasePlacementObj_.clear();
+#endif
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlacementObjectEditer::Init() {
+void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
+	obstaclesManager_ = obstaclesManager;
 	std::filesystem::path dire(kDirectoryPath_);
 	if (!std::filesystem::exists(kDirectoryPath_)) {
 		std::filesystem::create_directories(kDirectoryPath_);
@@ -20,42 +26,22 @@ void PlacementObjectEditer::Init() {
 // ↓　ファイルの読み込みを行う
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlacementObjectEditer::Load(const std::string& fileName) {
-	// 読み込むjsonファイルのフルパスを合成する
-	std::string filePath = kDirectoryPath_ + fileName + ".json";
-	// 読み込み用ファイルストリーム
-	std::ifstream ifs;
-	// ファイルを読み込みように開く
-	ifs.open(filePath);
-
-	if (ifs.fail()) {
-		std::string message = "not Exist " + fileName + ".json";
-	}
-
-	json root;
-	// json文字列からjsonのデータ構造に展開
-	ifs >> root;
-	// ファイルを閉じる
-	ifs.close();
-	
-	for (auto& [topKey, nestedData] : root.items()) {
-		for (auto& [key, value] : nestedData.items()) {
-			PlacementObjType objType = value["objType"];
-			Vector3 position = { value["position"][0], value["position"][1], value["position"][2] };
-			float radius = value["radius"];
-			Vector4 rotate = { value["rotate"][0], value["rotate"][1], value["rotate"][2], value["rotate"][3] };
-			Vector3 scale = { value["scale"][0], value["scale"][1], value["scale"][2] };
-
-			groupMap_[topKey].loadData_.emplace_back(scale, rotate, position, radius, objType);
-		}
-	}
-}
-
 void PlacementObjectEditer::LoadAllFile() {
 	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
-		Load(fileName);
+		MergeMaps(obstaclesManager_->LoadFile(fileName));
+	}
+}
+
+void PlacementObjectEditer::MergeMaps(const std::map<std::string, ObstaclesManager::Group>& map) {
+	for (const auto& pair : map) {
+		// map1にキーが存在しない場合は新しく挿入される
+		groupMap_[pair.first].loadData_.insert(
+			groupMap_[pair.first].loadData_.end(),
+			pair.second.loadData_.begin(),
+			pair.second.loadData_.end()
+		);
 	}
 }
 
@@ -71,12 +57,12 @@ void PlacementObjectEditer::Update() {
 	// -------------------------------------------------
 	// ↓ リスト内にある更新処理を行う
 	// -------------------------------------------------
-	for (std::list<ObjectData>::iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
+	for (std::list<ObstaclesManager::ObjectData>::iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
 		(*it).object_->Update();
 		++it;
 	}
 
-	for (std::list<ObjectData>::iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
+	for (std::list<ObstaclesManager::ObjectData>::iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
 		(*it).object_->Update();
 		++it;
 	}
@@ -90,12 +76,12 @@ void PlacementObjectEditer::Draw() const {
 	// -------------------------------------------------
 	// ↓ リスト内にある描画処理を行う
 	// -------------------------------------------------
-	for (std::list<ObjectData>::const_iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
+	for (std::list<ObstaclesManager::ObjectData>::const_iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
 		(*it).object_->Draw();
 		++it;
 	}
 
-	for (std::list<ObjectData>::const_iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
+	for (std::list<ObstaclesManager::ObjectData>::const_iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
 		(*it).object_->Draw();
 		++it;
 	}
@@ -109,6 +95,7 @@ void PlacementObjectEditer::Debug_Gui() {
 	ImGui::Begin("PlacementObjEditer");
 	if (ImGui::Button("Reload")) {
 		groupMap_.clear();
+		fileNames_.clear();
 		LoadAllFile();
 	}
 	NewGroup_Config();
@@ -166,14 +153,33 @@ void PlacementObjectEditer::NewGroup_Config() {
 	// ↓ 生成された仮のオブジェクトの位置を調整する
 	// -------------------------------------------------
 	uint32_t popIndex = 0;
-	for (std::list<ObjectData>::iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
-		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
+	for (std::list<ObstaclesManager::ObjectData>::iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
 		std::string name = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
-		ImGui::DragFloat3(name.c_str(), &translate.x, 0.1f);
-		(*it).object_->GetTransform()->SetTranslaion(translate);
+		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
+		Vector3 scale = (*it).object_->GetTransform()->GetScale();
+		if (ImGui::TreeNode(name.c_str())) {
+			if (ImGui::TreeNode("scale")) {
+				ImGui::DragFloat3("scale", &scale.x, 0.1f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("rotate")) {
+				(*it).object_->GetTransform()->Debug_Quaternion();
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("translation")) {
+				ImGui::DragFloat3("translation", &translate.x, 0.1f);
+				ImGui::TreePop();
+			}
 
-		ImGui::SameLine();
-		if (ImGui::Button("delete")) {
+			ImGui::TreePop();
+		}
+
+		(*it).object_->GetTransform()->SetTranslaion(translate);
+		(*it).object_->GetTransform()->SetScale(scale);
+
+		std::string deleteName = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
+		deleteName = "delete/" + deleteName;
+		if (ImGui::Button(deleteName.c_str())) {
 			it = debug_BasePlacementObj_.erase(it);
 		} else {
 			++it;
@@ -212,14 +218,33 @@ void PlacementObjectEditer::Edit_Config() {
 	// ↓ 生成されたオブジェクトの位置を調整する
 	// -------------------------------------------------
 	uint32_t popIndex = 0;
-	for (std::list<ObjectData>::iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
-		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
+	for (std::list<ObstaclesManager::ObjectData>::iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
 		std::string name = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
-		ImGui::DragFloat3(name.c_str(), &translate.x, 0.1f);
-		(*it).object_->GetTransform()->SetTranslaion(translate);
+		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
+		Vector3 scale = (*it).object_->GetTransform()->GetScale();
+		if (ImGui::TreeNode(name.c_str())) {
+			if (ImGui::TreeNode("scale")) {
+				ImGui::DragFloat3("scale", &scale.x, 0.1f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("rotate")) {
+				(*it).object_->GetTransform()->Debug_Quaternion();
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("translation")) {
+				ImGui::DragFloat3("translation", &translate.x, 0.1f);
+				ImGui::TreePop();
+			}
 
-		ImGui::SameLine();
-		if (ImGui::Button("delete")) {
+			ImGui::TreePop();
+		}
+		
+		(*it).object_->GetTransform()->SetTranslaion(translate);
+		(*it).object_->GetTransform()->SetScale(scale);
+
+		std::string deleteName = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
+		deleteName = "delete/" + deleteName;
+		if (ImGui::Button(deleteName.c_str())) {
 			it = inport_BasePlacementObj_.erase(it);
 		} else {
 			++it;
@@ -241,14 +266,14 @@ void PlacementObjectEditer::Edit_Config() {
 // ↓　listに登録されているobjectの情報を外部ファイルに格納する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlacementObjectEditer::Save(const std::string& fileName, const std::list<ObjectData>& list) {
+void PlacementObjectEditer::Save(const std::string& fileName, const std::list<ObstaclesManager::ObjectData>& list) {
 	// -------------------------------------------------
 	// ↓ 書き込むようにデータを登録する
 	// -------------------------------------------------
 	json root;
 	// rootにデータを書き込む
 	uint32_t index = 0;
-	for (const ObjectData& obj : list) {
+	for (const ObstaclesManager::ObjectData& obj : list) {
 		std::string objId = GetObjectString(obj.type_) + std::to_string(index);
 		// 格納したい情報を登録する
 		const auto& transform = obj.object_->GetTransform();
@@ -293,15 +318,16 @@ void PlacementObjectEditer::Inport() {
 		auto& obj = inport_BasePlacementObj_.emplace_back(std::make_unique<BasePlacementObject>());
 		obj.object_->Init();
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
-
+		Vector3 createPos = objData[oi].pos_;
+		createPos.x = objData[oi].pos_.x + obstaclesManager_->playerPos_.x;
 		switch (objData[oi].type_) {
 		case PlacementObjType::Test1_Type:
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, objData[oi].pos_, objData[oi].radius_);
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			obj.object_->SetObject("skin.obj");
 			obj.type_ = PlacementObjType::Test1_Type;
 			break;
 		case PlacementObjType::Test2_Type:
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, objData[oi].pos_, objData[oi].radius_);
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			obj.object_->SetObject("teapot.obj");
 			obj.type_ = PlacementObjType::Test2_Type;
 			break;

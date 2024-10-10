@@ -2,6 +2,11 @@
 #include "Engine/GameObject/BaseGameObject.h"
 #include "Engine/Collider/Collider.h"
 
+enum class PlacementObjType {
+	Test1_Type,
+	Test2_Type,
+};
+
 /// <summary>
 /// 障害物などのオブジェクトの元となるクラス
 /// </summary>

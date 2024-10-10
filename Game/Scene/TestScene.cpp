@@ -30,8 +30,11 @@ void TestScene::Init() {
 	trail_->Init();
 
 	// manager -------------------------------------------------------------------
+	obstaclesManager_ = std::make_unique<ObstaclesManager>();
+	obstaclesManager_->Init();
+
 	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
-	placementObjEditer_->Init();
+	placementObjEditer_->Init(obstaclesManager_.get());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
@@ -89,6 +92,9 @@ void TestScene::Update() {
 	
 	placementObjEditer_->Update();
 
+	obstaclesManager_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
+	obstaclesManager_->Update();
+
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
@@ -121,6 +127,8 @@ void TestScene::Draw() const {
 	placementObjEditer_->Draw();
 	testObj_->Draw();
 	testObj2_->Draw();
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	obstaclesManager_->Draw();
 
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
@@ -157,6 +165,8 @@ void TestScene::ImGuiDraw() {
 	waterSpace_->Debug_Gui();
 
 	debugCamera_->Debug_Gui();
+
+	obstaclesManager_->Debug_Gui();
 
 	Vector3 point = Vector3(2.1f, -0.9f, 1.3f);
 	Quaternion q = Quaternion::AngleAxis(0.45f, Vector3(1.0f, 0.4f, -0.2f).Normalize());
