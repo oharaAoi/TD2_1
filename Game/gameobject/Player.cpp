@@ -29,7 +29,7 @@ void Player::Init(){
 
 
 	isMove_ = false;
-	moveSpeed_ = 85;//0.7f / (1.0f / 60.0f);
+	moveSpeed_ = 25.0f;//0.7f / (1.0f / 60.0f);
 	radius_ = 1.0f;
 }
 
