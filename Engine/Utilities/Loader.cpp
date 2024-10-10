@@ -96,7 +96,7 @@ std::unordered_map<std::string, std::unique_ptr<Material>> LoadMaterialData(cons
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 	assert(scene->HasMeshes()); // meshがないのは対応しない
 
-	std::unordered_map<std::string, Material::ModelMaterialData> materialData;
+	std::unordered_map<std::string, Model::ModelMaterialData> materialData;
 	std::vector<std::string> materials;
 	// -------------------------------------------------
 	// ↓ materialの解析
@@ -116,7 +116,7 @@ std::unordered_map<std::string, std::unique_ptr<Material>> LoadMaterialData(cons
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			materials.push_back(materialName.C_Str());
-			materialData[materialName.C_Str()] = Material::ModelMaterialData();
+			materialData[materialName.C_Str()] = Model::ModelMaterialData();
 			std::string objTexture = textureFilePath.C_Str();
 			materialData[materialName.C_Str()].textureFilePath = objTexture;
 			TextureManager::LoadTextureFile(directoryPath, textureFilePath.C_Str());

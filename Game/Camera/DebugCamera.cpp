@@ -33,7 +33,8 @@ void DebugCamera::Init() {
 
 	debugCameraMode_ = true;
 
-	isMoveSpeed_ = 5.0f;
+	moveBaseSpeed_ = 5.0f;
+	moveSpeed_ = 5.0f;
 	moveQuaternion_ = Quaternion();
 }
 
@@ -68,7 +69,7 @@ void DebugCamera::Debug_Gui() {
 
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::DragFloat4("rotate", &quaternion_.x, 0.01f);
-	ImGui::DragFloat("isMoveSpeed", &isMoveSpeed_, 0.1f, 0.0f, 10.0f);
+	ImGui::DragFloat("isMoveSpeed", &moveSpeed_, 0.1f, 0.0f, 10.0f);
 	ImGui::DragFloat("sensitivity", &sensitivity_, 0.01f, 0.0f, 0.1f);
 	ImGui::Separator();
 	ImGui::DragFloat("yaw", &yaw_, 0.1f);
@@ -97,33 +98,41 @@ void DebugCamera::TransitionMove() {
 	moveDirection_ = Vector3();
 
 	if (Input::IsPressKey(DIK_A)) {
-		moveDirection_ -= quaternion_.MakeRight() * isMoveSpeed_;
+		moveDirection_ -= quaternion_.MakeRight() * moveSpeed_;
 	}
 
 	if (Input::IsPressKey(DIK_D)) {
-		moveDirection_ += quaternion_.MakeRight() * isMoveSpeed_;
+		moveDirection_ += quaternion_.MakeRight() * moveSpeed_;
 	}
 
 	if (Input::IsPressKey(DIK_W)) {
-		moveDirection_ += quaternion_.MakeForward() * isMoveSpeed_;
+		moveDirection_ += quaternion_.MakeForward() * moveSpeed_;
 	}
 
 	if (Input::IsPressKey(DIK_S)) {
-		moveDirection_ -= quaternion_.MakeForward() * isMoveSpeed_;
+		moveDirection_ -= quaternion_.MakeForward() * moveSpeed_;
 	}
 
 	if (Input::IsPressKey(DIK_Q)) {
-		moveDirection_ += quaternion_.MakeUp() * isMoveSpeed_;
+		moveDirection_ += quaternion_.MakeUp() * moveSpeed_;
 	}
 
 	if (Input::IsPressKey(DIK_E)) {
-		moveDirection_ -= quaternion_.MakeUp() * isMoveSpeed_;
+		moveDirection_ -= quaternion_.MakeUp() * moveSpeed_;
 	}
 
 	if (Input::IsPressKey(DIK_LSHIFT)) {
-		isMoveSpeed_ = isMoveMaxSpeed_;
+		moveSpeed_ = moveBaseSpeed_ * 2.0f;
 	}else{
-		isMoveSpeed_ = 5.0f;
+		moveSpeed_ = moveBaseSpeed_;
+	}
+
+	if (Input::GetWheel() > 0) {
+		moveBaseSpeed_ += 0.1f;
+	}
+
+	if (Input::GetWheel() < 0) {
+		moveBaseSpeed_ -= 0.1f;
 	}
 
 	transform_.translate += moveDirection_ * GameTimer::DeltaTime();

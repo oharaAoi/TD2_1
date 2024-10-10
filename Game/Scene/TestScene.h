@@ -12,6 +12,7 @@
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include  "Game/Effect/Trail.h"
+#include "Game/GameObject/WaterSpace.h"
 
 
 class TestScene 
@@ -44,11 +45,10 @@ private:
 	std::unique_ptr<BaseGameObject> testObj_ = nullptr;
 	std::unique_ptr<BaseGameObject> testObj2_ = nullptr;
 	std::unique_ptr<Trail> trail_ = nullptr;
+
+	std::unique_ptr<WaterSpace> waterSpace_;
 	
 	// sprite -----------------------------------
-	std::unique_ptr<Sprite> sprite_;
-	Vector2 range_;
-	Vector2 leftTop_;
 	
 	// Manager ------------------------------------------
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

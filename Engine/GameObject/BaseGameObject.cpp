@@ -27,7 +27,8 @@ void BaseGameObject::Draw() const {
 void BaseGameObject::SetObject(const std::string& objName) {
 	model_ = ModelManager::GetModel(objName);
 	for (uint32_t oi = 0; oi < model_->GetMaterialsSize(); ++oi) {
-		materials.push_back(Engine::CreateMaterial(model_->GetMaterialData(model_->GetMesh(oi)->GetUseMaterial())));
+		std::string name = model_->GetMesh(oi)->GetUseMaterial();
+		materials.push_back(Engine::CreateMaterial(model_->GetMaterialData(name)));
 	}
 }
 

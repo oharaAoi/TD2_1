@@ -10,6 +10,7 @@ void TestScene::Init() {
 	// カメラ -------------------------------------------------------------------
 	debugCamera_ = std::make_unique<DebugCamera>();
 	
+	// object -------------------------------------------------------------------
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
 	testObj_->SetObject("skin.obj");
@@ -21,29 +22,33 @@ void TestScene::Init() {
 	testObj2_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 	testObj2_->GetTransform()->SetTranslaion({ 1.0f, 0.0f, 0.0f });
 
-	collisionManager_ = std::make_unique<CollisionManager>();
+	waterSpace_ = std::make_unique<WaterSpace>();
+	waterSpace_->Init("./Game/Resources/Model/", "waterPlane.obj");
 
-	range_ = { 222, 222 };
-	leftTop_ = { 0,0 };
-	sprite_ = Engine::CreateSprite({ 200, 200 }, { 222, 222 });
-	sprite_->SetTexture("sample.png");
-
+	// effect -------------------------------------------------------------------
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
+	// manager -------------------------------------------------------------------
 	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
 	placementObjEditer_->Init();
+
+	collisionManager_ = std::make_unique<CollisionManager>();
 
 	adjustment_->GetInstance()->Init("testScene");
 }
 
 void TestScene::Load() {
 	// modelのload
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "plane.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "multiMaterial.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "Test_World.obj");
+
+	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "waterPlane.obj");
+	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap3.png");
 
 	ModelManager::LoadModel("./Engine/Resources/Animation/", "walk.gltf");
 	
@@ -79,10 +84,10 @@ void TestScene::Update() {
 	trail_->Update();
 	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
 	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
+
+	waterSpace_->Update(0.0f);
 	
 	placementObjEditer_->Update();
-
-	sprite_->Update(range_, leftTop_);
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -120,9 +125,11 @@ void TestScene::Draw() const {
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
 
+	Engine::SetPipeline(PipelineType::PBRPipeline);
+	waterSpace_->Draw();
+
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
-	sprite_->Draw();
 
 }
 
@@ -147,8 +154,7 @@ void TestScene::ImGuiDraw() {
 
 	testObj_->Debug_Gui();
 
-	ImGui::DragFloat2("range", &range_.x, 1.0f);
-	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
+	waterSpace_->Debug_Gui();
 
 	debugCamera_->Debug_Gui();
 

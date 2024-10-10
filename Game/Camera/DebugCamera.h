@@ -29,11 +29,6 @@ public:
 	/// </summary>
 	void RotateMove();
 
-	/// <summary>
-	/// マウスのスクロールで移動する
-	/// </summary>
-	void ScrollMove();
-
 private:
 
 	Quaternion quaternion_;
@@ -45,8 +40,9 @@ private:
 	// ---------------------------------------------------------------
 	bool debugCameraMode_ = true;
 
-	float isMoveSpeed_;
-	float isMoveMaxSpeed_ = 10.0f;
+	float moveBaseSpeed_;
+	float moveSpeed_;
+	float moveMaxSpeed_ = 30.0f;
 	Vector3 moveDirection_;
 	Vector2 preMousePos_;
 

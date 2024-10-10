@@ -48,8 +48,8 @@ void Material::ImGuiDraw() {
 }
 #endif
 
-void Material::SetMaterialData(ModelMaterialData materialData) {
-	materialData_ = materialData;
+void Material::SetMaterialData(Model::ModelMaterialData materialData) {
+	materialsData_ = materialData;
 
 	material_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	material_->enableLighting = true;

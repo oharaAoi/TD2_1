@@ -11,7 +11,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "Engine/Assets/Mesh.h"
-#include "Engine/Assets/Material.h"
 #include "Engine/Assets/Skinning.h"
 #include "Engine/Assets/WorldTransform.h"
 #include "Engine/Assets/ViewProjection.h"
@@ -20,6 +19,9 @@
 #include "Engine/Lib/Transform.h"
 #include "Engine/Math/MyMatrix.h"
 #include "Engine/Utilities/AnimationUtils.h"
+
+class Material;
+class PBRMaterial;
 
 class Model {
 public:
@@ -37,6 +39,14 @@ public:
 		std::string name;					 // Nodeの名前
 		std::vector<Node> children;			 // 子供のNode
 		NodeAnimationData animationsData; // ノードに関するアニメーション
+	};
+
+	struct ModelMaterialData {
+		Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		int32_t enableLighting = 1;
+		Matrix4x4 uvTransform = MakeIdentity4x4();
+		float shininess = 1.0f;
+		std::string textureFilePath; // 使用するtextureのパス
 	};
 
 public:
@@ -78,18 +88,20 @@ public:
 
 	std::map<std::string, Skinning::JointWeightData>& GetSkinClusterData() { return skinClusterData_; }
 
-	Mesh* GetMesh(const uint32_t& index) { return meshArray_[index]; }
+	Mesh* GetMesh(const uint32_t& index);
 
-	const Material::ModelMaterialData GetMaterialData(const std::string& name)const {return materialData_.at(name);}
+	const ModelMaterialData GetMaterialData(const std::string& name)const {return materialData_.at(name);}
 	const size_t GetMaterialsSize() const { return materialData_.size(); }
 
 private:
 
 	// 頂点バッファやインデックスバッファを持つ
 	std::vector<Mesh*> meshArray_;
-	std::unordered_map<std::string, Material::ModelMaterialData> materialData_;
+	std::unordered_map<std::string, ModelMaterialData> materialData_;
 	// テクスチャの情報を持っている
 	//std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;
+
+	std::vector<ModelMaterialData> materialsData_;
 
 	std::map<std::string, Skinning::JointWeightData> skinClusterData_;
 	// ノード

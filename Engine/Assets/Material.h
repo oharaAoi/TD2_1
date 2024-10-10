@@ -7,6 +7,7 @@
 #include "Engine/Math/MyMath.h"
 #include "Engine/Lib/Transform.h"
 #include "Engine/Manager/ImGuiManager.h"
+#include "Engine/GameObject/Model.h"
 
 
 template<typename T>
@@ -21,26 +22,6 @@ public:
 		float pad[3];
 		Matrix4x4 uvTransform;
 		float shininess;
-	};
-
-	//struct PBRMaterial {
-	//	Vector4 color;				// albedo
-	//	int32_t enableLighting;
-	//	float pad[3];
-	//	Matrix4x4 uvTransform;
-	//	Vector4 diffuseColor;		// 拡散反射率
-	//	Vector4 specularColor;		// 鏡面反射の色
-	//	float roughness;			// 粗さ
-	//	float metallic;				// 金属度
-	//	float shininess;			// 鋭さ
-	//};
-
-	struct ModelMaterialData {
-		Vector4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-		int32_t enableLighting = 1;
-		Matrix4x4 uvTransform = MakeIdentity4x4();
-		float shininess = 1.0f;
-		std::string textureFilePath; // 使用するtextureのパス
 	};
 
 	struct SpriteData {
@@ -64,33 +45,22 @@ public:
 
 public:
 
-	MaterialData* GetBaseMaterial() { return material_; }
-
-	ModelMaterialData GetMateriaData() { return materialData_; }
+	Model::ModelMaterialData GetBaseMaterial() { return materialsData_; }
+	const std::string GetUseTexture() const { return materialsData_.textureFilePath; }
 
 	void SetColor(const Vector4& color) { material_->color = color; }
 
-	/// <summary>
-	/// materialDataをセットする
-	/// </summary>
-	/// <param name="materialData"></param>
-	void SetMaterialData(ModelMaterialData materialData);
-
-	std::unique_ptr<Material> clone() const {
-		return std::make_unique<Material>(*this); // ディープコピーを行う
-	}
+	void SetMaterialData(Model::ModelMaterialData materialData);
 
 private:
 
 	ComPtr<ID3D12Resource> materialBuffer_;
 	MaterialData* material_;
 
-	// materialData
-	ModelMaterialData materialData_;
+	Model::ModelMaterialData materialsData_;
 
 	Vector3 uvTranslation_;
 	Vector3 uvScale_;
 	Vector3 uvRotation_;
-
 
 };

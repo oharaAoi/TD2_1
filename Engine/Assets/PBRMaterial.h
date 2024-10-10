@@ -6,6 +6,7 @@
 #include <map>
 #include "Engine/Utilities/DirectXUtils.h"
 #include "Engine/Math/MyMath.h"
+#include "Engine/GameObject/Model.h"
 
 class PBRMaterial {
 public:
@@ -32,13 +33,24 @@ public:
 	void Update();
 	void Draw(ID3D12GraphicsCommandList* commandList) const;
 
+#ifdef _DEBUG
+	void Debug_Gui();
+#endif
+
 	void LoadMaterial(const std::string& directoryPath, const std::string& fileName);
+
+	const std::string GetUseTexture() const { return materials_.textureFilePath; }
+
+	void SetColor(const Vector4& color) { pbrMaterial_->color = color; }
+
+	void SetMaterialData(Model::ModelMaterialData materialData);
 
 private:
 
 	ComPtr<ID3D12Resource> materialBuffer_;
-	std::map<std::string, PBRMaterialData*> materialMap_;
 	PBRMaterialData* pbrMaterial_;
+
+	Model::ModelMaterialData materials_;
 
 	Vector3 uvTranslation_;
 	Vector3 uvScale_;

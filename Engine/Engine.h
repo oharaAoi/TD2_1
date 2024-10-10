@@ -15,6 +15,7 @@
 #include "Engine/Manager/TextureManager.h"
 #include "Engine/Input/Input.h"
 #include "Engine/GameObject/Model.h"
+#include "Engine/Assets/PBRMaterial.h"
 #include "Engine/GameObject/Sphere.h"
 #include "Engine/2d/Sprite.h"
 #include "Engine/2d/Triangle.h"
@@ -87,7 +88,8 @@ public:
 	// Skinningの作成
 	static std::unique_ptr<Skinning> CreateSkinning(Skeleton* skeleton, Model* model);
 
-	static std::unique_ptr<Material> CreateMaterial(const Material::ModelMaterialData data);
+	static std::unique_ptr<Material> CreateMaterial(const Model::ModelMaterialData data);
+	static std::unique_ptr<PBRMaterial> CreatePBRMaterial(const Model::ModelMaterialData data);
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////

@@ -19,7 +19,8 @@ void MeshManager::Finalize() {
 	meshMap_.clear();
 }
 
-void MeshManager::AddMesh(ID3D12Device* device, const std::string& modelName, const std::vector<Mesh::VertexData> vertexData, std::vector<uint32_t>& indices) {
+void MeshManager::AddMesh(ID3D12Device* device, const std::string& modelName,
+						  const std::vector<Mesh::VertexData> vertexData, std::vector<uint32_t>& indices) {
 	// Meshクラスの宣言
 	std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
 	mesh->Init(device, vertexData, indices);
@@ -33,6 +34,5 @@ Mesh* MeshManager::GetMesh(const std::string& meshName) {
 		assert("not find Model!");
 	}
 
-	meshNameList_.push_back(meshName);
 	return meshMap_[meshName].get();
 }

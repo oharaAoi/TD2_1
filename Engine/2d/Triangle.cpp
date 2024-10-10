@@ -42,8 +42,8 @@ void Triangle::Init(ID3D12Device* device, const Mesh::Vertices& vertex) {
 	}
 
 	// materialの設定
-	Material::MaterialData* materialData = material_->GetBaseMaterial();
-	materialData->enableLighting = false;
+	/*Material::MaterialData* materialData = material_->GetBaseMaterial();
+	materialData->enableLighting = false;*/
 }
 
 void Triangle::Update() {

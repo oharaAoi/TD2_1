@@ -32,14 +32,11 @@ VertexShaderOutput main(VertexShaderInput input)
 	output.texcoord = input.texcoord;
 	output.normal = normalize(mul(input.normal, (float3x3) gWorldTransformMatrix.world));
 	output.worldPos = mul(input.position, gWorldTransformMatrix.world);
-	
-	// 基底ベクトル
-	float3 normal = normalize(mul(input.normal, (float3x3) gWorldTransformMatrix.world));
-	float3 tangent = normalize(mul(input.normal, (float3x3) gWorldTransformMatrix.world));
-	float3 bTangent = normalize(cross(normal, tangent));
-	
-	output.tangentMat = float3x3(tangent, bTangent, normal);
-	
+	float3 tangent = input.tangent;
+	float3 normal = input.normal;
+	float3 bitangent = cross(normal, tangent);
+	float3x3 TBN = float3x3(tangent, bitangent, normal);
+	output.tangentMat = TBN;
 	
 	return output;
 }

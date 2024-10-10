@@ -4,11 +4,10 @@ WaterSpace::WaterSpace() {}
 WaterSpace::~WaterSpace() {}
 
 void WaterSpace::Finalize() {
-	waveParameter_ = nullptr;
-	waveParameterBuffer_.Reset();
+	/*waveParameter_ = nullptr;
+	waveParameterBuffer_.Reset();*/
 	transform_->Finalize();
 	meshArray_.clear();
-	materialArray_.clear();
 
 }
 
@@ -20,33 +19,37 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 	// -------------------------------------------------
 	// ↓ 基本のGPUに送る情報を初期化する
 	// -------------------------------------------------
-	materialArray_ = LoadMaterialData(directorPath, fileName, Engine::GetDevice());
+	model_ = ModelManager::GetModel(fileName);
+
 	meshArray_ = LoadVertexData(directorPath, fileName, Engine::GetDevice());
 	transform_ = Engine::CreateWorldTransform();
+	for (uint32_t oi = 0; oi < model_->GetMaterialsSize(); ++oi) {
+		materials_.push_back(Engine::CreatePBRMaterial(model_->GetMaterialData(model_->GetMesh(oi)->GetUseMaterial())));
+	}
 
 	// -------------------------------------------------
 	// ↓ GPUに送る波の情報
 	// -------------------------------------------------
-	waveParameterBuffer_ = CreateBufferResource(Engine::GetDevice(), sizeof(WaveParameter));
-	// リソースの先頭のアドレスから使う
-	waveParameteBufferView_.BufferLocation = waveParameterBuffer_->GetGPUVirtualAddress();
-	// 使用するリソースのサイズは頂点3つ分のサイズ
-	waveParameteBufferView_.SizeInBytes = (UINT)sizeof(WaveParameter);
-	// 1頂点当たりのサイズ
-	waveParameteBufferView_.StrideInBytes = sizeof(WaveParameter);
-	// Resourceにデータを書き込む 
-	waveParameter_ = nullptr;
-	// アドレスを取得
-	waveParameterBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&waveParameter_));
-	waveParameter_->time = 0;
-	waveParameter_->amplitude = 0.4f;
-	waveParameter_->frequency = 1.0f;
+	//waveParameterBuffer_ = CreateBufferResource(Engine::GetDevice(), sizeof(WaveParameter));
+	//// リソースの先頭のアドレスから使う
+	//waveParameteBufferView_.BufferLocation = waveParameterBuffer_->GetGPUVirtualAddress();
+	//// 使用するリソースのサイズは頂点3つ分のサイズ
+	//waveParameteBufferView_.SizeInBytes = (UINT)sizeof(WaveParameter);
+	//// 1頂点当たりのサイズ
+	//waveParameteBufferView_.StrideInBytes = sizeof(WaveParameter);
+	//// Resourceにデータを書き込む 
+	//waveParameter_ = nullptr;
+	//// アドレスを取得
+	//waveParameterBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&waveParameter_));
+	//waveParameter_->time = 0;
+	//waveParameter_->amplitude = 0.4f;
+	//waveParameter_->frequency = 1.0f;
 
 	// -------------------------------------------------
 	// ↓ Materialの色を設定する
 	// -------------------------------------------------
-	for (auto& material : materialArray_) {
-		material.second->SetColor({1.0f, 1.0f, 1.0f, 0.5f});
+	for (uint32_t oi = 0; oi < materials_.size(); ++oi) {
+		materials_[oi]->SetColor({1.0f ,1.0f, 1.0f, 0.5f});
 	}
 
 	// -------------------------------------------------
@@ -78,17 +81,17 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WaterSpace::Update(const float& playerVelocityX) {
-	waveParameter_->time += GameTimer::DeltaTime();
+	/*waveParameter_->time += GameTimer::DeltaTime();*/
 
 	Move(playerVelocityX);
 
 	transform_->Update();
 
 	// 上面のworld座標を求めておく
-	for (size_t oi = 0; oi < worldTopFaceList_.size(); ++oi) {
+	/*for (size_t oi = 0; oi < worldTopFaceList_.size(); ++oi) {
 		worldTopFaceList_[oi] = Transform(topFaceList_[oi], transform_->GetWorldMatrix());
 		worldTopFaceList_[oi].y += waveParameter_->amplitude * std::sinf(waveParameter_->frequency * (worldTopFaceList_[oi].x + waveParameter_->time));
-	}
+	}*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,18 +99,18 @@ void WaterSpace::Update(const float& playerVelocityX) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WaterSpace::Draw() const {
-	Render::DrawLightGroup(5);
+	Render::DrawLightGroup(4);
 	ID3D12GraphicsCommandList* commandList = Engine::GetCommandList();
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		meshArray_[oi]->Draw(commandList);
-		materialArray_.at(meshArray_[oi]->GetUseMaterial())->Draw(commandList);
+		materials_[oi]->Draw(commandList);
 		transform_->Draw(commandList);
 		Render::GetViewProjection()->Draw(commandList);
 
-		std::string textureName = materialArray_.at(meshArray_[oi]->GetUseMaterial())->GetMateriaData().textureFilePath;
+		std::string textureName = materials_[oi]->GetUseTexture();
 		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 3);
 
-		commandList->SetGraphicsRootConstantBufferView(4, waveParameterBuffer_->GetGPUVirtualAddress());
+		//commandList->SetGraphicsRootConstantBufferView(4, waveParameterBuffer_->GetGPUVirtualAddress());
 
 		commandList->DrawIndexedInstanced(meshArray_[oi]->GetIndexNum(), 1, 0, 0, 0);
 	}
@@ -130,9 +133,13 @@ void WaterSpace::Move(const float& playerVelocityX) {
 #ifdef _DEBUG
 void WaterSpace::Debug_Gui() {
 	ImGui::Begin("WaterSpace");
-	ImGui::DragFloat("amplitude", &waveParameter_->amplitude, 0.1f);
-	ImGui::DragFloat("frequency", &waveParameter_->frequency, 0.1f);
-	ImGui::DragFloat("time", &waveParameter_->time, 0.1f);
+	//ImGui::DragFloat("amplitude", &waveParameter_->amplitude, 0.1f);
+	//ImGui::DragFloat("frequency", &waveParameter_->frequency, 0.1f);
+	//ImGui::DragFloat("time", &waveParameter_->time, 0.1f);
+	transform_->Debug_Gui();
+	for (uint32_t oi = 0; oi < materials_.size(); ++oi) {
+		materials_[oi]->Debug_Gui();
+	}
 	ImGui::End();
 }
 #endif // _DEBUG

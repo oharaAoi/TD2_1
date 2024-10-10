@@ -28,7 +28,7 @@ void BaseParticle::Draw(ID3D12GraphicsCommandList* commandList, const uint32_t& 
 		materialArray_[meshArray_[oi]->GetUseMaterial()]->Draw(commandList);
 		particleForGPU_->StackCommand(commandList);
 
-		std::string textureName = materialArray_[meshArray_[oi]->GetUseMaterial()]->GetMateriaData().textureFilePath;
+		std::string textureName = materialArray_[meshArray_[oi]->GetUseMaterial()]->GetUseTexture();
 		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 2);
 
 		commandList->DrawIndexedInstanced(meshArray_[oi]->GetIndexNum(), numInstance, 0, 0, 0);

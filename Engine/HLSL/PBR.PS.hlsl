@@ -49,8 +49,8 @@ ConstantBuffer<PointLight> gPointLight : register(b2);
 ConstantBuffer<SpotLight> gSpotLight : register(b3);
 Texture2D<float4> gTexture : register(t0);
 Texture2D<float3> gNormapMap : register(t1);
-Texture2D<float> gMetallicMap : register(t2);
-Texture2D<float> gRoughnessMap : register(t3);
+//Texture2D<float> gMetallicMap : register(t2);
+//Texture2D<float> gRoughnessMap : register(t3);
 
 SamplerState gSampler : register(s0);
 struct PixelShaderOutput{
@@ -169,21 +169,32 @@ float4 BRDF(float NdotH, float NDotV, float NDotL, float VDotH, float4 ks, float
 //////////////////////////////////////////////////////////////
 PixelShaderOutput main(VertexShaderOutput input){
 	PixelShaderOutput output;
+	
+	//=======================================================
+	// TextureのUVを求める
+	//=======================================================
 	float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
 	float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
-	float3 normalMap = gNormapMap.Sample(gSampler, transformedUV.xy).xyz * 2.0 - 1.0;
-	float metallicMap = gMetallicMap.Sample(gSampler, transformedUV.xy).r;
-	float roughnessMap = gRoughnessMap.Sample(gSampler, transformedUV.xy).r;
 	
-	if (textureColor.a <= 0.5f){
-		discard;
-	}
+	//=======================================================
+	// 法線マップのタイリングを計算する
+	//=======================================================
+	float tilingFactor = 20.0; // タイリングを小さくするためのスケール（2.0でテクスチャが2倍のサイズに見える）
+	float2 scaledUV = transformedUV.xy * tilingFactor; // UV座標をスケーリング
+	float3 normalMap = gNormapMap.Sample(gSampler, scaledUV).xyz * 2.0 - 1.0;
+	float3 normal = normalize(mul(normalMap, input.tangentMat));
 	
-	float3 normal = normalize(input.normal);
-	float3 lightDir = normalize(-gDirectionalLight.direction);
+	//=======================================================
+	// ラフネスとメタリックのmapを計算する
+	//=======================================================
+	//float metallicMap = gMetallicMap.Sample(gSampler, transformedUV.xy).r;
+	//float roughnessMap = gRoughnessMap.Sample(gSampler, transformedUV.xy).r;
 
-	float roughness = roughnessMap * roughnessMap + EPSILON;
-	float metallic = metallicMap;
+	//float roughness = roughnessMap * roughnessMap + EPSILON;
+	//float metallic = metallicMap;
+	
+	float roughness = gMaterial.roughness * gMaterial.roughness + EPSILON;
+	float metallic = gMaterial.metallic;
 	
 	//=======================================================
 	// 色を求める
@@ -196,6 +207,7 @@ PixelShaderOutput main(VertexShaderOutput input){
 	//=======================================================
 	// 内積などを求める
 	//=======================================================
+	float3 lightDir = normalize(-gDirectionalLight.direction);
 	float3 viewDir = normalize(gDirectionalLight.eyePos - input.worldPos.xyz);
 	float3 halfVec = normalize(viewDir + lightDir);
 	float NdotH = saturate(dot(normal, halfVec));

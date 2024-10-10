@@ -213,9 +213,9 @@ std::string ResourceStateToString(D3D12_RESOURCE_STATES state) {
 }
 
 void TransitionResourceState(ID3D12GraphicsCommandList* commandList, ID3D12Resource* resource, D3D12_RESOURCE_STATES beforState, D3D12_RESOURCE_STATES afterState) {
-	Log("ChangeStart ResourceState\n");
+	/*Log("ChangeStart ResourceState\n");
 	Log("[" + ResourceStateToString(beforState) + " : ");
-	Log(ResourceStateToString(afterState) + "]");
+	Log(ResourceStateToString(afterState) + "]");*/
 	D3D12_RESOURCE_BARRIER barrier;
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -230,7 +230,7 @@ void TransitionResourceState(ID3D12GraphicsCommandList* commandList, ID3D12Resou
 	// 張る
 	commandList->ResourceBarrier(1, &barrier);
 
-	Log("   SUCCESS!!!!!\n");
+	//Log("   SUCCESS!!!!!\n");
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index){

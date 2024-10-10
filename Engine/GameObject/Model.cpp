@@ -1,4 +1,6 @@
 #include "Model.h"
+#include "Engine/Assets/Material.h"
+#include "Engine/Assets/PBRMaterial.h"
 
 Model::Model() {
 }
@@ -43,7 +45,7 @@ void Model::Draw(ID3D12GraphicsCommandList* commandList,
 		viewProjection->Draw(commandList);
 
 		if (hasTexture_) {
-			std::string textureName = materials[oi]->GetMateriaData().textureFilePath;
+			std::string textureName = materials[oi]->GetUseTexture();
 			TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 3);
 		}
 
@@ -67,7 +69,7 @@ void Model::DrawSkinning(ID3D12GraphicsCommandList* commandList,
 		viewprojection->Draw(commandList);
 
 		if (hasTexture_) {
-			std::string textureName = materials[oi]->GetMateriaData().textureFilePath;
+			std::string textureName = materials[oi]->GetUseTexture();
 			TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 3);
 		}
 
@@ -142,7 +144,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 	std::vector<std::vector<uint32_t>> meshIndices;
 	std::vector<std::string> useMaterial;
 
-	std::unordered_map<std::string, Material::ModelMaterialData> materialData;
+	std::unordered_map<std::string, ModelMaterialData> materialData;
 	std::vector<std::string> materials;
 
 	// -------------------------------------------------
@@ -184,7 +186,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
 				uint32_t vertexIndex = face.mIndices[element];
-				meshIndices[scene->mNumMeshes - 1].push_back(vertexIndex);
+				meshIndices[meshIndex].push_back(vertexIndex);
 			}
 		}
 
@@ -205,6 +207,11 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 			}
 		}
 
+		// -------------------------------------------------
+		// ↓ Meshのtangetを取得する
+		// -------------------------------------------------
+
+	
 		// -------------------------------------------------
 		// ↓ skinningを取得する用の処理
 		// -------------------------------------------------
@@ -254,7 +261,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			materials.push_back(materialName.C_Str());
-			materialData[materialName.C_Str()] = Material::ModelMaterialData();
+			materialData[materialName.C_Str()] = ModelMaterialData();
 			std::string objTexture = textureFilePath.C_Str();
 			materialData[materialName.C_Str()].textureFilePath = objTexture;
 			TextureManager::LoadTextureFile(directoryPath, textureFilePath.C_Str());
@@ -282,4 +289,8 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 	}
 
 	//materialArray_ = std::move(materialResult);
+}
+
+Mesh* Model::GetMesh(const uint32_t& index) {
+	return meshArray_[index]; 
 }
