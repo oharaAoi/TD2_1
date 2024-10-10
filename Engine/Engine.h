@@ -25,17 +25,6 @@
 #include "Engine/Assets/RenderTexture.h"
 #include "Render.h"
 
-enum class PipelineKind {
-	kNormalPipeline,
-	kTexturelessPipeline,
-	kPrimitivePiPeline,
-	kPBRPipeline,
-	kParticlePipeline,
-	kSpritePipeline,
-	kSkinningPipeline,
-	kWaterSpacePipeline
-};
-
 class EffectSystem;
 class EffectSystemEditer;
 
@@ -98,6 +87,8 @@ public:
 	// Skinningの作成
 	static std::unique_ptr<Skinning> CreateSkinning(Skeleton* skeleton, Model* model);
 
+	static std::unique_ptr<Material> CreateMaterial(const Material::ModelMaterialData data);
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 描画系
@@ -116,7 +107,7 @@ public:
 	/// パイプラインの設定
 	/// </summary>
 	/// <param name="kind">設定するパイプライン</param>
-	static void SetPipeline(const PipelineKind& kind);
+	static void SetPipeline(const PipelineType& kind);
 
 	/// <summary>
 	/// 行いたいCSを設定する

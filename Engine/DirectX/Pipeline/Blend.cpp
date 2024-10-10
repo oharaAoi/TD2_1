@@ -13,7 +13,6 @@ D3D12_BLEND_DESC Blend::SetBlend(const BlendMode& mode) {
 	D3D12_BLEND_DESC blendDesc{};
 	// すべての色要素を書き込む
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	blendDesc.RenderTarget[0].BlendEnable = TRUE;
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
@@ -23,18 +22,23 @@ D3D12_BLEND_DESC Blend::SetBlend(const BlendMode& mode) {
 		blendDesc.RenderTarget[0].BlendEnable = FALSE;
 		break;
 	case BlendMode::kBlendModeNormal:
+		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		SetNormalBlend(blendDesc);
 		break;
 	case BlendMode::kBlendModeAdd:
+		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		SetAddBlend(blendDesc);
 		break;
 	case BlendMode::kBlendModeSubtract:
+		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		SetSubtractBlend(blendDesc);
 		break;
 	case BlendMode::kBlendModeMultily:
+		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		SetMultiplyBlend(blendDesc);
 		break;
 	case BlendMode::kBlendModeScreen:
+		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		SetScreenBlend(blendDesc);
 		break;
 	}

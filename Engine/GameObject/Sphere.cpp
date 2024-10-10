@@ -85,7 +85,7 @@ void Sphere::Init(ID3D12Device* device, const uint32_t& division) {
 		}
 
 		// materialの設定
-		Material::PBRMaterial* materialData = material_->GetBaseMaterial();
+		Material::MaterialData* materialData = material_->GetBaseMaterial();
 		materialData->enableLighting = true;
 	}
 }

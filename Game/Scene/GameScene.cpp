@@ -51,7 +51,6 @@ void GameScene::Init(){
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
 	camera_->SetPlayerPtr(player_.get());
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +74,19 @@ void GameScene::Update(){
 	AdjustmentItem::GetInstance()->Update();
 
 	// -------------------------------------------------
+	// ↓ Cameraの更新
+	// -------------------------------------------------
+	if (!isDebug_) {
+		camera_->Update();
+		Render::SetEyePos(camera_->GetWorldTranslate());
+		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+	} else {
+		debugCamera_->Update();
+		Render::SetEyePos(debugCamera_->GetWorldTranslate());
+		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
+	}
+
+	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
 	if (isPause_) {
@@ -87,24 +99,6 @@ void GameScene::Update(){
 		if (!isStepFrame_) {
 			return;
 		}
-	}
-
-	// -------------------------------------------------
-	// ↓ Cameraの更新
-	// -------------------------------------------------
-
-	// デバッグカメラが有効でない場合
-	if(isDegugCameraActive_ == false) {
-
-		camera_->Update();
-		Render::SetEyePos(camera_->GetWorldTranslate());
-		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
-
-	} else {// デバッグカメラが有効な場合
-
-		debugCamera_->Update();
-		Render::SetEyePos(debugCamera_->GetWorldTranslate());
-		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 	}
 
 	// -------------------------------------------------
@@ -148,7 +142,6 @@ void GameScene::Update(){
 
 void GameScene::Draw() const{
 #pragma region Primitive
-
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
@@ -175,13 +168,11 @@ void GameScene::Draw() const{
 	for(auto& ground : ground_){
 		ground->Draw();
 	}
-
 	player_->Draw();
 
 #pragma endregion
 
 #pragma region WaterSpace
-
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
@@ -285,9 +276,11 @@ void GameScene::Debug_Gui(){
 	if (ImGui::Button("play")) {
 		isPause_ = false;
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("step")) {
-		isStepFrame_ = true;
+	if (isPause_) {
+		ImGui::SameLine();
+		if (ImGui::Button("step")) {
+			isStepFrame_ = true;
+		}
 	}
 	ImGui::End();
 

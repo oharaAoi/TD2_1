@@ -93,9 +93,9 @@ void Player::Move(){
 // ↓　進行方向を向かせる
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::LookAtDirection(const float& angle){
-	Quaternion moveRotation = Quaternion::EulerToQuaternion({ 0,0,angle }) * Quaternion::AngleAxis(90.0f, { 0,1,0 });
-	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion(), moveRotation, lookAtT_);
+void Player::LookAtDirection(const float& angle) {
+	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
+	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
 	transform_->SetQuaternion(slerp);
 }
 

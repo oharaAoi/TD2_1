@@ -12,8 +12,14 @@ void TestScene::Init() {
 	
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
-	testObj_->SetObject("walk.gltf");
-	testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+	testObj_->SetObject("skin.obj");
+	//testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+
+	testObj2_ = std::make_unique<BaseGameObject>();
+	testObj2_->Init();
+	testObj2_->SetObject("walk.gltf");
+	testObj2_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
+	testObj2_->GetTransform()->SetTranslaion({ 1.0f, 0.0f, 0.0f });
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
@@ -22,8 +28,11 @@ void TestScene::Init() {
 	sprite_ = Engine::CreateSprite({ 200, 200 }, { 222, 222 });
 	sprite_->SetTexture("sample.png");
 
-	/*placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
-	placementObjEditer_->Init();*/
+	trail_ = std::make_unique<Trail>();
+	trail_->Init();
+
+	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
+	placementObjEditer_->Init();
 
 	adjustment_->GetInstance()->Init("testScene");
 }
@@ -66,8 +75,12 @@ void TestScene::Update() {
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
+	testObj2_->Update();
+	trail_->Update();
+	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
+	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
 	
-	//placementObjEditer_->Update();
+	placementObjEditer_->Update();
 
 	sprite_->Update(range_, leftTop_);
 
@@ -99,18 +112,16 @@ void TestScene::Update() {
 
 void TestScene::Draw() const {
 	
-	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
-
-#pragma region NormalPipeline
-
-	Engine::SetPipeline(PipelineKind::kNormalPipeline);
-	//placementObjEditer_->Draw();
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	placementObjEditer_->Draw();
 	testObj_->Draw();
-	
-#pragma endregion
+	testObj2_->Draw();
+
+	Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();
 
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
-	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sprite_->Draw();
 
 }
@@ -125,15 +136,32 @@ void TestScene::ImGuiDraw() {
 	if (ImGui::Button("play")) {
 		isPause_ = false;
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("step")) {
-		isStepFrame_ = true;
+	if (isPause_) {
+		ImGui::SameLine();
+		if (ImGui::Button("step")) {
+			isStepFrame_ = true;
+		}
 	}
+
+	testObj_->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+
+	testObj_->Debug_Gui();
 
 	ImGui::DragFloat2("range", &range_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
 	debugCamera_->Debug_Gui();
+
+	Vector3 point = Vector3(2.1f, -0.9f, 1.3f);
+	Quaternion q = Quaternion::AngleAxis(0.45f, Vector3(1.0f, 0.4f, -0.2f).Normalize());
+	Matrix4x4 qMat = q.MakeMatrix();
+
+	Vector3 rottateByA = q * point;
+	Vector3 B = Transform(point, qMat);
+
+	ImGui::DragFloat3("A", &rottateByA.x, 1.0f);
+	ImGui::DragFloat3("B", &B.x, 1.0f);
+
 	ImGui::End();
 }
 #endif

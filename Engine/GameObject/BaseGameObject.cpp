@@ -17,17 +17,18 @@ void BaseGameObject::Update() {
 
 void BaseGameObject::Draw() const {
 	if (animetor_ == nullptr) {
-		Engine::SetPipeline(PipelineKind::kNormalPipeline);
-		Render::DrawModel(model_, transform_.get(), materialArray_);
+		Render::DrawModel(model_, transform_.get(), materials);
 	} else {
-		Engine::SetPipeline(PipelineKind::kSkinningPipeline);
-		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get());
+		Engine::SetPipeline(PipelineType::SkinningPipeline);
+		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 	}
 }
 
 void BaseGameObject::SetObject(const std::string& objName) {
 	model_ = ModelManager::GetModel(objName);
-	materialArray_ = model_->copyMaterialArray();
+	for (uint32_t oi = 0; oi < model_->GetMaterialsSize(); ++oi) {
+		materials.push_back(Engine::CreateMaterial(model_->GetMaterialData(model_->GetMesh(oi)->GetUseMaterial())));
+	}
 }
 
 void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::string& objName) {
@@ -36,8 +37,8 @@ void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::st
 }
 
 void BaseGameObject::SetColor(const Vector4& color) {
-	for (const auto& pair : this->materialArray_) {
-		pair.second->SetColor(color);
+	for (size_t oi = 0; oi < materials.size(); ++oi) {
+		materials[oi]->SetColor(color);
 	}
 }
 
