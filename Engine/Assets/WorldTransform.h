@@ -31,6 +31,7 @@ public:
 
 #ifdef _DEBUG
 	void Debug_Gui();
+	void Debug_Quaternion();
 #endif
 
 public:
@@ -51,7 +52,7 @@ private:
 
 	Vector3 scale_;
 	Quaternion rotation_;
-	Quaternion quaternion_;
+	Quaternion moveQuaternion_;
 	Vector3 translation_;
 	Matrix4x4 worldMat_;
 

@@ -8,7 +8,7 @@
 #include "Game/Camera/DebugCamera.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/CollisionManager.h"
-
+#include "Game/Manager/ObstaclesManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include  "Game/Effect/Trail.h"
@@ -52,6 +52,7 @@ private:
 	
 	// Manager ------------------------------------------
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
 
 	// editer ------------------------------------------
 	std::unique_ptr<PlacementObjectEditer> placementObjEditer_ = nullptr;

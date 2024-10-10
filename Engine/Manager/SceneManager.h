@@ -8,6 +8,11 @@
 #include "Engine/Manager/ModelManager.h"
 #include "Engine/Input/Input.h"
 
+enum SceneType {
+	Scene_Game,
+	Scene_Test
+};
+
 /// <summary>
 /// シーンを管理するクラス
 /// </summary>
@@ -28,6 +33,12 @@ private:
 	std::unique_ptr<BaseScene> scene_ = nullptr;
 
 	EffectSystem* effectSystem_ = nullptr;
+
+#ifdef _DEBUG
+	int selectSceneNum_ = 0;
+	bool isSceneChange_ = 0;
+#endif // _DEBUG
+
 
 };
 

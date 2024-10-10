@@ -5,14 +5,11 @@
 #include <vector>
 #include <array>
 #include "Game/GameObject/BasePlacementObject.h"
+#include "Game/Manager/ObstaclesManager.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
-enum class PlacementObjType {
-	Test1_Type,
-	Test2_Type,
-};
 
 /// <summary>
 /// 障害物を配置するためのクラス
@@ -20,34 +17,13 @@ enum class PlacementObjType {
 class PlacementObjectEditer {
 public:
 
-	struct LoadData {
-		Vector3 pos_;
-		Vector3 scale_;
-		Vector4 rotate_;
-		float radius_;
-		PlacementObjType type_;
-		
-		LoadData(const Vector3& scale, const Vector4& rotate, const Vector3& pos,
-				 const float& radius, const PlacementObjType& type) {
-			scale_ = scale, rotate_ = rotate, pos_ = pos,  radius_ = radius, type_ = type;
-		}
-	};
-
-	struct Group {
-		std::vector<LoadData> loadData_;
-	};
-
-	struct ObjectData {
-		std::unique_ptr<BasePlacementObject> object_;
-		PlacementObjType type_;
-	};
 
 	PlacementObjectEditer();
 	~PlacementObjectEditer();
 
-	void Init();
-	void Load(const std::string& fileName);
+	void Init(ObstaclesManager* obstaclesManager);
 	void LoadAllFile();
+	void MergeMaps(const std::map<std::string, ObstaclesManager::Group>& map1);
 
 #ifdef _DEBUG
 
@@ -58,7 +34,7 @@ public:
 	void NewGroup_Config();
 	void Edit_Config();
 
-	void Save(const std::string& fileName, const std::list<ObjectData>& list);
+	void Save(const std::string& fileName, const std::list<ObstaclesManager::ObjectData>& list);
 
 	void Inport();
 
@@ -66,8 +42,8 @@ public:
 	
 private:
 
-	std::list<ObjectData> debug_BasePlacementObj_;
-	std::list<ObjectData> inport_BasePlacementObj_;
+	std::list<ObstaclesManager::ObjectData> debug_BasePlacementObj_;
+	std::list<ObstaclesManager::ObjectData> inport_BasePlacementObj_;
 	// 新しく生成する種類
 	PlacementObjType newPopType_;
 
@@ -78,8 +54,10 @@ private:
 
 #endif
 
+	ObstaclesManager* obstaclesManager_ = nullptr;
+
 	const std::string& kDirectoryPath_ = "./Game/Resources/GameData/PlacementObjectData/";
-	std::map<std::string, Group> groupMap_;
+	std::map<std::string, ObstaclesManager::Group> groupMap_;
 
 	std::vector<std::string> fileNames_;
 

@@ -9,6 +9,8 @@
 #include "Game/GameObject/Player.h"
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
+#include "Game/Manager/ObstaclesManager.h"
+#include  "Game/Effect/Trail.h"
 
 
 class GameScene 
@@ -42,16 +44,18 @@ private:
 	std::unique_ptr<Ground> ground_[kStageModelCount_];
 	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;
+	std::unique_ptr<Trail> trail_ = nullptr;
 
 	// --------- parameter ----------- //
 	float stageWidthEvery_ = 32.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
 
 	// ---------- editor ----------- //
 
-	std::unique_ptr<PlacementObjectEditer> objectEditor_ = nullptr;
+	std::unique_ptr<PlacementObjectEditer> placementObjectEditor_ = nullptr;
 
 	// ---------- sound ---------- //
 	SeData soundData_;

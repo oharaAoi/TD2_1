@@ -19,6 +19,9 @@ void ModelManager::Finalize() {
 }
 
 void ModelManager::LoadModel(const std::string& directoryPath, const std::string& modelName) {
+	if (auto it = modelMap_.find(modelName); it != modelMap_.end()) {
+		return;
+	}
 	modelMap_.try_emplace(modelName, Engine::CreateModel(directoryPath, modelName));
 }
 
