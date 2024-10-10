@@ -24,9 +24,9 @@ void Player::Init(){
 	adjustmentItem_->AddItem(groupName, "radius", radius_);
 
 	AdaptAdjustmentItem();
+	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
+	transform_->SetQuaternion(restPoseRotation_);
 
-	Quaternion playerQuaternion = Quaternion::AngleAxis(90.0f, { 0,1,0 });
-	transform_->SetQuaternion(playerQuaternion);
 
 	isMove_ = false;
 	moveSpeed_ = 0.7f;

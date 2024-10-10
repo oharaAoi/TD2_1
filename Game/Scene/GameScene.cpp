@@ -76,7 +76,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	if (!isDebug_) {
+	if (!isDegugCameraActive_) {
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
@@ -145,7 +145,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
+	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 
 	// コライダーの表示
 	if(Collider::isColliderBoxDraw_) {
@@ -163,7 +163,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineKind::kNormalPipeline);
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 
 	for(auto& ground : ground_){
 		ground->Draw();
@@ -176,7 +176,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineKind::kWaterSpacePipeline);
+	Engine::SetPipeline(PipelineType::WaterSpacePipeline);
 	// このクラスは一番最後に描画
 	for(auto& waterSpace : waterSpace_){
 		waterSpace->Draw();
@@ -193,7 +193,7 @@ void GameScene::Draw() const{
 	// スプライトの表示
 	/////////////////////////////////
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
-	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	Engine::SetPipeline(PipelineType::SpritePipeline);
 
 #pragma endregion
 }
