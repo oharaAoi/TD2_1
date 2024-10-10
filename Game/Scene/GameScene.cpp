@@ -70,6 +70,8 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
+	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap3.png");
 
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
@@ -197,7 +199,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::WaterSpacePipeline);
+	Engine::SetPipeline(PipelineType::PBRPipeline);
 	// このクラスは一番最後に描画
 	for(auto& waterSpace : waterSpace_){
 		waterSpace->Draw();
