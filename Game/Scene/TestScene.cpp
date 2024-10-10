@@ -31,8 +31,8 @@ void TestScene::Init() {
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	/*placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
-	placementObjEditer_->Init();*/
+	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
+	placementObjEditer_->Init();
 
 	adjustment_->GetInstance()->Init("testScene");
 }
@@ -78,8 +78,9 @@ void TestScene::Update() {
 	testObj2_->Update();
 	trail_->Update();
 	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
+	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
 	
-	//placementObjEditer_->Update();
+	placementObjEditer_->Update();
 
 	sprite_->Update(range_, leftTop_);
 
@@ -111,20 +112,16 @@ void TestScene::Update() {
 
 void TestScene::Draw() const {
 	
-	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
-
-#pragma region NormalPipeline
-
-	Engine::SetPipeline(PipelineKind::kNormalPipeline);
-	//placementObjEditer_->Draw();
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	placementObjEditer_->Draw();
 	testObj_->Draw();
-	trail_->Draw();
 	testObj2_->Draw();
-	
-#pragma endregion
+
+	Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();
 
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
-	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sprite_->Draw();
 
 }

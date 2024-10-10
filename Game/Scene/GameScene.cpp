@@ -42,7 +42,7 @@ void GameScene::Init() {
 
 	camera_->SetTarget(player_->GetTransform());
 
-	Engine::SetComputeShader(CSKind::GrayScale);
+	//Engine::SetComputeShader(CSKind::GrayScale);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ void GameScene::Update() {
 
 void GameScene::Draw() const {
 #pragma region Primitive
-	Engine::SetPipeline(PipelineKind::kPrimitivePiPeline);
+	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	if (Collider::isColliderBoxDraw_) {
 		if (!isDebug_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
@@ -140,7 +140,7 @@ void GameScene::Draw() const {
 
 #pragma region NormalPipeline
 
-	Engine::SetPipeline(PipelineKind::kNormalPipeline);
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 	ground_->Draw();
 	player_->Draw();
 
@@ -148,19 +148,19 @@ void GameScene::Draw() const {
 
 #pragma region WaterSpace
 
-	Engine::SetPipeline(PipelineKind::kWaterSpacePipeline);
+	Engine::SetPipeline(PipelineType::WaterSpacePipeline);
 	// このクラスは一番最後に描画
 	waterSpace_->Draw();
 
 #pragma endregion
 
 	// CSを実行する
-	Engine::RunCS();
+	//Engine::RunCS();
 
 #pragma region Sprite
 
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
-	Engine::SetPipeline(PipelineKind::kSpritePipeline);
+	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sprite_->Draw();
 
 #pragma endregion

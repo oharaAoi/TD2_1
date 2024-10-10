@@ -44,14 +44,14 @@ void SceneManager::Run() {
 
 		scene_->Draw();
 
-		Engine::SetPipeline(PipelineKind::kParticlePipeline);
+		Engine::SetPipeline(PipelineType::ParticlePipeline);
 		effectSystem_->Draw();
 
 		#ifdef _DEBUG
 		if (effectSystem_->GetIsEffectEditer()) {
 			effectSystem_->BeginEditer();
 			effectSystem_->UpdateEditer();
-			Engine::SetPipeline(PipelineKind::kParticlePipeline);
+			Engine::SetPipeline(PipelineType::ParticlePipeline);
 			effectSystem_->DrawEditer();
 		}
 		#endif

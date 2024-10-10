@@ -31,7 +31,12 @@ public:
 
 	void AddTrail(const Vector3& pos);
 
+	void SetPlayerPosition(const Vector3& playerPos) { playerPosition_ = playerPos; }
+
 private:
+
+	// 
+	Vector3 playerPosition_;
 
 	std::list<TrailData> trails_;
 	float newLifeTime_;

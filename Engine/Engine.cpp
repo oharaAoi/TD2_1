@@ -282,32 +282,35 @@ void Engine::RunCS() {
 // ↓　パイプラインの設定
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Engine::SetPipeline(const PipelineKind& kind) {
+void Engine::SetPipeline(const PipelineType& kind) {
 	switch (kind) {
-	case PipelineKind::kNormalPipeline:
+	case PipelineType ::NormalPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::NormalPipeline, dxCommands_->GetCommandList());
 		break;
-	case PipelineKind::kTexturelessPipeline:
+	case PipelineType::AddPipeline:
+		graphicsPipelines_->SetPipeline(PipelineType::AddPipeline, dxCommands_->GetCommandList());
+		break;
+	case PipelineType ::TextureLessPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::TextureLessPipeline, dxCommands_->GetCommandList());
 		break;
-	case PipelineKind::kPrimitivePiPeline:
+	case PipelineType ::PrimitivePipeline:
 		primitivePipeline_->Draw(dxCommands_->GetCommandList());
 		break;
-	case PipelineKind::kPBRPipeline:
+	case PipelineType ::PBRPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::PBRPipeline, dxCommands_->GetCommandList());
 		break;
-	case PipelineKind::kParticlePipeline:
+	case PipelineType ::ParticlePipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::ParticlePipeline, dxCommands_->GetCommandList());
 		break;
-	case PipelineKind::kSpritePipeline:
+	case PipelineType ::SpritePipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::SpritePipeline, dxCommands_->GetCommandList());
 
 		break;
-	case PipelineKind::kSkinningPipeline:
+	case PipelineType ::SkinningPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::SkinningPipeline, dxCommands_->GetCommandList());
 		break;
 
-	case PipelineKind::kWaterSpacePipeline:
+	case PipelineType ::WaterSpacePipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::WaterSpacePipeline, dxCommands_->GetCommandList());
 		break;
 	}

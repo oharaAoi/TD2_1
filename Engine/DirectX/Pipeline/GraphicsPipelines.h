@@ -5,12 +5,14 @@
 
 enum class PipelineType {
 	NormalPipeline,
+	AddPipeline,
 	TextureLessPipeline,
 	ParticlePipeline,
 	PBRPipeline,
 	SpritePipeline,
 	SkinningPipeline,
-	WaterSpacePipeline
+	WaterSpacePipeline, 
+	PrimitivePipeline
 };
 
 class GraphicsPipelines {
