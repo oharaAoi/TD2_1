@@ -14,7 +14,7 @@ void BaseEffect::Init(const std::string& directoryPath, const std::string& fileN
 	particles_ = Engine::CreateBaseParticle(directoryPath, fileName, particleNum);
 	useBillboard_ = true;
 
-	rotate_ = { 0.0f, 0.0f, 0.0f };
+	rotate_ = { 0.0f, 3.0f, 0.0f };
 }
 
 void BaseEffect::Update(const Matrix4x4& viewMat, const Matrix4x4& projection) {
@@ -52,6 +52,9 @@ void BaseEffect::Update(const Matrix4x4& viewMat, const Matrix4x4& projection) {
 		// 次のパーティクルへ
 		++particleIter;
 	}
+#ifdef _DEBUG
+	Debug_Gui();
+#endif
 }
 
 void BaseEffect::Draw() {
@@ -63,7 +66,7 @@ void BaseEffect::Debug_Gui() {
 	ImGui::Begin("particle");
 	ImGui::Text("liveCount: %d", liveNumInstance_);
 	ImGui::Checkbox("useBillboard", &useBillboard_);
-	ImGui::DragFloat("rotate.x", &rotate_.z, 0.1f);
+	ImGui::DragFloat3("rotate.x", &rotate_.x, 0.1f);
 	ImGui::Text("particlesData_.size: %d", static_cast<int>(particlesData_.size()));
 	ImGui::End();
 }

@@ -15,7 +15,7 @@ void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
 	
-	scene_ = std::make_unique<GameScene>();
+	scene_ = std::make_unique<TestScene>();
 	scene_->Load();
 	scene_->Init();
 
