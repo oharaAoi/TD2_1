@@ -16,9 +16,13 @@ public:
 	void Debug_Gui() override;
 #endif
 
+public:
+
+	void SetPlayerPtr(Player* pPlayer){ pPlayer_ = pPlayer; }
+
 private:
 
 	Player* pPlayer_ = nullptr;
-	Vector3 offset_;
-
+	Vector3 offsetVec_;
+	float offsetLength_;
 };

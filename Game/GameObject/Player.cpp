@@ -13,6 +13,7 @@ Player::~Player(){}
 void Player::Init(){
 	BaseGameObject::Init();
 	SetObject("skin.obj");
+	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
@@ -28,7 +29,7 @@ void Player::Init(){
 	transform_->SetQuaternion(playerQuaternion);
 
 	isMove_ = false;
-	moveSpeed_ = 0.2f;
+	moveSpeed_ = 0.7f;
 	radius_ = 1.0f;
 }
 
@@ -79,6 +80,13 @@ void Player::Move(){
 	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(-currentAngle_);
 	velocity_ *= moveSpeed_;
 	transform_->SetTranslaion(translate + velocity_);
+
+	// プレイヤー上部の水面の座標を取得
+	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
+	aboveWaterSurfacePos->Update();
+
+	// 深さを更新
+	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ void GameScene::Init(){
 
 		// 地面
 		ground_[i] = std::make_unique<Ground>();
-		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * 32.0f, 0.0f, 0.0f));
+		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * 32.0f, -32.0f, 0.0f));
 
 		// 水
 		waterSpace_[i] = std::make_unique<WaterSpace>();
@@ -50,8 +50,7 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
-
-	camera_->SetTarget(player_->GetTransform());
+	camera_->SetPlayerPtr(player_.get());
 
 }
 
@@ -61,6 +60,7 @@ void GameScene::Init(){
 
 void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
@@ -247,7 +247,7 @@ void GameScene::EndlessStage(){
 
 			// 配置
 			ground_[i]->GetTransform()->SetTranslaion(nextPos);
-			waterSpace_[i]->SetTranslate(nextPos);
+			waterSpace_[i]->SetTranslate({ nextPos.x,0.0f,nextPos.z });
 		}
 	}
 

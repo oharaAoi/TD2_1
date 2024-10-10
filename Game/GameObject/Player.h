@@ -29,8 +29,9 @@ public:
 public:
 
 	void SetHitWaterSurface(const bool& ishit) { hitWaterSurface_ = ishit; }
-
 	const Vector3 GetMoveVelocity() const { return velocity_ * moveSpeed_; }
+	WorldTransform* GetAboveSurfaceTransform(){ return aboveWaterSurfacePos.get(); }
+	float GetSwimmingDepth(){ return swimmigDepth_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -53,6 +54,12 @@ private:
 	// フラグ
 	bool hitWaterSurface_;
 	bool isMove_ = true;
+	bool isFlying_;
+
+	// プレイヤーの上部の水面の座標
+	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;
+	// プレイヤーがどれだけ潜っているか
+	float swimmigDepth_;
 
 public:// アクセッサ
 
