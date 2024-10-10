@@ -1,19 +1,19 @@
 #include "Player.h"
 
-Player::Player() {
+Player::Player(){
 	Init();
 }
 
-Player::~Player() {
-}
+Player::~Player(){}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::Init() {
+void Player::Init(){
 	BaseGameObject::Init();
 	SetObject("skin.obj");
+	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
@@ -25,11 +25,11 @@ void Player::Init() {
 
 	AdaptAdjustmentItem();
 
-	Quaternion playerQuaternion = Quaternion::AngleAxis(90.0f, {0,1,0});
+	Quaternion playerQuaternion = Quaternion::AngleAxis(90.0f, { 0,1,0 });
 	transform_->SetQuaternion(playerQuaternion);
 
 	isMove_ = false;
-
+	moveSpeed_ = 0.7f;
 	radius_ = 1.0f;
 }
 
@@ -37,12 +37,11 @@ void Player::Init() {
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::Update() {
-	if (isMove_) {
-		velocity_.x = 1.0f;
+void Player::Update(){
+	if(isMove_) {
 		Move();
 	} else {
-		velocity_.x = 0.0f;
+		velocity_ = { 0.0f,0.0f,0.0f };
 	}
 
 	BaseGameObject::Update();
@@ -52,7 +51,7 @@ void Player::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::Draw() const {
+void Player::Draw() const{
 	BaseGameObject::Draw();
 }
 
@@ -60,36 +59,41 @@ void Player::Draw() const {
 // ↓　移動関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::Move() {
+void Player::Move(){
 	Vector3 translate = transform_->GetTranslation();
-	if (Input::IsPressKey(DIK_SPACE)) {
-		// 移動処理
-		velocity_.y = 1.0f;
-		velocity_.Normalize();
-		translate += velocity_ * moveSpeed_ * GameTimer::DeltaTime();
+	if(Input::IsPressKey(DIK_SPACE)) {
 
-		// 回転処理
-		float targetAngle = std::atan2f(velocity_.x, velocity_.y);
-		LookAtDirection(targetAngle);
-		
+		pressTime_ += 0.005f;
+
 	} else {
-		// 移動処理
-		velocity_.y = -1.0f;
-		velocity_.Normalize();
-		translate += velocity_ * moveSpeed_ * GameTimer::DeltaTime();
-		
-		// 回転処理
-		float targetAngle = std::atan2f(velocity_.y, velocity_.x);
-		LookAtDirection(targetAngle);
+
+		pressTime_ -= 0.005f;
 	}
-	transform_->SetTranslaion(translate);
+
+	// 角度を加算
+	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
+	float ease = EaseOutBack(std::fabsf(pressTime_));
+	currentAngle_ = kMaxAngle_ * ease * (pressTime_ > 0.0f ? 1.0f : -1.0f);
+	LookAtDirection(currentAngle_);
+
+	// 移動量を加算
+	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(-currentAngle_);
+	velocity_ *= moveSpeed_;
+	transform_->SetTranslaion(translate + velocity_);
+
+	// プレイヤー上部の水面の座標を取得
+	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
+	aboveWaterSurfacePos->Update();
+
+	// 深さを更新
+	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　進行方向を向かせる
 //////////////////////////////////////////////////////////////////////////////////////////////////
- 
-void Player::LookAtDirection(const float& angle) {
+
+void Player::LookAtDirection(const float& angle){
 	Quaternion moveRotation = Quaternion::EulerToQuaternion({ 0,0,angle }) * Quaternion::AngleAxis(90.0f, { 0,1,0 });
 	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion(), moveRotation, lookAtT_);
 	transform_->SetQuaternion(slerp);
@@ -99,7 +103,7 @@ void Player::LookAtDirection(const float& angle) {
 // ↓　調整項目を適応させる
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::AdaptAdjustmentItem() {
+void Player::AdaptAdjustmentItem(){
 	const char* groupName = "Player";
 	transform_->SetTranslaion(adjustmentItem_->GetValue<Vector3>(groupName, "position"));
 	moveSpeed_ = adjustmentItem_->GetValue<float>(groupName, "moveSpeed");
@@ -108,7 +112,7 @@ void Player::AdaptAdjustmentItem() {
 	radius_ = adjustmentItem_->GetValue<float>(groupName, "radius");
 }
 
-const Vector3 Player::GetWorldTranslation(const Vector3& offset) const {
+const Vector3 Player::GetWorldTranslation(const Vector3& offset) const{
 	return Transform(offset, transform_->GetWorldMatrix());
 }
 
@@ -117,7 +121,7 @@ const Vector3 Player::GetWorldTranslation(const Vector3& offset) const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _DEBUG
-void Player::Debug_Gui() {
+void Player::Debug_Gui(){
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
 	ImGui::Separator();
@@ -127,14 +131,14 @@ void Player::Debug_Gui() {
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.1f);
 	ImGui::DragFloat("radius", &radius_, 0.1f);
 
-	if (ImGui::Button("ReAdapt")) {
+	if(ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();
 	}
 
 
 	ImGui::Checkbox("isMove", &isMove_);
 
-	if (hitWaterSurface_) {
+	if(hitWaterSurface_) {
 		ImGui::Text("Hit");
 	} else {
 		ImGui::Text("not Hit");

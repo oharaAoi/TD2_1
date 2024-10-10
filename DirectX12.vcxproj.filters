@@ -405,6 +405,12 @@
     <ClCompile Include="Game\Camera\BaseCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Math\Easing.cpp">
+      <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Item.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -718,6 +724,12 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\BasePlacementObject.h">
       <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Easing.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Item.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
