@@ -14,7 +14,15 @@ void GameScene::Finalize(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Init(){
+
 	AdjustmentItem::GetInstance()->Init("GameScene");
+
+	// -------------------------------------------------
+	// ↓ editorの初期化
+	// -------------------------------------------------
+
+	objectEditor_ = std::make_unique<PlacementObjectEditer>();
+	objectEditor_->Init();
 
 	// -------------------------------------------------
 	// ↓ cameraの初期化
@@ -62,6 +70,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
@@ -77,14 +86,14 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
-	if (isPause_) {
+	if(isPause_) {
 		isStepFrame_ = false;
 
-#ifdef _DEBUG
+	#ifdef _DEBUG
 		Debug_Gui();
-#endif
+	#endif
 		// stepフラグが立っていたら1フレームだけ進める
-		if (!isStepFrame_) {
+		if(!isStepFrame_) {
 			return;
 		}
 	}
@@ -136,9 +145,14 @@ void GameScene::Update(){
 
 
 #ifdef _DEBUG
-	if (!isStepFrame_) {
+	if(!isStepFrame_) {
 		Debug_Gui();
+
+		// editorの処理
 	}
+
+	objectEditor_->Update();
+
 #endif
 }
 
@@ -171,6 +185,13 @@ void GameScene::Draw() const{
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
+
+#ifdef _DEBUG
+
+	// editorの描画
+	objectEditor_->Draw();
+
+#endif // _DEBUG
 
 	for(auto& ground : ground_){
 		ground->Draw();
@@ -278,15 +299,15 @@ void GameScene::EndlessStage(){
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
-	if (ImGui::Button("stop")) {
+	if(ImGui::Button("stop")) {
 		isPause_ = true;
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("play")) {
+	if(ImGui::Button("play")) {
 		isPause_ = false;
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("step")) {
+	if(ImGui::Button("step")) {
 		isStepFrame_ = true;
 	}
 	ImGui::End();
