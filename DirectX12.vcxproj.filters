@@ -115,6 +115,9 @@
     <Filter Include="Engine\HLSL\CS">
       <UniqueIdentifier>{42b3d390-a5b5-4fdb-9aa3-87577ea7826c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Effect">
+      <UniqueIdentifier>{6d2d2e77-3c07-4ec4-815b-55ba7c35564f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -402,14 +405,14 @@
     <ClCompile Include="Engine\DirectX\RootSignature\RootSignatureBuilder.cpp">
       <Filter>Engine\DirectX\RootSignature</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Camera\BaseCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Manager\MeshManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\BaseCamera.cpp">
+      <Filter>Game\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Game\Effect\Trail.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -716,9 +719,6 @@
     <ClInclude Include="Engine\DirectX\RootSignature\RootSignatureBuilder.h">
       <Filter>Engine\DirectX\RootSignature</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Camera\BaseCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Editer\PlacementObjectEditer.h">
       <Filter>Game\Editer</Filter>
     </ClInclude>
@@ -726,10 +726,13 @@
       <Filter>Game\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Manager\MeshManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\BaseCamera.h">
+      <Filter>Game\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Game\Effect\Trail.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
