@@ -28,21 +28,22 @@ public:
 #endif 
 
 	void PlayerWaveCollision();
+	void EndlessStage();
 
 private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
-	bool isDebug_ = true;
+	bool isDegugCameraActive_ = false;
 
 	// ---------- gameobject ---------- //
-	std::unique_ptr<Ground> ground_ = nullptr;
-	std::unique_ptr<WaterSpace> waterSpace_ = nullptr;
+	static const int kStageModelCount_ = 4;
+	std::unique_ptr<Ground> ground_[kStageModelCount_];
+	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;
-	std::unique_ptr<Sprite> sprite_;
 
-	Vector2 range_;
-	Vector2 leftTop_;
+	// --------- parameter ----------- //
+	float stageWidthEvery_ = 32.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

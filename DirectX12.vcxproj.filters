@@ -414,6 +414,12 @@
     <ClCompile Include="Game\Effect\Trail.cpp">
       <Filter>Game\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Math\Easing.cpp">
+      <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Item.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -725,14 +731,11 @@
     <ClInclude Include="Game\GameObject\BasePlacementObject.h">
       <Filter>Game\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Manager\MeshManager.h">
-      <Filter>Engine\Manager</Filter>
+    <ClInclude Include="Engine\Math\Easing.h">
+      <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Camera\BaseCamera.h">
-      <Filter>Game\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\Trail.h">
-      <Filter>Game\Effect</Filter>
+    <ClInclude Include="Game\GameObject\Item.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

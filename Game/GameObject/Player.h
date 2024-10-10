@@ -4,7 +4,7 @@
 #include "Engine/Input/Input.h"
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Collider/Collider.h"
-
+#include "Easing.h"
 
 class Player :
 	public BaseGameObject,
@@ -29,8 +29,9 @@ public:
 public:
 
 	void SetHitWaterSurface(const bool& ishit) { hitWaterSurface_ = ishit; }
-
 	const Vector3 GetMoveVelocity() const { return velocity_ * moveSpeed_; }
+	WorldTransform* GetAboveSurfaceTransform(){ return aboveWaterSurfacePos.get(); }
+	float GetSwimmingDepth(){ return swimmigDepth_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -47,7 +48,23 @@ private:
 	float moveSpeed_;
 	float lookAtT_;
 
+	// プレイヤーが泳ぐ際のの角度決定に関する変数
+	float pressTime_;
+	float currentAngle_;
+	const float kMaxAngle_ = 3.14f * 0.28f;
+
+	// フラグ
 	bool hitWaterSurface_;
-	bool isMove_;
+	bool isMove_ = true;
+	bool isFlying_;
+
+	// プレイヤーの上部の水面の座標
+	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;
+	// プレイヤーがどれだけ潜っているか
+	float swimmigDepth_;
+
+public:// アクセッサ
+
+	void SetIsMove(bool flag){ isMove_ = flag; }
 };
 
