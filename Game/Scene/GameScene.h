@@ -8,6 +8,7 @@
 #include "Game/GameObject/WaterSpace.h"
 #include "Game/GameObject/Player.h"
 #include "Engine/Manager/CollisionManager.h"
+#include "Game/Editer/PlacementObjectEditer.h"
 
 
 class GameScene 
@@ -47,6 +48,10 @@ private:
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+
+	// ---------- editor ----------- //
+
+	std::unique_ptr<PlacementObjectEditer> objectEditor_ = nullptr;
 
 	// ---------- sound ---------- //
 	SeData soundData_;
