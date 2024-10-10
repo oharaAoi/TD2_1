@@ -81,7 +81,7 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void WaterSpace::Update(const float& playerVelocityX) {
+void WaterSpace::Update() {
 	/*waveParameter_->time += GameTimer::DeltaTime();*/
 
 	//Move(playerVelocityX);
@@ -89,10 +89,9 @@ void WaterSpace::Update(const float& playerVelocityX) {
 	transform_->Update();
 
 	// 上面のworld座標を求めておく
-	/*for (size_t oi = 0; oi < worldTopFaceList_.size(); ++oi) {
+	for (size_t oi = 0; oi < worldTopFaceList_.size(); ++oi) {
 		worldTopFaceList_[oi] = Transform(topFaceList_[oi], transform_->GetWorldMatrix());
-		worldTopFaceList_[oi].y += waveParameter_->amplitude * std::sinf(waveParameter_->frequency * (worldTopFaceList_[oi].x + waveParameter_->time));
-	}*/
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,16 +114,6 @@ void WaterSpace::Draw() const {
 
 		commandList->DrawIndexedInstanced(meshArray_[oi]->GetIndexNum(), 1, 0, 0, 0);
 	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　移動関数
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-void WaterSpace::Move(const float& playerVelocityX) {
-	Vector3 translate = transform_->GetTranslation();
-	translate.x += playerVelocityX * GameTimer::DeltaTime();
-	transform_->SetTranslaion(translate);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

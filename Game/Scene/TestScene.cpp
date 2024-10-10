@@ -85,7 +85,7 @@ void TestScene::Update() {
 	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
 	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
 
-	waterSpace_->Update(0.0f);
+	waterSpace_->Update();
 	
 	placementObjEditer_->Update();
 

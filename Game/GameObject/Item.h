@@ -7,8 +7,7 @@
 #include "Easing.h"
 
 class Item :
-	public BasePlacementObject,
-	public Collider{
+	public BasePlacementObject{
 
 public:
 	Item();

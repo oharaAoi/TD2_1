@@ -124,7 +124,7 @@ void GameScene::Update(){
 	}
 
 	for(auto& waterSpace : waterSpace_){
-		waterSpace->Update(player_->GetMoveVelocity().x);
+		waterSpace->Update();
 	}
 
 	//EndlessStage();
