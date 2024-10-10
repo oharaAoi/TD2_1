@@ -69,6 +69,7 @@ void GameScene::Init(){
 void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 
@@ -183,7 +184,7 @@ void GameScene::Draw() const{
 
 	/////////////////////////////////
 	// 3Dオブジェクトなどの表示(基本ここ)
-	/////////////////////////////////
+    	/////////////////////////////////
 	Engine::SetPipeline(PipelineKind::kNormalPipeline);
 
 #ifdef _DEBUG

@@ -15,8 +15,6 @@ public:
 	void Update() override;
 	void Draw() const override;
 
-	void Move();
-
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG

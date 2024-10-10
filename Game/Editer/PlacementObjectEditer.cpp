@@ -152,7 +152,7 @@ void PlacementObjectEditer::NewGroup_Config() {
 		newObject.object_->Init();
 		switch (newPopType_) {
 		case PlacementObjType::Test1_Type:
-			newObject.object_->SetObject("skin.obj");
+			newObject.object_->SetObject("Rock.obj");
 			newObject.type_ = PlacementObjType::Test1_Type;
 			break;
 		case PlacementObjType::Test2_Type:

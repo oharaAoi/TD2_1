@@ -29,7 +29,7 @@ void Player::Init(){
 	transform_->SetQuaternion(playerQuaternion);
 
 	isMove_ = false;
-	moveSpeed_ = 0.7f;
+	moveSpeed_ = 85;//0.7f / (1.0f / 60.0f);
 	radius_ = 1.0f;
 }
 
@@ -78,7 +78,7 @@ void Player::Move(){
 
 	// 移動量を加算
 	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(-currentAngle_);
-	velocity_ *= moveSpeed_;
+	velocity_ *= moveSpeed_ * std::fabsf(GameTimer::DeltaTime());
 	transform_->SetTranslaion(translate + velocity_);
 
 	// プレイヤー上部の水面の座標を取得

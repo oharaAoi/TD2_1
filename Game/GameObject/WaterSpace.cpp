@@ -80,7 +80,7 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 void WaterSpace::Update(const float& playerVelocityX) {
 	waveParameter_->time += GameTimer::DeltaTime();
 
-	Move(playerVelocityX);
+	//Move(playerVelocityX);
 
 	transform_->Update();
 
