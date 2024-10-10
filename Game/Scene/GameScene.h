@@ -38,7 +38,7 @@ private:
 	bool isDegugCameraActive_ = false;
 
 	// ---------- gameobject ---------- //
-	static const int kStageModelCount_ = 4;
+	static const int kStageModelCount_ = 1;
 	std::unique_ptr<Ground> ground_[kStageModelCount_];
 	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;

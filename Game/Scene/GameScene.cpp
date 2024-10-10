@@ -38,7 +38,7 @@ void GameScene::Init(){
 
 		// 地面
 		ground_[i] = std::make_unique<Ground>();
-		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * 32.0f, -32.0f, 0.0f));
+		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * 32.0f, -40.5f, 0.0f));
 
 		// 水
 		waterSpace_[i] = std::make_unique<WaterSpace>();
@@ -72,7 +72,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
-	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap3.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
@@ -127,7 +127,7 @@ void GameScene::Update(){
 		waterSpace->Update(player_->GetMoveVelocity().x);
 	}
 
-	EndlessStage();
+	//EndlessStage();
 
 	// -------------------------------------------------
 	// ↓ 当たり判定を取る
@@ -313,7 +313,9 @@ void GameScene::Debug_Gui(){
 	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 	player_->Debug_Gui();
 
-	//waterSpace_->Debug_Gui();
+	for (auto& waterSpace : waterSpace_) {
+		waterSpace->Debug_Gui();
+	}
 
 	if(!isDegugCameraActive_) {
 		camera_->Debug_Gui();

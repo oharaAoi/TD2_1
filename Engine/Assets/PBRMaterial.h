@@ -45,6 +45,9 @@ public:
 
 	void SetMaterialData(Model::ModelMaterialData materialData);
 
+	void SetUvScale(const Vector3& scale) { uvScale_ = scale; };
+	void SetUvTransition(const Vector3& transition) { uvTranslation_ = transition; };
+
 private:
 
 	ComPtr<ID3D12Resource> materialBuffer_;
