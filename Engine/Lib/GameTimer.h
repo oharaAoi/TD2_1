@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 
+
 /// <summary>
 /// フレームレートを固定するためのクラス
 /// </summary>
@@ -14,11 +15,17 @@ public:
 
 	void WaitNextFrame();
 
-	static float DeltaTime() { return kDeletaTime_; }
+	static float DeltaTime() { return deletaTime_; }
+
+	static float TimeRate() { return timeRate_; }
+
+	static float fps_;
 
 private:
 	std::chrono::steady_clock::time_point preFrameTime_;	// 前フレームの時間
 	std::chrono::milliseconds frameDuration_;				// フレームの間隔
-	static float kDeletaTime_;
+	static float deletaTime_;
+	static float timeRate_;
 };
 
+const float kDeletaTime_ = (1.0f / GameTimer::fps_);
