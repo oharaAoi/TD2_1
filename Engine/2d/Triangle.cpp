@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include "Engine/Engine.h"
 
 Triangle::Triangle() {
 }
@@ -6,65 +7,69 @@ Triangle::Triangle() {
 Triangle::~Triangle() {
 	mesh_->Finalize();
 	material_->Finalize();
+	worldTransform_->Finalize();
 }
 
-void Triangle::Init(ID3D12Device* device, const Mesh::Vertices& vertex) {
+void Triangle::Init(ID3D12Device* device, const Mesh::Vertices& vertex, const std::string& textureName) {
 	mesh_ = std::make_unique<Mesh>();
 	material_ = std::make_unique<Material>();
 
+	// vertexの設定
 	std::vector<Mesh::VertexData> vertices;
 	std::vector<uint32_t> indices;
 	vertices.resize(3);
 	indices.resize(3);
 
+	// 左下
+	vertices[0].pos = vertex.vertex1;
+	vertices[0].texcoord = { 0.0f, 1.0f };
+	vertices[0].normal = { 0.0f, 0.0f, -1.0f };
+	// 上
+	vertices[1].pos = vertex.vertex2;
+	vertices[1].texcoord = { 0.5f, 0.0f };
+	vertices[1].normal = { 0.0f, 0.0f, -1.0f };
+	// 右下
+	vertices[2].pos = vertex.vertex3;
+	vertices[2].texcoord = { 1.0f, 1.0f };
+	vertices[2].normal = { 0.0f, 0.0f, -1.0f };
+
+	// indexの設定
+	for (uint32_t index = 0; index < 3; index++) {
+		indices[index] = index;
+	}
+
 	mesh_->Init(device, vertices, indices);
 	material_->Init(device);
 
-	// vertexの設定
-	Mesh::VertexData* vertexData = mesh_->GetVertexData();
-	// 左下
-	vertexData[0].pos = vertex.vertex1;
-	vertexData[0].texcoord = { 0.0f, 1.0f };
-	vertexData[0].normal = { 0.0f, 0.0f, -1.0f };
-	// 上
-	vertexData[1].pos = vertex.vertex2;
-	vertexData[1].texcoord = { 0.5f, 0.0f };
-	vertexData[1].normal = { 0.0f, 0.0f, -1.0f };
-	// 右下
-	vertexData[2].pos = vertex.vertex3;
-	vertexData[2].texcoord = { 1.0f, 1.0f };
-	vertexData[2].normal = { 0.0f, 0.0f, -1.0f };
+	worldTransform_ = Engine::CreateWorldTransform();
 
-	// indexの設定
-	uint32_t* indexData = mesh_->GetIndexData();
-	for (uint32_t index = 0; index < 3; index++) {
-		indexData[index] = index;
-	}
-
-	// materialの設定
-	/*Material::MaterialData* materialData = material_->GetBaseMaterial();
-	materialData->enableLighting = false;*/
+	textureName_ = textureName;
 }
 
 void Triangle::Update() {
-
+	worldTransform_->Update();
 }
 
-void Triangle::Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewProjection) {
+void Triangle::Draw(ID3D12GraphicsCommandList* commandList, ViewProjection* viewProjection) const {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	mesh_->Draw(commandList);
 	material_->Draw(commandList);
-	worldTransform->Draw(commandList);
+	worldTransform_->Draw(commandList);
 	viewProjection->Draw(commandList);
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, "Resources/uvChecker.png", 3);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName_, 3);
 	commandList->DrawIndexedInstanced(3, 1, 0, 0, 0);
 }
 
+void Triangle::SetVertices(const Mesh::Vertices& vertex) {
+	Mesh::VertexData* data = mesh_->GetVertexData();
+	data[0].pos = vertex.vertex1; // 左下
+	data[1].pos = vertex.vertex2; // 上
+	data[2].pos = vertex.vertex3; // 右下
+}
+
 #ifdef _DEBUG
-void Triangle::ImGuiDraw(const std::string& name) {
-	if (ImGui::TreeNode(name.c_str())) {
-		material_->ImGuiDraw();
-		ImGui::TreePop();
-	}
+void Triangle::Debug_Gui() {
+	worldTransform_->Debug_Gui();
+	material_->ImGuiDraw();
 }
 #endif

@@ -47,6 +47,8 @@ private:
 	std::unique_ptr<Trail> trail_ = nullptr;
 
 	std::unique_ptr<WaterSpace> waterSpace_;
+
+	std::unique_ptr<Triangle> triangle_ = nullptr;
 	
 	// sprite -----------------------------------
 	

@@ -275,7 +275,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 	for (uint32_t oi = 0; oi < meshVertices.size(); oi++) {
 		/*mesh->SetUseMaterial(useMaterial[oi]);*/
 		MeshManager::GetInstance()->AddMesh(device, fileName, meshVertices[oi], meshIndices[oi]);
-		meshArray_[oi] = (MeshManager::GetInstance()->GetMesh(fileName));
+		meshArray_ = (MeshManager::GetInstance()->GetMeshes(fileName));
 		meshArray_[oi]->SetUseMaterial(useMaterial[oi]);
 	}
 
@@ -292,5 +292,5 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 }
 
 Mesh* Model::GetMesh(const uint32_t& index) {
-	return meshArray_[index]; 
+	return meshArray_[index].get(); 
 }

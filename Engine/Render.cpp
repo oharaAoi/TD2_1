@@ -52,9 +52,9 @@ void Render::SetRenderTarget(const RenderTargetType& type) {
 // ↓　三角形の描画
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Render::DrawTriangle(Triangle* triangle, const WorldTransform* worldTransform) {
+void Render::DrawTriangle(Triangle* triangle) {
 	lightGroup_->Draw(commandList_, 4);
-	triangle->Draw(commandList_, worldTransform, viewProjection_.get());
+	triangle->Draw(commandList_, viewProjection_.get());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

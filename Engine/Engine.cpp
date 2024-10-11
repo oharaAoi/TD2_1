@@ -207,9 +207,9 @@ void Engine::DrawRenderTexture() {
 // ↓　生成する関数群
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::unique_ptr<Triangle> Engine::CreateTriangle(const Mesh::Vertices& vertex) {
+std::unique_ptr<Triangle> Engine::CreateTriangle(const Mesh::Vertices& vertex, const std::string& textureName) {
 	std::unique_ptr<Triangle> triangle = std::make_unique<Triangle>();
-	triangle->Init(dxDevice_->GetDevice(), vertex);
+	triangle->Init(dxDevice_->GetDevice(), vertex, textureName);
 	return triangle;
 }
 

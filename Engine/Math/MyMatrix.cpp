@@ -1,5 +1,6 @@
 #include "MyMatrix.h"
 #include "Engine/Math/Quaternion.h"
+#include <stdexcept>
 
 /// <summary>
 /// 加算
@@ -56,10 +57,10 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 }
 
 /// <summary>
-/// 逆行列
+/// 逆行列を計算する関数
 /// </summary>
-/// <param name="m"></param>
-/// <returns></returns>
+/// <param name="matrix">元の行列</param>
+/// <returns>逆行列</returns>
 Matrix4x4 Inverse(Matrix4x4 matrix) {
     Matrix4x4 result;
 
@@ -70,25 +71,33 @@ Matrix4x4 Inverse(Matrix4x4 matrix) {
         }
     }
 
+    const float kEpsilon = 1e-6f; // 小さな値を設定して比較するために使用
+
     // 前進消去
     for (int i = 0; i < 4; ++i) {
-        // ピボットが0ならば行の入れ替えを行う
-        if (fabs(matrix.m[i][i] <kEpsilon)) {
+        // ピボットが0に近い場合は行の入れ替えを行う
+        if (fabs(matrix.m[i][i]) < kEpsilon) {
+            bool swapped = false;
             for (int j = i + 1; j < 4; ++j) {
-                if (matrix.m[j][i] != 0.0f) {
+                if (fabs(matrix.m[j][i]) > kEpsilon) {
                     swapRows(matrix, i, j);
                     swapRows(result, i, j);
+                    swapped = true;
                     break;
                 }
             }
+            // もし入れ替えが行われなければ、逆行列は存在しない（特異行列）
+            if (!swapped) {
+                throw std::runtime_error("Singular matrix, cannot find inverse.");
+            }
         }
 
-        // ピボットを1にする
+        // ピボットを1に正規化
         float pivot = matrix.m[i][i];
         scaleRow(matrix, i, 1.0f / pivot);
         scaleRow(result, i, 1.0f / pivot);
 
-        // ピボット以下の要素を0にする
+        // ピボット以下の行を0にする（前進消去）
         for (int j = i + 1; j < 4; ++j) {
             float factor = matrix.m[j][i];
             addScaledRow(matrix, j, i, -factor);
@@ -97,7 +106,7 @@ Matrix4x4 Inverse(Matrix4x4 matrix) {
     }
 
     // 後退代入
-    for (int i = 3; i > 0; --i) {
+    for (int i = 3; i >= 0; --i) {
         for (int j = i - 1; j >= 0; --j) {
             float factor = matrix.m[j][i];
             addScaledRow(matrix, j, i, -factor);
@@ -108,6 +117,12 @@ Matrix4x4 Inverse(Matrix4x4 matrix) {
     return result;
 }
 
+/// <summary>
+/// 2つの行を入れ替える関数
+/// </summary>
+/// <param name="matrix">操作対象の行列</param>
+/// <param name="row1">入れ替える行1</param>
+/// <param name="row2">入れ替える行2</param>
 void swapRows(Matrix4x4& matrix, int row1, int row2) {
     for (int i = 0; i < 4; ++i) {
         float temp = matrix.m[row1][i];
@@ -116,12 +131,25 @@ void swapRows(Matrix4x4& matrix, int row1, int row2) {
     }
 }
 
+/// <summary>
+/// 行全体にスカラー値をかける関数
+/// </summary>
+/// <param name="matrix">操作対象の行列</param>
+/// <param name="row">操作対象の行</param>
+/// <param name="scalar">スカラー値</param>
 void scaleRow(Matrix4x4& matrix, int row, float scalar) {
     for (int i = 0; i < 4; ++i) {
         matrix.m[row][i] *= scalar;
     }
 }
 
+/// <summary>
+/// 行全体に別の行をスケールして加える関数
+/// </summary>
+/// <param name="matrix">操作対象の行列</param>
+/// <param name="targetRow">操作対象の行</param>
+/// <param name="sourceRow">加える行</param>
+/// <param name="scalar">スケール値</param>
 void addScaledRow(Matrix4x4& matrix, int targetRow, int sourceRow, float scalar) {
     for (int i = 0; i < 4; ++i) {
         matrix.m[targetRow][i] += scalar * matrix.m[sourceRow][i];
@@ -284,7 +312,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const
     rotateMatrix = rotate.MakeMatrix();
     translateMatrix = MakeTranslateMatrix(translate);
 
-    affineMatrix = Multiply(Multiply(scaleMatrix, rotateMatrix), translateMatrix);
+    affineMatrix = scaleMatrix * rotateMatrix * translateMatrix;
 
     return affineMatrix;
 }

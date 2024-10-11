@@ -33,8 +33,8 @@ void DebugCamera::Init() {
 
 	debugCameraMode_ = true;
 
-	moveBaseSpeed_ = 5.0f;
-	moveSpeed_ = 5.0f;
+	moveBaseSpeed_ = 10.0f;
+	moveSpeed_ = 10.0f;
 	moveQuaternion_ = Quaternion();
 }
 

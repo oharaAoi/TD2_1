@@ -96,7 +96,7 @@ public:
 private:
 
 	// 頂点バッファやインデックスバッファを持つ
-	std::vector<Mesh*> meshArray_;
+	std::vector<std::shared_ptr<Mesh>> meshArray_;
 	std::unordered_map<std::string, ModelMaterialData> materialData_;
 	// テクスチャの情報を持っている
 	//std::unordered_map<std::string, std::unique_ptr<Material>> materialArray_;

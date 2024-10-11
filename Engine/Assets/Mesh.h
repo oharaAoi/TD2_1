@@ -30,9 +30,6 @@ public: // 構造体
 		Vector4 rightBottom;
 	};
 
-public:
-
-	static void CalculateTangent(VertexData* data);
 
 public:
 

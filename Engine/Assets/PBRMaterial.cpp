@@ -38,9 +38,21 @@ void PBRMaterial::Draw(ID3D12GraphicsCommandList* commandList) const {
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void PBRMaterial::Debug_Gui() {
-	ImGui::DragFloat4("uvScale_", &uvScale_.x, 0.01f);
-	ImGui::DragFloat4("uvRotation_", &uvRotation_.x, 0.01f);
-	ImGui::DragFloat4("uvTranslation_", &uvTranslation_.x, 0.01f);
+	if (ImGui::TreeNode("uvTramsform")) {
+		if (ImGui::TreeNode("scale")) {
+			ImGui::DragFloat4("uvScale", &uvScale_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("rotation")) {
+			ImGui::DragFloat4("uvRotation", &uvRotation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("translation")) {
+			ImGui::DragFloat4("uvTranslation", &uvTranslation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
 	ImGui::DragFloat("roughness", &pbrMaterial_->roughness, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("metallic", &pbrMaterial_->metallic, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat("shininess", &pbrMaterial_->shininess, 0.1f);

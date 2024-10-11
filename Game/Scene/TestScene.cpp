@@ -13,7 +13,7 @@ void TestScene::Init() {
 	// object -------------------------------------------------------------------
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
-	testObj_->SetObject("skin.obj");
+	testObj_->SetObject("multiMaterial.obj");
 	//testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 
 	testObj2_ = std::make_unique<BaseGameObject>();
@@ -25,6 +25,12 @@ void TestScene::Init() {
 	waterSpace_ = std::make_unique<WaterSpace>();
 	waterSpace_->Init("./Game/Resources/Model/", "waterPlane.obj");
 
+	triangle_ = Engine::CreateTriangle({
+		{-1.0f, 0.0f, 0.0f, 1.0f},
+		{0.0f, 1.0f, 0.0f, 1.0f},
+		{1.0f, 0.0f, 0.0f, 1.0f},
+									   }, "uvChecker.png");
+	
 	// effect -------------------------------------------------------------------
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
@@ -88,6 +94,8 @@ void TestScene::Update() {
 	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
 	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
 
+	triangle_->Update();
+
 	waterSpace_->Update();
 	
 	placementObjEditer_->Update();
@@ -129,6 +137,7 @@ void TestScene::Draw() const {
 	testObj2_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	obstaclesManager_->Draw();
+	Render::DrawTriangle(triangle_.get());
 
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
@@ -168,16 +177,10 @@ void TestScene::ImGuiDraw() {
 
 	obstaclesManager_->Debug_Gui();
 
-	Vector3 point = Vector3(2.1f, -0.9f, 1.3f);
-	Quaternion q = Quaternion::AngleAxis(0.45f, Vector3(1.0f, 0.4f, -0.2f).Normalize());
-	Matrix4x4 qMat = q.MakeMatrix();
-
-	Vector3 rottateByA = q * point;
-	Vector3 B = Transform(point, qMat);
-
-	ImGui::DragFloat3("A", &rottateByA.x, 1.0f);
-	ImGui::DragFloat3("B", &B.x, 1.0f);
-
+	if (ImGui::TreeNode("triangle")) {
+		triangle_->Debug_Gui();
+		ImGui::TreePop();
+	}
 	ImGui::End();
 }
 #endif

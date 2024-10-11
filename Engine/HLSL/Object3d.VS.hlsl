@@ -25,7 +25,7 @@ struct VertexShaderInput{
 VertexShaderOutput main(VertexShaderInput input){
 	VertexShaderOutput output;
 	// WVPの生成
-	float4x4 WVP = mul(gWorldTransformMatrix.world, mul(gViewProjectionMatrix.view, gViewProjectionMatrix.projection));
+	float4x4 WVP = mul(mul(gWorldTransformMatrix.world, gViewProjectionMatrix.view), gViewProjectionMatrix.projection);
 	output.position = mul(input.position, WVP);
 	output.texcoord = input.texcoord;
 	output.normal = normalize(mul(input.normal, (float3x3)gWorldTransformMatrix.worldInverseTranspose));

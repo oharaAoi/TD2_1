@@ -37,6 +37,6 @@ void BaseCamera::Update() {
 	translateMat_ = MakeTranslateMatrix(transform_.translate);
 
 	// worldの生成
-	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
+	cameraMatrix_ =scaleMat_ * rotateMat_ * translateMat_;
 	viewMatrix_ = Inverse(cameraMatrix_);
 }
