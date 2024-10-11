@@ -73,7 +73,7 @@ public:
 	// 生成系
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 三角形のポインタを作成
-	static std::unique_ptr<Triangle> CreateTriangle(const Mesh::Vertices& vertex);
+	static std::unique_ptr<Triangle> CreateTriangle(const Mesh::Vertices& vertex, const std::string& textureName);
 	// スプライトのポインタを作成
 	static std::unique_ptr<Sprite> CreateSprite(const Mesh::RectVetices& rect);
 	static std::unique_ptr<Sprite> CreateSprite(const Vector2& centerPos, const Vector2& size);

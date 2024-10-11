@@ -113,8 +113,8 @@ PixelShaderOutput main(VertexShaderOutput input)
 	float3 normal = normalize(input.normal);
 	float3 pointLightDirection = normalize(input.worldPos.xyz - gPointLight.position);
 	float3 toEye = normalize(gDirectionalLight.eyePos - input.worldPos.xyz);
-	float3 reflectLight = reflect(gDirectionalLight.direction, normal);
-	float3 halfVector = normalize(-gDirectionalLight.direction + toEye);
+	float3 reflectLight = reflect(normalize(gDirectionalLight.direction), normal);
+	float3 halfVector = normalize(-normalize(gDirectionalLight.direction) + toEye);
 	
 	float3 lightDire = normalize(gDirectionalLight.direction);
 	
@@ -179,12 +179,14 @@ PixelShaderOutput main(VertexShaderOutput input)
 	float3 limCol = pow(lim, gDirectionalLight.limPower) * gDirectionalLight.color.rgb * textureColor.rgb * gDirectionalLight.intensity;
 	
 	// --------------------- final --------------------- //
-	output.color.rgb = directionalDiffuse;
-	output.color.rgb += pointDiffuse + pointSpeculer;
-	output.color.rgb += spotDiffuse + spotSpeculer;
-	output.color.rgb += limCol;
+	output.color.rgb = directionalDiffuse + directionalSpeculer;
+	//output.color.rgb += pointDiffuse + pointSpeculer;
+	//output.color.rgb += spotDiffuse + spotSpeculer;
+	//output.color.rgb += limCol;
 	
 	output.color.a = gMaterial.color.a * textureColor.a;
+	
+	output.color = clamp(output.color, 0.0f, 1.0f);
 	
 	if (output.color.a <= 0.1f){
 		discard;

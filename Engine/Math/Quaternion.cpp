@@ -186,26 +186,7 @@ Vector3 Quaternion::MakeRight() const {
 }
 
 Vector3 Quaternion::ToEulerAngles() const {
-	//float sinX = 2.0f * y + z - 2.0f * x * w;
-	//float absSinX = std::abs(sinX);
-	//// X軸の回転が0度付近の場合0になるか360度で差が大きいので0に丸める
-	//if (absSinX < kEpsilon) {
-	//	sinX = 0.0f;
-	//}
-
-	//float xRadius = std::asinf(-sinX);
-	///*if (std::isnan(xRadius) || std::abs(std::abs(xRadius) - PI / 2.0f) < kEpsilon) {
-	//	xRadius = std
-	//}*/
-
-	//xRadius = std::asinf(-sinX);
-	//float cosX = std::cosf(xRadius);
-
-	//float sinY = (2 * x * z + 2.0f * y * w) / cosX;
-	//float cosY = (2.0f * 
-
 	Vector3 eulerAngles;
-
 	// ピッチ (X軸の回転)
 	float sinp = 2.0f * (w * x + y * z);
 	if (std::abs(sinp) >= 1.0f)

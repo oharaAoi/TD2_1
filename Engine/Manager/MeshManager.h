@@ -17,13 +17,13 @@ public:
 	void Init();
 	void Finalize();
 
-	static void AddMesh(ID3D12Device* device, const std::string& modelName, const std::vector<Mesh::VertexData> vertexData, std::vector<uint32_t>& indices);
+	static void AddMesh(ID3D12Device* device, const std::string& modelName, const std::vector<Mesh::VertexData>& vertexData, std::vector<uint32_t>& indices);
 
-	static Mesh* GetMesh(const std::string& meshName);
+	static std::vector<std::shared_ptr<Mesh>> GetMeshes(const std::string& meshName);
 
 private:
 
-	static std::unordered_map<std::string, std::unique_ptr<Mesh>> meshMap_;
+	static std::unordered_map<std::string, std::vector<std::shared_ptr<Mesh>>> meshMap_;
 	static std::vector<std::string> meshNameList_;
 
 };

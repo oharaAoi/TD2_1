@@ -21,6 +21,7 @@ void WorldTransform::Init(ID3D12Device* device) {
 void WorldTransform::Update(const Matrix4x4& mat) {
 	rotation_ = (rotation_.Normalize() * moveQuaternion_.Normalize());
 	rotation_ = rotation_.Normalize();
+	//Vector3 test = rotation_.ToEulerAngles();
 	moveQuaternion_ = Quaternion();
 	worldMat_ = mat * MakeAffineMatrix(scale_, rotation_, translation_);
 	if (parentMat_ != nullptr) {
@@ -52,6 +53,9 @@ void WorldTransform::Debug_Gui() {
 		}
 		ImGui::TreePop();
 	}
+
+	float norm = std::sqrtf(Quaternion::Dot(rotation_, rotation_));
+	ImGui::Text("norm: %f", norm);
 }
 
 void WorldTransform::Debug_Quaternion() {

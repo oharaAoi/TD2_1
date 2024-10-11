@@ -234,6 +234,8 @@ PixelShaderOutput main(VertexShaderOutput input){
 	output.color.rgb = finalColor.rgb * textureColor.rgb * gDirectionalLight.color.rgb;
 	output.color.a = gMaterial.color.a * textureColor.a;
 	
+	output.color = clamp(output.color, 0.0f, 1.0f);
+	
 	if (output.color.a <= 0.0f){
 		discard;
 	}

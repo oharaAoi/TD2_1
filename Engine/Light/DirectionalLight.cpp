@@ -36,6 +36,7 @@ void DirectionalLight::ImGuiDraw() {
 	ImGui::DragFloat3("Direction", &directionalLightData_->direction.x, 0.1f, -1.0f, 1.0f);
 	ImGui::DragFloat("intensity", &directionalLightData_->intensity, 0.1f, 0.0f, 1.0f);
 	ImGui::DragFloat("limPower", &directionalLightData_->limPower, 0.1f, 1.0f, 10.0f);
+	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	
 	ImGui::End();
 #endif

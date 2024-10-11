@@ -38,9 +38,21 @@ void Material::Draw(ID3D12GraphicsCommandList* commandList) {
 
 #ifdef _DEBUG
 void Material::ImGuiDraw() {
-	ImGui::DragFloat2("uvTranslate", &uvTranslation_.x, 0.01f, -10.0f, 10.0f);
-	ImGui::DragFloat2("uvScale", &uvScale_.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("UvRotate", &uvRotation_.z);
+	if (ImGui::TreeNode("uvTramsform")) {
+		if (ImGui::TreeNode("scale")) {
+			ImGui::DragFloat4("uvScale", &uvScale_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("rotation")) {
+			ImGui::DragFloat4("uvRotation", &uvRotation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("translation")) {
+			ImGui::DragFloat4("uvTranslation", &uvTranslation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
 	ImGui::ColorEdit4("color", &material_->color.x);
 	ImGui::Combo("Lighting", &material_->enableLighting, "None\0Lambert\0HalfLambert");
 

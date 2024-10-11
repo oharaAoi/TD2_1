@@ -40,7 +40,7 @@ public:
 	/// </summary>
 	/// <param name="triangle">: 三角形のポインタ</param>
 	/// <param name="worldTransform">: worldTrnasform</param>
-	static void DrawTriangle(Triangle* triangle, const WorldTransform* worldTransform);
+	static void DrawTriangle(Triangle* triangle);
 
 	/// <summary>
 	/// Spriteの描画
