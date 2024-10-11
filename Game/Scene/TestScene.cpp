@@ -13,7 +13,7 @@ void TestScene::Init() {
 	// object -------------------------------------------------------------------
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
-	testObj_->SetObject("multiMaterial.obj");
+	testObj_->SetObject("test.fbx");
 	//testObj_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf");
 
 	testObj2_ = std::make_unique<BaseGameObject>();
@@ -51,6 +51,7 @@ void TestScene::Load() {
 	// modelのload
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "test.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "multiMaterial.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "Test_World.obj");
