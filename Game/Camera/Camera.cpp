@@ -25,24 +25,49 @@ void Camera::Update(){
 	//プレイヤーが水面に出ているかどうかでターゲットを変更
 	if(pPlayer_->GetTransform()->GetTranslation().y < 10.0f){
 		target_ = pPlayer_->GetAboveSurfaceTransform();
-		offsetLength_ = 40.0f + pPlayer_->GetSwimmingDepth() * 5.0f;
-		transform_.rotate.y = 0.91f + (-0.5f) * std::clamp(pPlayer_->GetSwimmingDepth() / 30.0f,0.0f,1.0f);
+		offsetLength_ = 60.0f + pPlayer_->GetSwimmingDepth() * 5.0f;
+		transform_.rotate.y = 0.91f + (-0.5f) * std::clamp((pPlayer_->GetSwimmingDepth() -10.0f)/ 30.0f,0.0f,1.0f);
 		
 
 	} else{
 		target_ = pPlayer_->GetTransform();
-		offsetLength_ = 40.0f;
+		offsetLength_ = 60.0f;
 	}
 
 	// -------------------------------------------------
 	// ↓ Targetがいたら
 	// -------------------------------------------------
 	if(target_ != nullptr) {
+		 
+		Vector3 dif{};
+
+		if(pPlayer_->GetIsFlying()){
+			offsetLength_ = 60.0f + std::fabsf((pPlayer_->GetSwimmingDepth())) * 0.5f;
+			transform_.rotate.y = 0.91f + 0.05f * std::clamp(((pPlayer_->GetSwimmingDepth() - 10.0f) / -30.0f),0.0f,1.0f);
+			transform_.rotate.x = 0.1f * std::clamp(((pPlayer_->GetSwimmingDepth() - 10.0f) / -30.0f),0.0f,1.0f);
+
+		} else{
+			transform_.rotate.x *= 0.005f;
+			Vector3 offsetVecDif = Vector3(-20.4f, 0.3f, -25.7f).Normalize() - offsetVec_;
+			offsetVec_ += offsetVecDif * 0.05f;
+			float goalTranslateY = 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f);
+			transform_.translate.y += (goalTranslateY - transform_.translate.y) * 0.5f;
+			///transform_.translate.y = goalTranslateY;
+		}
 
 		// 目的座標への差分
-		Vector3 dif = (target_->GetTranslation() + 
-			(offsetVec_ * offsetLength_ * MakeRotateYMatrix(0.5f * std::clamp(pPlayer_->GetSwimmingDepth() / 30.0f, 0.0f, 1.0f))))
+		dif = (target_->GetTranslation() + 
+			((offsetVec_ * offsetLength_) * MakeRotateYMatrix(0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f))))
 			- transform_.translate;
+
+
+
+		if(pPlayer_->GetIsFlying()){
+			dif.y += pPlayer_->GetVelocity().y * 18.0f;
+			transform_.translate.x += 6.0f * std::clamp(((pPlayer_->GetSwimmingDepth() - 10.0f) / -30.0f),0.0f,1.0f);
+		} else{
+			transform_.translate.y -= 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f);
+		}
 
 		// 少し遅らせて追従
 		transform_.translate += dif * 0.1f;
