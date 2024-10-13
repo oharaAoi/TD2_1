@@ -1,6 +1,6 @@
 #include "GameScene.h"
 
-float GameScene::groundDepth_ = -32.0f;
+float GameScene::groundDepth_ = -40.5f;
 
 GameScene::GameScene(){}
 GameScene::~GameScene(){}
@@ -42,7 +42,7 @@ void GameScene::Init(){
 
 		// 地面
 		ground_[i] = std::make_unique<Ground>();
-		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * 32.0f, -40.5f, 0.0f));
+		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * stageWidthEvery_, groundDepth_, 0.0f));
 
 		// 水
 		waterSpace_[i] = std::make_unique<WaterSpace>();
