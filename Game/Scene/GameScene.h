@@ -31,6 +31,9 @@ public:
 	void PlayerWaveCollision();
 	void EndlessStage();
 
+public:
+	static float GetGroundDepth(){ return groundDepth_; }
+
 private:
 
 	std::unique_ptr<Camera> camera_ = nullptr;
@@ -45,6 +48,7 @@ private:
 
 	// --------- parameter ----------- //
 	float stageWidthEvery_ = 32.0f;
+	static float groundDepth_;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
