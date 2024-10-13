@@ -31,6 +31,7 @@ public:
 
 	void SetHitWaterSurface(const bool& ishit) { hitWaterSurface_ = ishit; }
 	const Vector3 GetMoveVelocity() const { return velocity_ * moveSpeed_; }
+	const float GetMoveSpeed()const{ return moveSpeed_; }
 	WorldTransform* GetAboveSurfaceTransform(){ return aboveWaterSurfacePos.get(); }
 	float GetSwimmingDepth(){ return swimmigDepth_; }
 	bool GetIsFlying(){ return isFlying_; }
