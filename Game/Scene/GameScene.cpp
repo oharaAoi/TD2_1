@@ -1,5 +1,7 @@
 #include "GameScene.h"
 
+float GameScene::groundDepth_ = -32.0f;
+
 GameScene::GameScene(){}
 GameScene::~GameScene(){}
 
@@ -45,7 +47,7 @@ void GameScene::Init(){
 		// 水
 		waterSpace_[i] = std::make_unique<WaterSpace>();
 		waterSpace_[i]->Init("./Game/Resources/Model/", "waterSpace.obj");
-		waterSpace_[i]->SetTranslate(Vector3(i * 32.0f, 0.0f, 0.0f));
+		waterSpace_[i]->SetTranslate(Vector3(i * stageWidthEvery_, 0.0f, 0.0f));
 	}
 
 	player_ = std::make_unique<Player>();
@@ -74,6 +76,7 @@ void GameScene::Init(){
 void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Fish.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");

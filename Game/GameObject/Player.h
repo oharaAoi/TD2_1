@@ -19,6 +19,7 @@ public:
 	void Draw() const override;
 
 	void Move();
+	void MoveLimit();
 	void LookAtDirection(const float& angle);
 
 	void AdaptAdjustmentItem();
@@ -32,6 +33,8 @@ public:
 	const Vector3 GetMoveVelocity() const { return velocity_ * moveSpeed_; }
 	WorldTransform* GetAboveSurfaceTransform(){ return aboveWaterSurfacePos.get(); }
 	float GetSwimmingDepth(){ return swimmigDepth_; }
+	bool GetIsFlying(){ return isFlying_; }
+	const Vector3& GetVelocity()const{ return velocity_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
