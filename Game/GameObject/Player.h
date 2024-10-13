@@ -19,6 +19,7 @@ public:
 	void Draw() const override;
 
 	void Move();
+	void MoveLimit();
 	void LookAtDirection(const float& angle);
 
 	void AdaptAdjustmentItem();

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game/Scene/GameScene.h"
 
 Player::Player(){
 	Init();
@@ -94,6 +95,21 @@ void Player::Move(){
 	} else{
 		isFlying_ = false;
 	}
+
+	MoveLimit();
+}
+
+
+void Player::MoveLimit(){
+
+	// 地面に接触したら
+	if(transform_->GetTranslation().y - radius_ < GameScene::GetGroundDepth()){
+		Vector3 translate = transform_->GetTranslation();
+		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
+		pressTime_ = 0.0f;
+		moveSpeed_ -= moveSpeed_ * 0.5f * GameTimer::DeltaTime();
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
