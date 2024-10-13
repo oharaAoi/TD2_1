@@ -1,6 +1,6 @@
 #include "GameScene.h"
 
-float GameScene::groundDepth_ = -32.0f;
+float GameScene::groundDepth_ = -40.5f;
 
 GameScene::GameScene(){}
 GameScene::~GameScene(){}
