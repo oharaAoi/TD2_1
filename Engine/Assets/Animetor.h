@@ -21,7 +21,9 @@ public:
 
 public:
 
-	const Skinning* GetSkinning() { return skinning_.get(); }
+	Skinning* GetSkinning() { return skinning_.get(); }
+
+
 
 private:
 

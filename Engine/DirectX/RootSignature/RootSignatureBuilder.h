@@ -12,6 +12,8 @@ public:
 
 	RootSignatureBuilder& AddCBV(const UINT& shaderRegister, const D3D12_SHADER_VISIBILITY& visibility);
 
+	RootSignatureBuilder& AddSRV(const UINT& shaderRegister, const D3D12_SHADER_VISIBILITY& visibility);
+
 	RootSignatureBuilder& AddDescriptorTable(D3D12_DESCRIPTOR_RANGE* descriptorRange, UINT rangeCount, D3D12_SHADER_VISIBILITY visibility);
 
 	RootSignatureBuilder& AddSampler(const D3D12_STATIC_SAMPLER_DESC& samplerDesc);

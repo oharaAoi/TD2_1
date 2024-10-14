@@ -16,10 +16,15 @@ void BaseGameObject::Update() {
 }
 
 void BaseGameObject::Draw() const {
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 	if (animetor_ == nullptr) {
+
 		Render::DrawModel(model_, transform_.get(), materials);
 	} else {
+		//Engine::SetSkinning(animetor_->GetSkinning(), model_->GetMesh(0));
+		//model_->GetMesh(0)->CopyVertexData(animetor_->GetSkinning()->GetVertexData());
 		Engine::SetPipeline(PipelineType::SkinningPipeline);
+		//Render::DrawModel(model_, transform_.get(), materials);
 		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 	}
 }

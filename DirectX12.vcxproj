@@ -114,6 +114,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\ComputeShader\BaseCSResource.cpp" />
     <ClCompile Include="Engine\ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Engine\ComputeShader\ComputeShaderPipeline.cpp" />
+    <ClCompile Include="Engine\ComputeShader\CsSkinnig.cpp" />
     <ClCompile Include="Engine\ComputeShader\DepthOfField.cpp" />
     <ClCompile Include="Engine\ComputeShader\GaussianBlur.cpp" />
     <ClCompile Include="Engine\ComputeShader\GrayScale.cpp" />
@@ -217,6 +218,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\ComputeShader\BaseCSResource.h" />
     <ClInclude Include="Engine\ComputeShader\ComputeShader.h" />
     <ClInclude Include="Engine\ComputeShader\ComputeShaderPipeline.h" />
+    <ClInclude Include="Engine\ComputeShader\CsSkinnig.h" />
     <ClInclude Include="Engine\ComputeShader\DepthOfField.h" />
     <ClInclude Include="Engine\ComputeShader\GaussianBlur.h" />
     <ClInclude Include="Engine\ComputeShader\GrayScale.h" />
@@ -365,6 +367,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\Skinning.CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Engine\HLSL\SkinningObject3d.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

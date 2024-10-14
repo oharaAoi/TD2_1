@@ -14,6 +14,7 @@ enum class RootSignatureType {
 	Sprite,
 	PBR,
 	ComputeShader,
+	CsSkinning,
 	ComputeShaderBlend,
 	CSReultRenderBlend,
 	WaterSpace
@@ -37,6 +38,7 @@ public:
 	ComPtr<ID3D12RootSignature> CreateSpriteRootSignature();
 	ComPtr<ID3D12RootSignature> CreatePBRRootSignature();
 	ComPtr<ID3D12RootSignature> CreateComputeShaderRootSignature();
+	ComPtr<ID3D12RootSignature> CreateCsSkinnigRootSignature();
 	ComPtr<ID3D12RootSignature> CreateBlendShaderRootSignature();
 	ComPtr<ID3D12RootSignature> CreateResultRenderRootSignature();
 
@@ -60,6 +62,7 @@ public:
 		{RootSignatureType::PBR, &RootSignature::CreatePBRRootSignature},
 		// CS
 		{RootSignatureType::ComputeShader, &RootSignature::CreateComputeShaderRootSignature},
+		{RootSignatureType::CsSkinning, &RootSignature::CreateCsSkinnigRootSignature},
 		{RootSignatureType::ComputeShaderBlend, &RootSignature::CreateBlendShaderRootSignature},
 		{RootSignatureType::CSReultRenderBlend, &RootSignature::CreateResultRenderRootSignature},
 		// game

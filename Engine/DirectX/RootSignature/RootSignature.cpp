@@ -222,6 +222,47 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateComputeShaderRootSignature() {
 		.Build(device_);
 }
 
+ComPtr<ID3D12RootSignature> RootSignature::CreateCsSkinnigRootSignature() {
+	/*D3D12_DESCRIPTOR_RANGE matrixPalette[1] = {};
+	matrixPalette[0].BaseShaderRegister = 0;
+	matrixPalette[0].NumDescriptors = 1;
+	matrixPalette[0].RangeType = D3D12_SHADER_VISIBILITY_ALL;
+	matrixPalette[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;*/
+
+	D3D12_DESCRIPTOR_RANGE MatrixPalette[1] = {};
+	MatrixPalette[0].BaseShaderRegister = 0;
+	MatrixPalette[0].NumDescriptors = 1;
+	MatrixPalette[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	MatrixPalette[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_DESCRIPTOR_RANGE  Vertex[1] = {};
+	 Vertex[0].BaseShaderRegister = 1;
+	 Vertex[0].NumDescriptors = 1;
+	 Vertex[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	 Vertex[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	 D3D12_DESCRIPTOR_RANGE  VertexInfluence[1] = {};
+	 VertexInfluence[0].BaseShaderRegister = 2;
+	 VertexInfluence[0].NumDescriptors = 1;
+	 VertexInfluence[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	 VertexInfluence[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// 出力のストラクチャードバッファ
+	D3D12_DESCRIPTOR_RANGE descriptorRangeUAV[1] = {};
+	descriptorRangeUAV[0].BaseShaderRegister = 0;
+	descriptorRangeUAV[0].NumDescriptors = 1;
+	descriptorRangeUAV[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	descriptorRangeUAV[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	
+	return builder_
+		.AddDescriptorTable(MatrixPalette, 1, D3D12_SHADER_VISIBILITY_ALL)  // MatrixPalette
+		.AddDescriptorTable(Vertex, 1, D3D12_SHADER_VISIBILITY_ALL)  // Vertex
+		.AddDescriptorTable(VertexInfluence, 1, D3D12_SHADER_VISIBILITY_ALL)  // VertexInfluence
+		.AddDescriptorTable(descriptorRangeUAV, 1, D3D12_SHADER_VISIBILITY_ALL) // outpur
+		.AddCBV(0, D3D12_SHADER_VISIBILITY_ALL)  // SkinningInformation 
+		.Build(device_);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////
 // CSを合成する
 //////////////////////////////////////////////////////////////////////////////////////

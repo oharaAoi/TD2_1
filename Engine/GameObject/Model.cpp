@@ -209,11 +209,6 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 				useMaterial.push_back(nameStr);
 			}
 		}
-
-		// -------------------------------------------------
-		// ↓ Meshのtangetを取得する
-		// -------------------------------------------------
-
 	
 		// -------------------------------------------------
 		// ↓ skinningを取得する用の処理
