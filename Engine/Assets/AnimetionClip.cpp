@@ -10,7 +10,7 @@ void AnimetionClip::Init() {
 }
 
 void AnimetionClip::Update() {
-	animationTime_ += 1.0f / 60.0f;
+	//animationTime_ += 1.0f / 60.0f;
 	animationTime_ = std::fmod(animationTime_, animation_.duration);
 
 	////// =======================================================================================
@@ -27,7 +27,7 @@ void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::st
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + animationFile;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
-	assert(scene->mNumAnimations != 0);		// アニメーションがない
+	//assert(scene->mNumAnimations != 0);		// アニメーションがない
 	// =======================================================================================
 	aiAnimation* animationAssimp = scene->mAnimations[0];	// 最初のアニメーションだけ	
 	// =======================================================================================

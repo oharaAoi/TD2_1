@@ -38,6 +38,10 @@ ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12D
 /// <returns></returns>
 ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes);
 
+ComPtr<ID3D12Resource> CreateUAVResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes);
+
+ComPtr<ID3D12Resource> CreateSRVResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes);
+
 /// <summary>
 /// 深度情報を格納するリソースの生成
 /// </summary>

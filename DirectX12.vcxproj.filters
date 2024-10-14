@@ -429,6 +429,9 @@
     <ClCompile Include="Game\GameObject\Fish.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\ComputeShader\CsSkinnig.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -770,6 +773,9 @@
     <ClInclude Include="Game\GameObject\Fish.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\ComputeShader\CsSkinnig.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\HLSL\Object3d.PS.hlsl">
@@ -834,6 +840,9 @@
     </FxCompile>
     <FxCompile Include="Engine\HLSL\WaterSpace.VS.hlsl">
       <Filter>Engine\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\HLSL\Skinning.CS.hlsl">
+      <Filter>Engine\HLSL\CS</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

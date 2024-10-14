@@ -17,6 +17,7 @@ enum class CsPipelineType {
 	VerticalBlur_Pipeline,
 	GrayScale_Pipeline,
 	DepthOfField_Pipeline,
+	Skinning_Pipeline,
 	Blend_Pipeline,
 	Result_Pipeline
 };

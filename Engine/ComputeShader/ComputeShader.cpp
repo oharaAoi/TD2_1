@@ -32,6 +32,7 @@ void ComputeShader::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	computeShaderPipelineMap_[CsPipelineType::HorizontalBlur_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 	computeShaderPipelineMap_[CsPipelineType::VerticalBlur_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 	computeShaderPipelineMap_[CsPipelineType::DepthOfField_Pipeline] = std::make_unique<ComputeShaderPipeline>();
+	computeShaderPipelineMap_[CsPipelineType::Skinning_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline] = std::make_unique<ComputeShaderPipeline>();
 
@@ -39,6 +40,7 @@ void ComputeShader::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	computeShaderPipelineMap_[CsPipelineType::HorizontalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::HorizontalBlur), RootSignatureType::ComputeShader);
 	computeShaderPipelineMap_[CsPipelineType::VerticalBlur_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::VerticalBlur), RootSignatureType::ComputeShader);
 	computeShaderPipelineMap_[CsPipelineType::DepthOfField_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::DepthOfField), RootSignatureType::ComputeShader);
+	computeShaderPipelineMap_[CsPipelineType::Skinning_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::SkinningCS), RootSignatureType::CsSkinning);
 	computeShaderPipelineMap_[CsPipelineType::Blend_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Blend), RootSignatureType::ComputeShaderBlend);
 	computeShaderPipelineMap_[CsPipelineType::Result_Pipeline]->Init(device, dxCompiler, dxHeap, shader->GetCsShaderData(Shader::Result), RootSignatureType::CSReultRenderBlend);
 
@@ -62,6 +64,10 @@ void ComputeShader::Init(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	// ↓ CSの内容を合成するResourceの作成
 	// ----------------------------------------------------------------------
 	CreateBlendResource();
+}
+
+void ComputeShader::SetSkinningPipeline(const CsPipelineType& type, ID3D12GraphicsCommandList* commandList) {
+	computeShaderPipelineMap_[type]->SetPipelineState(commandList);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

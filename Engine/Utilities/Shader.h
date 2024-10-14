@@ -25,6 +25,7 @@ public:
 		HorizontalBlur,
 		VerticalBlur,
 		DepthOfField,
+		SkinningCS,
 		Blend,
 		Result
 	};

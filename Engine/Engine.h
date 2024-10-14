@@ -117,6 +117,8 @@ public:
 	/// <param name="kind"></param>
 	static void SetComputeShader(const CSKind& kind);
 
+	static void SetSkinning(Skinning* skinning, Mesh* mesh);
+
 	/// <summary>
 	/// CSをResetする
 	/// </summary>

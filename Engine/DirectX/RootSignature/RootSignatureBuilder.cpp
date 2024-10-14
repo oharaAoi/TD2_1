@@ -19,6 +19,15 @@ RootSignatureBuilder& RootSignatureBuilder::AddCBV(const UINT& shaderRegister, c
 	return *this;
 }
 
+RootSignatureBuilder& RootSignatureBuilder::AddSRV(const UINT& shaderRegister, const D3D12_SHADER_VISIBILITY& visibility) {
+	D3D12_ROOT_PARAMETER param = {};
+	param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	param.ShaderVisibility = visibility;
+	param.Descriptor.ShaderRegister = shaderRegister;
+	rootParameters.push_back(param);
+	return *this;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　DescriptorTableを作成する
 //////////////////////////////////////////////////////////////////////////////////////////////////

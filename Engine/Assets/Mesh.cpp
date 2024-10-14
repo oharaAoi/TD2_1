@@ -29,6 +29,9 @@ void Mesh::Init(ID3D12Device* device, std::vector<VertexData> vertexData, std::v
 	// アドレスを取得
 	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	std::memcpy(vertexData_, vertexData.data(), sizeof(VertexData) * vertexData.size());
+	vertexDataSize_ = vertexData.size();
+
+	verticesData_ = vertexData;
 
 	// ---------------------------------------------------------------
 	// ↓indexの設定
@@ -54,4 +57,8 @@ void Mesh::Draw(ID3D12GraphicsCommandList* commandList) {
 
 void Mesh::DrawIndex(ID3D12GraphicsCommandList* commandList) {
 	commandList->IASetIndexBuffer(&indexBufferView_);
+}
+
+void Mesh::CopyVertexData(const VertexData* data) {
+	std::memcpy(vertexData_, data, sizeof(VertexData) * vertexDataSize_);
 }

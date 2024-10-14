@@ -58,6 +58,8 @@ public:
 	/// <returns></returns>
 	VertexData* GetVertexData() { return vertexData_; }
 
+	void CopyVertexData(const VertexData* data);
+
 	uint32_t GetIndexNum() { return indexNum_; }
 
 	/// <summary>
@@ -71,6 +73,8 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	uint32_t* GetIndexData() { return indexData_; }
+
+	const std::vector<VertexData>& GetVerticesData() const { return verticesData_; }
 
 	void SetUseMaterial(const std::string& usemtl) { useMaterial_ = usemtl; }
 	const std::string GetUseMaterial() const { return useMaterial_; }
@@ -86,10 +90,12 @@ private:
 	uint32_t* indexData_ = nullptr;
 
 	std::vector<uint32_t> indices_;
-
+	std::vector<VertexData> verticesData_;
+	
 	// 使用するマテリアル
 	std::string useMaterial_;
 
 	uint32_t indexNum_;
 	UINT vbvSize_;
+	uint32_t vertexDataSize_;
 };
