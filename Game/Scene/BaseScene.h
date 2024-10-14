@@ -1,5 +1,15 @@
 #pragma once
+#include <optional>
 #include "Engine/Manager/ModelManager.h"
+
+enum SceneType {
+	Scene_Title,
+	Scene_Select,
+	Scene_Game,
+	Scene_Result,
+	Scene_GameOver,
+	Scene_Test
+};
 
 /// <summary>
 /// BaseとなるScene
@@ -16,10 +26,14 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() const = 0;
 
+	void SetNextScene(const std::optional<SceneType>& sceneType) { type_ = sceneType; }
+	std::optional<SceneType> GetType() const { return type_; }
+
 protected:
 
 	bool isPause_ = false;
 	bool isStepFrame_ = false;
 
+	std::optional<SceneType> type_ = std::nullopt;
 };
 

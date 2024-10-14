@@ -192,10 +192,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameObject\Item.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\GameObject\WaterSpace.cpp" />
+    <ClCompile Include="Game\Information\StageInformation.cpp" />
     <ClCompile Include="Game\Manager\ObstaclesManager.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
+    <ClCompile Include="Game\Scene\GameOverScene.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
+    <ClCompile Include="Game\Scene\ResultScene.cpp" />
+    <ClCompile Include="Game\Scene\SelectScene.cpp" />
     <ClCompile Include="Game\Scene\TestScene.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -306,10 +311,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameObject\Item.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\GameObject\WaterSpace.h" />
+    <ClInclude Include="Game\Information\StageInformation.h" />
     <ClInclude Include="Game\Manager\ObstaclesManager.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
+    <ClInclude Include="Game\Scene\GameOverScene.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
+    <ClInclude Include="Game\Scene\ResultScene.h" />
+    <ClInclude Include="Game\Scene\SelectScene.h" />
     <ClInclude Include="Game\Scene\TestScene.h" />
+    <ClInclude Include="Game\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\HLSL\Blend.CS.hlsl">

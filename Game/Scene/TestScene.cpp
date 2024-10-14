@@ -14,7 +14,7 @@ void TestScene::Init() {
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
 	testObj_->SetObject("test2.fbx");
-	//testObj_->SetAnimater("./Engine/Resources/Develop/", "test2.fbx");
+	testObj_->SetAnimater("./Engine/Resources/Develop/", "test2.fbx");
 
 	testObj2_ = std::make_unique<BaseGameObject>();
 	testObj2_->Init();
@@ -48,11 +48,11 @@ void TestScene::Init() {
 }
 
 void TestScene::Load() {
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Animation/", "walk.gltf");
 	// modelのload
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "SquarePyramid.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "multiMaterial.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "Test_World.obj");

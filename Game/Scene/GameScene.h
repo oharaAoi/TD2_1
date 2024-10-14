@@ -10,6 +10,7 @@
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Game/Manager/ObstaclesManager.h"
+#include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
 
 

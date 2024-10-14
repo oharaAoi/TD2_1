@@ -3,15 +3,14 @@
 #include "Game/Scene/BaseScene.h"
 #include "Game/Scene/TestScene.h"
 #include "Game/Scene/GameScene.h"
+#include "Game/Scene/TitleScene.h"
+#include "Game/Scene/SelectScene.h"
+#include "Game/Scene/ResultScene.h"
+#include "Game/Scene/GameOverScene.h"
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/ModelManager.h"
 #include "Engine/Input/Input.h"
-
-enum SceneType {
-	Scene_Game,
-	Scene_Test
-};
 
 /// <summary>
 /// シーンを管理するクラス
@@ -26,6 +25,9 @@ public:
 	void Init();
 	void Run();
 
+	void SetChange();
+	void GetScene();
+
 private:
 
 	GameTimer gameTimer_ = GameTimer(60);
@@ -38,7 +40,6 @@ private:
 	int selectSceneNum_ = 0;
 	bool isSceneChange_ = 0;
 #endif // _DEBUG
-
 
 };
 

@@ -15,7 +15,7 @@ void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
 	
-	scene_ = std::make_unique<GameScene>();
+	scene_ = std::make_unique<TitleScene>();
 	scene_->Load();
 	scene_->Init();
 
@@ -85,6 +85,11 @@ void SceneManager::Run() {
 		Engine::EndFrame();
 		gameTimer_.WaitNextFrame();
 
+		if (scene_->GetType()) {
+			SetChange();
+			scene_->SetNextScene(std::nullopt);
+		}
+
 		// ------------------------------------ //
 		// シーン変更があったら
 		// ------------------------------------ //
@@ -105,7 +110,37 @@ void SceneManager::Run() {
 			isSceneChange_ = false;
 		}
 		#endif
+
 	}
 
 	Finalize();
+}
+
+void SceneManager::SetChange() {
+	GetScene();
+	scene_->Load();
+	scene_->Init();
+}
+
+void SceneManager::GetScene() {
+	switch (scene_->GetType().value()) {
+	case SceneType::Scene_Title:
+		scene_.reset(new TitleScene);
+		break;
+	case SceneType::Scene_Select:
+		scene_.reset(new SelectScene);
+		break;
+	case SceneType::Scene_Game:
+		scene_.reset(new GameScene);
+		break;
+	case SceneType::Scene_Result:
+		scene_.reset(new ResultScene);
+		break;
+	case SceneType::Scene_GameOver:
+		scene_.reset(new GameOverScene);
+		break;
+	case SceneType::Scene_Test:
+		scene_.reset(new TestScene);
+		break;
+	}
 }

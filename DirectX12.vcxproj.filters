@@ -121,6 +121,9 @@
     <Filter Include="Game\Manager">
       <UniqueIdentifier>{bd10a4a9-14d6-4616-84b8-58f98c735979}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Information">
+      <UniqueIdentifier>{fc061825-3199-4e7e-bfe3-a124df1f9b57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -429,11 +432,26 @@
     <ClCompile Include="Game\GameObject\Fish.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\ComputeShader\CsSkinnig.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameObject\Fish.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\ResultScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\SelectScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ComputeShader\CsSkinnig.cpp">
+      <Filter>Engine\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameOverScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Information\StageInformation.cpp">
+      <Filter>Game\Information</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -776,9 +794,6 @@
     <ClInclude Include="Game\GameObject\Fish.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ComputeShader\CsSkinnig.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Manager\MeshManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -790,6 +805,24 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject\Fish.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\ResultScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\SelectScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\TitleScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ComputeShader\CsSkinnig.h">
+      <Filter>Engine\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameOverScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Information\StageInformation.h">
+      <Filter>Game\Information</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

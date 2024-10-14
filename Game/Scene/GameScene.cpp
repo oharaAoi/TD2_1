@@ -24,7 +24,8 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	obstaclesManager_ = std::make_unique<ObstaclesManager>();
 	obstaclesManager_->Init();
-
+	obstaclesManager_->SetObstacles(StageInformation::GetStage());
+	
 	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
 	placementObjectEditor_->Init(obstaclesManager_.get());
 
@@ -110,6 +111,9 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
+	if (Input::IsTriggerKey(DIK_ESCAPE)) {
+		isPause_ = true;
+	}
 	if(isPause_) {
 		isStepFrame_ = false;
 
@@ -317,6 +321,14 @@ void GameScene::EndlessStage(){
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
+	if (ImGui::Button("NextScene")) {
+		SetNextScene(SceneType::Scene_Result);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("GameOverScene")) {
+		SetNextScene(SceneType::Scene_GameOver);
+	}
+
 	if(ImGui::Button("stop")) {
 		isPause_ = true;
 	}

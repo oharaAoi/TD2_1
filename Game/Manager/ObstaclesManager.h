@@ -47,6 +47,7 @@ public:
 	void Update();
 	void Draw() const;
 
+	void SetObstacles(const std::vector<std::string>& stageInformation);
 	void Inport(const std::string& fileName);
 
 	void LoadAllFile();

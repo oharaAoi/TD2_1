@@ -52,8 +52,12 @@ void Input::Update() {
 	memcpy(preKey_, key_, sizeof(key_));
 	preMouse_ = currentMouse_;
 
+	ZeroMemory(key_, sizeof(key_));
 	// 全キーの入力状況を取得
-	keyboard_->GetDeviceState(sizeof(key_), key_);
+	HRESULT hr = keyboard_->GetDeviceState(sizeof(key_), key_);
+	if (FAILED(hr)) {
+		ZeroMemory(key_, sizeof(key_));  // 取得に失敗した場合はキーをクリア
+	}
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &currentMouse_);
 
 	GetCursorPos(&mousePoint_);
@@ -140,7 +144,7 @@ bool Input::IsReleaseKey(uint8_t keyNum) {
 // ---------------------------------------------------------------
 bool Input::IsPressKey(uint8_t keyNum) {
 	if (key_[keyNum]) {
-		return true;
+   		return true;
 	}
 
 	return false;
