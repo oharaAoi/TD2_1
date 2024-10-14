@@ -84,6 +84,7 @@ void AnimetionClip::ApplyAnimation(Skeleton& skelton) {
 			joint.transform.rotate = CalculateQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
 			joint.transform.scale = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
 		}
+
 	}
 }
 

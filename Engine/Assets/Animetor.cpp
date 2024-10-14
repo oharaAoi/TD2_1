@@ -11,8 +11,7 @@ Animetor::~Animetor() {}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Animetor::Update() {
-	animetionClip_->Update();
-	animetionClip_->ApplyAnimation(skeleton_.get());
+
 	skeleton_->Update();
 	skinning_->Update(skeleton_.get());
 }
@@ -28,4 +27,7 @@ void Animetor::LoadAnimation(const std::string& directoryPath, const std::string
 	skeleton_->CreateSkeleton(model->GetNode());
 	skeleton_->Init();
 	skinning_ = Engine::CreateSkinning(skeleton_.get(), model);
+
+	animetionClip_->Update();
+	animetionClip_->ApplyAnimation(skeleton_.get());
 }

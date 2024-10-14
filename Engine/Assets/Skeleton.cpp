@@ -1,5 +1,8 @@
 #include "Skeleton.h"
 #include "Engine/GameObject/BaseGameObject.h"
+#ifdef DEBUG
+#include "Engine/Manager/ImGuiManager.h"
+#endif
 
 Skeleton::Skeleton() {}
 Skeleton::~Skeleton() {}
@@ -33,6 +36,11 @@ void Skeleton::Update() {
 
 		//obj_[oi]->GetTransform().Update(joint.skeltonSpaceMat);
 		oi++;
+
+#ifdef _DEBUG
+		std::string name = "joint" + std::to_string(oi);
+		ImGui::DragFloat3(name.c_str(), &joint.transform.rotate.x, 0.01f);
+#endif
 	}
 }
 
