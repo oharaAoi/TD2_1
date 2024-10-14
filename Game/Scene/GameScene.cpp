@@ -24,7 +24,9 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	obstaclesManager_ = std::make_unique<ObstaclesManager>();
 	obstaclesManager_->Init();
-	obstaclesManager_->SetObstacles(StageInformation::GetStage());
+	if (StageInformation::GetStageNumMax() != 0) {
+		obstaclesManager_->SetObstacles(StageInformation::GetStage());
+	}
 	
 	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
 	placementObjectEditor_->Init(obstaclesManager_.get());

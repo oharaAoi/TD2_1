@@ -14,7 +14,7 @@ void TestScene::Init() {
 	testObj_ = std::make_unique<BaseGameObject>();
 	testObj_->Init();
 	testObj_->SetObject("test2.fbx");
-	testObj_->SetAnimater("./Engine/Resources/Develop/", "test2.fbx");
+	//testObj_->SetAnimater("./Engine/Resources/Develop/", "test2.fbx");
 
 	testObj2_ = std::make_unique<BaseGameObject>();
 	testObj2_->Init();
