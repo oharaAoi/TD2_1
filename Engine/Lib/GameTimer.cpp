@@ -1,4 +1,7 @@
 #include "GameTimer.h"
+#ifdef _DEBUG
+#include "Engine/Manager/ImGuiManager.h"
+#endif
 
 float GameTimer::deletaTime_ = 0.0f;
 float GameTimer::fps_ = 60.0f;
@@ -15,8 +18,15 @@ GameTimer::~GameTimer() {
 
 void GameTimer::WaitNextFrame() {
 	auto currentTime = std::chrono::steady_clock::now();
-	//std::chrono::duration<float> elapsedTime = currentTime - preFrameTime_;
+	
 	deletaTime_ = std::chrono::duration<float>(currentTime - preFrameTime_).count();
 	timeRate_ = deletaTime_ / kDeletaTime_;
-	preFrameTime_ = std::chrono::steady_clock::now();
+	preFrameTime_ = currentTime;
+}
+
+void GameTimer::FPS() {
+#ifdef _DEBUG
+	float fps = 1.0f / deletaTime_;
+	ImGui::Text("fps: %f", fps);
+#endif
 }

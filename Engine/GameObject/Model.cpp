@@ -31,8 +31,8 @@ void Model::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // 描画関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void Model::Draw(ID3D12GraphicsCommandList* commandList, 
-				 const WorldTransform* worldTransform, 
+void Model::Draw(ID3D12GraphicsCommandList* commandList,
+				 const WorldTransform* worldTransform,
 				 const ViewProjection* viewProjection,
 				 const std::vector<std::unique_ptr<Material>>& materials) {
 
@@ -110,10 +110,11 @@ Model::Node Model::ReadNode(aiNode* node, const aiScene* scene) {
 	aiVector3D scale, translate;
 	aiQuaternion rotate;
 	node->mTransformation.Decompose(scale, rotate, translate);
-	result.transform.scale = { scale.x, scale.y, scale.z };
+
+	result.transform.scale = { 1, 1, 1 };
 	result.transform.rotate = { rotate.x, -rotate.y, -rotate.z, rotate.w };
 	result.transform.translate = { -translate.x, translate.y, translate.z };
-	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotate, result.transform.translate);
+	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotate.Normalize(), result.transform.translate);
 	result.name = node->mName.C_Str(); // Nodeの名前を格納
 
 	// ----------------------------------
@@ -209,7 +210,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 				useMaterial.push_back(nameStr);
 			}
 		}
-	
+
 		// -------------------------------------------------
 		// ↓ skinningを取得する用の処理
 		// -------------------------------------------------
@@ -290,5 +291,5 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 }
 
 Mesh* Model::GetMesh(const uint32_t& index) {
-	return meshArray_[index].get(); 
+	return meshArray_[index].get();
 }

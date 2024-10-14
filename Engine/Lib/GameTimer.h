@@ -15,6 +15,8 @@ public:
 
 	void WaitNextFrame();
 
+	void FPS();
+
 	static float DeltaTime() { return deletaTime_; }
 
 	static float TimeRate() { return timeRate_; }

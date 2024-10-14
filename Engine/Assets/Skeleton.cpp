@@ -12,11 +12,11 @@ Skeleton::~Skeleton() {}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Skeleton::Init() {
-	for (size_t oi = 0; oi < joints_.size(); ++oi) {
-		auto& instance = obj_.emplace_back(std::make_unique<BaseGameObject>());
-		instance->Init();
-		instance->SetObject("SquarePyramid.obj");
-	}
+	//for (size_t oi = 0; oi < joints_.size(); ++oi) {
+	//	auto& instance = obj_.emplace_back(std::make_unique<BaseGameObject>());
+	//	instance->Init();
+	//	instance->SetObject("SquarePyramid.obj");
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,21 +26,13 @@ void Skeleton::Init() {
 void Skeleton::Update() {
 	uint32_t oi = 0;
 	for (Joint& joint : joints_) {
-		joint.localMat = MakeAffineMatrix(joint.transform.scale, joint.transform.rotate, joint.transform.translate);
+		joint.localMat = MakeAffineMatrix(joint.transform.scale, joint.transform.rotate.Normalize(), joint.transform.translate);
 
 		if (joint.parent) {
 			joint.skeltonSpaceMat = joint.localMat * joints_[*joint.parent].skeltonSpaceMat;
 		} else {
 			joint.skeltonSpaceMat = joint.localMat;
 		}
-
-		//obj_[oi]->GetTransform().Update(joint.skeltonSpaceMat);
-		oi++;
-
-#ifdef _DEBUG
-		std::string name = "joint" + std::to_string(oi);
-		ImGui::DragFloat3(name.c_str(), &joint.transform.rotate.x, 0.01f);
-#endif
 	}
 }
 

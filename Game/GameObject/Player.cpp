@@ -13,8 +13,12 @@ Player::~Player(){}
 
 void Player::Init(){
 	BaseGameObject::Init();
-	SetObject("skin.obj");
+	SetObject("test2.fbx");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
+
+	animetor_ = std::make_unique<PlayerAnimator>();
+	animetor_->Init();
+	animetor_->LoadAnimation(model_);
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
@@ -45,6 +49,8 @@ void Player::Update(){
 		velocity_ = { 0.0f,0.0f,0.0f };
 	}
 
+	animetor_->Update();
+
 	BaseGameObject::Update();
 }
 
@@ -53,7 +59,8 @@ void Player::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Draw() const{
-	BaseGameObject::Draw();
+	//BaseGameObject::Draw();
+	Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

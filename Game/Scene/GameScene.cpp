@@ -77,6 +77,8 @@ void GameScene::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Load(){
+	//ModelManager::LoadModel("./Engine/Resources/Develop/", "test3.fbx");
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Fish.obj");
@@ -218,6 +220,7 @@ void GameScene::Draw() const{
 	for(auto& ground : ground_){
 		ground->Draw();
 	}
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
 
 	// effectの描画

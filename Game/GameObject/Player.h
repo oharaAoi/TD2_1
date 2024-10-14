@@ -5,6 +5,7 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
+#include "Game/GameObject/PlayerAnimator.h"
 
 class Player :
 	public BaseGameObject,
@@ -66,6 +67,8 @@ private:
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;
 	// プレイヤーがどれだけ潜っているか
 	float swimmigDepth_;
+
+	std::unique_ptr<PlayerAnimator> animetor_;
 
 public:// アクセッサ
 
