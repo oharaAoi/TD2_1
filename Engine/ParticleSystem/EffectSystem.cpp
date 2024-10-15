@@ -1,5 +1,7 @@
 #include "EffectSystem.h"
 #include "Engine/ParticleSystem/EffectSystemEditer.h"
+#include "Engine/ParticleSystem/Emitter.h"
+#include "Engine/ParticleSystem/BaseEffect.h"
 
 EffectSystem::~EffectSystem() {}
 
@@ -13,8 +15,8 @@ EffectSystem* EffectSystem::GetInstacne() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void EffectSystem::Init() {
-	particleField_ = std::make_unique<ParticleField>();
-	particleField_->Init();
+	/*particleField_ = std::make_unique<ParticleField>();
+	particleField_->Init();*/
 	/*particleField_->SetParticle(particle_.get());*/
 
 	// -------------------------------------------------
@@ -53,6 +55,9 @@ void EffectSystem::Update() {
 		// ↓ エミッターの更新
 		// -------------------------------------------------
 		for (std::list<std::unique_ptr<Emitter>>::iterator emitterListIter = effectDataListIter->emitterList.begin(); emitterListIter != effectDataListIter->emitterList.end();) {
+			if ((*emitterListIter)->GetIsDead()) {
+				emitterListIter = effectDataListIter->emitterList.erase(emitterListIter);
+			}
 			(*emitterListIter)->Update();
 			++emitterListIter;
 		}
@@ -109,7 +114,7 @@ void EffectSystem::Draw() const {
 
 		++effectDataListIter;
 	}
-	particleField_->Draw(viewMat_ * projectionMat_);
+	//particleField_->Draw(viewMat_ * projectionMat_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,6 +133,21 @@ void EffectSystem::CreateEffect() {
 	effectList_.push_back(std::move(effectData));
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Emitterのファイル読み込み
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void EffectSystem::LoadEmitter(const std::string& fileName) {
+	std::string filePath = kDirectoryPath_ + fileName + ".json";
+	// 読み込み用ファイルストリーム
+	std::ifstream ifs;
+	// ファイルを読み込みように開く
+	ifs.open(filePath);
+	if (ifs.fail()) {
+		std::string message = "not Exist " + fileName + ".json";
+	}
+
+}
 
 void EffectSystem::SetViewProjectionMatrix(const Matrix4x4& viewMat, const Matrix4x4& projection) {
 	viewMat_ = viewMat;

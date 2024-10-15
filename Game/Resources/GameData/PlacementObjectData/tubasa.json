@@ -1,10 +1,10 @@
 {
     "tubasa": {
-        "Test1_0": {
-            "objType": 0,
+        "Test2_0": {
+            "objType": 1,
             "position": [
+                -8.0,
                 0.0,
-                1.0,
                 0.0
             ],
             "radius": 1.0,

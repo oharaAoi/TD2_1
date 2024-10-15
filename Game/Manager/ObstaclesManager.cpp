@@ -64,7 +64,6 @@ void ObstaclesManager::Inport(const std::string& fileName) {
 		obj->Init();
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
-		createPos.x = objData[oi].pos_.x + playerPos_.x;
 		switch (objData[oi].type_) {
 		case PlacementObjType::Test1_Type:
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
@@ -83,6 +82,8 @@ void ObstaclesManager::Inport(const std::string& fileName) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ObstaclesManager::LoadAllFile() {
+	groupMap_.clear();
+	fileNames_.clear();
 	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
@@ -146,8 +147,17 @@ void ObstaclesManager::MergeMaps(const std::map<std::string, Group>& map) {
 #ifdef _DEBUG
 void ObstaclesManager::Debug_Gui() {
 	ImGui::Begin("ObstaclesManager");
+	if (ImGui::Button("clear")) {
+		obstaclesList_.clear();
+	}
+	if (ImGui::Button("Add")) {
+		Inport(inportFileName_);
+	}
+	ImGui::SameLine();
 	if (ImGui::Button("Inport")) {
 		obstaclesList_.clear();
+		groupMap_.clear();
+		LoadAllFile();
 		Inport(inportFileName_);
 	}
 	ImGui::SameLine();

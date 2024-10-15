@@ -39,6 +39,8 @@ public:
 	void Inport();
 
 	std::string GetObjectString(const PlacementObjType& type);
+
+	const bool GetIsPlay() const { return isCheckCollision_; }
 	
 private:
 
@@ -51,6 +53,9 @@ private:
 	std::string inportFileName_;
 
 	int inportIndex_;
+
+	bool isDraw_ = true;
+	bool isCheckCollision_ = true;
 
 #endif
 

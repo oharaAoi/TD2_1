@@ -63,7 +63,9 @@ void EffectSystemEditer::Update() {
 		// -------------------------------------------------
 		for (std::list<std::unique_ptr<Emitter>>::iterator emitterListIter = effectDataListIter->emitterList.begin(); emitterListIter != effectDataListIter->emitterList.end();) {
 			(*emitterListIter)->Update();
+			ImGui::Begin("Editor");
 			(*emitterListIter)->Debug_Gui();
+			ImGui::End();
 			++emitterListIter;
 		}
 
@@ -73,7 +75,9 @@ void EffectSystemEditer::Update() {
 		for (std::list<std::unique_ptr<BaseEffect>>::iterator effectListIter = effectDataListIter->effectList.begin(); effectListIter != effectDataListIter->effectList.end();) {
 			(*effectListIter)->SetCameraMatrix(effectSystemCamera_->GetCameraMatrix());
 			(*effectListIter)->Update(effectSystemCamera_->GetViewMatrix(), effectSystemCamera_->GetProjectionMatrix());
+			ImGui::Begin("Editor");
 			(*effectListIter)->Debug_Gui();
+			ImGui::End();
 			++effectListIter;
 		}
 

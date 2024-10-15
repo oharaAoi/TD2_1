@@ -41,6 +41,16 @@ public:
 	/// </summary>
 	void CreateEffect();
 
+	/// <summary>
+	/// Emitterを情報を読み込む
+	/// </summary>
+	void LoadEmitter(const std::string& fileName);
+
+	/// <summary>
+	/// Saveを行う
+	/// </summary>
+	void SaveEmitter();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 
@@ -64,6 +74,8 @@ public: // accessor
 	const bool GetIsEffectEditer() const { return isEffectEditer_; }
 
 private:
+
+	const std::string kDirectoryPath_ = "./Game/Resources/GameData/Emitter/";
 
 	std::unique_ptr<ParticleField> particleField_ = nullptr;
 	std::list<EffectData> effectList_;

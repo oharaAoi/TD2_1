@@ -24,7 +24,6 @@ void Skeleton::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Skeleton::Update() {
-	uint32_t oi = 0;
 	for (Joint& joint : joints_) {
 		joint.localMat = MakeAffineMatrix(joint.transform.scale, joint.transform.rotate.Normalize(), joint.transform.translate);
 

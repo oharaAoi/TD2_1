@@ -19,6 +19,8 @@ void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
 		std::filesystem::create_directories(kDirectoryPath_);
 	}
 
+	isDraw_ = true;
+
 	LoadAllFile();
 }
 
@@ -27,6 +29,8 @@ void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlacementObjectEditer::LoadAllFile() {
+	fileNames_.clear();
+	groupMap_.clear();
 	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
@@ -73,6 +77,9 @@ void PlacementObjectEditer::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlacementObjectEditer::Draw() const {
+	if (!isDraw_) {
+		return;
+	}
 	// -------------------------------------------------
 	// ↓ リスト内にある描画処理を行う
 	// -------------------------------------------------
@@ -93,14 +100,25 @@ void PlacementObjectEditer::Draw() const {
 
 void PlacementObjectEditer::Debug_Gui() {
 	ImGui::Begin("PlacementObjEditer");
+	if (ImGui::Checkbox("CheckCollision", &isCheckCollision_));
+	if (ImGui::Checkbox("isDraw", &isDraw_));
+	// Reloadを行う
 	if (ImGui::Button("Reload")) {
 		groupMap_.clear();
 		fileNames_.clear();
 		LoadAllFile();
 	}
-	NewGroup_Config();
+	// 新しいファイルの作成
+	if (ImGui::TreeNode("newFile")) {
+		NewGroup_Config();
+		ImGui::TreePop();
+	}
 	ImGui::Separator();
-	Edit_Config();
+	// 既存のファイルを編集
+	if (ImGui::TreeNode("editFile")) {
+		Edit_Config();
+		ImGui::TreePop();
+	}
 	ImGui::End();
 }
 
@@ -157,6 +175,7 @@ void PlacementObjectEditer::NewGroup_Config() {
 		std::string name = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
 		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
 		Vector3 scale = (*it).object_->GetTransform()->GetScale();
+		(*it).object_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		if (ImGui::TreeNode(name.c_str())) {
 			if (ImGui::TreeNode("scale")) {
 				ImGui::DragFloat3("scale", &scale.x, 0.1f);
@@ -170,7 +189,7 @@ void PlacementObjectEditer::NewGroup_Config() {
 				ImGui::DragFloat3("translation", &translate.x, 0.1f);
 				ImGui::TreePop();
 			}
-
+			(*it).object_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 			ImGui::TreePop();
 		}
 
@@ -195,6 +214,7 @@ void PlacementObjectEditer::NewGroup_Config() {
 void PlacementObjectEditer::Edit_Config() {
 	if (ImGui::Button("Inport")) {
 		inport_BasePlacementObj_.clear();
+		LoadAllFile();
 		Inport();
 	}
 	ImGui::SameLine();
@@ -215,6 +235,36 @@ void PlacementObjectEditer::Edit_Config() {
 	}
 
 	// -------------------------------------------------
+	// ↓ 生成する種類を選択する
+	// -------------------------------------------------
+	ImGui::Text("newObjType");
+	if (ImGui::RadioButton("Test1_Type", newPopType_ == PlacementObjType::Test1_Type)) {
+		newPopType_ = PlacementObjType::Test1_Type;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Test2_Type", newPopType_ == PlacementObjType::Test2_Type)) {
+		newPopType_ = PlacementObjType::Test2_Type;
+	}
+
+	// -------------------------------------------------
+	// ↓ 新しく追加する
+	// -------------------------------------------------
+	if (ImGui::Button("AddList")) {
+		auto& newObject = inport_BasePlacementObj_.emplace_back(std::make_unique<BasePlacementObject>());
+		newObject.object_->Init();
+		switch (newPopType_) {
+		case PlacementObjType::Test1_Type:
+			newObject.object_->SetObject("Rock.obj");
+			newObject.type_ = PlacementObjType::Test1_Type;
+			break;
+		case PlacementObjType::Test2_Type:
+			newObject.object_->SetObject("teapot.obj");
+			newObject.type_ = PlacementObjType::Test2_Type;
+			break;
+		}
+	}
+
+	// -------------------------------------------------
 	// ↓ 生成されたオブジェクトの位置を調整する
 	// -------------------------------------------------
 	uint32_t popIndex = 0;
@@ -222,6 +272,7 @@ void PlacementObjectEditer::Edit_Config() {
 		std::string name = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
 		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
 		Vector3 scale = (*it).object_->GetTransform()->GetScale();
+		(*it).object_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		if (ImGui::TreeNode(name.c_str())) {
 			if (ImGui::TreeNode("scale")) {
 				ImGui::DragFloat3("scale", &scale.x, 0.1f);
@@ -235,10 +286,11 @@ void PlacementObjectEditer::Edit_Config() {
 				ImGui::DragFloat3("translation", &translate.x, 0.1f);
 				ImGui::TreePop();
 			}
+			(*it).object_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 
 			ImGui::TreePop();
 		}
-		
+
 		(*it).object_->GetTransform()->SetTranslaion(translate);
 		(*it).object_->GetTransform()->SetScale(scale);
 
@@ -255,7 +307,7 @@ void PlacementObjectEditer::Edit_Config() {
 	// -------------------------------------------------
 	// ↓ 再保存する
 	// -------------------------------------------------
-	if(!inport_BasePlacementObj_.empty()){
+	if (!inport_BasePlacementObj_.empty()) {
 		if (ImGui::Button("Save_Edit")) {
 			Save(inportFileName_, inport_BasePlacementObj_);
 		}
@@ -319,7 +371,6 @@ void PlacementObjectEditer::Inport() {
 		obj.object_->Init();
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
-		createPos.x = objData[oi].pos_.x + obstaclesManager_->playerPos_.x;
 		switch (objData[oi].type_) {
 		case PlacementObjType::Test1_Type:
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);

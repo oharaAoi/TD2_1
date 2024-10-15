@@ -27,7 +27,7 @@ void BaseEffect::Update(const Matrix4x4& viewMat, const Matrix4x4& projection) {
 
 		// 回転・移動などの処理
 		particleIter->transform.rotate = rotate_;
-		particleIter->transform.translate += particleIter->velocity * kDeltaTime_;
+		particleIter->transform.translate += particleIter->velocity * GameTimer::DeltaTime();
 
 		// 行列の生成
 		Matrix4x4 worldMat;
@@ -40,7 +40,7 @@ void BaseEffect::Update(const Matrix4x4& viewMat, const Matrix4x4& projection) {
 		// 色の変更
 		particleIter->color.w = 1.0f - (particleIter->currentTime / particleIter->lifeTime);
 		// lifeCountの更新
-		particleIter->currentTime += kDeltaTime_;
+		particleIter->currentTime += GameTimer::DeltaTime();
 
 		// パーティクルが一定数を超えないように
 		if (liveNumInstance_ < kNumInstance_) {
@@ -52,9 +52,6 @@ void BaseEffect::Update(const Matrix4x4& viewMat, const Matrix4x4& projection) {
 		// 次のパーティクルへ
 		++particleIter;
 	}
-#ifdef _DEBUG
-	Debug_Gui();
-#endif
 }
 
 void BaseEffect::Draw() {
@@ -63,12 +60,13 @@ void BaseEffect::Draw() {
 
 #ifdef _DEBUG
 void BaseEffect::Debug_Gui() {
-	ImGui::Begin("particle");
-	ImGui::Text("liveCount: %d", liveNumInstance_);
-	ImGui::Checkbox("useBillboard", &useBillboard_);
-	ImGui::DragFloat3("rotate.x", &rotate_.x, 0.1f);
-	ImGui::Text("particlesData_.size: %d", static_cast<int>(particlesData_.size()));
-	ImGui::End();
+	if (ImGui::TreeNode("Particle")) {
+		ImGui::Text("liveCount: %d", liveNumInstance_);
+		ImGui::Checkbox("useBillboard", &useBillboard_);
+		ImGui::DragFloat3("rotate.x", &rotate_.x, 0.1f);
+		ImGui::Text("particlesData_.size: %d", static_cast<int>(particlesData_.size()));
+		ImGui::TreePop();
+	}
 }
 #endif
 

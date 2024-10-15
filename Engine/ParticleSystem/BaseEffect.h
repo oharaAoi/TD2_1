@@ -3,6 +3,7 @@
 #include "Engine/Math/MyRandom.h"
 #include "Emitter.h"
 #include "Engine/Lib/Transform.h"
+#include "Engine/Lib/GameTimer.h"
 
 /// <summary>
 /// Effectの元となるクラス

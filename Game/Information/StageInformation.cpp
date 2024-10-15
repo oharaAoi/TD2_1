@@ -14,10 +14,12 @@ StageInformation::~StageInformation() {
 }
 
 void StageInformation::Init() {
+	// ステージ1
 	Add("aoi");
 	Add("tubasa");
 	Build();
 
+	// ステージ2
 	Add("tubasa");
 	Build();
 

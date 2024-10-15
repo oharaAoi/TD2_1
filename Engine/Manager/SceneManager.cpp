@@ -96,7 +96,7 @@ void SceneManager::Run() {
 		// シーン変更があったら
 		// ------------------------------------ //
 		#ifdef _DEBUG
-		/*if (isSceneChange_) {
+		if (isSceneChange_) {
 			switch (selectSceneNum_) {
 			case SceneType::Scene_Game:
 				scene_.reset(new GameScene);
@@ -110,7 +110,7 @@ void SceneManager::Run() {
 				break;
 			}
 			isSceneChange_ = false;
-		}*/
+		}
 		#endif
 
 	}
