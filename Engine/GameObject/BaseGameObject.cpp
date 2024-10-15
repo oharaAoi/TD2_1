@@ -1,6 +1,7 @@
 #include "BaseGameObject.h"
 
 void BaseGameObject::Finalize() {
+	transform_->Finalize();
 }
 
 void BaseGameObject::Init() {

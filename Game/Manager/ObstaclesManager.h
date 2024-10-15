@@ -2,6 +2,10 @@
 #include <vector>
 #include <list>
 #include "Game/GameObject/BasePlacementObject.h"
+#include "Engine/Math/MyRandom.h"
+#include "Game/GameObject/Fish.h"
+#include "Game/GameObject/Item.h"
+#include "Game/Information/StageInformation.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -54,7 +58,13 @@ public:
 	std::map<std::string, Group> LoadFile(const std::string& fileName);
 	void MergeMaps(const std::map<std::string, Group>& map1);
 
+	// Randomで配置する
+	void RandomAddObject();
+
 	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
+
+	std::list<std::unique_ptr<BasePlacementObject>>& GetPlacementObject() { return obstaclesList_; }
+	const float GetUpdateLenght() const { return playerDrawLenght_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -78,6 +88,6 @@ private:
 	std::vector<std::string> fileNames_;
 
 	Vector3 playerPos_;
-	float playerDrawLenght_ = 6.0f;
+	float playerDrawLenght_ = 200.0f;
 };
 

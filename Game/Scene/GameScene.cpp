@@ -59,31 +59,31 @@ void GameScene::Init(){
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	for(int32_t i = 0; i < int(stageWidth_ / 5.0f); i++){
+	//for(int32_t i = 0; i < int(stageWidth_ / 5.0f); i++){
 
-		// 魚をランダムに配置
-		int rand = RandomInt(1, 100);
+	//	// 魚をランダムに配置
+	//	int rand = RandomInt(1, 100);
 
-		// 10mごとに2/3の確率で配置
-		if(rand <= 66){
+	//	// 10mごとに2/3の確率で配置
+	//	if(rand <= 66){
 
 
-			// 1/2で魚、アイテムを切り替える
-			if(rand % 2 == 0){
-				fish_.emplace_back(std::make_unique<Fish>());
-				float depth = RandomFloat(groundDepth_ + fish_.back()->GetRadius(), -fish_.back()->GetRadius());
-				fish_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-				fish_.back()->Update();
+	//		// 1/2で魚、アイテムを切り替える
+	//		if(rand % 2 == 0){
+	//			fish_.emplace_back(std::make_unique<Fish>());
+	//			float depth = RandomFloat(groundDepth_ + fish_.back()->GetRadius(), -fish_.back()->GetRadius());
+	//			fish_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+	//			fish_.back()->Update();
 
-			} else{
-				items_.emplace_back(std::make_unique<Item>());
-				float depth = RandomFloat(groundDepth_ + items_.back()->GetRadius(), -items_.back()->GetRadius());
-				items_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-				items_.back()->Update();
+	//		} else{
+	//			items_.emplace_back(std::make_unique<Item>());
+	//			float depth = RandomFloat(groundDepth_ + items_.back()->GetRadius(), -items_.back()->GetRadius());
+	//			items_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+	//			items_.back()->Update();
 
-			}
-		}
-	}
+	//		}
+	//	}
+	//}
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -128,12 +128,6 @@ void GameScene::Load(){
 void GameScene::Update(){
 
 	AdjustmentItem::GetInstance()->Update();
-
-	// -------------------------------------------------
-	// ↓ 開始時にコライダーのリストを更新する
-	// -------------------------------------------------
-
-	UpdateColliderList();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -182,22 +176,6 @@ void GameScene::Update(){
 		waterSpace->Update();
 	}
 
-	for(auto& fish : fish_){
-		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
-		if (lenght < 200.0f) {
-			fish->Update();
-		}
-	}
-
-	for(auto& item : items_){
-		float lenght = std::abs((player_->GetWorldTranslation() - item->GetWorldTranslation()).Length());
-		if (lenght < 200.0f) {
-			item->Update();
-		}
-	}
-
-	//EndlessStage();
-
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
 
@@ -207,9 +185,16 @@ void GameScene::Update(){
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
 	// -------------------------------------------------
+	// ↓ 開始時にコライダーのリストを更新する
+	// -------------------------------------------------
+
+	UpdateColliderList();
+
+	// -------------------------------------------------
 	// ↓ 当たり判定を取る
 	// -------------------------------------------------
 	PlayerWaveCollision();
+	collisionManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	collisionManager_->CheckAllCollision();
 
 	// -------------------------------------------------
@@ -252,9 +237,9 @@ void GameScene::Draw() const{
 	// コライダーの表示
 	if(Collider::isColliderBoxDraw_) {
 		if(!isDegugCameraActive_) {
-			//collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
 		} else {
-			//collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
 
@@ -280,19 +265,6 @@ void GameScene::Draw() const{
 		ground->Draw();
 	}
 
-	for (auto& fish : fish_) {
-		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
-		if (lenght < 200.0f) {
-			fish->Draw();
-		}
-	}
-
-	for(auto& item : items_){
-		float lenght = std::abs((player_->GetWorldTranslation() - item->GetWorldTranslation()).Length());
-		if (lenght < 200.0f) {
-			item->Draw();
-		}
-	}
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
 
@@ -338,7 +310,14 @@ void GameScene::UpdateColliderList(){
 
 	collisionManager_->AddCollider(player_.get());
 
-	for(auto& fish : fish_){
+	for (auto& obstacle : obstaclesManager_->GetPlacementObject()) {
+		float lenght = std::abs((player_->GetWorldTranslation() - obstacle->GetWorldTranslation()).Length());
+		if (lenght < obstaclesManager_->GetUpdateLenght()) {
+			collisionManager_->AddCollider(obstacle.get());
+		}
+	}
+
+	/*for(auto& fish : fish_){
 		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
 		if (lenght < 200.0f) {
 			collisionManager_->AddCollider(fish.get());
@@ -350,7 +329,7 @@ void GameScene::UpdateColliderList(){
 		if (lenght < 200.0f) {
 			collisionManager_->AddCollider(item.get());
 		}
-	}
+	}*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

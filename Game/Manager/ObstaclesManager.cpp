@@ -20,6 +20,8 @@ void ObstaclesManager::Init() {
 	}
 
 	LoadAllFile();
+
+	RandomAddObject();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,11 +30,15 @@ void ObstaclesManager::Init() {
 
 void ObstaclesManager::Update() {
 	for (std::list<std::unique_ptr<BasePlacementObject>>::iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
+		if (!(*it)->GetIsActive()) {
+			it = obstaclesList_.erase(it);
+			continue;
+		}
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
 		if (length < playerDrawLenght_) {
 			(*it)->Update();
-			++it;
 		}
+		++it;
 	}
 }
 
@@ -45,8 +51,8 @@ void ObstaclesManager::Draw() const {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
 		if (length < playerDrawLenght_) {
 			(*it)->Draw();
-			++it;
 		}
+		++it;
 	}
 }
 
@@ -149,6 +155,42 @@ void ObstaclesManager::MergeMaps(const std::map<std::string, Group>& map) {
 		);
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　debugようにランダムに配置する関数
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ObstaclesManager::RandomAddObject() {
+	for (int32_t i = 0; i < int(StageInformation::stageWidth_ / 5.0f); i++) {
+
+		// 魚をランダムに配置
+		int rand = RandomInt(1, 100);
+
+		// 10mごとに2/3の確率で配置
+		if (rand <= 66) {
+
+
+			// 1/2で魚、アイテムを切り替える
+			if (rand % 2 == 0) {
+				auto& fish = obstaclesList_.emplace_back(std::make_unique<Fish>());
+				float depth = RandomFloat(StageInformation::groundDepth_ + fish->GetRadius(), -fish->GetRadius());
+				fish->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+				fish->Update();
+
+			} else {
+				auto& item = obstaclesList_.emplace_back(std::make_unique<Item>());
+				float depth = RandomFloat(StageInformation::groundDepth_ + item->GetRadius(), -item->GetRadius());
+				item->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+				item->Update();
+
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Debug表示
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _DEBUG
 void ObstaclesManager::Debug_Gui() {

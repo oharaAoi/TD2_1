@@ -30,6 +30,12 @@ public:
 	static uint32_t GetNowStage() { return nowStageNum_; }
 	static void SetNowStage(uint32_t num) { nowStageNum_ = num; }
 
+public:
+	// stageの汎用変数
+	static float stageWidth_;
+	static float stageWidthEvery_;
+	static float groundDepth_;
+
 private:
 	std::string  kDirectoryPath_ = "./Game/Resources/GameData/StageInformation/stage";
 	static std::vector<std::vector<std::string>> stageInformationArray_;

@@ -100,8 +100,8 @@ void PlacementObjectEditer::Draw() const {
 
 void PlacementObjectEditer::Debug_Gui() {
 	ImGui::Begin("PlacementObjEditer");
-	if (ImGui::Checkbox("CheckCollision", &isCheckCollision_));
-	if (ImGui::Checkbox("isDraw", &isDraw_));
+	ImGui::Checkbox("CheckCollision", &isCheckCollision_);
+	ImGui::Checkbox("isDraw", &isDraw_);
 	// Reloadを行う
 	if (ImGui::Button("Reload")) {
 		groupMap_.clear();

@@ -37,9 +37,13 @@ public:
 	// リストを空にする
 	void Reset() { colliders_.clear(); }
 
+	void SetPlayerPosition(const Vector3& pos) { playerPosition_ = pos; }
+
 private:
 
 	std::list<Collider*> colliders_;
+
+	Vector3 playerPosition_;
 	
 };
 

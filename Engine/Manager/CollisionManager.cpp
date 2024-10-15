@@ -15,8 +15,10 @@ void CollisionManager::Init() {
 void CollisionManager::Draw(const Matrix4x4& vpMat)  const {
 	std::list<Collider*>::const_iterator iter = colliders_.begin();
 	for (; iter != colliders_.end(); ++iter) {
-		AABB aabb = { (*iter)->GetWorldTranslation(),(*iter)->GetRadius()};
-		DrawAABB(aabb, vpMat, (*iter)->GetIsHitting() ? Vector4{1.0f, 0.0f, 0.0f, 1.0f} : Vector4{1.0f, 1.0f, 1.0f, 1.0f});
+		if (std::abs((playerPosition_ - (*iter)->GetWorldTranslation()).Length()) < 100.0f) {
+			AABB aabb = { (*iter)->GetWorldTranslation(),(*iter)->GetRadius() };
+			DrawAABB(aabb, vpMat, (*iter)->GetIsHitting() ? Vector4{ 1.0f, 0.0f, 0.0f, 1.0f } : Vector4{ 1.0f, 1.0f, 1.0f, 1.0f });
+		}
 	}
 }
 

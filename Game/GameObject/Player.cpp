@@ -81,17 +81,17 @@ void Player::Move(){
 	Vector3 translate = transform_->GetTranslation();
 	if(Input::IsPressKey(DIK_SPACE)) {
 
-		pressTime_ += 0.005f;
+		pressTime_ += 0.05f;
 
 	} else {
 
-		pressTime_ -= 0.005f;
+		pressTime_ -= 0.05f;
 	}
 
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
 	float ease = EaseOutBack(std::fabsf(pressTime_));
-	currentAngle_ = kMaxAngle_ * ease * (pressTime_ > 0.0f ? 1.0f : -1.0f);
+	currentAngle_ = kMaxAngle_ * ease * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
