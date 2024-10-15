@@ -20,7 +20,7 @@ void GameTimer::CalculationFrame() {
 	auto currentTime = std::chrono::steady_clock::now();
 	
 	deletaTime_ = std::chrono::duration<float>(currentTime - preFrameTime_).count();
-	timeRate_ = deletaTime_ / kDeletaTime_;
+	timeRate_ = deletaTime_ / kDeltaTime_;
 	preFrameTime_ = currentTime;
 }
 

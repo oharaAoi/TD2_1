@@ -147,6 +147,7 @@ void ObstaclesManager::MergeMaps(const std::map<std::string, Group>& map) {
 #ifdef _DEBUG
 void ObstaclesManager::Debug_Gui() {
 	ImGui::Begin("ObstaclesManager");
+	ImGui::Text("objectNum: %d", static_cast<int>(obstaclesList_.size()));
 	if (ImGui::Button("clear")) {
 		obstaclesList_.clear();
 	}

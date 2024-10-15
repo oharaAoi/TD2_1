@@ -67,7 +67,6 @@ void SceneManager::Run() {
 			effectSystem_->DrawEditer();
 		}
 		#endif
-
 		gameTimer_.FPS();
 
 		// ------------------------------------ //

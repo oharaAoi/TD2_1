@@ -20,6 +20,7 @@
 #include "Engine/Lib/Transform.h"
 #include "Engine/Math/MyMatrix.h"
 #include "Engine/Utilities/AnimationUtils.h"
+#include "Engine/Lib/GameTimer.h"
 
 class Material;
 class PBRMaterial;

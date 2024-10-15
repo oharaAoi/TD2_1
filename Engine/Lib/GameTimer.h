@@ -30,4 +30,4 @@ private:
 	static float timeRate_;
 };
 
-const float kDeletaTime_ = (1.0f / GameTimer::fps_);
+const float kDeltaTime_ = (1.0f / GameTimer::fps_);

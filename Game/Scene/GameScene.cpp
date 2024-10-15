@@ -192,7 +192,6 @@ void GameScene::Update(){
 
 	//EndlessStage();
 
-	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
 
 	// trail
