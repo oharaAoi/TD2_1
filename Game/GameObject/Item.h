@@ -6,8 +6,7 @@
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
 
-class Item :
-	public BasePlacementObject{
+class Item : public BasePlacementObject{
 
 public:
 	Item();
@@ -16,6 +15,8 @@ public:
 	void Init() override;
 	void Update() override;
 	void Draw() const override;
+
+	void OnCollision([[maybe_unused]] Collider* other)override;
 
 private:
 

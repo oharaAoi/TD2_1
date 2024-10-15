@@ -61,14 +61,24 @@ void GameScene::Init(){
 		// 魚をランダムに配置
 		int rand = RandomInt(1, 100);
 
-		// 10mごとに1/3の確率で配置
-		if(rand <= 33){
-			fish_.emplace_back(std::make_unique<Fish>());
+		// 10mごとに2/3の確率で配置
+		if(rand <= 66){
 
-			float depth = RandomFloat(groundDepth_ + fish_.back()->GetRadius() ,-fish_.back()->GetRadius());
-			fish_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
 
-			fish_.back()->Update();
+			// 1/2で魚、アイテムを切り替える
+			if(rand % 2 == 0){
+				fish_.emplace_back(std::make_unique<Fish>());
+				float depth = RandomFloat(groundDepth_ + fish_.back()->GetRadius(), -fish_.back()->GetRadius());
+				fish_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+				fish_.back()->Update();
+
+			} else{
+				items_.emplace_back(std::make_unique<Item>());
+				float depth = RandomFloat(groundDepth_ + items_.back()->GetRadius(), -items_.back()->GetRadius());
+				items_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+				items_.back()->Update();
+
+			}
 		}
 	}
 
@@ -123,7 +133,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	if (!isDegugCameraActive_) {
+	if(!isDegugCameraActive_) {
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
@@ -168,6 +178,10 @@ void GameScene::Update(){
 		fish->Update();
 	}
 
+	for(auto& item : items_){
+		item->Update();
+	}
+
 	//EndlessStage();
 
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
@@ -190,6 +204,7 @@ void GameScene::Update(){
 
 	// 死んでいる要素の削除
 	fish_.remove_if([](auto& fish){return !fish->GetIsActive(); });
+	items_.remove_if([](auto& item){return !item->GetIsActive(); });
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -255,6 +270,9 @@ void GameScene::Draw() const{
 		fish->Draw();
 	}
 
+	for(auto& item : items_){
+		item->Draw();
+	}
 	player_->Draw();
 
 	// effectの描画
@@ -301,6 +319,10 @@ void GameScene::UpdateColliderList(){
 
 	for(auto& fish : fish_){
 		collisionManager_->AddCollider(fish.get());
+	}
+
+	for(auto& item : items_){
+		collisionManager_->AddCollider(item.get());
 	}
 }
 
@@ -382,9 +404,9 @@ void GameScene::Debug_Gui(){
 	if(ImGui::Button("play")) {
 		isPause_ = false;
 	}
-	if (isPause_) {
+	if(isPause_) {
 		ImGui::SameLine();
-		if (ImGui::Button("step")) {
+		if(ImGui::Button("step")) {
 			isStepFrame_ = true;
 		}
 	}
@@ -395,7 +417,7 @@ void GameScene::Debug_Gui(){
 	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 	player_->Debug_Gui();
 
-	for (auto& waterSpace : waterSpace_) {
+	for(auto& waterSpace : waterSpace_) {
 		waterSpace->Debug_Gui();
 	}
 

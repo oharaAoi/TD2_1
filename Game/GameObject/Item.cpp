@@ -34,3 +34,16 @@ void Item::Update(){
 void Item::Draw() const{
 	BaseGameObject::Draw();
 }
+
+//////////////////////////////////////////////////////
+//  衝突時処理
+//////////////////////////////////////////////////////
+
+void Item::OnCollision(Collider* other){
+
+	//プレイヤーに当たった場合
+	if(other->GetObjectType() == int(ObjectType::PLAYER)){
+		isActive_ = false;
+	}
+}
+
