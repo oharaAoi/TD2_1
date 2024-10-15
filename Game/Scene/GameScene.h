@@ -1,15 +1,27 @@
 #pragma once
 #include "Engine.h"
-#include "Game/Scene/BaseScene.h"
-#include "Game/Camera/Camera.h"
-#include "Game/Camera/DebugCamera.h"
-#include "Engine/ParticleSystem/EffectSystem.h"
+
+/*---- game object ---*/
 #include "Game/GameObject/Ground.h"
 #include "Game/GameObject/WaterSpace.h"
 #include "Game/GameObject/Player.h"
+#include "Game/GameObject/Fish.h"
+#include "Game/GameObject/Item.h"
+
+/*------ manager,editor ------*/
+#include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Game/Manager/ObstaclesManager.h"
+
+/*--------- lib ----------*/
+#include "Engine/Math/MyRandom.h"
+
+/*------- other -------*/
+#include "Game/Scene/BaseScene.h"
+#include "Game/Camera/Camera.h"
+#include "Game/Camera/DebugCamera.h"
+#include "Game/Effect/Trail.h"
 #include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
 
@@ -31,6 +43,7 @@ public:
 	void Debug_Gui();
 #endif 
 
+	void UpdateColliderList();
 	void PlayerWaveCollision();
 	void EndlessStage();
 
@@ -49,8 +62,11 @@ private:
 	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Trail> trail_ = nullptr;
+	std::list<std::unique_ptr<Fish>>fish_;
+	std::list<std::unique_ptr<Item>>items_;
 
 	// --------- parameter ----------- //
+	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
 	static float groundDepth_;
 

@@ -6,10 +6,8 @@
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
 
-class Fish : 
-	public BasePlacementObject,
-	public Collider
-{
+class Fish : public BasePlacementObject{
+
 public:
 	Fish();
 	~Fish();
@@ -17,6 +15,11 @@ public:
 	void Init() override;
 	void Update() override;
 	void Draw() const override;
+
+	void OnCollision([[maybe_unused]] Collider* other)override;
+
+public:
+
 
 private:
 

@@ -12,6 +12,10 @@ Item::~Item(){}
 //////////////////////////////////////////////////////
 
 void Item::Init(){
+
+	typeID_ = (int)ObjectType::ITEM;
+
+	BaseGameObject::Init();
 	SetObject("Item.obj");
 }
 
@@ -19,10 +23,27 @@ void Item::Init(){
 //  更新処理
 //////////////////////////////////////////////////////
 
-void Item::Update(){}
+void Item::Update(){
+	BaseGameObject::Update();
+}
 
 //////////////////////////////////////////////////////
 //  描画処理
 //////////////////////////////////////////////////////
 
-void Item::Draw() const{}
+void Item::Draw() const{
+	BaseGameObject::Draw();
+}
+
+//////////////////////////////////////////////////////
+//  衝突時処理
+//////////////////////////////////////////////////////
+
+void Item::OnCollision(Collider* other){
+
+	//プレイヤーに当たった場合
+	if(other->GetObjectType() == int(ObjectType::PLAYER)){
+		isActive_ = false;
+	}
+}
+

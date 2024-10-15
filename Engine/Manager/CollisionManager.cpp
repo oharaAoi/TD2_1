@@ -25,6 +25,7 @@ void CollisionManager::Draw(const Matrix4x4& vpMat)  const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CollisionManager::CheckAllCollision() {
+
 	// リスト内のペアの総当たり判定
 	std::list<Collider*>::iterator iterA = colliders_.begin();
 	for (; iterA != colliders_.end(); ++iterA) {

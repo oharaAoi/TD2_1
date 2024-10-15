@@ -797,6 +797,9 @@
     <ClInclude Include="Game\GameObject\Fish.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Manager\MeshManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>

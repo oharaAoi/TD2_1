@@ -12,6 +12,9 @@ Player::~Player(){}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Init(){
+
+	typeID_ = (int)ObjectType::PLAYER;
+
 	BaseGameObject::Init();
 	SetObject("test2.fbx");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
@@ -85,7 +88,7 @@ void Player::Move(){
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
-	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(-currentAngle_);
+	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(currentAngle_);
 	velocity_ *= moveSpeed_ * std::fabsf(GameTimer::DeltaTime());
 	transform_->SetTranslaion(translate + velocity_);
 
@@ -177,3 +180,23 @@ void Player::Debug_Gui(){
 	ImGui::End();
 }
 #endif // _DEBUG
+
+//////////////////////////////////////////////////////
+//  衝突時処理
+//////////////////////////////////////////////////////
+
+void Player::OnCollision(Collider* other){
+
+	int ownerType = int(other->GetObjectType() & (int)ObjectType::OBSTACLE);
+
+	//障害物に当たった場合
+	if(ownerType == (int)ObjectType::OBSTACLE){
+		moveSpeed_ -= 10.0f;
+		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
+	}
+
+	if(other->GetObjectType() == (int)ObjectType::ITEM){
+		moveSpeed_ += 10.0f;
+		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
+	}
+}

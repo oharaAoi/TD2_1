@@ -7,7 +7,7 @@
 #include <cassert>
 #include <cmath>
 #include <unordered_map>
-#include <Lib/tiny_gltf.h> // Assimpの場合使わない
+//#include <Lib/tiny_gltf.h> // Assimpの場合使わない
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>

@@ -5,3 +5,9 @@ float RandomFloat(const float& min, const float& max) {
     float result = distribution(randomEngine);
     return result;
 }
+
+int RandomInt(int min, int max){
+    std::uniform_int_distribution<int> distribution(min, max);
+    int result = distribution(randomEngine);
+    return result;
+}

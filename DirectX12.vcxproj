@@ -53,7 +53,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\assimp\include;$(ProjectDir)Engine;$(ProjectDir)Externals\ImGui;$(ProjectDir)Externals;$(ProjectDir);$(ProjectDir)Engine\Math</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\assimp\include;$(ProjectDir)Engine;$(ProjectDir)Externals\ImGui;$(ProjectDir)Externals\nlohmann;$(ProjectDir);$(ProjectDir)Engine\Math;$(ProjectDir)Externals;$(ProjectDir)Externals\DirectXTex</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -321,6 +321,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Scene\ResultScene.h" />
     <ClInclude Include="Game\Scene\SelectScene.h" />
     <ClInclude Include="Game\Scene\TestScene.h" />
+    <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>

@@ -59,12 +59,41 @@ void GameScene::Init(){
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
+	for(int32_t i = 0; i < int(stageWidth_ / 10.0f); i++){
+
+		// 魚をランダムに配置
+		int rand = RandomInt(1, 100);
+
+		// 10mごとに2/3の確率で配置
+		if(rand <= 66){
+
+
+			// 1/2で魚、アイテムを切り替える
+			if(rand % 2 == 0){
+				fish_.emplace_back(std::make_unique<Fish>());
+				float depth = RandomFloat(groundDepth_ + fish_.back()->GetRadius(), -fish_.back()->GetRadius());
+				fish_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+				fish_.back()->Update();
+
+			} else{
+				items_.emplace_back(std::make_unique<Item>());
+				float depth = RandomFloat(groundDepth_ + items_.back()->GetRadius(), -items_.back()->GetRadius());
+				items_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
+				items_.back()->Update();
+
+			}
+		}
+	}
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
 	// -------------------------------------------------
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
+
+	for(auto& fish : fish_){
+		collisionManager_->AddCollider(fish.get());
+	}
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -81,7 +110,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "Fish.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "fish.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
@@ -97,12 +126,19 @@ void GameScene::Load(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update(){
+
 	AdjustmentItem::GetInstance()->Update();
+
+	// -------------------------------------------------
+	// ↓ 開始時にコライダーのリストを更新する
+	// -------------------------------------------------
+
+	UpdateColliderList();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	if (!isDegugCameraActive_) {
+	if(!isDegugCameraActive_) {
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
@@ -146,6 +182,14 @@ void GameScene::Update(){
 		waterSpace->Update();
 	}
 
+	for(auto& fish : fish_){
+		fish->Update();
+	}
+
+	for(auto& item : items_){
+		item->Update();
+	}
+
 	//EndlessStage();
 
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
@@ -160,6 +204,15 @@ void GameScene::Update(){
 	// ↓ 当たり判定を取る
 	// -------------------------------------------------
 	PlayerWaveCollision();
+	collisionManager_->CheckAllCollision();
+
+	// -------------------------------------------------
+	// ↓ 当たり判定の後の処理
+	// -------------------------------------------------
+
+	// 死んでいる要素の削除
+	fish_.remove_if([](auto& fish){return !fish->GetIsActive(); });
+	items_.remove_if([](auto& item){return !item->GetIsActive(); });
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -193,9 +246,9 @@ void GameScene::Draw() const{
 	// コライダーの表示
 	if(Collider::isColliderBoxDraw_) {
 		if(!isDegugCameraActive_) {
-			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+			//collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
 		} else {
-			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+			//collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
 
@@ -219,6 +272,14 @@ void GameScene::Draw() const{
 
 	for(auto& ground : ground_){
 		ground->Draw();
+	}
+
+	for(auto& fish : fish_){
+		fish->Draw();
+	}
+
+	for(auto& item : items_){
+		item->Draw();
 	}
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
@@ -253,6 +314,25 @@ void GameScene::Draw() const{
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 
 #pragma endregion
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GameScene::UpdateColliderList(){
+
+	collisionManager_->Reset();
+
+	collisionManager_->AddCollider(player_.get());
+
+	for(auto& fish : fish_){
+		collisionManager_->AddCollider(fish.get());
+	}
+
+	for(auto& item : items_){
+		collisionManager_->AddCollider(item.get());
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,9 +421,9 @@ void GameScene::Debug_Gui(){
 	if(ImGui::Button("play")) {
 		isPause_ = false;
 	}
-	if (isPause_) {
+	if(isPause_) {
 		ImGui::SameLine();
-		if (ImGui::Button("step")) {
+		if(ImGui::Button("step")) {
 			isStepFrame_ = true;
 		}
 	}
@@ -354,7 +434,7 @@ void GameScene::Debug_Gui(){
 	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 	player_->Debug_Gui();
 
-	for (auto& waterSpace : waterSpace_) {
+	for(auto& waterSpace : waterSpace_) {
 		waterSpace->Debug_Gui();
 	}
 
