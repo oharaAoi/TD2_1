@@ -12,6 +12,10 @@ Item::~Item(){}
 //////////////////////////////////////////////////////
 
 void Item::Init(){
+
+	typeID_ = (int)ObjectType::ITEM;
+
+	BaseGameObject::Init();
 	SetObject("Item.obj");
 }
 
@@ -19,10 +23,14 @@ void Item::Init(){
 //  更新処理
 //////////////////////////////////////////////////////
 
-void Item::Update(){}
+void Item::Update(){
+	BaseGameObject::Update();
+}
 
 //////////////////////////////////////////////////////
 //  描画処理
 //////////////////////////////////////////////////////
 
-void Item::Draw() const{}
+void Item::Draw() const{
+	BaseGameObject::Draw();
+}

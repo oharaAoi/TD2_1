@@ -83,9 +83,10 @@ struct Vector3 final {
 	// Matrix
 	Vector3 operator*(const Matrix4x4& mat) {
 		Vector3 result{};
-		result.x = mat.m[0][0] * x + mat.m[0][1] * y + mat.m[0][2] * z + mat.m[0][3];
-		result.y = mat.m[1][0] * x + mat.m[1][1] * y + mat.m[1][2] * z + mat.m[1][3];
-		result.z = mat.m[2][0] * x + mat.m[2][1] * y + mat.m[2][2] * z + mat.m[2][3];
+
+		result.x = mat.m[0][0] * x + mat.m[1][0] * y + mat.m[2][0] * z + mat.m[3][0];
+		result.y = mat.m[0][1] * x + mat.m[1][1] * y + mat.m[2][1] * z + mat.m[3][1];
+		result.z = mat.m[0][2] * x + mat.m[1][2] * y + mat.m[2][2] * z + mat.m[3][2];
 
 		return result;
 	}

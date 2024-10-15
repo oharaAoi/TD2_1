@@ -13,6 +13,8 @@ void BaseGameObject::Update() {
 		animetor_->Update();
 	}
 	transform_->Update();
+
+	worldPos_ = Vector3(0.0f, 0.0f, 0.0f) * transform_->GetWorldMatrix();
 }
 
 void BaseGameObject::Draw() const {

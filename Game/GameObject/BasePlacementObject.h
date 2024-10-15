@@ -24,7 +24,7 @@ public:
 	virtual void Draw() const override; 
 
 	virtual void OnCollision([[maybe_unused]] Collider* other) override {};
-	const virtual Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const override { return offset; }
+	const virtual Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const override { return worldPos_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();

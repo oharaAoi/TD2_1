@@ -35,7 +35,7 @@ public:
 	void AddCollider(Collider* collider) { colliders_.push_back(collider); };
 
 	// リストを空にする
-	void Rest() { colliders_.clear(); }
+	void Reset() { colliders_.clear(); }
 
 private:
 
