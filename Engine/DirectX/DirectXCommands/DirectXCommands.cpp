@@ -104,29 +104,12 @@ void DirectXCommands::SyncGPUAndCPU() {
 
 	// Fenceの値が指定したSignal値にたどりついているか確認する
 	// GetCompletedValueの初期値はFence作成時に渡した初期値
-	if (fence_->GetCompletedValue() < fenceValue_) {
+	if (fence_->GetCompletedValue() != fenceValue_) {
 		// 指定下Signalにたどりついていないので、たどりつくまで松ようにイベントを設定する
-		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+		HANDLE event = CreateEvent(nullptr, false, false, nullptr);
+		fence_->SetEventOnCompletion(fenceValue_, event);
+		WaitForSingleObject(event, INFINITE);
+		CloseHandle(event);
 
-		WaitForSingleObject(fenceEvent_, INFINITE);
-	}
-}
-
-/// <summary>
-/// コンピュートシェーダーを行った後にGPUとCPU
-/// </summary>
-void DirectXCommands::EffectShaderSyncGPUAndCPU() {
-	// fenceの値を更新
-	effectFenceValue_++;
-	// GPUがここまでたどり着いた時に,fenceの値を指定した値に第謬するようにsignelを送る
-	effectCommandQueue_->Signal(fence_.Get(), effectFenceValue_);
-
-	// Fenceの値が指定したSignal値にたどりついているか確認する
-	// GetCompletedValueの初期値はFence作成時に渡した初期値
-	if (fence_->GetCompletedValue() < effectFenceValue_) {
-		// 指定下Signalにたどりついていないので、たどりつくまで松ようにイベントを設定する
-		fence_->SetEventOnCompletion(effectFenceValue_, effectFenceEvent_);
-
-		WaitForSingleObject(effectFenceEvent_, INFINITE);
 	}
 }

@@ -37,10 +37,6 @@ public:
 	/// </summary>
 	void SyncGPUAndCPU();
 
-	/// <summary>
-	/// コンピュートシェーダーを行った後にGPUとCPU
-	/// </summary>
-	void EffectShaderSyncGPUAndCPU();
 
 public:
 	/// <summary>

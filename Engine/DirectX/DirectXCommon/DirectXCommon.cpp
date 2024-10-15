@@ -97,9 +97,6 @@ void DirectXCommon::End() {
 	assert(SUCCEEDED(hr));
 	hr = dxCommands_->GetCommandList()->Reset(dxCommands_->GetCommandAllocator(), nullptr);
 	assert(SUCCEEDED(hr));
-
-	// offScreenの設定を直す
-	//renderTarget_->ChangeOffScreenResource(dxCommands_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 
 void DirectXCommon::CreateDXGI() {

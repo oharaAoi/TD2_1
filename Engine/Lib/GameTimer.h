@@ -13,7 +13,7 @@ public:
 	GameTimer(const uint32_t& fps);
 	~GameTimer();
 
-	void WaitNextFrame();
+	void CalculationFrame();
 
 	void FPS();
 

@@ -49,14 +49,15 @@ void Input::Update() {
 	mouse_->Acquire();
 
 	// keyの値をpreKeyにコピーする
-	memcpy(preKey_, key_, sizeof(key_));
+	std::memcpy(preKey_, key_, sizeof(key_));
 	preMouse_ = currentMouse_;
 
 	ZeroMemory(key_, sizeof(key_));
 	// 全キーの入力状況を取得
 	HRESULT hr = keyboard_->GetDeviceState(sizeof(key_), key_);
 	if (FAILED(hr)) {
-		ZeroMemory(key_, sizeof(key_));  // 取得に失敗した場合はキーをクリア
+		keyboard_->Acquire();
+		keyboard_->GetDeviceState(sizeof(key_), key_);
 	}
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &currentMouse_);
 

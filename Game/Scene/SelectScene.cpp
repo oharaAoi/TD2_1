@@ -45,7 +45,7 @@ void SelectScene::Update() {
 void SelectScene::Draw() const {
 }
 
-///////////////////////////////////dddd///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　シーンを変更する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +56,7 @@ void SelectScene::ChangeStage() {
 	if (Input::IsTriggerKey(DIK_RIGHT)) {
 		selectStageNum_++;
 	}
-	selectStageNum_ = std::clamp(static_cast<int>(selectStageNum_), 0, static_cast<int>(stageInformation_.GetStageNumMax() - 1));
+	//selectStageNum_ = std::clamp(static_cast<int>(selectStageNum_), 0, static_cast<int>(stageInformation_.GetStageNumMax() - 1));
 
 	StageInformation::SetNowStage(selectStageNum_);
 }

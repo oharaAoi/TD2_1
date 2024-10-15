@@ -15,7 +15,7 @@ void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
 	
-	scene_ = std::make_unique<GameScene>();
+	scene_ = std::make_unique<TitleScene>();
 	scene_->Load();
 	scene_->Init();
 
@@ -26,8 +26,6 @@ void SceneManager::Init() {
 void SceneManager::Run() {
 	while (Engine::ProcessMessage()) {
 		Engine::BeginFrame();
-
-		Input::GetInstance()->Update();
 
 		// ------------------------------------ //
 		// 更新処理
@@ -85,7 +83,9 @@ void SceneManager::Run() {
 		#endif
 
 		Engine::EndFrame();
-		gameTimer_.WaitNextFrame();
+
+		// fpsの計算
+		gameTimer_.CalculationFrame();
 
 		if (scene_->GetType()) {
 			SetChange();
@@ -96,7 +96,7 @@ void SceneManager::Run() {
 		// シーン変更があったら
 		// ------------------------------------ //
 		#ifdef _DEBUG
-		if (isSceneChange_) {
+		/*if (isSceneChange_) {
 			switch (selectSceneNum_) {
 			case SceneType::Scene_Game:
 				scene_.reset(new GameScene);
@@ -110,7 +110,7 @@ void SceneManager::Run() {
 				break;
 			}
 			isSceneChange_ = false;
-		}
+		}*/
 		#endif
 
 	}

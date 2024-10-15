@@ -14,7 +14,7 @@
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "Xinput.lib")
 
-enum XInputButtons {
+enum XInputButtons{
 	DPAD_UP = 0x0001,
 	DPAD_DOWN = 0x0002,
 	DPAD_LEFT = 0x0004,
