@@ -187,4 +187,9 @@ void Player::OnCollision(Collider* other){
 		moveSpeed_ -= 10.0f;
 		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
 	}
+
+	if(other->GetObjectType() == (int)ObjectType::ITEM){
+		moveSpeed_ += 10.0f;
+		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
+	}
 }
