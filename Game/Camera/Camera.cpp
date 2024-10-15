@@ -60,7 +60,7 @@ void Camera::Update(){
 
 			dif = (target_->GetTranslation() +
 				((offsetVec_ * offsetLength_) *
-					MakeRotateYMatrix(0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f) *
+					MakeRotateYMatrix(-0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f) *
 						(pPlayer_->GetVelocity().x / 80.0f))))
 				- transform_.translate;
 
@@ -73,7 +73,7 @@ void Camera::Update(){
 
 			dif = (target_->GetTranslation() +
 				((offsetVec_ * offsetLength_) *
-					MakeRotateYMatrix(0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f))))
+					MakeRotateYMatrix(-0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f))))
 				- transform_.translate;
 
 			transform_.translate.y -= 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f) * GameTimer::TimeRate();
