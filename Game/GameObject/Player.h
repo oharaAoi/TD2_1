@@ -5,7 +5,7 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
-#include "Game/GameObject/PlayerAnimator.h"
+#include "Game/Attachment/PlayerAnimator.h"
 
 class Player :
 	public BaseGameObject,
@@ -26,7 +26,7 @@ public:
 	void AdaptAdjustmentItem();
 
 	void OnCollision([[maybe_unused]] Collider* other) override;
-	const Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const;
+	const Vector3 GetWorldTranslation() const;
 
 public:
 

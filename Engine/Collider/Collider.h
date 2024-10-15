@@ -25,7 +25,7 @@ public:
 public:
 
 	// ------------ 位置(world) ------------ // 
-	const virtual Vector3 GetWorldTranslation(const Vector3& offset = { 0.0f, 0.0f, 0.0f }) const = 0;
+	const virtual Vector3 GetWorldTranslation() const = 0;
 
 	// ------------ 半径 ------------ // 
 	float GetRadius() const { return radius_; }

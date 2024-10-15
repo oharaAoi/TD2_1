@@ -289,7 +289,7 @@ void GameScene::Draw() const{
 
 	for(auto& item : items_){
 		float lenght = std::abs((player_->GetWorldTranslation() - item->GetWorldTranslation()).Length());
-		if (lenght < 6.0f) {
+		if (lenght < 200.0f) {
 			item->Draw();
 		}
 	}

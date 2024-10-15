@@ -124,6 +124,9 @@
     <Filter Include="Game\Information">
       <UniqueIdentifier>{fc061825-3199-4e7e-bfe3-a124df1f9b57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Attachment">
+      <UniqueIdentifier>{8402cab2-b53c-4f50-aeeb-3197dd5ba883}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -423,14 +426,8 @@
     <ClCompile Include="Engine\Math\Easing.cpp">
       <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\Item.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Manager\ObstaclesManager.cpp">
       <Filter>Game\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\Fish.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject\Fish.cpp">
       <Filter>ソース ファイル</Filter>
@@ -453,8 +450,14 @@
     <ClCompile Include="Game\Information\StageInformation.cpp">
       <Filter>Game\Information</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\PlayerAnimator.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Game\GameObject\Item.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Fish.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Attachment\PlayerAnimator.cpp">
+      <Filter>Game\Attachment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -770,31 +773,16 @@
     <ClInclude Include="Engine\Math\Easing.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\Item.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Manager\ObstaclesManager.h">
       <Filter>Game\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Manager\MeshManager.h">
-      <Filter>Engine\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\Trail.h">
-      <Filter>Game\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Camera\BaseCamera.h">
-      <Filter>Game\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Manager\MeshManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Camera\BaseCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Effect\Trail.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\Fish.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ObjectType.h">
@@ -830,8 +818,23 @@
     <ClInclude Include="Game\Information\StageInformation.h">
       <Filter>Game\Information</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\PlayerAnimator.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Game\GameObject\Fish.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Item.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Manager\MeshManager.h">
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\BaseCamera.h">
+      <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\Trail.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attachment\PlayerAnimator.h">
+      <Filter>Game\Attachment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
