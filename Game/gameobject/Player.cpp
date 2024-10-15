@@ -145,8 +145,8 @@ void Player::AdaptAdjustmentItem(){
 	radius_ = adjustmentItem_->GetValue<float>(groupName, "radius");
 }
 
-const Vector3 Player::GetWorldTranslation(const Vector3& offset) const{
-	return Transform(offset, transform_->GetWorldMatrix());
+const Vector3 Player::GetWorldTranslation() const{
+	return Transform(Vector3(0.0f, 0.0f,0.0f), transform_->GetWorldMatrix());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
