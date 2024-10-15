@@ -28,8 +28,11 @@ void ObstaclesManager::Init() {
 
 void ObstaclesManager::Update() {
 	for (std::list<std::unique_ptr<BasePlacementObject>>::iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
-		(*it)->Update();
-		++it;
+		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
+		if (length < playerDrawLenght_) {
+			(*it)->Update();
+			++it;
+		}
 	}
 }
 
@@ -39,8 +42,11 @@ void ObstaclesManager::Update() {
 
 void ObstaclesManager::Draw() const {
 	for (std::list<std::unique_ptr<BasePlacementObject>>::const_iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
-		(*it)->Draw();
-		++it;
+		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
+		if (length < playerDrawLenght_) {
+			(*it)->Draw();
+			++it;
+		}
 	}
 }
 

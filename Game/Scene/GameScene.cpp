@@ -59,7 +59,7 @@ void GameScene::Init(){
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	for(int32_t i = 0; i < int(stageWidth_ / 10.0f); i++){
+	for(int32_t i = 0; i < int(stageWidth_ / 5.0f); i++){
 
 		// 魚をランダムに配置
 		int rand = RandomInt(1, 100);
@@ -98,7 +98,7 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
-	camera_->SetPlayerPtr(player_.get());
+ 	camera_->SetPlayerPtr(player_.get());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,15 +183,22 @@ void GameScene::Update(){
 	}
 
 	for(auto& fish : fish_){
-		fish->Update();
+		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
+		if (lenght < 200.0f) {
+			fish->Update();
+		}
 	}
 
 	for(auto& item : items_){
-		item->Update();
+		float lenght = std::abs((player_->GetWorldTranslation() - item->GetWorldTranslation()).Length());
+		if (lenght < 200.0f) {
+			item->Update();
+		}
 	}
 
 	//EndlessStage();
 
+	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
 
 	// trail
@@ -273,12 +280,18 @@ void GameScene::Draw() const{
 		ground->Draw();
 	}
 
-	for(auto& fish : fish_){
-		fish->Draw();
+	for (auto& fish : fish_) {
+		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
+		if (lenght < 200.0f) {
+			fish->Draw();
+		}
 	}
 
 	for(auto& item : items_){
-		item->Draw();
+		float lenght = std::abs((player_->GetWorldTranslation() - item->GetWorldTranslation()).Length());
+		if (lenght < 6.0f) {
+			item->Draw();
+		}
 	}
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
@@ -326,11 +339,17 @@ void GameScene::UpdateColliderList(){
 	collisionManager_->AddCollider(player_.get());
 
 	for(auto& fish : fish_){
-		collisionManager_->AddCollider(fish.get());
+		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
+		if (lenght < 200.0f) {
+			collisionManager_->AddCollider(fish.get());
+		}
 	}
 
 	for(auto& item : items_){
-		collisionManager_->AddCollider(item.get());
+		float lenght = std::abs((player_->GetWorldTranslation() - item->GetWorldTranslation()).Length());
+		if (lenght < 200.0f) {
+			collisionManager_->AddCollider(item.get());
+		}
 	}
 }
 

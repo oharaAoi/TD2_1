@@ -78,5 +78,6 @@ private:
 	std::vector<std::string> fileNames_;
 
 	Vector3 playerPos_;
+	float playerDrawLenght_ = 6.0f;
 };
 

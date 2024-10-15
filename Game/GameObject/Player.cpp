@@ -52,6 +52,13 @@ void Player::Update(){
 		velocity_ = { 0.0f,0.0f,0.0f };
 	}
 
+	// 飛行フラグ更新
+	if (transform_->GetTranslation().y > 0.0f) {
+		isFlying_ = true;
+	} else {
+		isFlying_ = false;
+	}
+
 	animetor_->Update();
 
 	BaseGameObject::Update();
@@ -98,13 +105,6 @@ void Player::Move(){
 
 	// 深さを更新
 	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
-
-	// 飛行フラグ更新
-	if(transform_->GetTranslation().y > 0.0f){
-		isFlying_ = true;
-	} else{
-		isFlying_ = false;
-	}
 
 	MoveLimit();
 }
