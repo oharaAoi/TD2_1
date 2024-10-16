@@ -16,12 +16,12 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("skin.obj");
+	SetObject("Player.fbx");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	animetor_ = std::make_unique<PlayerAnimator>();
 	animetor_->Init();
-	//animetor_->LoadAnimation(model_);
+	animetor_->LoadAnimation(model_);
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
@@ -68,7 +68,7 @@ void Player::Update(){
 		isFlying_ = false;
 	}
 
-	//animetor_->Update();
+	animetor_->Update();
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -81,8 +81,8 @@ void Player::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Draw() const{
-	BaseGameObject::Draw();
-	//Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
+	//BaseGameObject::Draw();
+	Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
