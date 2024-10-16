@@ -16,7 +16,7 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("Player.fbx");
+	SetObject("test2.fbx");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	animetor_ = std::make_unique<PlayerAnimator>();
