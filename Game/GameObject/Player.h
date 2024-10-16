@@ -7,6 +7,12 @@
 #include "Easing.h"
 #include "Game/Attachment/PlayerAnimator.h"
 
+enum class MoveDirection : int{
+	DOWN = -1,
+	STRAIGHT = 0,
+	UP = 1
+};
+
 class Player :
 	public BaseGameObject,
 	public Collider {
@@ -20,6 +26,8 @@ public:
 	void Draw() const override;
 
 	void Move();
+	void Flying();
+	void Swimming();
 	void MoveLimit();
 	void LookAtDirection(const float& angle);
 
@@ -67,6 +75,19 @@ private:
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;
 	// プレイヤーがどれだけ潜っているか
 	float swimmigDepth_;
+
+	// 飛行中に上昇が弱まって降下しているかどうかのフラグ
+	bool isFalling_;
+	// 飛行後終了して水に入った瞬間を得るフラグ
+	bool isDiving;
+	// 着水して水に潜った際の猶予時間
+	const float kDiveTime_ = 1.0f;
+	float diveTime_ = kDiveTime_;
+
+
+	// プレイヤーの動く方向
+	MoveDirection nextDirection_ = MoveDirection::UP;
+	MoveDirection moveDirection_ = MoveDirection::STRAIGHT;
 
 	std::unique_ptr<PlayerAnimator> animetor_;
 

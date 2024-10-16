@@ -26,7 +26,7 @@ void Camera::Update(){
 	if(pPlayer_->GetTransform()->GetTranslation().y < 10.0f){
 		target_ = pPlayer_->GetAboveSurfaceTransform();
 		offsetLength_ = 60.0f + pPlayer_->GetSwimmingDepth() * 5.0f;
-		transform_.rotate.y = 0.91f + (-0.5f) * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, 0.0f, 1.0f);
+		transform_.rotate.y = 0.91f + (-0.5f) * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 45.0f, 0.0f, 1.0f);
 
 
 	} else{
@@ -70,17 +70,18 @@ void Camera::Update(){
 				* (pPlayer_->GetVelocity().x / 80.0f) * GameTimer::TimeRate();
 		} else{
 
+			dif = (target_->GetTranslation() + (offsetVec_ * offsetLength_)) - transform_.translate;
 
 			dif = (target_->GetTranslation() +
 				((offsetVec_ * offsetLength_) *
-					MakeRotateYMatrix(-0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f))))
+					MakeRotateYMatrix(-0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 45.0f, -1.0f, 1.0f))))
 				- transform_.translate;
 
-			transform_.translate.y -= 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f) * GameTimer::TimeRate();
+			transform_.translate.y -= 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 45.0f) * GameTimer::TimeRate();
 		}
 
 		// 少し遅らせて追従
-		transform_.translate += dif * 0.1f * GameTimer::TimeRate();
+		transform_.translate += dif * 0.05f * GameTimer::TimeRate();
 	}
 
 	BaseCamera::Update();

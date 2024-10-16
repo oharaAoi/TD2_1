@@ -34,7 +34,7 @@ void Player::Init(){
 	AdaptAdjustmentItem();
 	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
 	transform_->SetQuaternion(restPoseRotation_);
-
+	transform_->SetTranslaion({ 0.0f,-20.0f,0.0f });
 
 	isMove_ = false;
 	moveSpeed_ = 25.0f;//0.7f / (1.0f / 60.0f);
@@ -53,7 +53,7 @@ void Player::Update(){
 	}
 
 	// 飛行フラグ更新
-	if (transform_->GetTranslation().y > 0.0f) {
+	if(transform_->GetTranslation().y > 0.0f) {
 		isFlying_ = true;
 	} else {
 		isFlying_ = false;
@@ -78,26 +78,82 @@ void Player::Draw() const{
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Move(){
-	Vector3 translate = transform_->GetTranslation();
-	if(Input::IsPressKey(DIK_SPACE)) {
 
-		pressTime_ += 0.005f;
+	if(!isFlying_){
+		if(!isDiving){
+			if(Input::IsPressKey(DIK_SPACE)) {
 
-	} else {
+				// 押したら上下移動をやめる
+				if(Input::IsTriggerKey(DIK_SPACE)){
+					//moveDirection_ = MoveDirection::STRAIGHT;
+				}
 
-		pressTime_ -= 0.005f;
+				// 押してる時間を増加する
+				pressTime_ += (1.0f - pressTime_) * 0.025f * GameTimer::TimeRate();
+
+			} else {
+
+				if(Input::IsReleaseKey(DIK_SPACE)){
+
+					// 動く方向を切り替え
+					moveDirection_ = nextDirection_;
+
+					// 次の動く方向を決定
+					if(nextDirection_ == MoveDirection::DOWN){
+						nextDirection_ = MoveDirection::UP;
+					} else{
+						nextDirection_ = MoveDirection::DOWN;
+					}
+				}
+
+				// 押してる時間を減らす
+				pressTime_ += (0.0f - pressTime_) * 0.025f * GameTimer::TimeRate();
+			}
+		} else{
+
+			moveDirection_ = MoveDirection::DOWN;
+			diveTime_ -= GameTimer::DeltaTime();
+			pressTime_ += (1.0f - pressTime_) * 0.025f * GameTimer::TimeRate();
+
+			if(diveTime_ <= 0.0f){
+				isDiving = false;
+				diveTime_ = kDiveTime_;
+			}
+		}
+
+	} else{// 飛行時
+
+		pressTime_ += (1.0f - pressTime_) * 0.025f * GameTimer::TimeRate();
+
+		if(pressTime_ >= 0.95f){
+			isFalling_ = true;
+		}
+
+		// 少しずつ下降
+		if(isFalling_){
+			transform_->SetTranslaion(transform_->GetTranslation() + Vector3(0.0f, -0.1f, 0.0f));
+		}
+
+		if(transform_->GetTranslation().y <= 0.0f){
+			isDiving = true;
+			moveDirection_ = MoveDirection::DOWN;
+			pressTime_ = 0.0f;
+		}
 	}
 
 	// 角度を加算
-	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
+	pressTime_ = std::clamp(pressTime_, 0.0f, 1.0f);
 	float ease = EaseOutBack(std::fabsf(pressTime_));
 	currentAngle_ = kMaxAngle_ * ease * (pressTime_ > 0.0f ? 1.0f : -1.0f);
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
-	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(currentAngle_);
-	velocity_ *= moveSpeed_ * std::fabsf(GameTimer::DeltaTime());
-	transform_->SetTranslaion(translate + velocity_);
+	float velocityRate = moveSpeed_ / 80.0f;
+
+	velocity_ = Vector3(1.0f, 0.0f, 0.0f);
+	velocity_.y = (float)moveDirection_ * (1.0f - pressTime_) * velocityRate;
+	velocity_.x *= moveSpeed_ * std::fabsf(GameTimer::DeltaTime());
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
 
 	// プレイヤー上部の水面の座標を取得
 	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
@@ -108,6 +164,10 @@ void Player::Move(){
 
 	MoveLimit();
 }
+
+void Player::Flying(){}
+
+void Player::Swimming(){}
 
 
 void Player::MoveLimit(){
@@ -126,7 +186,7 @@ void Player::MoveLimit(){
 // ↓　進行方向を向かせる
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::LookAtDirection(const float& angle) {
+void Player::LookAtDirection(const float& angle){
 	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
 	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
 	transform_->SetQuaternion(slerp);
@@ -146,7 +206,7 @@ void Player::AdaptAdjustmentItem(){
 }
 
 const Vector3 Player::GetWorldTranslation() const{
-	return Transform(Vector3(0.0f, 0.0f,0.0f), transform_->GetWorldMatrix());
+	return Transform(Vector3(0.0f, 0.0f, 0.0f), transform_->GetWorldMatrix());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
