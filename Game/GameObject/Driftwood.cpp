@@ -1,32 +1,34 @@
-#include "Item.h"
+#include "Driftwood.h"
 
 //////////////////////////////////////////////////////
 //  コンストラクタ・デストラクタ
 //////////////////////////////////////////////////////
 
-Item::Item(){ Init(); }
-Item::~Item(){}
+Driftwood::Driftwood() { Init(); }
+Driftwood::~Driftwood() {}
 
 //////////////////////////////////////////////////////
 //  初期化処理
 //////////////////////////////////////////////////////
 
-void Item::Init(){
+void Driftwood::Init() {
 
-	typeID_ = (int)ObjectType::ITEM;
+	typeID_ = (int)ObjectType::DRIFTWOOD;
 
 	BaseGameObject::Init();
-	SetObject("Item.obj");
+	SetObject("Driftwood.obj");
 
-	obb_.size = { 1.0f, 1.0f, 1.0f };
+	obb_.size = { 3.0f, 0.6f, 0.6f };
 	obb_.center = GetWorldTranslation();
+
+	radius_ = obb_.size.x;
 }
 
 //////////////////////////////////////////////////////
 //  更新処理
 //////////////////////////////////////////////////////
 
-void Item::Update(){
+void Driftwood::Update() {
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
@@ -36,7 +38,7 @@ void Item::Update(){
 //  描画処理
 //////////////////////////////////////////////////////
 
-void Item::Draw() const{
+void Driftwood::Draw() const {
 	BaseGameObject::Draw();
 }
 
@@ -44,11 +46,10 @@ void Item::Draw() const{
 //  衝突時処理
 //////////////////////////////////////////////////////
 
-void Item::OnCollision(Collider* other){
+void Driftwood::OnCollision(Collider* other) {
 
 	//プレイヤーに当たった場合
-	if(other->GetObjectType() == int(ObjectType::PLAYER)){
-		isActive_ = false;
+	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
+		//isActive_ = false;
 	}
 }
-

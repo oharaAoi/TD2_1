@@ -128,64 +128,38 @@ public:
 	// sound系
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
-	/// <summary>
-	/// Audioファイルを読み込む関数
-	/// </summary>
-	/// <param name="fileName">音声データのファイルパス</param>
-	/// <returns></returns>
-	static SoundData LoadAudio(const std::string& fileName);
-
-	/// <summary>
-	/// BGMを読み込む関数
-	/// </summary>
-	/// <param name="fileName">音声データのファイルパス</param>
-	/// <returns></returns>
-	static BgmData LoadBGM(const std::string& fileName);
-
-	/// <summary>
-	/// SEを読み込む関数
-	/// </summary>
-	/// <param name="fileName">音声データのファイルパス</param>
-	/// <returns></returns>
-	static SeData LoadSE(const std::string& fileName);
+	static AudioData LoadAudio(const std::string& fileName);
 
 	/// <summary>
 	/// 音を鳴らす関数
 	/// </summary>
 	/// <param name="soundData">音声データをまとめた構造体</param>
-	static void PlayAudio(const SoundData& soundData);
-
-	/// <summary>
-	/// BGMを鳴らす関数
-	/// </summary>
-	/// <param name="soundData">音声データをまとめた構造体</param>
-	/// <param name="isLoop">BGMをループさせるか</param>
-	static void PlayBGM(const BgmData& soundData, const bool& isLoop);
-
-	/// <summary>
-	/// SEを鳴らす関数
-	/// </summary>
-	/// <param name="soundData">音声データをまとめた構造体</param>
-	/// <param name="isLoop">SEをループさせるか</param>
-	static void PlaySE(const SeData& soundData, const bool& isLoop);
+	static void PlayAudio(const AudioData& soundData, bool isLoop, float volume, bool checkPlaying = false);
 
 	/// <summary>
 	/// BGMを一時停止させる関数
 	/// </summary>
 	/// <param name="soundData">音声データをまとめた構造体</param>
-	static void PauseBGM(const BgmData& soundData);
+	static void Pause(const AudioData& soundData);
 
 	/// <summary>
 	/// BGMを再生する関数
 	/// </summary>
 	/// <param name="soundData">音声データをまとめた構造体</param>
-	static void ReStartBGM(const BgmData& soundData);
+	static void ReStart(const AudioData& soundData);
 
 	/// <summary>
 	/// 音の再生を止める関数
 	/// </summary>
 	/// <param name="soundData">音声データをまとめた構造体</param>
-	static void StopBGM(const BgmData& soundData);
+	static void Stop(const AudioData& soundData);
+
+	/// <summary>
+	/// 音量を調整する
+	/// </summary>
+	/// <param name="soundData"></param>
+	/// <param name="volume"></param>
+	static void SetVolume(const AudioData& soundData, float volume);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 苦肉の策

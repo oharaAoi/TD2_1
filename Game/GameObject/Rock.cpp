@@ -1,22 +1,22 @@
-#include "Item.h"
+#include "Rock.h"
 
 //////////////////////////////////////////////////////
 //  コンストラクタ・デストラクタ
 //////////////////////////////////////////////////////
 
-Item::Item(){ Init(); }
-Item::~Item(){}
+Rock::Rock() { Init(); }
+Rock::~Rock() {}
 
 //////////////////////////////////////////////////////
 //  初期化処理
 //////////////////////////////////////////////////////
 
-void Item::Init(){
+void Rock::Init() {
 
-	typeID_ = (int)ObjectType::ITEM;
+	typeID_ = (int)ObjectType::ROCK;
 
 	BaseGameObject::Init();
-	SetObject("Item.obj");
+	SetObject("Rock.obj");
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
@@ -26,7 +26,7 @@ void Item::Init(){
 //  更新処理
 //////////////////////////////////////////////////////
 
-void Item::Update(){
+void Rock::Update() {
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
@@ -36,7 +36,7 @@ void Item::Update(){
 //  描画処理
 //////////////////////////////////////////////////////
 
-void Item::Draw() const{
+void Rock::Draw() const {
 	BaseGameObject::Draw();
 }
 
@@ -44,11 +44,10 @@ void Item::Draw() const{
 //  衝突時処理
 //////////////////////////////////////////////////////
 
-void Item::OnCollision(Collider* other){
+void Rock::OnCollision(Collider* other) {
 
 	//プレイヤーに当たった場合
-	if(other->GetObjectType() == int(ObjectType::PLAYER)){
-		isActive_ = false;
+	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
+		//isActive_ = false;
 	}
 }
-

@@ -3,8 +3,13 @@
 #include "Engine/Collider/Collider.h"
 
 enum class PlacementObjType {
-	Test1_Type,
-	Test2_Type,
+	ROCK,
+	FISH,
+	BIRD,
+	ITEM,
+	DRIFTWOOD,
+	WATERWEED,
+	COIN,
 };
 
 /// <summary>

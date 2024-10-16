@@ -6,6 +6,7 @@
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
 #include "Game/Attachment/PlayerAnimator.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 class Player :
 	public BaseGameObject,
@@ -38,6 +39,8 @@ public:
 	bool GetIsFlying(){ return isFlying_; }
 	const Vector3& GetVelocity()const{ return velocity_; }
 
+	const uint32_t GetCoinNum() const { return getCoinNum_; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG
@@ -69,6 +72,12 @@ private:
 	float swimmigDepth_;
 
 	std::unique_ptr<PlayerAnimator> animetor_;
+
+	// sound
+	std::unique_ptr<AudioPlayer> hitSe_;
+	std::unique_ptr<AudioPlayer> coinGetSe_;
+
+	uint32_t getCoinNum_ = 0;
 
 public:// アクセッサ
 

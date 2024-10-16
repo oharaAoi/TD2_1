@@ -112,6 +112,10 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "fish.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Bird.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Driftwood.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Coin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
@@ -175,6 +179,8 @@ void GameScene::Update(){
 	for(auto& waterSpace : waterSpace_){
 		waterSpace->Update();
 	}
+
+	obstaclesManager_->Debug_Gui();
 
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
@@ -265,7 +271,7 @@ void GameScene::Draw() const{
 		ground->Draw();
 	}
 
-	Engine::SetPipeline(PipelineType::SkinningPipeline);
+	//Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
 
 	// effectの描画
@@ -316,6 +322,24 @@ void GameScene::UpdateColliderList(){
 			collisionManager_->AddCollider(obstacle.get());
 		}
 	}
+
+#ifdef _DEBUG
+
+	for (auto& obstacle : placementObjectEditor_->GetDebugPlacementObjs()) {
+		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
+		if (lenght < obstaclesManager_->GetUpdateLenght()) {
+			collisionManager_->AddCollider(obstacle.object_.get());
+		}
+	}
+
+	for (auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()) {
+		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
+		if (lenght < obstaclesManager_->GetUpdateLenght()) {
+			collisionManager_->AddCollider(obstacle.object_.get());
+		}
+	}
+
+#endif // _DEBUG
 
 	/*for(auto& fish : fish_){
 		float lenght = std::abs((player_->GetWorldTranslation() - fish->GetWorldTranslation()).Length());
@@ -424,6 +448,11 @@ void GameScene::Debug_Gui(){
 			isStepFrame_ = true;
 		}
 	}
+
+	ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
+	ImGui::SameLine();
+	ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
+
 	ImGui::End();
 
 	ImGui::Begin("GameObjects");
@@ -440,8 +469,6 @@ void GameScene::Debug_Gui(){
 	}
 
 	debugCamera_->Debug_Gui();
-
-	obstaclesManager_->Debug_Gui();
 
 	ImGui::End();
 }

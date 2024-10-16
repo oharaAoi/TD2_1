@@ -77,13 +77,41 @@ void ObstaclesManager::Inport(const std::string& fileName) {
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
 		switch (objData[oi].type_) {
-		case PlacementObjType::Test1_Type:
+		case PlacementObjType::ROCK:
+			obj.reset(new Rock);
+			obj->Init();
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj->SetObject("skin.obj");
 			break;
-		case PlacementObjType::Test2_Type:
+		case PlacementObjType::FISH:
+			obj.reset(new Fish);
+			obj->Init();
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj->SetObject("teapot.obj");
+			break;
+		case PlacementObjType::BIRD:
+			obj.reset(new Bird);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			break;
+		case PlacementObjType::ITEM:
+			obj.reset(new Item);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			break;
+		case PlacementObjType::DRIFTWOOD:
+			obj.reset(new Driftwood);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			break;
+		case PlacementObjType::WATERWEED:
+			obj.reset(new Waterweed);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			break;
+		case PlacementObjType::COIN:
+			obj.reset(new Coin);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			coinNum_++;
 			break;
 		}
 	}

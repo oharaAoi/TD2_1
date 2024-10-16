@@ -114,6 +114,19 @@ LoadData Audio::LoadWave(const char* filename) {
 	return loadData;
 }
 
+AudioData Audio::LoadAudio(const char* filename) {
+	LoadData loadData = LoadWave(filename);
+	// 読み込んだ音声データをreturn
+	AudioData result = {};
+	result.data.wfex = loadData.fmt;
+	result.data.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
+	result.data.bufferSize = loadData.dataSize;
+	HRESULT hr = xAudio2_->CreateSourceVoice(&result.pSourceVoice, &result.data.wfex);
+	assert(SUCCEEDED(hr));
+
+	return result;
+}
+
 
 /// <summary>
 /// 音声データの読み込み
@@ -129,30 +142,6 @@ SoundData Audio::SoundLoadWave(const char* filename) {
 	soundData.bufferSize = loadData.dataSize;
 	
 	return soundData;
-}
-
-BgmData Audio::LoadBGM(const char* filename) {
-	LoadData loadData = LoadWave(filename);
-	// 読み込んだ音声データをreturn
-	BgmData bgm = {};
-	bgm.data.wfex = loadData.fmt;
-	bgm.data.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
-	bgm.data.bufferSize = loadData.dataSize;
-	HRESULT result = xAudio2_->CreateSourceVoice(&bgm.pSourceVoice, &bgm.data.wfex);
-	assert(SUCCEEDED(result));
-
-	return bgm;
-}
-
-SeData Audio::LoadSE(const char* filename) {
-	LoadData loadData = LoadWave(filename);
-	// 読み込んだ音声データをreturn
-	SeData se = {};
-	se.data.wfex = loadData.fmt;
-	se.data.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
-	se.data.bufferSize = loadData.dataSize;
-
-	return se;
 }
 
 /// <summary>
@@ -196,22 +185,19 @@ void Audio::SoundPlayWave(const SoundData& soundData) {
 	result = pSourceVoice->Start();
 }
 
-/// <summary>
-/// BGMの再生
-/// </summary>
-/// <param name="xAudio2"></param>
-/// <param name="soundData"></param>
-void Audio::PlayBGM(const BgmData& soundData, const bool& isLoop) {
+void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, bool checkPlaying) {
 	HRESULT result = S_FALSE;
 
-	if (!IsPlaying(soundData.pSourceVoice)) {
-		return;
+	if (checkPlaying) {
+		if (!IsPlaying(audioData.pSourceVoice)) {
+			return;
+		}
 	}
 
 	// 再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.data.pBuffer;
-	buf.AudioBytes = soundData.data.bufferSize;
+	buf.pAudioData = audioData.data.pBuffer;
+	buf.AudioBytes = audioData.data.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 	// ループするかしないか
 	if (isLoop) {
@@ -221,33 +207,12 @@ void Audio::PlayBGM(const BgmData& soundData, const bool& isLoop) {
 	}
 
 	// 波形データの再生
-	result = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result = audioData.pSourceVoice->SubmitSourceBuffer(&buf);
 	assert(SUCCEEDED(result));
-	result = soundData.pSourceVoice->Start();
+	result = audioData.pSourceVoice->Start();
 	assert(SUCCEEDED(result));
-}
-
-/// <summary>
-/// SEの再生
-/// </summary>
-/// <param name="xAudio2"></param>
-/// <param name="soundData"></param>
-void Audio::PlaySE(const SeData& soundData, const bool& isLoop) {
-	HRESULT result = S_FALSE;
-	// 波形フォーマットを元にsourceVoiceの生成
-	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.data.wfex);
+	result = audioData.pSourceVoice->SetVolume(volume);
 	assert(SUCCEEDED(result));
-	// 再生する波形データの設定
-	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.data.pBuffer;
-	buf.AudioBytes = soundData.data.bufferSize;
-	buf.Flags = XAUDIO2_END_OF_STREAM;
-	// ループするかしないか
-	buf.LoopCount = isLoop;
-	// 波形データの再生
-	result = pSourceVoice->SubmitSourceBuffer(&buf);
-	result = pSourceVoice->Start();
 }
 
 /// <summary>
@@ -277,6 +242,16 @@ void Audio::PauseAudio(IXAudio2SourceVoice* pSourceVoice) {
 /// <param name="soundData"></param>
 void Audio::ReStartAudio(IXAudio2SourceVoice* pSourceVoice) {
 	HRESULT result = pSourceVoice->Start();
+	assert(SUCCEEDED(result));
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="pSourceVoice"></param>
+void Audio::SetVolume(IXAudio2SourceVoice* pSourceVoice, float volume) {
+	HRESULT result = S_FALSE;
+	result = pSourceVoice->SetVolume(volume);
 	assert(SUCCEEDED(result));
 }
 

@@ -40,8 +40,13 @@ public:
 
 	std::string GetObjectString(const PlacementObjType& type);
 
+	void NewObjectTypeSelect();
+
 	const bool GetIsPlay() const { return isCheckCollision_; }
 	
+	std::list<ObstaclesManager::ObjectData>& GetDebugPlacementObjs() { return debug_BasePlacementObj_; }
+	std::list<ObstaclesManager::ObjectData>& GetInportPlacementObjs() { return inport_BasePlacementObj_; }
+
 private:
 
 	std::list<ObstaclesManager::ObjectData> debug_BasePlacementObj_;

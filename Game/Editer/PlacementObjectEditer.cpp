@@ -141,28 +141,48 @@ void PlacementObjectEditer::NewGroup_Config() {
 	// ↓ 生成する種類を選択する
 	// -------------------------------------------------
 	ImGui::Text("newObjType");
-	if (ImGui::RadioButton("Test1_Type", newPopType_ == PlacementObjType::Test1_Type)) {
-		newPopType_ = PlacementObjType::Test1_Type;
-	}
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Test2_Type", newPopType_ == PlacementObjType::Test2_Type)) {
-		newPopType_ = PlacementObjType::Test2_Type;
-	}
+	NewObjectTypeSelect();
 
 	// -------------------------------------------------
 	// ↓ 実際に生成を行う
 	// -------------------------------------------------
 	if (ImGui::Button("AddList")) {
 		auto& newObject = debug_BasePlacementObj_.emplace_back(std::make_unique<BasePlacementObject>());
-		newObject.object_->Init();
 		switch (newPopType_) {
-		case PlacementObjType::Test1_Type:
-			newObject.object_->SetObject("Rock.obj");
-			newObject.type_ = PlacementObjType::Test1_Type;
+		case PlacementObjType::ROCK:
+			newObject.object_.reset(new Rock);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::ROCK;
 			break;
-		case PlacementObjType::Test2_Type:
-			newObject.object_->SetObject("teapot.obj");
-			newObject.type_ = PlacementObjType::Test2_Type;
+		case PlacementObjType::FISH:
+			newObject.object_.reset(new Fish);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::FISH;
+			break;
+		case PlacementObjType::BIRD:
+			newObject.object_.reset(new Bird);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::BIRD;
+			break;
+		case PlacementObjType::ITEM:
+			newObject.object_.reset(new Item);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::ITEM;
+			break;
+		case PlacementObjType::DRIFTWOOD:
+			newObject.object_.reset(new Driftwood);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::DRIFTWOOD;
+			break;
+		case PlacementObjType::WATERWEED:
+			newObject.object_.reset(new Waterweed);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::WATERWEED;
+			break;
+		case PlacementObjType::COIN:
+			newObject.object_.reset(new Coin);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::COIN;
 			break;
 		}
 	}
@@ -238,28 +258,48 @@ void PlacementObjectEditer::Edit_Config() {
 	// ↓ 生成する種類を選択する
 	// -------------------------------------------------
 	ImGui::Text("newObjType");
-	if (ImGui::RadioButton("Test1_Type", newPopType_ == PlacementObjType::Test1_Type)) {
-		newPopType_ = PlacementObjType::Test1_Type;
-	}
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Test2_Type", newPopType_ == PlacementObjType::Test2_Type)) {
-		newPopType_ = PlacementObjType::Test2_Type;
-	}
+	NewObjectTypeSelect();
 
 	// -------------------------------------------------
 	// ↓ 新しく追加する
 	// -------------------------------------------------
 	if (ImGui::Button("AddList")) {
 		auto& newObject = inport_BasePlacementObj_.emplace_back(std::make_unique<BasePlacementObject>());
-		newObject.object_->Init();
 		switch (newPopType_) {
-		case PlacementObjType::Test1_Type:
-			newObject.object_->SetObject("Rock.obj");
-			newObject.type_ = PlacementObjType::Test1_Type;
+		case PlacementObjType::ROCK:
+			newObject.object_.reset(new Rock);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::ROCK;
 			break;
-		case PlacementObjType::Test2_Type:
-			newObject.object_->SetObject("teapot.obj");
-			newObject.type_ = PlacementObjType::Test2_Type;
+		case PlacementObjType::FISH:
+			newObject.object_.reset(new Fish);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::FISH;
+			break;
+		case PlacementObjType::BIRD:
+			newObject.object_.reset(new Bird);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::BIRD;
+			break;
+		case PlacementObjType::ITEM:
+			newObject.object_.reset(new Item);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::ITEM;
+			break;
+		case PlacementObjType::DRIFTWOOD:
+			newObject.object_.reset(new Driftwood);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::DRIFTWOOD;
+			break;
+		case PlacementObjType::WATERWEED:
+			newObject.object_.reset(new Waterweed);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::WATERWEED;
+			break;
+		case PlacementObjType::COIN:
+			newObject.object_.reset(new Coin);
+			newObject.object_->Init();
+			newObject.type_ = PlacementObjType::COIN;
 			break;
 		}
 	}
@@ -368,19 +408,44 @@ void PlacementObjectEditer::Inport() {
 	for (size_t oi = 0; oi < groupMap_[inportFileName_].loadData_.size(); ++oi) {
 		auto& objData = groupMap_[inportFileName_].loadData_;
 		auto& obj = inport_BasePlacementObj_.emplace_back(std::make_unique<BasePlacementObject>());
-		obj.object_->Init();
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
 		switch (objData[oi].type_) {
-		case PlacementObjType::Test1_Type:
+		case PlacementObjType::ROCK:
+			obj.object_.reset(new Rock);
+			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj.object_->SetObject("skin.obj");
-			obj.type_ = PlacementObjType::Test1_Type;
+			obj.type_ = PlacementObjType::ROCK;
 			break;
-		case PlacementObjType::Test2_Type:
+		case PlacementObjType::FISH:
+			obj.object_.reset(new Fish);
+			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj.object_->SetObject("teapot.obj");
-			obj.type_ = PlacementObjType::Test2_Type;
+			obj.type_ = PlacementObjType::FISH;
+			break;
+		case PlacementObjType::BIRD:
+			obj.object_.reset(new Rock);
+			obj.object_->Init();
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.type_ = PlacementObjType::BIRD;
+			break;
+		case PlacementObjType::ITEM:
+			obj.object_.reset(new Item);
+			obj.object_->Init();
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.type_ = PlacementObjType::ITEM;
+			break;
+		case PlacementObjType::DRIFTWOOD:
+			obj.object_.reset(new Driftwood);
+			obj.object_->Init();
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.type_ = PlacementObjType::DRIFTWOOD;
+			break;
+		case PlacementObjType::WATERWEED:
+			obj.object_.reset(new Waterweed);
+			obj.object_->Init();
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.type_ = PlacementObjType::WATERWEED;
 			break;
 		}
 	}
@@ -392,12 +457,52 @@ void PlacementObjectEditer::Inport() {
 
 std::string PlacementObjectEditer::GetObjectString(const PlacementObjType& type) {
 	switch (type) {
-	case PlacementObjType::Test1_Type:
-		return std::string("Test1_");
-	case PlacementObjType::Test2_Type:
-		return std::string("Test2_");
+	case PlacementObjType::ROCK:
+		return std::string("ROCK_");
+	case PlacementObjType::FISH:
+		return std::string("FISH_");
+	case PlacementObjType::BIRD:
+		return std::string("BIRD_");
+	case PlacementObjType::ITEM:
+		return std::string("ITEM_");
+	case PlacementObjType::DRIFTWOOD:
+		return std::string("DRIFTWOOD_");
+	case PlacementObjType::WATERWEED:
+		return std::string("WATERWEED_");
+	case PlacementObjType::COIN:
+		return std::string("COIN_");
 	default:
 		return std::string("???");
+	}
+}
+
+void PlacementObjectEditer::NewObjectTypeSelect() {
+	if (ImGui::RadioButton("ROCK", newPopType_ == PlacementObjType::ROCK)) {
+		newPopType_ = PlacementObjType::ROCK;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("FISH", newPopType_ == PlacementObjType::FISH)) {
+		newPopType_ = PlacementObjType::FISH;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("BIRD", newPopType_ == PlacementObjType::BIRD)) {
+		newPopType_ = PlacementObjType::BIRD;
+	}
+	
+	if (ImGui::RadioButton("ITEM", newPopType_ == PlacementObjType::ITEM)) {
+		newPopType_ = PlacementObjType::ITEM;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("DRIFTWOOD", newPopType_ == PlacementObjType::DRIFTWOOD)) {
+		newPopType_ = PlacementObjType::DRIFTWOOD;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("WATERWEED", newPopType_ == PlacementObjType::WATERWEED)) {
+		newPopType_ = PlacementObjType::WATERWEED;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("COIN", newPopType_ == PlacementObjType::COIN)) {
+		newPopType_ = PlacementObjType::COIN;
 	}
 }
 

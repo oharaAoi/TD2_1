@@ -1,32 +1,35 @@
-#include "Item.h"
+#include "Waterweed.h"
 
 //////////////////////////////////////////////////////
 //  コンストラクタ・デストラクタ
 //////////////////////////////////////////////////////
 
-Item::Item(){ Init(); }
-Item::~Item(){}
+Waterweed::Waterweed() { Init(); }
+Waterweed::~Waterweed() {}
 
 //////////////////////////////////////////////////////
 //  初期化処理
 //////////////////////////////////////////////////////
 
-void Item::Init(){
+void Waterweed::Init() {
 
-	typeID_ = (int)ObjectType::ITEM;
+	typeID_ = (int)ObjectType::WATERWEED;
 
 	BaseGameObject::Init();
-	SetObject("Item.obj");
+	SetObject("Waterweed.obj");
 
-	obb_.size = { 1.0f, 1.0f, 1.0f };
+	obb_.size = { 1.0f, 2.5f, 1.0f };
 	obb_.center = GetWorldTranslation();
+
+	radius_ = 2.5f;
 }
 
 //////////////////////////////////////////////////////
 //  更新処理
 //////////////////////////////////////////////////////
 
-void Item::Update(){
+void Waterweed::Update() {
+	SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
@@ -36,7 +39,7 @@ void Item::Update(){
 //  描画処理
 //////////////////////////////////////////////////////
 
-void Item::Draw() const{
+void Waterweed::Draw() const {
 	BaseGameObject::Draw();
 }
 
@@ -44,11 +47,10 @@ void Item::Draw() const{
 //  衝突時処理
 //////////////////////////////////////////////////////
 
-void Item::OnCollision(Collider* other){
+void Waterweed::OnCollision(Collider* other) {
 
 	//プレイヤーに当たった場合
-	if(other->GetObjectType() == int(ObjectType::PLAYER)){
-		isActive_ = false;
+	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
+		//isActive_ = false;
 	}
 }
-

@@ -345,40 +345,28 @@ void Engine::ResetComputeShader() {
 // ↓　Sound系
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-SoundData Engine::LoadAudio(const std::string& fileName) {
-	return audio_->SoundLoadWave(fileName.c_str());
+AudioData Engine::LoadAudio(const std::string& fileName) {
+	return audio_->LoadAudio(fileName.c_str());
 }
 
-BgmData Engine::LoadBGM(const std::string& fileName) {
-	return audio_->LoadBGM(fileName.c_str());
+void Engine::PlayAudio(const AudioData& soundData, bool isLoop, float volume, bool checkPlaying) {
+	audio_->PlayAudio(soundData, isLoop, volume, checkPlaying);
 }
 
-SeData Engine::LoadSE(const std::string& fileName) {
-	return audio_->LoadSE(fileName.c_str());
-}
-
-void Engine::PlayAudio(const SoundData& soundData) {
-	audio_->SoundPlayWave(soundData);
-}
-
-void Engine::PlayBGM(const BgmData& soundData, const bool& isLoop) {
-	audio_->PlayBGM(soundData, isLoop);
-}
-
-void Engine::PlaySE(const SeData& soundData, const bool& isLoop) {
-	audio_->PlaySE(soundData, isLoop);
-}
-
-void Engine::PauseBGM(const BgmData& soundData) {
+void Engine::Pause(const AudioData& soundData) {
 	audio_->PauseAudio(soundData.pSourceVoice);
 }
 
-void Engine::ReStartBGM(const BgmData& soundData) {
+void Engine::ReStart(const AudioData& soundData) {
 	audio_->ReStartAudio(soundData.pSourceVoice);
 }
 
-void Engine::StopBGM(const BgmData& soundData) {
+void Engine::Stop(const AudioData& soundData) {
 	audio_->StopAudio(soundData.pSourceVoice);
+}
+
+void Engine::SetVolume(const AudioData& soundData, float volume) {
+	audio_->SetVolume(soundData.pSourceVoice, volume);
 }
 
 ID3D12Device* Engine::GetDevice() {

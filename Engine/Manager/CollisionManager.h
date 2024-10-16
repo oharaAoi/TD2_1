@@ -29,6 +29,13 @@ public:
 	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
 	/// <summary>
+	/// Obbでの当たり判定を行う
+	/// </summary>
+	/// <param name="colliderA"></param>
+	/// <param name="colliderB"></param>
+	bool CheckCollisonObb(Collider* colliderA, Collider* colliderB);
+
+	/// <summary>
 	/// コライダーの追加
 	/// </summary>
 	/// <param name="collider"></param>

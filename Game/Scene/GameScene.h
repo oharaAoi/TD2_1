@@ -77,8 +77,4 @@ private:
 	// ---------- editor ----------- //
 
 	std::unique_ptr<PlacementObjectEditer> placementObjectEditor_ = nullptr;
-
-	// ---------- sound ---------- //
-	SeData soundData_;
-	BgmData bgmData_;
 };

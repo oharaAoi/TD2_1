@@ -39,13 +39,9 @@ struct LoadData {
 	uint32_t dataSize;
 };
 
-struct BgmData {
+struct AudioData {
 	SoundData data;
 	IXAudio2SourceVoice* pSourceVoice;
-};
-
-struct SeData {
-	SoundData data;
 };
 
 class Audio {
@@ -80,18 +76,7 @@ public:
 
 	LoadData LoadWave(const char* filename);
 
-	/// <summary>
-	/// Bgmを読み込む
-	/// </summary>
-	/// <returns></returns>
-	BgmData LoadBGM(const char* filename);
-
-	/// <summary>
-	/// SEを読み込む
-	/// </summary>
-	/// <param name="filename"></param>
-	/// <returns></returns>
-	SeData LoadSE(const char* filename);
+	AudioData LoadAudio(const char* filename);
 
 	/// <summary>
 	/// 音声データの解放
@@ -106,17 +91,7 @@ public:
 	/// <param name="soundData"></param>
 	void SoundPlayWave(const SoundData& soundData);
 
-	/// <summary>
-	/// BGMの再生
-	/// </summary>
-	/// <param name="soundData"></param>
-	void PlayBGM(const BgmData& soundData, const bool& isLoop);
-
-	/// <summary>
-	/// SEの再生
-	/// </summary>
-	/// <param name="soundData"></param>
-	void PlaySE(const SeData& soundData, const bool& isLoop);
+	void PlayAudio(const AudioData& audioData, bool isLoop, float volume, bool checkPlaying = false);
 
 	/// <summary>
 	/// サウンドの停止
@@ -135,6 +110,12 @@ public:
 	/// </summary>
 	/// <param name="soundData"></param>
 	void ReStartAudio(IXAudio2SourceVoice* pSourceVoice);
+
+	/// <summary>
+	/// 音量の設定
+	/// </summary>
+	/// <param name="pSourceVoice"></param>
+	void SetVolume(IXAudio2SourceVoice* pSourceVoice, float volume);
 
 	/// <summary>
 	/// サウンドが再生中かどうか

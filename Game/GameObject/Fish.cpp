@@ -18,6 +18,9 @@ void Fish::Init(){
 	BaseGameObject::Init();
 	radius_ = 1.0f;
 	SetObject("fish.obj");
+
+	obb_.size = { 1.0f, 1.0f, 1.0f };
+	obb_.center = GetWorldTranslation();
 }
 
 //////////////////////////////////////////////////////
@@ -25,6 +28,8 @@ void Fish::Init(){
 //////////////////////////////////////////////////////
 
 void Fish::Update(){
+	obb_.center = GetWorldTranslation();
+	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
 }
 

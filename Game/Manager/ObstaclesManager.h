@@ -5,6 +5,11 @@
 #include "Engine/Math/MyRandom.h"
 #include "Game/GameObject/Fish.h"
 #include "Game/GameObject/Item.h"
+#include "Game/GameObject/Rock.h"
+#include "Game/GameObject/Bird.h"
+#include "Game/GameObject/Driftwood.h"
+#include "Game/GameObject/Waterweed.h"
+#include "Game/GameObject/Coin.h"
 #include "Game/Information/StageInformation.h"
 #include <nlohmann/json.hpp>
 
@@ -66,6 +71,8 @@ public:
 	std::list<std::unique_ptr<BasePlacementObject>>& GetPlacementObject() { return obstaclesList_; }
 	const float GetUpdateLenght() const { return playerDrawLenght_; }
 
+	const uint32_t GetMaxCoins() const { return coinNum_; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 
@@ -89,5 +96,7 @@ private:
 
 	Vector3 playerPos_;
 	float playerDrawLenght_ = 200.0f;
+
+	uint32_t coinNum_ = 0;
 };
 

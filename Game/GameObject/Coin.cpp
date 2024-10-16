@@ -1,22 +1,23 @@
-#include "Item.h"
+#include "Coin.h"
 
 //////////////////////////////////////////////////////
 //  コンストラクタ・デストラクタ
 //////////////////////////////////////////////////////
 
-Item::Item(){ Init(); }
-Item::~Item(){}
+Coin::Coin() { Init(); }
+Coin::~Coin() {}
 
 //////////////////////////////////////////////////////
 //  初期化処理
 //////////////////////////////////////////////////////
 
-void Item::Init(){
+void Coin::Init() {
 
-	typeID_ = (int)ObjectType::ITEM;
+	typeID_ = (int)ObjectType::COIN;
 
 	BaseGameObject::Init();
-	SetObject("Item.obj");
+	SetObject("Coin.obj");
+	SetColor({ 1.0f, 1.0f, 0.0f, 1.0f });
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
@@ -26,7 +27,7 @@ void Item::Init(){
 //  更新処理
 //////////////////////////////////////////////////////
 
-void Item::Update(){
+void Coin::Update() {
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
@@ -36,7 +37,7 @@ void Item::Update(){
 //  描画処理
 //////////////////////////////////////////////////////
 
-void Item::Draw() const{
+void Coin::Draw() const {
 	BaseGameObject::Draw();
 }
 
@@ -44,11 +45,9 @@ void Item::Draw() const{
 //  衝突時処理
 //////////////////////////////////////////////////////
 
-void Item::OnCollision(Collider* other){
-
+void Coin::OnCollision(Collider* other) {
 	//プレイヤーに当たった場合
-	if(other->GetObjectType() == int(ObjectType::PLAYER)){
+	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
 		isActive_ = false;
 	}
 }
-

@@ -2,6 +2,7 @@
 #include <cstdint>
 #include "Engine/Math/Vector3.h"
 #include "Engine/Math/Vector4.h"
+#include "Engine/Math/MathStructures.h"
 #include "ObjectType.h"
 
 /// <summary>
@@ -42,12 +43,16 @@ public:
 
 	int32_t GetObjectType(){ return typeID_; }
 
+	OBB& GetObb() { return obb_; }
+
 protected:
 
 	// 半径
 	float radius_ = 1.0f;
 	// 種別ID
 	int32_t typeID_ = -1;
+	// 当たり判定用
+	OBB obb_;
 
 	bool isHitting_;
 	Vector4 color_;
