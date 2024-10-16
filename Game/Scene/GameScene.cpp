@@ -107,8 +107,8 @@ void GameScene::Init(){
 
 void GameScene::Load(){
 	//ModelManager::LoadModel("./Engine/Resources/Develop/", "test3.fbx");
+
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
-	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "fish.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
@@ -116,12 +116,17 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Driftwood.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Coin.obj");
+
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
+
 	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
+	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
+
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 }
 
@@ -267,16 +272,17 @@ void GameScene::Draw() const{
 
 	obstaclesManager_->Draw();
 
-	for(auto& ground : ground_){
-		ground->Draw();
-	}
-
 	//Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
 
 	// effectの描画
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
+
+	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
+	for (auto& ground : ground_) {
+		ground->Draw();
+	}
 
 #pragma endregion
 
@@ -452,6 +458,10 @@ void GameScene::Debug_Gui(){
 	ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
 	ImGui::SameLine();
 	ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
+
+	for (auto& ground : ground_) {
+		ground->Debug_Gui();
+	}
 
 	ImGui::End();
 

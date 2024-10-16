@@ -940,6 +940,9 @@
     <FxCompile Include="Engine\HLSL\Skinning.CS.hlsl">
       <Filter>Engine\HLSL\CS</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\HLSL\WaterLighting.PS.hlsl">
+      <Filter>Engine\HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\ImGui\LICENSE.txt">

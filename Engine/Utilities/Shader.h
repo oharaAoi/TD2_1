@@ -17,7 +17,8 @@ public:
 		PBR,
 		Particle,
 		Sprite,
-		WaterSpace
+		WaterSpace,
+		WaterLighting,
 	};
 
 	enum CsShaderName {

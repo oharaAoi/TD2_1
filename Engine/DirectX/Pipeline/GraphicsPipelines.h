@@ -12,6 +12,7 @@ enum class PipelineType {
 	SpritePipeline,
 	SkinningPipeline,
 	WaterSpacePipeline, 
+	WaterLightingPipeline,
 	PrimitivePipeline
 };
 

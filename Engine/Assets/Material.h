@@ -52,6 +52,10 @@ public:
 
 	void SetMaterialData(Model::ModelMaterialData materialData);
 
+	void SetUvScale(const Vector3& scale) { uvScale_ = scale; }
+	void SetUvRotate(const Vector3& rotate) { uvRotation_ = rotate; }
+	void SetUvTranslation(const Vector3& translation) { uvTranslation_ = translation; }
+
 private:
 
 	ComPtr<ID3D12Resource> materialBuffer_;

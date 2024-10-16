@@ -320,6 +320,9 @@ void Engine::SetPipeline(const PipelineType& kind) {
 	case PipelineType ::WaterSpacePipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::WaterSpacePipeline, dxCommands_->GetCommandList());
 		break;
+	case PipelineType::WaterLightingPipeline:
+		graphicsPipelines_->SetPipeline(PipelineType::WaterLightingPipeline, dxCommands_->GetCommandList());
+		break;
 	}
 }
 

@@ -17,7 +17,8 @@ enum class RootSignatureType {
 	CsSkinning,
 	ComputeShaderBlend,
 	CSReultRenderBlend,
-	WaterSpace
+	WaterSpace,
+	WaterLighting
 };
 
 class RootSignature {
@@ -49,6 +50,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	ComPtr<ID3D12RootSignature> CreateWaterSpaceRootSignature();
+	ComPtr<ID3D12RootSignature> CreateWaterLightingRootSignature();
 
 	using FunctionPointer = ComPtr<ID3D12RootSignature>(RootSignature::*)();
 	std::unordered_map<RootSignatureType, FunctionPointer> functionMap_ = {
@@ -67,6 +69,7 @@ public:
 		{RootSignatureType::CSReultRenderBlend, &RootSignature::CreateResultRenderRootSignature},
 		// game
 		{RootSignatureType::WaterSpace, &RootSignature::CreateWaterSpaceRootSignature},
+		{RootSignatureType::WaterLighting, &RootSignature::CreateWaterLightingRootSignature},
 	};
 
 	ComPtr<ID3D12RootSignature> Create(const RootSignatureType& type);

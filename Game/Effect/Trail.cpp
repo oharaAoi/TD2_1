@@ -16,12 +16,12 @@ void Trail::Update() {
 		// ↓ trailの位置をplayerに合わせる
 		// -------------------------------------------------
 		Vector3 trailPos = (*it).entity->GetTransform()->GetTranslation();
-		trailPos = trailPos.Lerp(trailPos, playerPosition_, 0.1f);
+		trailPos = trailPos.Lerp(trailPos, playerPosition_, 0.05f);
 		(*it).entity->GetTransform()->SetTranslaion(trailPos);
 
 		(*it).entity->Update();
 		(*it).entity->SetColor(Vector4(1.0f,1.0f,1.0f, std::lerp(0.0f, 1.0f, (*it).lifeTime_ / newLifeTime_)));
-		(*it).lifeTime_ -= 1.0f * GameTimer::DeltaTime();
+		(*it).lifeTime_ -= GameTimer::DeltaTime();
 
 		if ((*it).lifeTime_ < 0) {
 			it = trails_.erase(it);
@@ -31,7 +31,7 @@ void Trail::Update() {
 	}
 
 	if (createCoolTime_ != 0.0f) {
-		createCoolTime_ -= 1.0f * GameTimer::DeltaTime();
+		createCoolTime_ -= GameTimer::DeltaTime();
 		if (createCoolTime_ <= 0.0f) {
 			createCoolTime_ = 0.0f;
 		}
@@ -51,7 +51,7 @@ void Trail::AddTrail(const Vector3& pos) {
 	}
 
 	if (createCoolTime_ <= 0.0f) {
-		createCoolTime_ = 0.0f;
+ 		createCoolTime_ = 0.2f;
 		trails_.emplace_back(TrailData{ pos, newLifeTime_ });
 	}
 }
