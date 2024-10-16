@@ -93,11 +93,11 @@ void Player::Move(){
 	Vector3 translate = transform_->GetTranslation();
 	if(Input::IsPressKey(DIK_SPACE)) {
 
-		pressTime_ += 0.05f;
+		pressTime_ += 0.025f;
 
 	} else {
 
-		pressTime_ -= 0.05f;
+		pressTime_ -= 0.025f;
 	}
 
 	// 角度を加算
