@@ -16,12 +16,12 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("test2.fbx");
+	SetObject("skin.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	animetor_ = std::make_unique<PlayerAnimator>();
 	animetor_->Init();
-	animetor_->LoadAnimation(model_);
+	//animetor_->LoadAnimation(model_);
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
@@ -35,10 +35,19 @@ void Player::Init(){
 	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
 	transform_->SetQuaternion(restPoseRotation_);
 
+	obb_.size = { 1.0f, 1.0f, 1.0f };
+	obb_.center = GetWorldTranslation();
 
 	isMove_ = false;
 	moveSpeed_ = 25.0f;//0.7f / (1.0f / 60.0f);
-	radius_ = 1.0f;
+	radius_ = 2.0f;
+
+	getCoinNum_ = 0;
+
+	hitSe_ = std::make_unique<AudioPlayer>();
+	coinGetSe_ = std::make_unique<AudioPlayer>();
+	hitSe_->Init("./Game/Resources/Audio/test.wav");
+	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +68,10 @@ void Player::Update(){
 		isFlying_ = false;
 	}
 
-	animetor_->Update();
+	//animetor_->Update();
+
+	obb_.center = GetWorldTranslation();
+	obb_.MakeOBBAxis(transform_->GetQuaternion());
 
 	BaseGameObject::Update();
 }
@@ -69,8 +81,8 @@ void Player::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Draw() const{
-	//BaseGameObject::Draw();
-	Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
+	BaseGameObject::Draw();
+	//Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,12 +203,18 @@ void Player::OnCollision(Collider* other){
 
 	//障害物に当たった場合
 	if(ownerType == (int)ObjectType::OBSTACLE){
-		moveSpeed_ -= 10.0f;
+  		moveSpeed_ -= 10.0f;
 		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
+		hitSe_->Play(false, true);
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::ITEM){
 		moveSpeed_ += 10.0f;
 		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
+	}
+
+	if (other->GetObjectType() == (int)ObjectType::COIN) {
+		coinGetSe_->Play(false, 0.5f, true);
+		getCoinNum_++;
 	}
 }
