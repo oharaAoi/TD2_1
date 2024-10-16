@@ -182,7 +182,7 @@ void Player::Move(){
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
 	float ease = EaseOutBack(std::fabsf(pressTime_));
-	currentAngle_ = kMaxAngle_ * ease * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
@@ -226,9 +226,9 @@ void Player::MoveLimit(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::LookAtDirection(const float& angle){
-	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
+	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
 	slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	transform_->SetQuaternion(slerpRotation_);
+	transform_->SetQuaternion(moveRotation);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,8 +260,10 @@ void Player::Debug_Gui(){
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
-	ImGui::DragFloat("lookAtT", &lookAtT_, 0.1f);
+	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
+	
 	ImGui::DragFloat("radius", &radius_, 0.1f);
+	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
 
 	if(ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();
