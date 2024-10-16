@@ -46,18 +46,19 @@ void Camera::Update(){
 			if(pPlayer_->GetTransform()->GetTranslation().y > 10.0f){
 
 				// 高さの割合を計算
- 				float heightRatio = std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f, 0.0f, 1.0f);
-				
+				float heightRatio = std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f, 0.0f, 1.0f);
+
 				// 飛行中のプレイヤーの高さに応じた追加の調整ベクトルを計算
 				addVec.y = 7.0f * (pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f;
 				addVec.x = 10.0f * heightRatio;
+				addVec.y += pPlayer_->GetVelocity().y * 40.0f;
 
 				// 飛行中の定位置まで回転を加算
 				transform_.rotate.x += 0.005f * GameTimer::TimeRate();
 				transform_.rotate.x = std::clamp(transform_.rotate.x, baseRotate.x, baseRotate.x + 0.15f);
 				transform_.rotate.y += 0.005f * GameTimer::TimeRate();
 				transform_.rotate.y = std::clamp(transform_.rotate.y, baseRotate.y, baseRotate.y + 0.15f);
-			
+
 			}
 
 		} else{
@@ -68,6 +69,7 @@ void Camera::Update(){
 			transform_.rotate.y -= 0.005f * GameTimer::TimeRate();
 			transform_.rotate.y = std::clamp(transform_.rotate.y, baseRotate.y, baseRotate.y + 0.15f);
 		}
+
 
 		// 目的座標への差分
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec) - transform_.translate;
