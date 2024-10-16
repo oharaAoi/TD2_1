@@ -23,8 +23,6 @@ public:
 
 	Skinning* GetSkinning() { return skinning_.get(); }
 
-
-
 private:
 
 	std::unique_ptr<AnimetionClip> animetionClip_;
