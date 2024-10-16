@@ -1,6 +1,7 @@
 #include "Skinning.h"
 #include "Engine/Assets/Skeleton.h"
 #include "Engine/GameObject/Model.h"
+#include "Engine/Assets/Mesh.h"
 
 Skinning::Skinning() {}
 Skinning::~Skinning() {}

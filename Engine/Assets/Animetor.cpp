@@ -26,7 +26,7 @@ void Animetor::LoadAnimation(const std::string& directoryPath, const std::string
 	skeleton_ = std::make_unique<Skeleton>();
 	skeleton_->CreateSkeleton(model->GetNode());
 	skeleton_->Init();
-	skinning_ = Engine::CreateSkinning(skeleton_.get(), model);
+	skinning_ = Engine::CreateSkinning(skeleton_.get(), model, 0);
 
 	animetionClip_->Update();
 	animetionClip_->ApplyAnimation(skeleton_.get());

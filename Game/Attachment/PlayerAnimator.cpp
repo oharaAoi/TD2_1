@@ -27,14 +27,19 @@ void PlayerAnimator::Update() {
 
 	// jointの更新
 	skeleton_->Update();
-	skinning_->Update(skeleton_.get());
+	for (size_t oi = 0; oi < skinning_.size(); ++oi) {
+		skinning_[oi]->Update(skeleton_.get());
+	}
 }
 
 void PlayerAnimator::LoadAnimation(Model* model) {
 	skeleton_ = std::make_unique<Skeleton>();
 	skeleton_->CreateSkeleton(model->GetNode());
 	skeleton_->Init();
-	skinning_ = Engine::CreateSkinning(skeleton_.get(), model);
+	for (size_t oi = 0; oi < model->GetMeshsNum(); ++oi) {
+		skinning_.push_back(Engine::CreateSkinning(skeleton_.get(), model, (uint32_t)oi));
+	}
+	/*skinning_ = Engine::CreateSkinning(skeleton_.get(), model);*/
 
 	// jointの参照をポインタとして保持
 	std::vector<Skeleton::Joint>& joints = skeleton_->GetJoints();
@@ -42,3 +47,4 @@ void PlayerAnimator::LoadAnimation(Model* model) {
 		joints_[joint.name] = const_cast<Skeleton::Joint*>(&joint);
 	}
 }
+

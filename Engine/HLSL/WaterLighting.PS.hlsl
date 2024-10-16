@@ -186,9 +186,9 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	//output.color.rgb += luminance * float3(1.0, 1.0, 1.0);;
 	output.color.a = gMaterial.color.a * textureColor.a;
 	
-	if (luminance > 0.8f) {
-		output.color.rgb += lightTextureColor;
-	}
+	//if (luminance > 0.8f) {
+	//	output.color.rgb += lightTextureColor;
+	//}
 	
 	output.color = clamp(output.color, 0.0f, 1.0f);
 	
