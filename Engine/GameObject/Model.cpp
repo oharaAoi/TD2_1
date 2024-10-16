@@ -138,7 +138,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + fileName;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs |
-											 aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);
+											 aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 	if (!scene) {
 		std::cerr << "Error: " << importer.GetErrorString() << std::endl;
 	}

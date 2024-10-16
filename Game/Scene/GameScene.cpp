@@ -59,31 +59,8 @@ void GameScene::Init(){
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	//for(int32_t i = 0; i < int(stageWidth_ / 5.0f); i++){
-
-	//	// 魚をランダムに配置
-	//	int rand = RandomInt(1, 100);
-
-	//	// 10mごとに2/3の確率で配置
-	//	if(rand <= 66){
-
-
-	//		// 1/2で魚、アイテムを切り替える
-	//		if(rand % 2 == 0){
-	//			fish_.emplace_back(std::make_unique<Fish>());
-	//			float depth = RandomFloat(groundDepth_ + fish_.back()->GetRadius(), -fish_.back()->GetRadius());
-	//			fish_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-	//			fish_.back()->Update();
-
-	//		} else{
-	//			items_.emplace_back(std::make_unique<Item>());
-	//			float depth = RandomFloat(groundDepth_ + items_.back()->GetRadius(), -items_.back()->GetRadius());
-	//			items_.back()->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-	//			items_.back()->Update();
-
-	//		}
-	//	}
-	//}
+	worldWall_ = std::make_unique<WorldWall>();
+	worldWall_->Init();
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -106,9 +83,7 @@ void GameScene::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Load(){
-	//ModelManager::LoadModel("./Engine/Resources/Develop/", "test3.fbx");
-
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
+	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player.fbx");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "fish.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
@@ -117,16 +92,21 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Coin.obj");
 
+	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 
+	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
+
+	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
-	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 
+	// Texture
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 }
 
@@ -174,6 +154,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
+
 	player_->Update();
 
 	for(auto& ground : ground_){
@@ -194,6 +175,8 @@ void GameScene::Update(){
 	trail_->Update();
 	trail_->AddTrail(player_->GetTransform()->GetTranslation());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
+
+	worldWall_->Update();
 
 	// -------------------------------------------------
 	// ↓ 開始時にコライダーのリストを更新する
@@ -263,6 +246,9 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 
+	worldWall_->Draw();
+
+
 #ifdef _DEBUG
 
 	// editorの描画
@@ -272,7 +258,7 @@ void GameScene::Draw() const{
 
 	obstaclesManager_->Draw();
 
-	//Engine::SetPipeline(PipelineType::SkinningPipeline);
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->Draw();
 
 	// effectの描画
@@ -462,6 +448,8 @@ void GameScene::Debug_Gui(){
 	for (auto& ground : ground_) {
 		ground->Debug_Gui();
 	}
+
+	worldWall_->GetTransform()->Debug_Gui();
 
 	ImGui::End();
 

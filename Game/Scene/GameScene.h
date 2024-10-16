@@ -22,6 +22,7 @@
 #include "Game/Camera/Camera.h"
 #include "Game/Camera/DebugCamera.h"
 #include "Game/Effect/Trail.h"
+#include "Game/GameObject/WorldWall.h"
 #include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
 
@@ -64,6 +65,9 @@ private:
 	std::unique_ptr<Trail> trail_ = nullptr;
 	std::list<std::unique_ptr<Fish>>fish_;
 	std::list<std::unique_ptr<Item>>items_;
+
+	// ---------- worldobject ---------- //
+	std::unique_ptr<WorldWall> worldWall_ = nullptr;
 
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;

@@ -15,7 +15,7 @@ void Ground::Init() {
 	BaseGameObject::Init();
 	SetObject("ground.obj");
 	for (uint32_t oi = 0; oi < materials.size(); ++oi) {
-		materials[oi]->SetUvScale({ 0.1f, 200.0f, 1.0f });
+		materials[oi]->SetUvScale({ 1.0f, 1.0f, 1.0f });
 	}
 }
 
@@ -42,8 +42,11 @@ void Ground::Draw() const {
 
 #ifdef _DEBUG
 void Ground::Debug_Gui() {
+	ImGui::Begin("Ground");
+	transform_->Debug_Gui();
 	for (uint32_t oi = 0; oi < materials.size(); ++oi) {
 		materials[oi]->ImGuiDraw();
 	}
+	ImGui::End();
 }
 #endif // _DEBUG
