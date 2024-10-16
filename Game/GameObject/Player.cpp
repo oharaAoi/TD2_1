@@ -16,7 +16,7 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("test2.fbx");
+	SetObject("Player.fbx");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	animetor_ = std::make_unique<PlayerAnimator>();
@@ -43,6 +43,8 @@ void Player::Init(){
 	radius_ = 2.0f;
 
 	getCoinNum_ = 0;
+
+	slerpRotation_ = Quaternion();
 
 	hitSe_ = std::make_unique<AudioPlayer>();
 	coinGetSe_ = std::make_unique<AudioPlayer>();
@@ -82,7 +84,7 @@ void Player::Update(){
 
 void Player::Draw() const{
 	//BaseGameObject::Draw();
-	Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
+	Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,8 +142,8 @@ void Player::MoveLimit(){
 
 void Player::LookAtDirection(const float& angle) {
 	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
-	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	transform_->SetQuaternion(slerp);
+	slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
+	transform_->SetQuaternion(slerpRotation_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

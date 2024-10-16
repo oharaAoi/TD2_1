@@ -77,6 +77,30 @@ void Model::DrawSkinning(ID3D12GraphicsCommandList* commandList,
 	}
 }
 
+void Model::DrawSkinnings(ID3D12GraphicsCommandList* commandList,
+						  const std::vector<std::unique_ptr<Skinning>>& skinning,
+						  const WorldTransform* worldTransform,
+						  const ViewProjection* viewprojection, 
+						  const std::vector<std::unique_ptr<Material>>& materials) {
+
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
+		skinning[oi]->StackCommand(commandList, meshArray_[oi]->GetVBV());
+		meshArray_[oi]->DrawIndex(commandList);
+		materials[oi]->Draw(commandList);
+
+		worldTransform->Draw(commandList);
+		viewprojection->Draw(commandList);
+
+		if (hasTexture_) {
+			std::string textureName = materials[oi]->GetUseTexture();
+			TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureName, 3);
+		}
+
+		commandList->DrawIndexedInstanced(meshArray_[oi]->GetIndexNum(), 1, 0, 0, 0);
+	}
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　Debug
@@ -214,11 +238,12 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 		// -------------------------------------------------
 		// ↓ skinningを取得する用の処理
 		// -------------------------------------------------
+		std::map<std::string, Skinning::JointWeightData> newMap;
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
 			// jointごとの格納領域を作る
 			aiBone* bone = mesh->mBones[boneIndex];
 			std::string jointName = bone->mName.C_Str();
-			Skinning::JointWeightData& jointWeightData = skinClusterData_[jointName];
+			Skinning::JointWeightData& jointWeightData = newMap[jointName];
 
 			// InverseBindPoseMatrixの抽出
 			aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
@@ -237,6 +262,7 @@ void Model::LoadObj(const std::string& directoryPath, const std::string& fileNam
 			}
 		}
 
+		skinClusterData_.push_back(std::move(newMap));
 		// nodeの解析
 		rootNode_ = ReadNode(scene->mRootNode, scene);
 		meshVertices.push_back(vertices);

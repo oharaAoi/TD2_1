@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Engine/Assets/Skinning.h"
 
 Mesh::Mesh() {
 }

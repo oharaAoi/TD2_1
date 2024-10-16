@@ -62,8 +62,9 @@ public:
 	/// <param name="worldTransform">: worldTransform</param>
 	static void DrawModel(Model* model, const WorldTransform* worldTransform, const std::vector<std::unique_ptr<Material>>& materials);
 
-	//static void DrawAnimationModel(Model* model, const Skinning& skeleton, const WorldTransform* worldTransform);
 	static void DrawAnimationModel(Model* model, const Skinning* skeleton, const WorldTransform* worldTransform, const std::vector<std::unique_ptr<Material>>& materials);
+
+	static void DrawAnimationModels(Model* model, const std::vector<std::unique_ptr<Skinning>>& skinnig, const WorldTransform* worldTransform, const std::vector<std::unique_ptr<Material>>& materials);
 
 	/// <summary>
 	/// Particleの描画

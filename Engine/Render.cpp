@@ -94,6 +94,11 @@ void Render::DrawAnimationModel(Model* model, const Skinning* skinning,
 	model->DrawSkinning(commandList_, skinning, worldTransform, viewProjection_.get(), materials);
 }
 
+void Render::DrawAnimationModels(Model* model, const std::vector<std::unique_ptr<Skinning>>& skinning, const WorldTransform* worldTransform, const std::vector<std::unique_ptr<Material>>& materials) {
+	lightGroup_->Draw(commandList_, 5);
+	model->DrawSkinnings(commandList_, skinning, worldTransform, viewProjection_.get(), materials);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　Particleの描画
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -50,6 +50,7 @@ private:
 	AdjustmentItem* adjustmentItem_;
 
 	Quaternion restPoseRotation_;
+	Quaternion slerpRotation_;
 
 	// パラメータ
 	Vector3 velocity_;
