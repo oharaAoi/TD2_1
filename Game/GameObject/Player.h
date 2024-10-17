@@ -53,6 +53,9 @@ private:
 	// パラメータ---------------------------------------
 
 	Quaternion restPoseRotation_;
+	Quaternion slerpRotation_;
+
+	// パラメータ
 	Vector3 velocity_;
 	float moveSpeed_;
 	float lookAtT_;

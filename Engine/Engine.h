@@ -86,7 +86,7 @@ public:
 	// ワールドトランスフォームを作成
 	static std::unique_ptr<WorldTransform> CreateWorldTransform();
 	// Skinningの作成
-	static std::unique_ptr<Skinning> CreateSkinning(Skeleton* skeleton, Model* model);
+	static std::unique_ptr<Skinning> CreateSkinning(Skeleton* skeleton, Model* model, uint32_t index);
 
 	static std::unique_ptr<Material> CreateMaterial(const Model::ModelMaterialData data);
 	static std::unique_ptr<PBRMaterial> CreatePBRMaterial(const Model::ModelMaterialData data);

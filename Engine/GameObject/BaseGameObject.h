@@ -10,6 +10,7 @@
 #include "Engine/Math/MyMatrix.h"
 #include "Engine/Collider/Collider.h"
 #include "Engine/Lib/GameTimer.h"
+#include "Engine/Assets/AnimetionClip.h"
 
 class BaseGameObject {
 public:
@@ -28,7 +29,7 @@ public:
 
 	void SetObject(const std::string& objName);
 
-	void SetAnimater(const std::string& directoryPath, const std::string& objName);
+	void SetAnimater(const std::string& directoryPath, const std::string& objName, bool isSkinning);
 
 	WorldTransform* GetTransform() { return transform_.get(); }
 
@@ -41,6 +42,7 @@ protected:
 
 	std::unique_ptr<WorldTransform> transform_;
 	std::unique_ptr<Animetor> animetor_ = nullptr;
+	std::unique_ptr<AnimetionClip> animationClip_;
 
 	bool isAnimation_ = false;
 

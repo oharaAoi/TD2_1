@@ -16,7 +16,7 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("test2.fbx");
+	SetObject("Player.fbx");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 
 	animetor_ = std::make_unique<PlayerAnimator>();
@@ -43,6 +43,8 @@ void Player::Init(){
 	radius_ = 2.0f;
 
 	getCoinNum_ = 0;
+
+	slerpRotation_ = Quaternion();
 
 	hitSe_ = std::make_unique<AudioPlayer>();
 	coinGetSe_ = std::make_unique<AudioPlayer>();
@@ -82,7 +84,7 @@ void Player::Update(){
 
 void Player::Draw() const{
 	//BaseGameObject::Draw();
-	Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
+	Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +182,7 @@ void Player::Move(){
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
 	float ease = EaseOutBack(std::fabsf(pressTime_));
-	currentAngle_ = kMaxAngle_ * ease * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
@@ -224,9 +226,9 @@ void Player::MoveLimit(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::LookAtDirection(const float& angle){
-	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
-	Quaternion slerp = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	transform_->SetQuaternion(slerp);
+	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
+	slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
+	transform_->SetQuaternion(moveRotation);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,8 +260,10 @@ void Player::Debug_Gui(){
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
-	ImGui::DragFloat("lookAtT", &lookAtT_, 0.1f);
+	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
+	
 	ImGui::DragFloat("radius", &radius_, 0.1f);
+	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
 
 	if(ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();

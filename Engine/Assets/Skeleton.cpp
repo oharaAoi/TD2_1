@@ -81,3 +81,4 @@ int32_t Skeleton::CreateJoint(const Model::Node& node, const std::optional<int32
 
 	return joint.index;
 }
+

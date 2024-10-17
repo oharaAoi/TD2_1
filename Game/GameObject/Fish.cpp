@@ -17,7 +17,8 @@ void Fish::Init(){
 	
 	BaseGameObject::Init();
 	radius_ = 1.0f;
-	SetObject("fish.obj");
+	SetObject("Fish.gltf");
+	//SetAnimater("./Game/Resources/Model/Fish/", "Fish.gltf", false);
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
@@ -28,6 +29,7 @@ void Fish::Init(){
 //////////////////////////////////////////////////////
 
 void Fish::Update(){
+	transform_->SetQuaternion(Quaternion::AngleAxis((-90.0f * toRadian), Vector3{ 0.0, 1.0f, 0.0f }));
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();

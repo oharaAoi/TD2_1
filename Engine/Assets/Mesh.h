@@ -91,7 +91,7 @@ private:
 
 	std::vector<uint32_t> indices_;
 	std::vector<VertexData> verticesData_;
-	
+
 	// 使用するマテリアル
 	std::string useMaterial_;
 

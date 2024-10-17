@@ -256,9 +256,9 @@ std::unique_ptr<WorldTransform> Engine::CreateWorldTransform() {
 	return result;
 }
 
-std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* model) {
+std::unique_ptr<Skinning> Engine::CreateSkinning(Skeleton* skeleton, Model* model, uint32_t index) {
 	std::unique_ptr<Skinning> result = std::make_unique<Skinning>();
-	result->CreateSkinCluster(dxDevice_->GetDevice(), skeleton, model->GetMesh(0), descriptorHeap_.get(), model->GetSkinClusterData());
+	result->CreateSkinCluster(dxDevice_->GetDevice(), skeleton, model->GetMesh(index), descriptorHeap_.get(), model->GetSkinClustersData(index));
 	return result;
 }
 

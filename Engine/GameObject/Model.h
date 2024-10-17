@@ -60,6 +60,8 @@ public:
 	void Update();
 	void Draw(ID3D12GraphicsCommandList* commandList, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::vector<std::unique_ptr<Material>>& materials);
 	void DrawSkinning(ID3D12GraphicsCommandList* commandList, const Skinning* skinning, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::vector<std::unique_ptr<Material>>& materials);
+	void DrawSkinnings(ID3D12GraphicsCommandList* commandList, const std::vector<std::unique_ptr<Skinning>>& skinnig, const WorldTransform* worldTransform, const ViewProjection* viewprojection, const std::vector<std::unique_ptr<Material>>& materials);
+
 
 #ifdef _DEBUG
 	void Debug_Gui(const std::string& name);
@@ -88,9 +90,11 @@ public:
 
 	Node& GetNode() { return rootNode_; }
 
-	std::map<std::string, Skinning::JointWeightData>& GetSkinClusterData() { return skinClusterData_; }
+	std::map<std::string, Skinning::JointWeightData>& GetSkinClusterData() { return data_; }
+	std::map<std::string, Skinning::JointWeightData>& GetSkinClustersData(uint32_t index) { return skinClusterData_[index]; }
 
 	Mesh* GetMesh(const uint32_t& index);
+	size_t GetMeshsNum() const { return meshArray_.size(); }
 
 	const ModelMaterialData GetMaterialData(const std::string& name)const {return materialData_.at(name);}
 	const size_t GetMaterialsSize() const { return materialData_.size(); }
@@ -105,7 +109,8 @@ private:
 
 	std::vector<ModelMaterialData> materialsData_;
 
-	std::map<std::string, Skinning::JointWeightData> skinClusterData_;
+	std::vector<std::map<std::string, Skinning::JointWeightData>> skinClusterData_;
+	std::map<std::string, Skinning::JointWeightData> data_;
 	// ノード
 	Node rootNode_;
 

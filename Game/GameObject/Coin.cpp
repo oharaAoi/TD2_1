@@ -16,7 +16,8 @@ void Coin::Init() {
 	typeID_ = (int)ObjectType::COIN;
 
 	BaseGameObject::Init();
-	SetObject("Coin.obj");
+	SetObject("Coin.gltf");
+	//SetAnimater("./Game/Resources/Model/Coin/", "Coin.gltf", false);
 	SetColor({ 1.0f, 1.0f, 0.0f, 1.0f });
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
