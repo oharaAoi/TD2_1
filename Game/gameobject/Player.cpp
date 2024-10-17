@@ -28,7 +28,7 @@ void Player::Init(){
 
 		// 自身を後続のモデルのターゲットに設定
 		pTarget = followModels_.back().get();
-
+  
 	}
 
 
