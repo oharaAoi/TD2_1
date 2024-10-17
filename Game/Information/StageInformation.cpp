@@ -7,7 +7,7 @@ std::vector<std::vector<std::string>> StageInformation::stageInformationArray_;
 uint32_t StageInformation::nowStageNum_ = 0;
 float StageInformation::stageWidth_ = 8000.0f;
 float StageInformation::stageWidthEvery_ = 32.0f;
-float StageInformation::groundDepth_ = -40.5f;
+float StageInformation::groundDepth_ = -44.0f;
 
 StageInformation::StageInformation() {
 	stageInformationArray_.clear();

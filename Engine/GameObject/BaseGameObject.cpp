@@ -13,7 +13,13 @@ void BaseGameObject::Update() {
 	if (animetor_ != nullptr) {
 		animetor_->Update();
 	}
-	transform_->Update();
+
+	if (animationClip_) {
+		animationClip_->Update();
+		transform_->Update(animationClip_->GetMatrix());
+	} else {
+		transform_->Update();
+	}
 
 	worldPos_ = Vector3(0.0f, 0.0f, 0.0f) * transform_->GetWorldMatrix();
 }
@@ -38,9 +44,14 @@ void BaseGameObject::SetObject(const std::string& objName) {
 	}
 }
 
-void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::string& objName) {
-	animetor_ = std::make_unique<Animetor>();
-	animetor_->LoadAnimation(directoryPath, objName, model_);
+void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::string& objName, bool isSkinning) {
+	if (isSkinning) {
+		animetor_ = std::make_unique<Animetor>();
+		animetor_->LoadAnimation(directoryPath, objName, model_);
+	} else {
+		animationClip_ = std::make_unique<AnimetionClip>();
+		animationClip_->LoadAnimation(directoryPath, objName, model_->GetRootNodeName());
+	}
 }
 
 void BaseGameObject::SetColor(const Vector4& color) {

@@ -38,7 +38,7 @@ public:
 	/// </summary>
 	/// <param name="rectRange">: 描画する範囲</param>
 	/// <param name="leftTop">: 左上座標</param>
-	void Update(const Vector2& rectRange = { 0.0f, 0.0f }, const Vector2& leftTop = {0.0f, 0.0f});
+	void Update(const Vector2& rectRange = { 0.0f, 0.0f }, const Vector2& leftTop = { 0.0f, 0.0f });
 	void Draw();
 
 	/// <summary>
@@ -56,6 +56,11 @@ public:
 	void SetTexture(const std::string& fileName);
 
 	void RestTextureSize(const Vector2& centerPos, const Vector2& size);
+
+	// 描画する範囲の設定
+	void SetRectRange(const Vector2& rectRange) { rectRange_ = rectRange; };
+	// 描画する範囲の設定
+	void SetLeftTop(const Vector2& leftTop) { leftTop_ = leftTop; }
 
 private:
 
@@ -80,6 +85,11 @@ private:
 	kTransform uvTransform_;
 
 	std::string textureName_;
+
+	// 描画する範囲
+	Vector2 rectRange_ = { 0.0f, 0.0f };
+	// 左上座標
+	Vector2 leftTop_ = { 0.0f, 0.0f };
 
 	// Textureのサイズ
 	Vector2 textureSize_;

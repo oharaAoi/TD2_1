@@ -70,14 +70,14 @@ void Sprite::Init(ID3D12Device* device, const Mesh::RectVetices& rect) {
 void Sprite::Update(const Vector2& rectRange, const Vector2& leftTop) {
 	materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
 
-	Vector2 drawRange = textureSize_;
-	if (rectRange.x != 0 && rectRange.y != 0) {
-		drawRange = rectRange;
-	}
-	materialData_->uvTransform.m[0][0] = drawRange.x / textureSize_.x;	// Xスケーリング
-	materialData_->uvTransform.m[1][1] = drawRange.y/ textureSize_.y;	// Yスケーリング
-	materialData_->uvTransform.m[3][0] = leftTop.x / textureSize_.x;	// Xオフセット
-	materialData_->uvTransform.m[3][1] = leftTop.y / textureSize_.y;	// Yオフセット
+	//Vector2 drawRange = textureSize_;
+	//if (rectRange.x != 0 && rectRange.y != 0) {
+	//	drawRange = rectRange;
+	//}
+	materialData_->uvTransform.m[0][0] = rectRange_.x / textureSize_.x;	// Xスケーリング
+	materialData_->uvTransform.m[1][1] = rectRange_.y/ textureSize_.y;	// Yスケーリング
+	materialData_->uvTransform.m[3][0] = leftTop_.x / textureSize_.x;	// Xオフセット
+	materialData_->uvTransform.m[3][1] = leftTop_.y / textureSize_.y;	// Yオフセット
 
 	transformData_->wvp = Matrix4x4(
 		MakeAffineMatrix(transform_)
@@ -103,6 +103,7 @@ void Sprite::Draw(ID3D12GraphicsCommandList* commandList) {
 void Sprite::SetTexture(const std::string& fileName) {
 	textureName_ = fileName;
 	textureSize_ = TextureManager::GetInstance()->GetTextureSize(fileName);
+	rectRange_ = textureSize_;
 }
 
 void Sprite::RestTextureSize(const Vector2& centerPos, const Vector2& size) {
@@ -130,6 +131,5 @@ void Sprite::Debug_Gui() {
 		ImGui::SliderAngle("uvRotation", &uvTransform_.rotate.z);
 		ImGui::TreePop();
 	}
-
 }
 #endif

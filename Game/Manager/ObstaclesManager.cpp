@@ -22,6 +22,8 @@ void ObstaclesManager::Init() {
 	LoadAllFile();
 
 	RandomAddObject();
+
+	Inport("WaterWeed.json");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,12 +203,14 @@ void ObstaclesManager::RandomAddObject() {
 			// 1/2で魚、アイテムを切り替える
 			if (rand % 2 == 0) {
 				auto& fish = obstaclesList_.emplace_back(std::make_unique<Fish>());
+				fish->Init();
 				float depth = RandomFloat(StageInformation::groundDepth_ + fish->GetRadius(), -fish->GetRadius());
 				fish->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
 				fish->Update();
 
 			} else {
 				auto& item = obstaclesList_.emplace_back(std::make_unique<Item>());
+				item->Init();
 				float depth = RandomFloat(StageInformation::groundDepth_ + item->GetRadius(), -item->GetRadius());
 				item->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
 				item->Update();

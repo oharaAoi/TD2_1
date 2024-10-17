@@ -64,13 +64,22 @@ void Player::Update(){
 	}
 
 	// 飛行フラグ更新
-	if (transform_->GetTranslation().y > 0.0f) {
+	if(transform_->GetTranslation().y > 0.0f) {
 		isFlying_ = true;
+
+		if (!preFlying_) {
+			timer_.Measurement(transform_->GetTranslation().x);
+		}
 	} else {
 		isFlying_ = false;
+
+		if (preFlying_) {
+			timer_.Finish(transform_->GetTranslation().x);
+		}
 	}
 
 	animetor_->Update();
+	timer_.Update(transform_->GetTranslation().x);
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -92,26 +101,102 @@ void Player::Draw() const{
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Move(){
-	Vector3 translate = transform_->GetTranslation();
-	if(Input::IsPressKey(DIK_SPACE)) {
 
-		pressTime_ += 0.05f;
+	// 前フレームの値を保存
+	prePos_ = transform_->GetTranslation();
 
-	} else {
+	// 飛んでいないときにだけ操作を受け付ける
+	if(!isFlying_){// 水中 -----------------------------------
 
-		pressTime_ -= 0.05f;
+		if(!isDiving_){// 着水直後ではないとき
+
+			// 押すと上昇、離すと沈む
+			if(Input::IsPressKey(DIK_SPACE)) {
+				pressTime_ += 0.025f * GameTimer::TimeRate();
+
+			} else {
+				pressTime_ -= 0.025f * GameTimer::TimeRate();
+			}
+
+		} else{// 着水直後
+
+			diveTime_ -= GameTimer::DeltaTime();// 着水後の猶予時間を減らす
+
+			// 潜る
+			float t = diveTime_ / kDiveTime_;
+			Vector3 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
+			transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
+
+			// 猶予時間が0になったら通常状態へ
+			if(diveTime_ <= 0.0f){
+				isDiving_ = false;
+				diveTime_ = kDiveTime_;
+			}
+
+		}
+
+		isFalling_ = false;
+
+	} else{// 飛行中-------------------------------------------
+
+
+		////////////////////////////// 上昇中 /////////////////////////////////
+		if(!isFalling_){
+
+			// 上昇を徐々に遅くする
+			pressTime_ *= 0.97f * GameTimer::TimeRate();
+			isCloseWing_ = false;
+			dropSpeed_ = 0.0f;
+
+		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
+
+
+			// SPACE押して翼の開閉
+			if(Input::IsTriggerKey(DIK_SPACE)) {
+				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+			}
+
+			// 下降ベクトルを格納する変数
+			Vector3 dropVec{};
+
+			if(!isCloseWing_){//////// 翼を広げている際 ////////
+
+				// 下降ベクトル
+				dropVec = Vector3(0.0f, -0.2f, 0.0f) * GameTimer::TimeRate();
+				dropSpeed_ = 0.0f;
+
+			} else{//////// 翼を閉じている際 ////////
+
+				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
+				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
+			}
+
+			// 座標の更新
+			transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
+
+			// 水に触れたらダイブのフラグをオンにする
+			if(transform_->GetTranslation().y < 0.0f){
+				isDiving_ = true;
+				isFalling_ = false;
+				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
+				// 潜水速度の最低値を保つ
+				if(divingSpeed_ > -0.7f){
+					divingSpeed_ = -0.7f;
+				}
+			}
+		}
 	}
 
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
 	float ease = EaseOutBack(std::fabsf(pressTime_));
-	currentAngle_ = kMaxAngle_ * ease * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
-	velocity_ = Vector3(1.0f,0.0f,0.0f) * MakeRotateZMatrix(currentAngle_);
+	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
 	velocity_ *= moveSpeed_ * std::fabsf(GameTimer::DeltaTime());
-	transform_->SetTranslaion(translate + velocity_);
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
 
 	// プレイヤー上部の水面の座標を取得
 	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
@@ -120,7 +205,16 @@ void Player::Move(){
 	// 深さを更新
 	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 
+	// 下降フラグの更新
+	if(!isFalling_){
+		// ある程度上昇が収まったら下降フラグをオンに
+		if(transform_->GetTranslation().y - prePos_.y <= 0.1f){
+			isFalling_ = true;
+		}
+	}
+
 	MoveLimit();
+	preFlying_ = isFlying_;
 }
 
 
@@ -140,10 +234,10 @@ void Player::MoveLimit(){
 // ↓　進行方向を向かせる
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Player::LookAtDirection(const float& angle) {
-	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle).Normalize()) * restPoseRotation_;
+void Player::LookAtDirection(const float& angle){
+	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
 	slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	transform_->SetQuaternion(slerpRotation_);
+	transform_->SetQuaternion(moveRotation);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +254,7 @@ void Player::AdaptAdjustmentItem(){
 }
 
 const Vector3 Player::GetWorldTranslation() const{
-	return Transform(Vector3(0.0f, 0.0f,0.0f), transform_->GetWorldMatrix());
+	return Transform(Vector3(0.0f, 0.0f, 0.0f), transform_->GetWorldMatrix());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,8 +269,10 @@ void Player::Debug_Gui(){
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
-	ImGui::DragFloat("lookAtT", &lookAtT_, 0.1f);
+	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
+	
 	ImGui::DragFloat("radius", &radius_, 0.1f);
+	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
 
 	if(ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();
@@ -190,6 +286,11 @@ void Player::Debug_Gui(){
 	} else {
 		ImGui::Text("not Hit");
 	}
+
+	/*if (ImGui::TreeNode("FlyingTimer")) {*/
+		timer_.Debug_Gui();
+	/*	ImGui::TreePop();
+	}*/
 
 	ImGui::End();
 }
@@ -205,7 +306,7 @@ void Player::OnCollision(Collider* other){
 
 	//障害物に当たった場合
 	if(ownerType == (int)ObjectType::OBSTACLE){
-  		moveSpeed_ -= 10.0f;
+		moveSpeed_ -= 10.0f;
 		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
 		hitSe_->Play(false, true);
 	}
@@ -215,7 +316,7 @@ void Player::OnCollision(Collider* other){
 		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
 	}
 
-	if (other->GetObjectType() == (int)ObjectType::COIN) {
+	if(other->GetObjectType() == (int)ObjectType::COIN) {
 		coinGetSe_->Play(false, 0.5f, true);
 		getCoinNum_++;
 	}

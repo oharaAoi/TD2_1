@@ -25,13 +25,12 @@ void Camera::Update(){
 	//プレイヤーが水面に出ているかどうかでターゲットを変更
 	if(pPlayer_->GetTransform()->GetTranslation().y < 10.0f){
 		target_ = pPlayer_->GetAboveSurfaceTransform();
-		offsetLength_ = 60.0f + pPlayer_->GetSwimmingDepth() * 5.0f;
-		transform_.rotate.y = 0.91f + (-0.5f) * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, 0.0f, 1.0f);
-
+		// ターゲットからの距離を水深に応じて更新
+		offsetLength_ = 80.0f + pPlayer_->GetSwimmingDepth() * 3.0f;
 
 	} else{
 		target_ = pPlayer_->GetTransform();
-		offsetLength_ = 60.0f;
+		offsetLength_ = 80.0f;
 	}
 
 	// -------------------------------------------------
@@ -40,47 +39,43 @@ void Camera::Update(){
 	if(target_ != nullptr) {
 
 		Vector3 dif{};
+		Vector3 addVec{};
 
 		if(pPlayer_->GetIsFlying()){
-			offsetLength_ = 60.0f + std::fabsf((pPlayer_->GetSwimmingDepth())) * 0.5f;
-			transform_.rotate.y = 0.91f + 0.05f * std::clamp(((pPlayer_->GetSwimmingDepth() - 10.0f) / -30.0f), 0.0f, 1.0f);
-			transform_.rotate.x = 0.1f * std::clamp(((pPlayer_->GetSwimmingDepth() - 10.0f) / -30.0f), 0.0f, 1.0f);
+
+			if(pPlayer_->GetTransform()->GetTranslation().y > 10.0f){
+
+				// 高さの割合を計算
+				float heightRatio = std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f, 0.0f, 1.0f);
+
+				// 飛行中のプレイヤーの高さに応じた追加の調整ベクトルを計算
+				addVec.y = 7.0f * (pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f;
+				addVec.x = 10.0f * heightRatio;
+				addVec.y += pPlayer_->GetVelocity().y * 40.0f;
+
+				// 飛行中の定位置まで回転を加算
+				transform_.rotate.x += 0.005f * GameTimer::TimeRate();
+				transform_.rotate.x = std::clamp(transform_.rotate.x, baseRotate.x, baseRotate.x + 0.15f);
+				transform_.rotate.y += 0.005f * GameTimer::TimeRate();
+				transform_.rotate.y = std::clamp(transform_.rotate.y, baseRotate.y, baseRotate.y + 0.15f);
+
+			}
 
 		} else{
-			transform_.rotate.x *= 0.005f * GameTimer::TimeRate();
-			Vector3 offsetVecDif = Vector3(-20.4f, 0.3f, -25.7f).Normalize() - offsetVec_;
-			offsetVec_ += offsetVecDif * 0.05f * GameTimer::TimeRate();
-			float goalTranslateY = 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f);
-			transform_.translate.y += (goalTranslateY - transform_.translate.y) * 0.5f * GameTimer::TimeRate();
-			///transform_.translate.y = goalTranslateY;
+
+			// 回転を徐々にもとに戻す
+			transform_.rotate.x -= 0.005f * GameTimer::TimeRate();
+			transform_.rotate.x = std::clamp(transform_.rotate.x, baseRotate.x, baseRotate.x + 0.15f);
+			transform_.rotate.y -= 0.005f * GameTimer::TimeRate();
+			transform_.rotate.y = std::clamp(transform_.rotate.y, baseRotate.y, baseRotate.y + 0.15f);
 		}
+
 
 		// 目的座標への差分
-		if(pPlayer_->GetIsFlying()){
-
-			dif = (target_->GetTranslation() +
-				((offsetVec_ * offsetLength_) *
-					MakeRotateYMatrix(-0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f) *
-						(pPlayer_->GetVelocity().x / 80.0f))))
-				- transform_.translate;
-
-
-			dif.y += pPlayer_->GetVelocity().y * 18.0f;
-			transform_.translate.x += 6.0f * std::clamp(((pPlayer_->GetSwimmingDepth() - 10.0f) / -30.0f), 0.0f, 1.0f)
-				* (pPlayer_->GetVelocity().x / 80.0f) * GameTimer::TimeRate();
-		} else{
-
-
-			dif = (target_->GetTranslation() +
-				((offsetVec_ * offsetLength_) *
-					MakeRotateYMatrix(-0.5f * std::clamp((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f, -1.0f, 1.0f))))
-				- transform_.translate;
-
-			transform_.translate.y -= 10.0f * ((pPlayer_->GetSwimmingDepth() - 10.0f) / 30.0f) * GameTimer::TimeRate();
-		}
+		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate += dif * 0.1f * GameTimer::TimeRate();
+		transform_.translate += dif * 0.05f * GameTimer::TimeRate();
 	}
 
 	BaseCamera::Update();
