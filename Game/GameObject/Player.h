@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject/BaseGameObject.h"
+#include "Game/GameObject/PlayerBody.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/Input/Input.h"
 #include "Engine/Lib/GameTimer.h"
@@ -50,12 +51,16 @@ private:
 	AdjustmentItem* adjustmentItem_;
 	std::unique_ptr<PlayerAnimator> animetor_;
 
+	// 付属モデル---------------------------------------
+
+	std::list<std::unique_ptr<PlayerBody>>followModels_;
+	const int kMinBodyCount_ = 8;
+
 	// パラメータ---------------------------------------
 
 	Quaternion restPoseRotation_;
 	Quaternion slerpRotation_;
 
-	// パラメータ
 	Vector3 velocity_;
 	float moveSpeed_;
 	float lookAtT_;

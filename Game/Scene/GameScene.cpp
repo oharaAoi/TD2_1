@@ -268,7 +268,7 @@ void GameScene::Draw() const{
 
 	obstaclesManager_->Draw();
 
-	Engine::SetPipeline(PipelineType::SkinningPipeline);
+
 	player_->Draw();
 
 	// effectの描画

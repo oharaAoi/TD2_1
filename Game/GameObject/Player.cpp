@@ -16,8 +16,28 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("Player.fbx");
+	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
+
+	//
+	BaseGameObject* pTarget = this;
+	for(int i = 0; i < kMinBodyCount_; i++){
+
+		auto& body = followModels_.emplace_back(std::make_unique<PlayerBody>());
+		body->Init();
+		i != kMinBodyCount_ - 1 ? 
+			body->SetObject("Player_Torso.obj") : body->SetObject("Player_Tail.obj");
+		body->SetTarget(pTarget);
+		body->SetSpace(3.0f);
+		body->GetTransform()->SetTranslaion(transform_->GetTranslation());
+		body->GetTransform()->SetQuaternion(Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f)));
+
+		// 自身を後続のモデルのターゲットに設定
+		pTarget = body.get();
+		// 更新
+		body->Update();
+	}
+
 
 	animetor_ = std::make_unique<PlayerAnimator>();
 	animetor_->Init();
@@ -70,6 +90,11 @@ void Player::Update(){
 		isFlying_ = false;
 	}
 
+	// 体の更新
+	for(auto& body : followModels_){
+		body->Update();
+	}
+
 	animetor_->Update();
 
 	obb_.center = GetWorldTranslation();
@@ -83,8 +108,14 @@ void Player::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Draw() const{
-	//BaseGameObject::Draw();
-	Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
+	BaseGameObject::Draw();
+
+	// 体の描画
+	for(auto& body : followModels_){
+		body->Draw();
+	}
+
+	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
