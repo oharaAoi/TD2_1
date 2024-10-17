@@ -240,7 +240,8 @@ void Player::Move(){
 	// 下降フラグの更新
 	if(!isFalling_){
 		// ある程度上昇が収まったら下降フラグをオンに
-		if(transform_->GetTranslation().y - prePos_.y <= 0.1f){
+		Vector3 difVec = Normalize(transform_->GetTranslation() - prePos_);
+		if(Dot({1.0f,0.0f,0.0f},difVec) >= 0.95f){
 			isFalling_ = true;
 		}
 	}
