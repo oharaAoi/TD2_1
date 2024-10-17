@@ -171,12 +171,12 @@ void Player::Move(){
 
 	} else{// 飛行中-------------------------------------------
 
+		// 上昇を徐々に遅くする
+		pressTime_ *= 0.97f * GameTimer::TimeRate();
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
 
-			// 上昇を徐々に遅くする
-			pressTime_ *= 0.97f * GameTimer::TimeRate();
 			isCloseWing_ = false;
 			dropSpeed_ = 0.0f;
 
@@ -241,7 +241,7 @@ void Player::Move(){
 	if(!isFalling_){
 		// ある程度上昇が収まったら下降フラグをオンに
 		Vector3 difVec = Normalize(transform_->GetTranslation() - prePos_);
-		if(Dot({1.0f,0.0f,0.0f},difVec) >= 0.95f){
+		if(Dot({1.0f,0.0f,0.0f},difVec) >= 0.97f){
 			isFalling_ = true;
 		}
 	}
