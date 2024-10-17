@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include "Engine.h"
 #include "Engine/Lib/GameTimer.h"
 
 /// <summary>
@@ -12,6 +14,7 @@ public:
 
 	void Init(float limit);
 	void Update();
+	void Draw();
 
 	/// <summary>
 	/// 計測を行う
@@ -25,11 +28,13 @@ public:
 	const bool GetIsFinish() { return isFinish_; }
 
 private:
-
+	// 終了したか
 	bool isFinish_;
-
+	// 時間系
 	float gameTimer_;
 	float gameTimeLimit_;
+
+	std::vector<Sprite> limitTimeUI_;
 
 };
 
