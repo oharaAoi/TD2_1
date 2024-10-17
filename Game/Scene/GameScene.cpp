@@ -92,6 +92,10 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Coin.obj");
 
+	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
+
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
