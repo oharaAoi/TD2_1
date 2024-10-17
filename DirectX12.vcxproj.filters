@@ -130,6 +130,9 @@
     <Filter Include="Game\UI">
       <UniqueIdentifier>{00907f2b-5450-4533-bbab-c8358289e5ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\DirectX\Template">
+      <UniqueIdentifier>{da0f4114-7515-4278-a995-67fb384b1c8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -480,26 +483,26 @@
     <ClCompile Include="Game\GameObject\Waterweed.cpp">
       <Filter>Game\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\WorldWall.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Information\FlyingTimer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Information\GamePlayTimer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Effect\Splash.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject\PlayerBody.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\DirectX\Template\Pool.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\DirectX\Descriptor\DescriptorAllocator.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\DirectX\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Information\FlyingTimer.cpp">
+      <Filter>Game\Information</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Information\GamePlayTimer.cpp">
+      <Filter>Game\Information</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\WorldWall.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\DirectX\Template\Pool.cpp">
+      <Filter>Engine\DirectX\Template</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -896,26 +899,26 @@
     <ClInclude Include="Game\GameObject\Waterweed.h">
       <Filter>Game\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\WorldWall.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Information\FlyingTimer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Information\GamePlayTimer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Effect\Splash.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameObject\PlayerBody.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\DirectX\Template\Pool.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\DirectX\Descriptor\DescriptorAllocator.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\DirectX\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Information\FlyingTimer.h">
+      <Filter>Game\Information</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Information\GamePlayTimer.h">
+      <Filter>Game\Information</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\WorldWall.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DirectX\Template\Pool.h">
+      <Filter>Engine\DirectX\Template</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
