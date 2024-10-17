@@ -287,10 +287,10 @@ void Player::Debug_Gui(){
 		ImGui::Text("not Hit");
 	}
 
-	if (ImGui::TreeNode("FlyingTimer")) {
+	/*if (ImGui::TreeNode("FlyingTimer")) {*/
 		timer_.Debug_Gui();
-		ImGui::TreePop();
-	}
+	/*	ImGui::TreePop();
+	}*/
 
 	ImGui::End();
 }

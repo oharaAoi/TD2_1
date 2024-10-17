@@ -70,6 +70,8 @@ private:
 	// ---------- worldobject ---------- //
 	std::unique_ptr<WorldWall> worldWall_ = nullptr;
 
+	std::unique_ptr<BaseGameObject> waterWeed_;
+
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;

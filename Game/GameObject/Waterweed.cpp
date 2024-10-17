@@ -16,7 +16,7 @@ void Waterweed::Init() {
 	typeID_ = (int)ObjectType::WATERWEED;
 
 	BaseGameObject::Init();
-	SetObject("Waterweed.obj");
+	SetObject("Ground_WaterPlant.obj");
 
 	obb_.size = { 1.0f, 2.5f, 1.0f };
 	obb_.center = GetWorldTranslation();

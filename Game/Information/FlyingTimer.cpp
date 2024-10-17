@@ -42,7 +42,9 @@ void FlyingTimer::Finish(float posX) {
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void FlyingTimer::Debug_Gui() {
+	ImGui::Begin("FlyingTimer");
 	ImGui::Text("max : %f", maxFlyingLength_);
 	ImGui::Text("current : %f", currentFlyingLength_);
+	ImGui::End();
 }
 #endif
