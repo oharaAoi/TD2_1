@@ -1,6 +1,8 @@
 #include "DescriptorHeap.h"
 #include "Engine/DirectX/Descriptor/DescriptorAllocator.h"
 
+std::list<int> DescriptorHeap::freeSrvList_;
+
 DescriptorHeap::DescriptorHeap(ID3D12Device* device) {
 	Initialize(device);
 }
@@ -26,26 +28,26 @@ void DescriptorHeap::Initialize(ID3D12Device* device) {
 	dsvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 2, false);
 
 	srvAllocator_ = std::make_unique<DescriptorAllocator>(
-		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * (1 << 16),
-		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+		(1 << 16),
+		descriptorSize_->GetSRV(),
+		1
 	);
 
-	rtvAllocator_ = std::make_unique<DescriptorAllocator>(
-		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_RTV) * 7,
-		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+	/*rtvAllocator_ = std::make_unique<DescriptorAllocator>(
+		 7,
+		descriptorSize_->GetRTV(),
+		0
 	);
 
 	dsvAllocator_ = std::make_unique<DescriptorAllocator>(
-		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_DSV) * 2,
-		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_DSV)
-	);
+		2,
+		descriptorSize_->GetDSV(),
+		0
+	);*/
 
-	rtvAllocator_;
-	dsvAllocator_;
-
-	useSrvIndex_ = 0;	// SRVの先頭はImGuiで使うため0から始める
-	useDsvIndex_ = -1;	// 他は生成時に+1しているため一番最初ように-1から始める
-	useRtvIndex_ = -1;
+	useSrvIndex_ = 0;	// SRVの先頭はImGuiで使うため0にして先頭を開けておく
+	useDsvIndex_ = -1;	// 他は先頭から始められるように-1にしておくことで
+	useRtvIndex_ = -1;	// GetDescriptorHandle時に先頭が0になる
 }
 
 void DescriptorHeap::Finalize() {
@@ -84,6 +86,19 @@ DescriptorHeap::DescriptorHandles DescriptorHeap::GetDescriptorHandle(const Desc
 	}
 
 	return handle;
+}
+
+void DescriptorHeap::FreeList() {
+	for (int index : freeSrvList_) {
+		FreeSRV(index);
+	}
+	freeSrvList_.clear();
+}
+
+void DescriptorHeap::AddFreeSrvList(int index) {
+	if (index >= 0) {
+		freeSrvList_.push_back(index);
+	}
 }
 
 DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateSRV() {

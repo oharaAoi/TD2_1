@@ -51,7 +51,7 @@ void ObstaclesManager::Update() {
 		// 更新をする
 		(*it)->Update();
 		float length = (((*it)->GetWorldTranslation().x - playerPos_.x));
-		if(length < -100.0f) {
+		if(length < -50.0f) {
  			(*it)->SetIsActive(false);
 		}
 		++it;

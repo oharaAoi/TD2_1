@@ -1,6 +1,8 @@
 #include "BasePlacementObject.h"
 
-BasePlacementObject::~BasePlacementObject() {}
+BasePlacementObject::~BasePlacementObject() {
+	BaseGameObject::Finalize();
+}
 void BasePlacementObject::Finalize() {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

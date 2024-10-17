@@ -12,6 +12,7 @@ DepthOfField::~DepthOfField() {
 void DepthOfField::Finalize() {
 	BaseCSResource::Finalize();
 	copyDepthStencilResource_.Reset();
+	DescriptorHeap::AddFreeSrvList(referenceResourceHandles_.assignIndex_);
 }
 
 void DepthOfField::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
@@ -62,7 +63,7 @@ void DepthOfField::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 	// SRVを作成するDescriptorHeapの場所を求める
-	referenceResourceHandles_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	referenceResourceHandles_ = dxHeap_->AllocateSRV();
 	// 生成
 	device_->CreateShaderResourceView(copyDepthStencilResource_.Get(), &srvDesc, referenceResourceHandles_.handleCPU);
 

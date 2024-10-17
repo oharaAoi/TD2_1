@@ -9,6 +9,8 @@ void ComputeShader::Finalize() {
 	gaussianBlur_->Finalize();
 	grayScale_->Finalize();
 	computeShaderPipelineMap_.clear();
+	DescriptorHeap::AddFreeSrvList(uavRenderAddress_.assignIndex_);
+	DescriptorHeap::AddFreeSrvList(srvRenderAddress_.assignIndex_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +194,8 @@ void ComputeShader::CreateBlendResource() {
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 	uavDesc.Format = resultResource_->GetDesc().Format;
 	// SRVを作成するDescriptorHeapの場所を求める
-	uavRenderAddress_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	//uavRenderAddress_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	uavRenderAddress_ = dxHeap_->AllocateSRV();
 	// 生成
 	device_->CreateUnorderedAccessView(resultResource_.Get(), nullptr, &uavDesc, uavRenderAddress_.handleCPU);
 
@@ -204,7 +207,7 @@ void ComputeShader::CreateBlendResource() {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 	// SRVを作成するDescriptorHeapの場所を求める
-	srvRenderAddress_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	srvRenderAddress_ = dxHeap_->AllocateSRV();
 	// 生成
 	device_->CreateShaderResourceView(resultResource_.Get(), &srvDesc, srvRenderAddress_.handleCPU);
 }

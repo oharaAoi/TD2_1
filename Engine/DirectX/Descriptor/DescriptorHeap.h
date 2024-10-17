@@ -4,7 +4,7 @@
 #include "dxgidebug.h"
 #include <cassert>
 #include <wrl.h>
-// utilities
+#include <list>
 #include "Engine/Utilities/DirectXUtils.h"
 
 #include "Engine/DirectX/Descriptor/DescriptorSize.h"
@@ -61,6 +61,17 @@ public:
 	/// <returns></returns>
 	DescriptorHandles GetDescriptorHandle(const DescriptorHeapType& type);
 
+	/// <summary>
+	/// リストに入っているindexをheapから解放する
+	/// </summary>
+	void FreeList();
+
+	/// <summary>
+	/// リストに追加する
+	/// </summary>
+	/// <param name="index"></param>
+	static void AddFreeSrvList(int index);
+
 public:
 
 	/// <summary>
@@ -113,4 +124,6 @@ private:
 	int32_t useSrvIndex_;
 	int32_t useDsvIndex_;
 	int32_t useRtvIndex_;
+
+	static std::list<int> freeSrvList_;
 };

@@ -6,8 +6,8 @@
 Animetor::Animetor() {}
 Animetor::~Animetor() {}
 
-void Animetor::Finalize() {
-
+ void Animetor::Finalize() {
+	skinning_->Finalize();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -12,6 +12,8 @@ void RenderTexture::Finalize() {
 	indexBuffer_.Reset();
 	materialBuffer_.Reset();
 	transformBuffer_.Reset();
+	DescriptorHeap::AddFreeSrvList(renderSrvRenderAddress_.assignIndex_);
+	DescriptorHeap::AddFreeSrvList(renderUavRenderAddress_.assignIndex_);
 }
 
 void RenderTexture::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
@@ -95,7 +97,7 @@ void RenderTexture::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 	uavDesc.Format = renderResource_->GetDesc().Format;
 	// SRVを作成するDescriptorHeapの場所を求める
-	renderUavRenderAddress_ = dxHeap->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	renderUavRenderAddress_ = dxHeap->AllocateSRV();
 	// 生成
 	device->CreateUnorderedAccessView(renderResource_.Get(), nullptr, &uavDesc, renderUavRenderAddress_.handleCPU);
 
@@ -107,7 +109,7 @@ void RenderTexture::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 	// SRVを作成するDescriptorHeapの場所を求める
-	renderSrvRenderAddress_ = dxHeap->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	renderSrvRenderAddress_ = dxHeap->AllocateSRV();
 	// 生成
 	device->CreateShaderResourceView(renderResource_.Get(), &srvDesc, renderSrvRenderAddress_.handleCPU);
 }

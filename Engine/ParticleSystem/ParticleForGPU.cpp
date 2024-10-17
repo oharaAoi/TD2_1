@@ -7,6 +7,7 @@ ParticleForGPU::~ParticleForGPU() {
 
 void ParticleForGPU::Finalize() {
 	cBuffer_.Reset();
+	DescriptorHeap::AddFreeSrvList(instancingSrvHandle_.assignIndex_);
 }
 
 void ParticleForGPU::Init(ID3D12Device* device, const uint32_t& instanceSize) {
@@ -38,7 +39,7 @@ void ParticleForGPU::CreateSrv(ID3D12Device* device, DescriptorHeap* dxHeap, con
 	desc.Buffer.NumElements = instanceNum;
 	desc.Buffer.StructureByteStride = sizeof(ParticleForGPUData);
 
-	instancingSrvHandle_ = dxHeap->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	instancingSrvHandle_ = dxHeap->AllocateSRV();
 
 	device->CreateShaderResourceView(cBuffer_.Get(), &desc, instancingSrvHandle_.handleCPU);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #ifdef _DEBUG
+#include "Engine/DirectX/Descriptor/DescriptorHeap.h"
 #include "Engine/Utilities/DirectXUtils.h"
 #include "Externals/ImGui/imgui.h"
 #include "Externals/ImGui/imgui_impl_dx12.h"

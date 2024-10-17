@@ -8,7 +8,7 @@ Skinning::~Skinning() {}
 
 void Skinning::Finalize() {
 	paletteResource_.Reset();
-
+	DescriptorHeap::AddFreeSrvList(paletteSrvHandle_.assignIndex_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,9 @@ void Skinning::CreateSkinCluster(ID3D12Device* device, Skeleton* skeleton, Mesh*
 	WellForGPU* mappedPalette = nullptr;
 	paletteResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	mappedPalette_ = { mappedPalette, jointSize };	// spanを使ってアクセス
-	paletteSrvHandle_ = heap->GetDescriptorHandle(TYPE_SRV);
-
+	//paletteSrvHandle_ = heap->GetDescriptorHandle(TYPE_SRV);
+	paletteSrvHandle_ = heap->AllocateSRV();
+	
 	// -------------------------------------------------
 	// ↓ palette用のSRVを作成
 	// -------------------------------------------------

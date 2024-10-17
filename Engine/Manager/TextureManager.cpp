@@ -68,6 +68,7 @@ void TextureManager::Finalize() {
 	for (auto& data : textureData_) {
 		data.second.textureResource_.Reset();
 		data.second.intermediateResource_.Reset();
+		DescriptorHeap::AddFreeSrvList(data.second.address_.assignIndex_);
 	}
 }
 
@@ -110,7 +111,7 @@ void TextureManager::LoadTextureFile(const std::string& directoryPath, const std
 
 	// ------------------------------------------------------------
 	// SRVを作成するDescriptorHeapの場所を求める
-	data.address_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	data.address_ = dxHeap_->AllocateSRV();
 	data.textureSize_.x = static_cast<float>(metadata.width);
 	data.textureSize_.y = static_cast<float>(metadata.height);
 	
@@ -174,7 +175,7 @@ void TextureManager::LoadWhite1x1Texture(const std::string& directoryPath, const
 
 	// ------------------------------------------------------------
 	// SRVを作成するDescriptorHeapの場所を求める
-	data.address_ = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+	data.address_ = dxHeap_->AllocateSRV();
 	data.textureSize_.x = static_cast<float>(metadata.width);
 	data.textureSize_.y = static_cast<float>(metadata.height);
 

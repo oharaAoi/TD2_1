@@ -143,6 +143,8 @@ void Engine::BeginFrame() {
 
 void Engine::EndFrame() {
 	dxCommon_->End();
+
+	descriptorHeap_->FreeList();
 }
 
 void Engine::EndImGui() {

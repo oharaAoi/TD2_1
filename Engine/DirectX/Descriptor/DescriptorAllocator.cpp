@@ -7,7 +7,9 @@ DescriptorHeap::DescriptorHandles DescriptorAllocator::Allocate(ID3D12Descriptor
 	if (!freeStack_.empty()) {
 		// 再利用可能なインデックスをスタックから取得
 		uint32_t reusedIndex = freeStack_.top();
-		freeStack_.pop();
+ 		freeStack_.pop();
+		/*std::string name = std::to_string(reusedIndex);
+		Log("popHeap" + name + "\n");*/
 		return GetDescriptorHandle(descriptorHeap, reusedIndex);
 	} else if (currentIndex_ < totalDescriptors_) {
 		// 新しいディスクリプタを割り当て
@@ -19,6 +21,8 @@ DescriptorHeap::DescriptorHandles DescriptorAllocator::Allocate(ID3D12Descriptor
 
 void DescriptorAllocator::Free(uint32_t index) {
 	freeStack_.push(index);  // フリースタックに戻す
+	/*std::string name = std::to_string(index);
+	Log("pushFreeHeap" + name + "\n");*/
 }
 
 DescriptorHeap::DescriptorHandles DescriptorAllocator::GetDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t index) {

@@ -98,10 +98,10 @@ void RenderTarget::CrateSwapChainResource() {
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	// 一つ目のDescriptorの生成
-	swapChainRTVHandles_[0] = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_RTV);
+	swapChainRTVHandles_[0] = dxHeap_->GetDescriptorHandle(TYPE_RTV);
 	device_->CreateRenderTargetView(swapChainRenderResource_[0].Get(), &rtvDesc, swapChainRTVHandles_[0].handleCPU);
 	// 二つ目の生成
-	swapChainRTVHandles_[1] = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_RTV);
+	swapChainRTVHandles_[1] = dxHeap_->GetDescriptorHandle(TYPE_RTV);
 
 	device_->CreateRenderTargetView(swapChainRenderResource_[1].Get(), &rtvDesc, swapChainRTVHandles_[1].handleCPU);
 }
@@ -149,7 +149,7 @@ void RenderTarget::CreateRenderTarget() {
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 	for (uint32_t oi = 0; oi < renderTargetNum_; ++oi) {
-		RTVHandle_[oi] = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_RTV);
+		RTVHandle_[oi] = dxHeap_->GetDescriptorHandle(TYPE_RTV);
 		device_->CreateRenderTargetView(renderTargetResource_[oi].Get(), &rtvDesc, RTVHandle_[oi].handleCPU);
 	}
 
@@ -163,7 +163,7 @@ void RenderTarget::CreateRenderTarget() {
 	srvDesc.Texture2D.MipLevels = 1;
 
 	for (uint32_t oi = 0; oi < renderTargetNum_; ++oi) {
-		SRVHandle_[oi] = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+		SRVHandle_[oi] = dxHeap_->AllocateSRV();
 		device_->CreateShaderResourceView(renderTargetResource_[oi].Get(), &srvDesc, SRVHandle_[oi].handleCPU);
 	}
 }

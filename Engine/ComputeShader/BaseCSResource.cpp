@@ -64,7 +64,7 @@ void BaseCSResource::CreateResourceBuffer(const uint32_t& createNum) {
 		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 		uavDesc.Format = bufferData.uavBuffer->GetDesc().Format;
 		// SRVを作成するDescriptorHeapの場所を求める
-		bufferData.uavAddress = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+		bufferData.uavAddress = dxHeap_->AllocateSRV();
 		// 生成
 		device_->CreateUnorderedAccessView(bufferData.uavBuffer.Get(), nullptr, &uavDesc, bufferData.uavAddress.handleCPU);
 
@@ -82,7 +82,7 @@ void BaseCSResource::CreateSRV() {
 		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 		srvDesc.Texture2D.MipLevels = 1;
 		// SRVを作成するDescriptorHeapの場所を求める
-		bufferHandles_[oi].srvAddress = dxHeap_->GetDescriptorHandle(DescriptorHeapType::TYPE_SRV);
+		bufferHandles_[oi].srvAddress = dxHeap_->AllocateSRV();
 		// 生成
 		device_->CreateShaderResourceView(bufferHandles_[oi].uavBuffer.Get(), &srvDesc, bufferHandles_[oi].srvAddress.handleCPU);
 	}

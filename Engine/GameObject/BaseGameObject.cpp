@@ -1,7 +1,12 @@
 #include "BaseGameObject.h"
 
 void BaseGameObject::Finalize() {
-	transform_->Finalize();
+	if (transform_ != nullptr) {
+		transform_->Finalize();
+	}
+	if (animetor_ != nullptr) {
+		animetor_->Finalize();
+	}
 }
 
 void BaseGameObject::Init() {
