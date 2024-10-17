@@ -26,19 +26,44 @@ Splash::Splash(const Vector2& emitPos, float velocity){
 		Quaternion quaternion;
 		quaternion.x = Quaternion::AngleAxis(RandomFloat(0.0f, 3.14f), { 1.0f,0.0f,0.0f }).x;
 
-		//splash->GetTransform()->SetQuaternion()
-		//splash->Update();
+		Vector3 rotate = {
+			RandomFloat(0.0f,3.14f),
+			RandomFloat(0.0f,3.14f * 2.0f),
+			RandomFloat(0.0f,3.14f),
+		};
+
+		splash->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate));
+		splash->GetTransform()->SetScale({ 0.5f,0.5f,0.5f });
+		splash->Update();
 	}
 
 	for(int i = 0; i < kWaterColmnCount_; i++){
 		auto& waterColmn = waterColmns_.emplace_back(std::make_unique<BaseGameObject>());
 		waterColmn->SetObject("WaterColmn.obj");
 		waterColmn->Update();
+
+		Vector3 rotate = {
+			0.0f,
+			RandomFloat(0.0f,3.14f * 2.0f),
+			0.0f,
+		};
+
+		waterColmn->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate));
+		waterColmn->Update();
 	}
 
 	for(int i = 0; i < kPlaneCount_; i++){
 		auto& ripple = ripples_.emplace_back(std::make_unique<BaseGameObject>());
 		ripple->SetObject("Ripple.obj");
+		ripple->Update();
+
+		Vector3 rotate = {
+			0.0f,
+			RandomFloat(0.0f,3.14f * 2.0f),
+			0.0f,
+		};
+
+		ripple->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate));
 		ripple->Update();
 	}
 }
@@ -48,6 +73,19 @@ Splash::Splash(const Vector2& emitPos, float velocity){
 ////////////////////////////////////////////////////////////////////
 
 void Splash::Update(){
+
+	for(int i = 0; i < splashModels_.size(); i++){
+		//splashModels_[i]->GetTransform()->Se
+	}
+
+	for(int i = 0; i < waterColmns_.size(); i++){
+		float t = float(i) / float(waterColmns_.size() - 1);
+	}
+
+	for(int i = 0; i < ripples_.size(); i++){
+		float t = float(i) / float(ripples_.size() - 1);
+	}
+
 
 	lifetime_ -= GameTimer::DeltaTime();
 }

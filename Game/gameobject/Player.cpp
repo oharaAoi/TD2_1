@@ -23,19 +23,12 @@ void Player::Init(){
 	BaseGameObject* pTarget = this;
 	for(int i = 0; i < kMinBodyCount_; i++){
 
-		auto& body = followModels_.emplace_back(std::make_unique<PlayerBody>());
-		body->Init();
-		i != kMinBodyCount_ - 1 ? 
-			body->SetObject("Player_Torso.obj") : body->SetObject("Player_Tail.obj");
-		body->SetTarget(pTarget);
-		body->SetSpace(3.0f);
-		body->GetTransform()->SetTranslaion(transform_->GetTranslation());
-		body->GetTransform()->SetQuaternion(Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f)));
+		// 胴体を追加
+		AddBody(pTarget);
 
 		// 自身を後続のモデルのターゲットに設定
-		pTarget = body.get();
-		// 更新
-		body->Update();
+		pTarget = followModels_.back().get();
+
 	}
 
 
@@ -96,6 +89,14 @@ void Player::Update(){
 	}
 
 	animetor_->Update();
+
+
+	if(Input::IsTriggerKey(DIK_UP)){
+		AddBody(followModels_.back().get());
+	} else if(Input::IsTriggerKey(DIK_DOWN)){
+		EraseBody();
+	}
+
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -280,6 +281,43 @@ const Vector3 Player::GetWorldTranslation() const{
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　胴体の追加
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Player::AddBody(BaseGameObject* pTarget){
+
+	if(bodyCount_ >= kMaxBodyCount_){ return; }
+
+	if(followModels_.size() != 0){
+		auto& preBody = followModels_.back();
+		preBody->SetObject("Player_Torso.obj");
+	}
+
+	auto& body = followModels_.emplace_back(std::make_unique<PlayerBody>());
+	body->Init();
+	body->SetObject("Player_Tail.obj");
+	body->SetTarget(pTarget);
+	body->SetSpace(3.0f);
+	body->GetTransform()->SetTranslaion(pTarget->GetTransform()->GetTranslation());
+	body->GetTransform()->SetQuaternion(Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f)));
+
+	// 更新
+	body->Update();
+
+	bodyCount_++;
+}
+
+// 最後尾を削除
+void Player::EraseBody(){
+	if(followModels_.size() > kMinBodyCount_){
+		followModels_.pop_back();
+	}
+
+	followModels_.back()->SetObject("Player_Tail.obj");
+	bodyCount_--;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　debug表示
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -311,6 +349,8 @@ void Player::Debug_Gui(){
 
 	ImGui::End();
 }
+
+
 #endif // _DEBUG
 
 //////////////////////////////////////////////////////

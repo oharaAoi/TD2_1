@@ -14,6 +14,10 @@ public:
 	void Draw();
 
 public:
+
+	bool GetIsEndSplash(){ return lifetime_ <= 0.0f; }
+
+public:
 	Vector3 emitPos_;
 	float kLifetime_;
 	float lifetime_;

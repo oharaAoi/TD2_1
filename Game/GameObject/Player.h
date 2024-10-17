@@ -30,6 +30,9 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 	const Vector3 GetWorldTranslation() const;
 
+	void AddBody(BaseGameObject* pTarget);
+	void EraseBody();
+
 public:
 
 	void SetHitWaterSurface(const bool& ishit){ hitWaterSurface_ = ishit; }
@@ -54,7 +57,9 @@ private:
 	// 付属モデル---------------------------------------
 
 	std::list<std::unique_ptr<PlayerBody>>followModels_;
-	const int kMinBodyCount_ = 8;
+	const int kMinBodyCount_ = 2;
+	const int kMaxBodyCount_ = 8;
+	int bodyCount_ = kMinBodyCount_;
 
 	// パラメータ---------------------------------------
 
