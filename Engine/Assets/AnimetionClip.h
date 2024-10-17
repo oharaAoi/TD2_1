@@ -52,7 +52,7 @@ public:
 	void Init();
 	void Update();
 
-	void LoadAnimation(const std::string directoryPath, const std::string& animationFile);
+	void LoadAnimation(const std::string directoryPath, const std::string& animationFile, const std::string& name);
 
 	void ApplyAnimation(Skeleton& skelton);
 	void ApplyAnimation(Skeleton* skelton);
@@ -66,11 +66,14 @@ public:
 
 private:
 
+	std::vector<Animation> animations_;
 	Animation animation_;
 
 	float animationTime_ = 0.0f;
 
 	Matrix4x4 animationMat_;
+
+	std::string rootName_;
 
 };
 

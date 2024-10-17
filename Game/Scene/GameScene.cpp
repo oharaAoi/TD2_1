@@ -97,6 +97,8 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
