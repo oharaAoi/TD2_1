@@ -11,7 +11,8 @@ Animetor::~Animetor() {}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Animetor::Update() {
-
+	animetionClip_->Update();
+	animetionClip_->ApplyAnimation(skeleton_.get());
 	skeleton_->Update();
 	skinning_->Update(skeleton_.get());
 }

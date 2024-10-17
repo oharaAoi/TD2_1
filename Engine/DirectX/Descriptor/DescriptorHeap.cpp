@@ -21,7 +21,7 @@ void DescriptorHeap::Initialize(ID3D12Device* device) {
 
 	// ヒープの生成
 	rtvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 7, false);
-	srvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 10000, true);
+	srvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, (1 << 16), true);
 	dsvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 2, false);
 
 	useSrvIndex_ = 0;	// SRVの先頭はImGuiで使うため0から始める

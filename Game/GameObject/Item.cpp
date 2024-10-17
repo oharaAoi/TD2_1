@@ -16,7 +16,7 @@ void Item::Init(){
 	typeID_ = (int)ObjectType::ITEM;
 
 	BaseGameObject::Init();
-	SetObject("Item.obj");
+	SetObject("skin.obj");
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();

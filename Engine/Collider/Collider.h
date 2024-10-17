@@ -38,6 +38,7 @@ public:
 
 	// ------------- アクティブかどうか ------------- //
 	bool GetIsActive(){ return isActive_; }
+	void SetIsActive(const bool& isActive) { isActive_ = isActive; };
 
 	// --------------- オブジェクトの属性取得 -------------- //
 

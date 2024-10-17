@@ -36,11 +36,6 @@ void TestScene::Init() {
 	trail_->Init();
 
 	// manager -------------------------------------------------------------------
-	obstaclesManager_ = std::make_unique<ObstaclesManager>();
-	obstaclesManager_->Init();
-
-	placementObjEditer_ = std::make_unique<PlacementObjectEditer>();
-	placementObjEditer_->Init(obstaclesManager_.get());
 
 	collisionManager_ = std::make_unique<CollisionManager>();
 
@@ -98,11 +93,6 @@ void TestScene::Update() {
 
 	waterSpace_->Update();
 	
-	placementObjEditer_->Update();
-
-	obstaclesManager_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
-	obstaclesManager_->Update();
-
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
@@ -132,11 +122,10 @@ void TestScene::Update() {
 void TestScene::Draw() const {
 	
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	placementObjEditer_->Draw();
+	
 	testObj_->Draw();
 	testObj2_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	obstaclesManager_->Draw();
 	Render::DrawTriangle(triangle_.get());
 
 	Engine::SetPipeline(PipelineType::AddPipeline);
@@ -172,8 +161,6 @@ void TestScene::ImGuiDraw() {
 	waterSpace_->Debug_Gui();
 
 	debugCamera_->Debug_Gui();
-
-	obstaclesManager_->Debug_Gui();
 
 	if (ImGui::TreeNode("triangle")) {
 		triangle_->Debug_Gui();

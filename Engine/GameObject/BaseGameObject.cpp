@@ -26,6 +26,7 @@ void BaseGameObject::Update() {
 
 void BaseGameObject::Draw() const {
 	if (animetor_ == nullptr) {
+		Engine::SetPipeline(PipelineType::NormalPipeline);
 		Render::DrawModel(model_, transform_.get(), materials);
 	} else {
 		//Engine::SetSkinning(animetor_->GetSkinning(), model_->GetMesh(0));
