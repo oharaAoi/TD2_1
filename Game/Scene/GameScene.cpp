@@ -99,13 +99,11 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "fish.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Bird.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Driftwood.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "Coin.obj");
-
+	
 	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
@@ -125,7 +123,6 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "Ground1.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
 
 	// Texture

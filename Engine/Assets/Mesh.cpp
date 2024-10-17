@@ -30,7 +30,7 @@ void Mesh::Init(ID3D12Device* device, std::vector<VertexData> vertexData, std::v
 	// アドレスを取得
 	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	std::memcpy(vertexData_, vertexData.data(), sizeof(VertexData) * vertexData.size());
-	vertexDataSize_ = vertexData.size();
+	vertexDataSize_ = static_cast<uint32_t>(vertexData.size());
 
 	verticesData_ = vertexData;
 

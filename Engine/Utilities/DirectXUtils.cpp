@@ -6,9 +6,9 @@
 #pragma comment(lib, "dxcompiler.lib")
 
 ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device,
-	const D3D12_DESCRIPTOR_HEAP_TYPE& heapType,
-	const UINT& numDescriptor,
-	const bool& shaderVisible){
+												  const D3D12_DESCRIPTOR_HEAP_TYPE& heapType,
+												  const UINT& numDescriptor,
+												  const bool& shaderVisible) {
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
 	D3D12_DESCRIPTOR_HEAP_DESC desc{};

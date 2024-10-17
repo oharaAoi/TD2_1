@@ -34,8 +34,6 @@ public:
 	void Init();
 	void Update();
 
-	void Draw() const;
-
 	void CreateSkeleton(const Model::Node& node);
 	int32_t CreateJoint(const Model::Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
@@ -52,7 +50,5 @@ private:
 	int32_t root_;	// RootJointのIndex
 	std::map<std::string, int32_t> jointMap_;	// Joint名とIndexの辞書
 	std::vector<Joint> joints_;	// 所属しているジョイント
-
-	std::vector<std::unique_ptr<BaseGameObject>> obj_;
 };
 
