@@ -221,8 +221,7 @@ void Player::Move(){
 
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
-	float ease = EaseOutBack(std::fabsf(pressTime_));
-	currentAngle_ = kMaxAngle_ * pressTime_;// * (pressTime_ > 0.0f ? 1.0f : -1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算

@@ -50,8 +50,8 @@ void Camera::Update(){
 
 				// 飛行中のプレイヤーの高さに応じた追加の調整ベクトルを計算
 				addVec.y = 7.0f * (pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f;
-				addVec.x = 10.0f * heightRatio;
-				addVec.y += pPlayer_->GetVelocity().y * 40.0f;
+				//addVec.x = 10.0f * heightRatio;
+				addVec.y += pPlayer_->GetVelocity().y * 30.0f;
 
 				// 飛行中の定位置まで回転を加算
 				transform_.rotate.x += 0.005f * GameTimer::TimeRate();
