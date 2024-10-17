@@ -66,11 +66,20 @@ void Player::Update(){
 	// 飛行フラグ更新
 	if(transform_->GetTranslation().y > 0.0f) {
 		isFlying_ = true;
+
+		if (!preFlying_) {
+			timer_.Measurement(transform_->GetTranslation().x);
+		}
 	} else {
 		isFlying_ = false;
+
+		if (preFlying_) {
+			timer_.Finish(transform_->GetTranslation().x);
+		}
 	}
 
 	animetor_->Update();
+	timer_.Update(transform_->GetTranslation().x);
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -95,7 +104,6 @@ void Player::Move(){
 
 	// 前フレームの値を保存
 	prePos_ = transform_->GetTranslation();
-
 
 	// 飛んでいないときにだけ操作を受け付ける
 	if(!isFlying_){// 水中 -----------------------------------
@@ -206,6 +214,7 @@ void Player::Move(){
 	}
 
 	MoveLimit();
+	preFlying_ = isFlying_;
 }
 
 
@@ -276,6 +285,11 @@ void Player::Debug_Gui(){
 		ImGui::Text("Hit");
 	} else {
 		ImGui::Text("not Hit");
+	}
+
+	if (ImGui::TreeNode("FlyingTimer")) {
+		timer_.Debug_Gui();
+		ImGui::TreePop();
 	}
 
 	ImGui::End();

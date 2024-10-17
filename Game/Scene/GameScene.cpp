@@ -19,6 +19,9 @@ void GameScene::Init(){
 
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
+	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
+	gamePlayTimer_->Init(60.0f);
+
 	// -------------------------------------------------
 	// ↓ editorの初期化
 	// -------------------------------------------------
@@ -45,6 +48,7 @@ void GameScene::Init(){
 
 		// 地面
 		ground_[i] = std::make_unique<Ground>();
+
 		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * stageWidthEvery_, groundDepth_, 0.0f));
 
 		// 水
@@ -105,11 +109,14 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Ground1.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
 
 	// Texture
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
+
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,6 +215,14 @@ void GameScene::Update(){
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
 
+	if (player_->GetIsMove()) {
+		gamePlayTimer_->Update();
+
+		if (gamePlayTimer_->GetIsFinish()) {
+			isPause_ = true;
+		}
+	}
+
 #ifdef _DEBUG
 	if(!isStepFrame_) {
 		Debug_Gui();
@@ -215,7 +230,6 @@ void GameScene::Update(){
 		// editorの処理
 		placementObjectEditor_->Update();
 	}
-
 #endif
 }
 
@@ -469,6 +483,8 @@ void GameScene::Debug_Gui(){
 	}
 
 	debugCamera_->Debug_Gui();
+
+	gamePlayTimer_->Debug_Gui();
 
 	ImGui::End();
 }

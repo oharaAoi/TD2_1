@@ -7,6 +7,7 @@
 #include "Easing.h"
 #include "Game/Attachment/PlayerAnimator.h"
 #include "Engine/Audio/AudioPlayer.h"
+#include "Game/Information/FlyingTimer.h"
 
 class Player :
 	public BaseGameObject,
@@ -40,6 +41,8 @@ public:
 	const Vector3& GetVelocity()const{ return velocity_; }
 
 	const uint32_t GetCoinNum() const{ return getCoinNum_; }
+
+	const bool GetIsMove() const {return isMove_;}
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -82,6 +85,8 @@ private:
 	bool isDiving_;	// 飛行後終了して水に入った瞬間を得るフラグ
 	bool isCloseWing_;// 飛行中に翼を閉じているかどうか
 
+	bool preFlying_; // 前フレームで飛んでいたか
+
 	// データ格納変数　----------------------------------
 
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;// プレイヤーの上部の水面の座標
@@ -89,6 +94,9 @@ private:
 	uint32_t getCoinNum_ = 0;// コインを何枚取得したか
 	Vector3 prePos_;
 	float divingSpeed_;// 着水時の下へのスピード
+
+	// 飛距離計測用　----------------------------------
+	FlyingTimer timer_;
 
 	// sound-------------------------------------------
 

@@ -25,6 +25,7 @@
 #include "Game/GameObject/WorldWall.h"
 #include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
+#include "Game/Information/GamePlayTimer.h"
 
 
 class GameScene 
@@ -81,4 +82,7 @@ private:
 	// ---------- editor ----------- //
 
 	std::unique_ptr<PlacementObjectEditer> placementObjectEditor_ = nullptr;
+
+	// ---------- information ---------- //
+	std::unique_ptr<GamePlayTimer> gamePlayTimer_;
 };
