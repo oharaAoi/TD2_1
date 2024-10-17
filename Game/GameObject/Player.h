@@ -43,10 +43,9 @@ public:
 	float GetSwimmingDepth(){ return swimmigDepth_; }
 	bool GetIsFlying(){ return isFlying_; }
 	const Vector3& GetVelocity()const{ return velocity_; }
-
 	const uint32_t GetCoinNum() const{ return getCoinNum_; }
-
 	const bool GetIsMove() const {return isMove_;}
+	const bool GetIsSplash()const{ return isSplash_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -91,11 +90,11 @@ private:
 	bool hitWaterSurface_;
 	bool isMove_ = true;
 	bool isFlying_;
+	bool preFlying_; // 前フレームで飛んでいたか
 	bool isFalling_;// 下降中かどうか
 	bool isDiving_;	// 飛行後終了して水に入った瞬間を得るフラグ
 	bool isCloseWing_;// 飛行中に翼を閉じているかどうか
-
-	bool preFlying_; // 前フレームで飛んでいたか
+	bool isSplash_;
 
 	// データ格納変数　----------------------------------
 

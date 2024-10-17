@@ -29,7 +29,7 @@ void WorldTransform::Update(const Matrix4x4& mat) {
 	}
 	// GPUに送るデータを更新
 	data_->matWorld = worldMat_;
-	data_->worldInverseTranspose = Transpose(Inverse(worldMat_));
+	data_->worldInverseTranspose = Transpose((worldMat_).Inverse());
 }
 
 void WorldTransform::Draw(ID3D12GraphicsCommandList* commandList) const {

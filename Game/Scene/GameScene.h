@@ -23,6 +23,7 @@
 #include "Game/Camera/Camera.h"
 #include "Game/Camera/DebugCamera.h"
 #include "Game/Effect/Trail.h"
+#include "Game/Effect/Splash.h"
 #include "Game/GameObject/WorldWall.h"
 #include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
@@ -52,6 +53,7 @@ public:
 
 public:
 	static float GetGroundDepth(){ return groundDepth_; }
+	void CheckAddSplash();
 
 private:
 
@@ -64,7 +66,10 @@ private:
 	std::unique_ptr<Ground> ground_[kStageModelCount_];
 	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;
+
+	// ------------ effect ------------ //
 	std::unique_ptr<Trail> trail_ = nullptr;
+	std::list<std::unique_ptr<Splash>>splash_;
 
 	// ---------- worldobject ---------- //
 	std::unique_ptr<WorldWall> worldWall_ = nullptr;

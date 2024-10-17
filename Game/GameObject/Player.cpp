@@ -70,6 +70,11 @@ void Player::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update(){
+
+	// 毎フレームの初期化
+	isSplash_ = false;
+
+	// 移動
 	if(isMove_) {
 		Move();
 	} else {
@@ -82,12 +87,14 @@ void Player::Update(){
 
 		if (!preFlying_) {
 			timer_.Measurement(transform_->GetTranslation().x);
+			isSplash_ = true;
 		}
 	} else {
 		isFlying_ = false;
 
 		if (preFlying_) {
 			timer_.Finish(transform_->GetTranslation().x);
+			isSplash_ = true;
 		}
 	}
 

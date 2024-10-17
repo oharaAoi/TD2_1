@@ -35,6 +35,8 @@ public:
 
 	void SetColor(const Vector4& color);
 
+	void SetIsLighting(bool isLighting);
+
 protected:
 
 	Model* model_;

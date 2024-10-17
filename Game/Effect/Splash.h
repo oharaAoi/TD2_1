@@ -8,7 +8,7 @@ class Splash{
 
 public:
 	Splash() = default;
-	Splash(const Vector2& emitPos, float velocity);
+	Splash(const Vector3& emitPos, float velocity);
 
 	void Update();
 	void Draw();
@@ -25,9 +25,9 @@ public:
 	float maxHeight_;
 
 private:
-	static const int kSplashCount_ = 64;
-	static const int kWaterColmnCount_ = 16;
-	static const int kPlaneCount_ = 16;
+	static const int kSplashCount_ = 12;
+	static const int kWaterColmnCount_ = 8;
+	static const int kPlaneCount_ = 8;
 	static float defaultVelocity_;
 
 private:
