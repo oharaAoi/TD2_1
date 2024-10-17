@@ -20,6 +20,7 @@ void Item::Init(){
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
+	SetColor({1.0f, 1.0f, 0.0f, 1.0f});
 }
 
 //////////////////////////////////////////////////////
