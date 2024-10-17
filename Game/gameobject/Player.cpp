@@ -211,10 +211,8 @@ void Player::Move(){
 				isDiving_ = true;
 				isFalling_ = false;
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
-				// 潜水速度の最低値を保つ
-				if(divingSpeed_ > -0.7f){
-					divingSpeed_ = -0.7f;
-				}
+				// 潜水速度を一定範囲に保つ
+				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
 			}
 		}
 	}

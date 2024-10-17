@@ -18,7 +18,7 @@ public:
 
 private:
 
-
-
+	bool isHitPlayer_ = false;
+	float wipeOutTime_ = 2.0f;
 };
 

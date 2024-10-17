@@ -59,9 +59,9 @@ void Camera::Update(){
 				addVec.y += pPlayer_->GetVelocity().y * 30.0f;
 
 				// 飛行中の定位置まで回転を加算
-				transform_.rotate.x += 0.005f * GameTimer::TimeRate();
+				transform_.rotate.x += 0.005f * GameTimer::TimeRate() * velocityRate_;
 				transform_.rotate.x = std::clamp(transform_.rotate.x, baseRotate.x, baseRotate.x + 0.15f);
-				transform_.rotate.y += 0.005f * GameTimer::TimeRate();
+				transform_.rotate.y += 0.005f * GameTimer::TimeRate() * velocityRate_;
 				transform_.rotate.y = std::clamp(transform_.rotate.y, baseRotate.y, baseRotate.y + 0.15f);
 
 			}
@@ -84,7 +84,9 @@ void Camera::Update(){
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate += dif * 0.05f * GameTimer::TimeRate() * velocityRate_;
+		transform_.translate.x += dif.x * 0.04f * GameTimer::TimeRate() * velocityRate_;
+		transform_.translate.y += dif.y * 0.05f * GameTimer::TimeRate() * velocityRate_;
+		transform_.translate.z += dif.z * 0.05f * GameTimer::TimeRate() * velocityRate_;
 	}
 
 	BaseCamera::Update();

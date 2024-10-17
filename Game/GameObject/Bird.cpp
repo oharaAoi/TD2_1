@@ -49,6 +49,6 @@ void Bird::OnCollision(Collider* other) {
 
 	//プレイヤーに当たった場合
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
-		//isActive_ = false;
+		isHitPlayer_ = true;
 	}
 }
