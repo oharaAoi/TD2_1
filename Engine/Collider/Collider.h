@@ -44,6 +44,7 @@ public:
 	int32_t GetObjectType(){ return typeID_; }
 
 	OBB& GetObb() { return obb_; }
+	void SetObbSize(float radius){ obb_.size = { radius,radius,radius }; }
 
 protected:
 

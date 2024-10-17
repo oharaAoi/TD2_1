@@ -78,10 +78,6 @@ void GameScene::Init(){
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
 
-	//for(auto& fish : fish_){
-	//	collisionManager_->AddCollider(fish.get());
-	//}
-
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
@@ -216,14 +212,6 @@ void GameScene::Update(){
 	PlayerWaveCollision();
 	collisionManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	collisionManager_->CheckAllCollision();
-
-	// -------------------------------------------------
-	// ↓ 当たり判定の後の処理
-	// -------------------------------------------------
-
-	// 死んでいる要素の削除
-	//fish_.remove_if([](auto& fish){return !fish->GetIsActive(); });
-	//items_.remove_if([](auto& item){return !item->GetIsActive(); });
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する

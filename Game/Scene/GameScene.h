@@ -65,13 +65,9 @@ private:
 	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Trail> trail_ = nullptr;
-	//std::list<std::unique_ptr<Fish>>fish_;
-	//std::list<std::unique_ptr<Item>>items_;
-	//std::list<std::unique_ptr<Bird>>birds_;
 
 	// ---------- worldobject ---------- //
 	std::unique_ptr<WorldWall> worldWall_ = nullptr;
-
 	std::unique_ptr<BaseGameObject> waterWeed_;
 
 	// --------- parameter ----------- //

@@ -172,7 +172,7 @@ void Player::Move(){
 	} else{// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
-		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.05f,1.0f);
+		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.1f,1.0f);
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
@@ -194,7 +194,6 @@ void Player::Move(){
 			if(!isCloseWing_){//////// 翼を広げている際 ////////
 
 				// 下降ベクトル
-				dropVec = Vector3(0.0f, -0.2f, 0.0f) * GameTimer::TimeRate();
 				dropSpeed_ = 0.0f;
 
 			} else{//////// 翼を閉じている際 ////////
@@ -370,10 +369,8 @@ void Player::Debug_Gui(){
 
 void Player::OnCollision(Collider* other){
 
-	int ownerType = int(other->GetObjectType() & (int)ObjectType::OBSTACLE);
-
 	//障害物に当たった場合
-	if(ownerType == (int)ObjectType::OBSTACLE){
+	if(other->GetObjectType() == (int)ObjectType::FISH){
 		moveSpeed_ -= 10.0f;
 		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
 		hitSe_->Play(false, true);
@@ -387,5 +384,19 @@ void Player::OnCollision(Collider* other){
 	if(other->GetObjectType() == (int)ObjectType::COIN) {
 		coinGetSe_->Play(false, 0.5f, true);
 		getCoinNum_++;
+	}
+
+	if(other->GetObjectType() == (int)ObjectType::BIRD) {
+
+		if(isFlying_ && !isFalling_){ return; }
+
+		if(isCloseWing_){
+			pressTime_ = 1.0f;
+			isFalling_ = false;
+			isCloseWing_ = false;
+		} else{
+			moveSpeed_ *= 0.5f;
+			isCloseWing_ = true;
+		}
 	}
 }
