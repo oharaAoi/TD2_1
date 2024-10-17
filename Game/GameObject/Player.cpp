@@ -16,8 +16,21 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 	BaseGameObject::Init();
-	SetObject("Player.fbx");
+	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
+
+	//
+	BaseGameObject* pTarget = this;
+	for(int i = 0; i < kMinBodyCount_; i++){
+
+		// 胴体を追加
+		AddBody(pTarget);
+
+		// 自身を後続のモデルのターゲットに設定
+		pTarget = followModels_.back().get();
+
+	}
+
 
 	animetor_ = std::make_unique<PlayerAnimator>();
 	animetor_->Init();
@@ -78,8 +91,21 @@ void Player::Update(){
 		}
 	}
 
+	// 体の更新
+	for(auto& body : followModels_){
+		body->Update();
+	}
+
 	animetor_->Update();
 	timer_.Update(transform_->GetTranslation().x);
+
+
+	if(Input::IsTriggerKey(DIK_UP)){
+		AddBody(followModels_.back().get());
+	} else if(Input::IsTriggerKey(DIK_DOWN)){
+		EraseBody();
+	}
+
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -92,8 +118,14 @@ void Player::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Draw() const{
-	//BaseGameObject::Draw();
-	Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
+	BaseGameObject::Draw();
+
+	// 体の描画
+	for(auto& body : followModels_){
+		body->Draw();
+	}
+
+	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,6 +290,43 @@ const Vector3 Player::GetWorldTranslation() const{
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　胴体の追加
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Player::AddBody(BaseGameObject* pTarget){
+
+	if(bodyCount_ >= kMaxBodyCount_){ return; }
+
+	if(followModels_.size() != 0){
+		auto& preBody = followModels_.back();
+		preBody->SetObject("Player_Torso.obj");
+	}
+
+	auto& body = followModels_.emplace_back(std::make_unique<PlayerBody>());
+	body->Init();
+	body->SetObject("Player_Tail.obj");
+	body->SetTarget(pTarget);
+	body->SetSpace(3.0f);
+	body->GetTransform()->SetTranslaion(pTarget->GetTransform()->GetTranslation());
+	body->GetTransform()->SetQuaternion(Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f)));
+
+	// 更新
+	body->Update();
+
+	bodyCount_++;
+}
+
+// 最後尾を削除
+void Player::EraseBody(){
+	if(followModels_.size() > kMinBodyCount_){
+		followModels_.pop_back();
+	}
+
+	followModels_.back()->SetObject("Player_Tail.obj");
+	bodyCount_--;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　debug表示
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -294,6 +363,8 @@ void Player::Debug_Gui(){
 
 	ImGui::End();
 }
+
+
 #endif // _DEBUG
 
 //////////////////////////////////////////////////////

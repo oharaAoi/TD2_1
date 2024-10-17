@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject/BaseGameObject.h"
+#include "Game/GameObject/PlayerBody.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/Input/Input.h"
 #include "Engine/Lib/GameTimer.h"
@@ -30,6 +31,9 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 	const Vector3 GetWorldTranslation() const;
 
+	void AddBody(BaseGameObject* pTarget);
+	void EraseBody();
+
 public:
 
 	void SetHitWaterSurface(const bool& ishit){ hitWaterSurface_ = ishit; }
@@ -53,12 +57,18 @@ private:
 	AdjustmentItem* adjustmentItem_;
 	std::unique_ptr<PlayerAnimator> animetor_;
 
+	// 付属モデル---------------------------------------
+
+	std::list<std::unique_ptr<PlayerBody>>followModels_;
+	const int kMinBodyCount_ = 2;
+	const int kMaxBodyCount_ = 8;
+	int bodyCount_ = kMinBodyCount_;
+
 	// パラメータ---------------------------------------
 
 	Quaternion restPoseRotation_;
 	Quaternion slerpRotation_;
 
-	// パラメータ
 	Vector3 velocity_;
 	float moveSpeed_;
 	float lookAtT_;
