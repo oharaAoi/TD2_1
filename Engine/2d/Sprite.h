@@ -38,7 +38,7 @@ public:
 	/// </summary>
 	/// <param name="rectRange">: 描画する範囲</param>
 	/// <param name="leftTop">: 左上座標</param>
-	void Update(const Vector2& rectRange = { 0.0f, 0.0f }, const Vector2& leftTop = { 0.0f, 0.0f });
+	void Update();
 	void Draw();
 
 	/// <summary>

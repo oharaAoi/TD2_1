@@ -65,6 +65,8 @@ public:
 	Skinning();
 	~Skinning();
 
+	void Finalize();
+
 	void Update(Skeleton* skeleton);
 
 	void CreateSkinCluster(ID3D12Device* device, Skeleton* skeleton, Mesh* mesh, DescriptorHeap* heap, std::map<std::string, Skinning::JointWeightData>& skinClusterData);
@@ -79,29 +81,31 @@ public:
 
 private:
 	UINT vertices_;
-	// well
-	std::vector<Matrix4x4> inverseBindPoseMatrices_;
+
+	// palette
+	ComPtr<ID3D12Resource> paletteResource_;
+	std::span<WellForGPU> mappedPalette_;
+	DescriptorHeap::DescriptorHandles paletteSrvHandle_;
+
 	// influence
 	ComPtr<ID3D12Resource> influenceResource_;
 	D3D12_VERTEX_BUFFER_VIEW influenceBuffeView_;
 	std::span<VertexInfluence> mappedInfluence_;
 	DescriptorHeap::DescriptorHandles influenceSrvHandle_;
-	// palette
-	ComPtr<ID3D12Resource> paletteResource_;
-	std::span<WellForGPU> mappedPalette_;
-	DescriptorHeap::DescriptorHandles paletteSrvHandle_;
+
+	// well
+	std::vector<Matrix4x4> inverseBindPoseMatrices_;
+
+
 	// skinningInformation
-	ComPtr<ID3D12Resource> skinningInformationResource_;
 	SkinningInformation* skinningInformation_;
 	DescriptorHeap::DescriptorHandles skinningInformationSrvHandle_;
-
+	ComPtr<ID3D12Resource> skinningInformationResource_;
 	// output
 	ComPtr<ID3D12Resource> outputResource_;
 	DescriptorHeap::DescriptorHandles outputHandle_;
 	Mesh::VertexData* vertexData_;
-
 	ComPtr<ID3D12Resource> readResource_;
-
 	// MeshInputView
 	DescriptorHeap::DescriptorHandles inputHandle_;
 

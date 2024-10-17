@@ -18,7 +18,7 @@ void Fish::Init(){
 	BaseGameObject::Init();
 	radius_ = 1.0f;
 	SetObject("Fish.gltf");
-	//SetAnimater("./Game/Resources/Model/Fish/", "Fish.gltf", false);
+	SetAnimater("./Game/Resources/Model/Fish/", "Fish.gltf", true);
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();

@@ -54,10 +54,8 @@ private:
 	
 	// Manager ------------------------------------------
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
-	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
 
 	// editer ------------------------------------------
-	std::unique_ptr<PlacementObjectEditer> placementObjEditer_ = nullptr;
 	std::unique_ptr<AdjustmentItem> adjustment_ = nullptr;
 };
 

@@ -15,6 +15,7 @@ public:
 	Animetor();
 	~Animetor();
 
+	void Finalize();
 	void Update();
 
 	void LoadAnimation(const std::string& directoryPath, const std::string& fileName, Model* model);

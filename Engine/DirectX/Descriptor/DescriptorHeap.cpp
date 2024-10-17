@@ -1,4 +1,5 @@
 #include "DescriptorHeap.h"
+#include "Engine/DirectX/Descriptor/DescriptorAllocator.h"
 
 DescriptorHeap::DescriptorHeap(ID3D12Device* device) {
 	Initialize(device);
@@ -21,8 +22,26 @@ void DescriptorHeap::Initialize(ID3D12Device* device) {
 
 	// ヒープの生成
 	rtvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 7, false);
-	srvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 10000, true);
+	srvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, (1 << 16), true);
 	dsvHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 2, false);
+
+	srvAllocator_ = std::make_unique<DescriptorAllocator>(
+		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * (1 << 16),
+		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+	);
+
+	rtvAllocator_ = std::make_unique<DescriptorAllocator>(
+		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_RTV) * 7,
+		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+	);
+
+	dsvAllocator_ = std::make_unique<DescriptorAllocator>(
+		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_DSV) * 2,
+		sizeof(D3D12_DESCRIPTOR_HEAP_TYPE_DSV)
+	);
+
+	rtvAllocator_;
+	dsvAllocator_;
 
 	useSrvIndex_ = 0;	// SRVの先頭はImGuiで使うため0から始める
 	useDsvIndex_ = -1;	// 他は生成時に+1しているため一番最初ように-1から始める
@@ -48,20 +67,46 @@ DescriptorHeap::DescriptorHandles DescriptorHeap::GetDescriptorHandle(const Desc
 		handle.handleCPU = GetCPUDescriptorHandle(srvHeap_.Get(), descriptorSize_->GetSRV(), (static_cast<int>(useSrvIndex_) + 1));
 		handle.handleGPU = GetGPUDescriptorHandle(srvHeap_.Get(), descriptorSize_->GetSRV(), (static_cast<int>(useSrvIndex_) + 1));
 		useSrvIndex_++;
+		handle.assignIndex_ = useSrvIndex_;
 		break;
 
 	case DescriptorHeapType::TYPE_DSV:
 		handle.handleCPU = GetCPUDescriptorHandle(dsvHeap_.Get(), descriptorSize_->GetDSV(), (static_cast<int>(useDsvIndex_) + 1));
-		//handle.handleGPU = GetGPUDescriptorHandle(dsvHeap_.Get(), descriptorSize_->GetDSV(), (static_cast<int>(useDsvIndex_) + 1));
 		useDsvIndex_++;
+		handle.assignIndex_ = useDsvIndex_;
 		break;
 
 	case DescriptorHeapType::TYPE_RTV:
 		handle.handleCPU = GetCPUDescriptorHandle(rtvHeap_.Get(), descriptorSize_->GetRTV(), (static_cast<int>(useRtvIndex_) + 1));
-		//handle.handleGPU = GetGPUDescriptorHandle(rtvHeap_.Get(), descriptorSize_->GetRTV(), (static_cast<int>(useRtvIndex_) + 1));
 		useRtvIndex_++;
+		handle.assignIndex_ = useRtvIndex_;
 		break;
 	}
 
 	return handle;
+}
+
+DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateSRV() {
+	return srvAllocator_->Allocate(srvHeap_.Get());
+	return DescriptorHandles();
+}
+
+DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateRTV() {
+	return rtvAllocator_->Allocate(rtvHeap_.Get());
+}
+
+DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateDSV() {
+	return dsvAllocator_->Allocate(dsvHeap_.Get());
+}
+
+void DescriptorHeap::FreeSRV(uint32_t index) {
+	srvAllocator_->Free(index);
+}
+
+void DescriptorHeap::FreeRTV(uint32_t index) {
+	rtvAllocator_->Free(index);
+}
+
+void DescriptorHeap::FreeDSV(uint32_t index) {
+	dsvAllocator_->Free(index);
 }

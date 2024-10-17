@@ -67,7 +67,7 @@ void Sprite::Init(ID3D12Device* device, const Mesh::RectVetices& rect) {
 	);
 }
 
-void Sprite::Update(const Vector2& rectRange, const Vector2& leftTop) {
+void Sprite::Update() {
 	materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
 
 	//Vector2 drawRange = textureSize_;

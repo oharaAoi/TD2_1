@@ -9,6 +9,8 @@
 
 #include "Engine/DirectX/Descriptor/DescriptorSize.h"
 
+class DescriptorAllocator;
+
 template<typename T>
 using ComPtr = Microsoft::WRL::ComPtr <T>;
 
@@ -26,6 +28,7 @@ public:
 	struct DescriptorHandles {
 		D3D12_CPU_DESCRIPTOR_HANDLE handleCPU;
 		D3D12_GPU_DESCRIPTOR_HANDLE handleGPU;
+		int assignIndex_;
 	};
 
 public:
@@ -84,6 +87,15 @@ public:
 	/// <returns></returns>
 	ID3D12DescriptorHeap* GetDSVHeap() { return dsvHeap_.Get(); }
 
+	DescriptorHandles AllocateSRV();
+	DescriptorHandles AllocateRTV();
+	DescriptorHandles AllocateDSV();
+
+	void FreeSRV(uint32_t index);
+	void FreeRTV(uint32_t index);
+	void FreeDSV(uint32_t index);
+
+
 private:
 
 	ID3D12Device* device_ = nullptr;
@@ -93,6 +105,10 @@ private:
 	ComPtr<ID3D12DescriptorHeap> rtvHeap_ = nullptr;
 	ComPtr<ID3D12DescriptorHeap> srvHeap_ = nullptr;
 	ComPtr<ID3D12DescriptorHeap> dsvHeap_ = nullptr;
+
+	std::unique_ptr<DescriptorAllocator> srvAllocator_;
+	std::unique_ptr<DescriptorAllocator> rtvAllocator_;
+	std::unique_ptr<DescriptorAllocator> dsvAllocator_;
 	
 	int32_t useSrvIndex_;
 	int32_t useDsvIndex_;

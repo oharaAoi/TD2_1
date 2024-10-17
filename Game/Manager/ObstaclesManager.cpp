@@ -31,14 +31,28 @@ void ObstaclesManager::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ObstaclesManager::Update() {
+	//for (const auto& pair : groupMap_) {
+	//	const std::string& key = pair.first;	// key
+	//	const Group& value = pair.second;		// volue
+
+	//	// mapに格納されているデータの位置を
+	//}
+
+	// randomに配置されている物をリストに追加していく
+	RandomImportCreate();
+
+	// リストの更新を行う
 	for (std::list<std::unique_ptr<BasePlacementObject>>::iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
 		if (!(*it)->GetIsActive()) {
 			it = obstaclesList_.erase(it);
 			continue;
 		}
-		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
-		if (length < playerDrawLenght_) {
-			(*it)->Update();
+
+		// 更新をする
+		(*it)->Update();
+		float length = (((*it)->GetWorldTranslation().x - playerPos_.x));
+		if(length < -100.0f) {
+ 			(*it)->SetIsActive(false);
 		}
 		++it;
 	}
@@ -56,6 +70,70 @@ void ObstaclesManager::Draw() const {
 		}
 		++it;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　ランダム配置の追加
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ObstaclesManager::RandomImportCreate() {
+	for (auto it = randomImportArray_.begin(); it != randomImportArray_.end();) {
+		float length = std::abs(it->pos_.x - playerPos_.x);
+		if (length < playerDrawLenght_) {
+			auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
+			obj->Init();
+			Quaternion rotate = {
+				it->rotate_.x,
+				it->rotate_.y,
+				it->rotate_.z,
+				it->rotate_.w
+			};
+			Vector3 createPos = it->pos_;
+			switch (it->type_) {
+			case PlacementObjType::ROCK:
+				obj.reset(new Rock);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				break;
+			case PlacementObjType::FISH:
+				obj.reset(new Fish);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				break;
+			case PlacementObjType::BIRD:
+				obj.reset(new Bird);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				break;
+			case PlacementObjType::ITEM:
+				obj.reset(new Item);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				break;
+			case PlacementObjType::DRIFTWOOD:
+				obj.reset(new Driftwood);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				break;
+			case PlacementObjType::WATERWEED:
+				obj.reset(new Waterweed);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				break;
+			case PlacementObjType::COIN:
+				obj.reset(new Coin);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				coinNum_++;
+				break;
+			}
+
+			it = randomImportArray_.erase(it);
+		} else {
+			++it;
+		}
+	}
+
 }
 
 
@@ -225,35 +303,29 @@ void ObstaclesManager::RandomAddObject() {
 
 			// 1/2で魚、アイテムを切り替える
 			if (rand % 2 == 0) {
-				auto& fish = obstaclesList_.emplace_back(std::make_unique<Fish>());
-				fish->Init();
-				float depth = RandomFloat(StageInformation::groundDepth_ + fish->GetRadius(), -fish->GetRadius());
-				fish->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-				fish->Update();
+				float depth = RandomFloat(StageInformation::groundDepth_ + 1.0f, -1.0f);
+				LoadData data{
+					Vector3(1.0f,1.0f,1.0f),			// scale
+					Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
+					Vector3(10.0f * i, depth, 0.0f),	// 位置
+					1.0f,								// 半径
+					PlacementObjType::FISH				// type
+				};
+
+				randomImportArray_.push_back(data);
 
 			} else {
-				auto& item = obstaclesList_.emplace_back(std::make_unique<Item>());
-				item->Init();
-				float depth = RandomFloat(StageInformation::groundDepth_ + item->GetRadius(), -item->GetRadius());
-				item->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-				item->Update();
+				float depth = RandomFloat(StageInformation::groundDepth_ + 1.0f, -1.0f);
+				LoadData data{
+					Vector3(1.0f,1.0f,1.0f),			// scale
+					Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
+					Vector3(10.0f * i, depth, 0.0f),	// 位置
+					1.0f,								// 半径
+					PlacementObjType::ITEM				// type
+				};
+
+				randomImportArray_.push_back(data);
 			}
-		}
-
-
-		//////////////////////////////////////////////////////
-		//                   空中
-		//////////////////////////////////////////////////////
-
-		// 10mごとに1/5の確率で追加
-		if(rand < 20){
-			auto& bird = obstaclesList_.emplace_back(std::make_unique<Bird>());
-			bird->Init();
-			float depth = RandomFloat(10.0f, 50.0f);
-			bird->GetTransform()->SetTranslaion(Vector3(10.0f * i, depth, 0.0f));
-			bird->SetRadius(2.0f);
-			bird->SetObbSize(bird->GetRadius());
-			bird->Update();
 		}
 	}
 }

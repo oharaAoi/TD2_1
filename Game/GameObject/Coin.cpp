@@ -17,7 +17,7 @@ void Coin::Init() {
 
 	BaseGameObject::Init();
 	SetObject("Coin.gltf");
-	//SetAnimater("./Game/Resources/Model/Coin/", "Coin.gltf", false);
+	SetAnimater("./Game/Resources/Model/Coin/", "Coin.gltf", true);
 	SetColor({ 1.0f, 1.0f, 0.0f, 1.0f });
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };

@@ -13,14 +13,14 @@ void AnimetionClip::Update() {
 	animationTime_ += 1.0f / 60.0f;
 	animationTime_ = std::fmod(animationTime_, animation_.duration);
 
-	//// =======================================================================================
-	NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[rootName_];
-	//// =======================================================================================
+	////// =======================================================================================
+	//NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[rootName_];
+	////// =======================================================================================
 
-	Vector3 translate = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-	Quaternion rotate = CalculateQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-	Vector3 scale = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
-	animationMat_ = MakeAffineMatrix(scale, rotate, translate);
+	//Vector3 translate = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
+	//Quaternion rotate = CalculateQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
+	//Vector3 scale = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
+	//animationMat_ = MakeAffineMatrix(scale, rotate, translate);
 }
 
 void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::string& animationFile, const std::string& name) {
@@ -31,8 +31,7 @@ void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::st
 
 	for (uint32_t animationIndex = 0; animationIndex < scene->mNumAnimations; ++animationIndex) {
 		aiAnimation* animationAssimp = scene->mAnimations[animationIndex];
-		Animation animation;
-		animation.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);	// 時間の単位を秒に変換
+		animation_.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);	// 時間の単位を秒に変換
 
 		// -------------------------------------------------
 		// ↓ アニメーションの解析
@@ -40,7 +39,7 @@ void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::st
 		// assimpでは個々のNodeのAnimationをchannelと呼ぶ
 		for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; ++channelIndex) {
 			aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
-			NodeAnimation& nodeAnimation = animation.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
+			NodeAnimation& nodeAnimation = animation_.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
 
 			// -------------------------------------------------
 			// ↓ Vector3の読み込み
@@ -76,7 +75,7 @@ void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::st
 			}
 		}
 
-		animations_.push_back(animation);
+		/*animations_.push_back(animation);*/
 	}
 	rootName_ = name;
 }

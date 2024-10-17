@@ -47,7 +47,7 @@ Matrix4x4 Quaternion::MakeMatrix() const {
 
 Quaternion Quaternion::AngleAxis(float angle, const Vector3& axis) {
 	Vector3 normalizeAxis = axis.Normalize();
-	float sinHalfAngle = std::sin(angle / 2.0f);
+	//float sinHalfAngle = std::sin(angle / 2.0f);
 
 	return Quaternion(
 		normalizeAxis.x * std::sin(angle / 2.0f),

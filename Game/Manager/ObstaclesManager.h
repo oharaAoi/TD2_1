@@ -55,10 +55,15 @@ public:
 	void Init();
 	void Update();
 	void Draw() const;
-
+	
+	// ランダム配置の追加
+	void RandomImportCreate();
+	
+	// 配置系
 	void SetObstacles(const std::vector<std::string>& stageInformation);
 	void Inport(const std::string& fileName);
 
+	// 読み込み系
 	void LoadAllFile();
 	std::map<std::string, Group> LoadFile(const std::string& fileName);
 	void MergeMaps(const std::map<std::string, Group>& map1);
@@ -66,6 +71,7 @@ public:
 	// Randomで配置する
 	void RandomAddObject();
 
+	// アクセッサ
 	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
 
 	std::list<std::unique_ptr<BasePlacementObject>>& GetPlacementObject() { return obstaclesList_; }
@@ -93,6 +99,8 @@ private:
 	std::map<std::string, Group> groupMap_;
 	// ファイル名が入っているリスト
 	std::vector<std::string> fileNames_;
+
+	std::list<LoadData> randomImportArray_;
 
 	Vector3 playerPos_;
 	float playerDrawLenght_ = 200.0f;
