@@ -172,7 +172,7 @@ void Player::Move(){
 	} else{// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
-		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.1f,1.0f);
+		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.05f,1.0f);
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
