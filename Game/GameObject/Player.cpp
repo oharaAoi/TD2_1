@@ -172,7 +172,7 @@ void Player::Move(){
 	} else{// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
-		pressTime_ *= 0.97f * GameTimer::TimeRate();
+		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.1f,1.0f);
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
@@ -240,8 +240,7 @@ void Player::Move(){
 	// 下降フラグの更新
 	if(!isFalling_){
 		// ある程度上昇が収まったら下降フラグをオンに
-		Vector3 difVec = Normalize(transform_->GetTranslation() - prePos_);
-		if(Dot({1.0f,0.0f,0.0f},difVec) >= 0.97f){
+		if(currentAngle_ <= 0.1f){
 			isFalling_ = true;
 		}
 	}

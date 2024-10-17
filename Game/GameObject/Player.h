@@ -76,7 +76,7 @@ private:
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
 	float pressTime_;
 	float currentAngle_;
-	const float kMaxAngle_ = 3.14f * 0.28f;
+	const float kMaxAngle_ = 3.14f * 0.38f;
 
 	// 着水して水に潜った際の猶予時間
 	const float kDiveTime_ = 1.0f;
