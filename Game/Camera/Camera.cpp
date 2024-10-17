@@ -40,17 +40,22 @@ void Camera::Update(){
 
 		Vector3 dif{};
 		Vector3 addVec{};
+		velocityRate_ = pPlayer_->GetMoveVelocity().x / defaultVelocity_;
 
 		if(pPlayer_->GetIsFlying()){
+
+			// 飛んでいるとき
+			adjustX_ -= 0.5f * GameTimer::TimeRate();
+			adjustX_ = std::clamp(adjustX_, -15.0f, 0.0f);
 
 			if(pPlayer_->GetTransform()->GetTranslation().y > 10.0f){
 
 				// 高さの割合を計算
-				float heightRatio = std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f, 0.0f, 1.0f);
+				float heightRatio = std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 1.0f) / 40.0f, 0.0f, 1.0f);
 
 				// 飛行中のプレイヤーの高さに応じた追加の調整ベクトルを計算
 				addVec.y = 7.0f * (pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f;
-				//addVec.x = 10.0f * heightRatio;
+				addVec.x = -10.0f * heightRatio;
 				addVec.y += pPlayer_->GetVelocity().y * 30.0f;
 
 				// 飛行中の定位置まで回転を加算
@@ -63,6 +68,10 @@ void Camera::Update(){
 
 		} else{
 
+			// 移動をもとに戻す
+			adjustX_ += 0.5f * GameTimer::TimeRate();
+			adjustX_ = std::clamp(adjustX_, -15.0f, 0.0f);
+
 			// 回転を徐々にもとに戻す
 			transform_.rotate.x -= 0.005f * GameTimer::TimeRate();
 			transform_.rotate.x = std::clamp(transform_.rotate.x, baseRotate.x, baseRotate.x + 0.15f);
@@ -72,10 +81,10 @@ void Camera::Update(){
 
 
 		// 目的座標への差分
-		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec) - transform_.translate;
+		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate += dif * 0.05f * GameTimer::TimeRate();
+		transform_.translate += dif * 0.05f * GameTimer::TimeRate() * velocityRate_;
 	}
 
 	BaseCamera::Update();
