@@ -327,6 +327,25 @@ void ObstaclesManager::RandomAddObject() {
 				randomImportArray_.push_back(data);
 			}
 		}
+
+		////////////////////////////////////////////
+		//              空中
+		////////////////////////////////////////////
+
+		if (rand < 20) {
+
+			// 10mに一回、1/5の確率で出現
+			float height = RandomFloat(0.0f, 60.0f);
+			LoadData data{
+				Vector3(1.0f,1.0f,1.0f),			// scale
+				Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
+				Vector3(10.0f * i, height, 0.0f),	// 位置
+				2.0f,								// 半径
+				PlacementObjType::BIRD				// type
+			};
+
+			randomImportArray_.push_back(data);
+		}
 	}
 }
 
