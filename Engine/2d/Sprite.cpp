@@ -77,6 +77,7 @@ void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 
 	rectRange_ = textureSize_;
 	leftTop_ = { 0.0f, 0.0f };
+	anchorPoint_ = { 0.5f, 0.5f };
 }
 
 void Sprite::Update() {
@@ -102,7 +103,7 @@ void Sprite::Draw() {
 	Render::DrawSprite(this);
 }
 
-void Sprite::Draw(ID3D12GraphicsCommandList* commandList) {
+void Sprite::Draw(ID3D12GraphicsCommandList* commandList) const {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);

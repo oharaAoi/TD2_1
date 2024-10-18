@@ -16,6 +16,8 @@ public:
 
 	void OnCollision([[maybe_unused]] Collider* other)override;
 
+	void SetWorldWallPos(const Vector3& pos);
+
 private:
 
 
