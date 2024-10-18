@@ -75,8 +75,7 @@ public:
 	// 三角形のポインタを作成
 	static std::unique_ptr<Triangle> CreateTriangle(const Mesh::Vertices& vertex, const std::string& textureName);
 	// スプライトのポインタを作成
-	static std::unique_ptr<Sprite> CreateSprite(const Mesh::RectVetices& rect);
-	static std::unique_ptr<Sprite> CreateSprite(const Vector2& centerPos, const Vector2& size);
+	static std::unique_ptr<Sprite> CreateSprite(const std::string& fileName);
 	// 球のポインタを作成
 	static std::unique_ptr<Sphere> CreateSphere(const uint32_t& devision);
 	// モデルのポインタを作成

@@ -28,5 +28,7 @@ void PlayerBody::Update(){
 		transform_->SetQuaternion(slerp);
 	}
 
+	SetIsLighting(false);
+
 	BaseGameObject::Update();
 }

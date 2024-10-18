@@ -32,7 +32,7 @@ public:
 	Sprite();
 	~Sprite();
 
-	void Init(ID3D12Device* device, const Mesh::RectVetices& rect);
+	void Init(ID3D12Device* device, const std::string& fileName);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -55,12 +55,16 @@ public:
 
 	void SetTexture(const std::string& fileName);
 
-	void RestTextureSize(const Vector2& centerPos, const Vector2& size);
+	void SetTextureCenterPos(const Vector2& centerPos);
+
+	void SetTextureSize(const Vector2& size);
 
 	// 描画する範囲の設定
 	void SetRectRange(const Vector2& rectRange) { rectRange_ = rectRange; };
 	// 描画する範囲の設定
 	void SetLeftTop(const Vector2& leftTop) { leftTop_ = leftTop; }
+
+	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
 
 private:
 
@@ -90,6 +94,7 @@ private:
 	Vector2 rectRange_ = { 0.0f, 0.0f };
 	// 左上座標
 	Vector2 leftTop_ = { 0.0f, 0.0f };
+	Vector2 centerPos_; 
 
 	// Textureのサイズ
 	Vector2 textureSize_;
