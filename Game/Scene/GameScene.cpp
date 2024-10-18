@@ -20,7 +20,7 @@ void GameScene::Init(){
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(3000.0f);
+	gamePlayTimer_->Init(60.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -53,7 +53,7 @@ void GameScene::Init(){
 
 		// 水
 		waterSpace_[i] = std::make_unique<WaterSpace>();
-		waterSpace_[i]->Init("./Game/Resources/Model/", "waterSpace.obj");
+		waterSpace_[i]->Init("./Game/Resources/Model/Watersurface/", "Wotersurface.obj");
 		waterSpace_[i]->SetTranslate(Vector3(i * stageWidthEvery_, 0.0f, 0.0f));
 	}
 
@@ -115,7 +115,8 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed1.obj");
 
 	// 仕様上連続して読み込みたい物
-	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Wotersurface.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
@@ -197,6 +198,16 @@ void GameScene::Update(){
 	worldWall_->Update();
 	waterWeed_->Update();
 
+
+#ifdef _DEBUG
+	if(!isStepFrame_) {
+		Debug_Gui();
+
+		// editorの処理
+		placementObjectEditor_->Update();
+	}
+#endif
+
 	// -------------------------------------------------
 	// ↓ 開始時にコライダーのリストを更新する
 	// -------------------------------------------------
@@ -224,15 +235,6 @@ void GameScene::Update(){
 			isPause_ = true;
 		}
 	}
-
-#ifdef _DEBUG
-	if(!isStepFrame_) {
-		Debug_Gui();
-
-		// editorの処理
-		placementObjectEditor_->Update();
-	}
-#endif
 
 	if (Input::IsTriggerKey(DIK_R)) {
 		Init();
@@ -299,7 +301,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::PBRPipeline);
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 	// このクラスは一番最後に描画
 	for(auto& waterSpace : waterSpace_){
 		waterSpace->Draw();
@@ -317,6 +319,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
+	gamePlayTimer_->Draw();
 
 #pragma endregion
 }

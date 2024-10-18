@@ -132,10 +132,22 @@ void PlacementObjectEditer::NewGroup_Config() {
 	// ↓ 保存を行う
 	// -------------------------------------------------
 	if (ImGui::Button("Save")) {
-		Save(exportFileName_, debug_BasePlacementObj_);
+		Save(exportFileName_, debug_BasePlacementObj_, newLevel_);
 	}
 	ImGui::SameLine();
 	ImGui::InputText(".json##SaveFineName", &exportFileName_[0], sizeof(char) * 64);
+
+	// -------------------------------------------------
+	// ↓ 生成するファイルのレベルを決める
+	// -------------------------------------------------
+	ImGui::Text("newLevel");
+	if (ImGui::Button("-")) { newLevel_--; }
+	ImGui::SameLine();
+	if (ImGui::Button("+")) { newLevel_++; }
+	ImGui::SameLine();
+	ImGui::Text(": %d", newLevel_);
+	newLevel_ = std::clamp(static_cast<int>(newLevel_), 0, 10);
+
 
 	// -------------------------------------------------
 	// ↓ 生成する種類を選択する
@@ -255,6 +267,17 @@ void PlacementObjectEditer::Edit_Config() {
 	}
 
 	// -------------------------------------------------
+	// ↓ 生成するファイルのレベルを決める
+	// -------------------------------------------------
+	ImGui::Text("editLevel");
+	if (ImGui::Button("-")) { editLevel_--; }
+	ImGui::SameLine();
+	if (ImGui::Button("+")) { editLevel_++; }
+	ImGui::SameLine();
+	ImGui::Text(": %d", editLevel_);
+	editLevel_ = std::clamp(static_cast<int>(editLevel_), 0, 10);
+
+	// -------------------------------------------------
 	// ↓ 生成する種類を選択する
 	// -------------------------------------------------
 	ImGui::Text("newObjType");
@@ -349,7 +372,7 @@ void PlacementObjectEditer::Edit_Config() {
 	// -------------------------------------------------
 	if (!inport_BasePlacementObj_.empty()) {
 		if (ImGui::Button("Save_Edit")) {
-			Save(inportFileName_, inport_BasePlacementObj_);
+			Save(inportFileName_, inport_BasePlacementObj_, editLevel_);
 		}
 	}
 }
@@ -358,7 +381,9 @@ void PlacementObjectEditer::Edit_Config() {
 // ↓　listに登録されているobjectの情報を外部ファイルに格納する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlacementObjectEditer::Save(const std::string& fileName, const std::list<ObstaclesManager::ObjectData>& list) {
+void PlacementObjectEditer::Save(const std::string& fileName,
+								 const std::list<ObstaclesManager::ObjectData>& list,
+								 uint32_t level) {
 	// -------------------------------------------------
 	// ↓ 書き込むようにデータを登録する
 	// -------------------------------------------------
@@ -375,6 +400,7 @@ void PlacementObjectEditer::Save(const std::string& fileName, const std::list<Ob
 		json pos = json::array({ translation.x, translation.y, translation.z });
 		json rotateJoson = json::array({ rotate.x, rotate.y, rotate.z, rotate.w });
 		json scaleJson = json::array({ scale.x, scale.y, scale.z });
+		root[fileName]["level"] = level;
 		root[fileName][objId] = {
 			{"position",pos },
 			{"rotate", rotateJoson},

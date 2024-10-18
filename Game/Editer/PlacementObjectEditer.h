@@ -34,7 +34,9 @@ public:
 	void NewGroup_Config();
 	void Edit_Config();
 
-	void Save(const std::string& fileName, const std::list<ObstaclesManager::ObjectData>& list);
+	void Save(const std::string& fileName,
+			  const std::list<ObstaclesManager::ObjectData>& list,
+			  uint32_t level);
 
 	void Inport();
 
@@ -53,6 +55,10 @@ private:
 	std::list<ObstaclesManager::ObjectData> inport_BasePlacementObj_;
 	// 新しく生成する種類
 	PlacementObjType newPopType_;
+	// 配置のレベル
+	uint32_t newLevel_ = 0;
+	// 編集する配置のレベル
+	uint32_t editLevel_ = 0;
 
 	char exportFileName_[64];
 	std::string inportFileName_;

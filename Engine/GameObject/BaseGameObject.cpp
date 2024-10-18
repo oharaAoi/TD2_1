@@ -7,6 +7,7 @@ void BaseGameObject::Finalize() {
 	if (animetor_ != nullptr) {
 		animetor_->Finalize();
 	}
+	materials.clear();
 }
 
 void BaseGameObject::Init() {

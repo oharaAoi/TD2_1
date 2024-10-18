@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-SceneManager::SceneManager() { Init();}
+SceneManager::SceneManager() {}
 
 SceneManager::~SceneManager() {}
 

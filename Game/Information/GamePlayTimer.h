@@ -14,12 +14,22 @@ public:
 
 	void Init(float limit);
 	void Update();
-	void Draw();
+	void Draw() const;
 
 	/// <summary>
 	/// 計測を行う
 	/// </summary>
 	void Measurement();
+
+	/// <summary>
+	/// 桁数を割り出す
+	/// </summary>
+	/// <returns></returns>
+	int DegitCount(float value);
+
+	int IntegerCount(int value, int n);
+
+	Vector2 CalculationSpriteLT(int value);
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -34,7 +44,7 @@ private:
 	float gameTimer_;
 	float gameTimeLimit_;
 
-	std::vector<Sprite> limitTimeUI_;
+	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;
 
 };
 
