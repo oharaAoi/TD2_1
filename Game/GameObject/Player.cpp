@@ -52,7 +52,7 @@ void Player::Init(){
 	obb_.center = GetWorldTranslation();
 
 	isMove_ = false;
-	moveSpeed_ = 25.0f;//0.7f / (1.0f / 60.0f);
+	moveSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
 	radius_ = 2.0f;
 
 	getCoinNum_ = 0;
@@ -70,6 +70,12 @@ void Player::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update(){
+
+	// 毎フレームの初期化・保存
+	isSplash_ = false;
+	preFlying_ = isFlying_;
+
+	// 移動
 	if(isMove_) {
 		Move();
 	} else {
@@ -82,16 +88,19 @@ void Player::Update(){
 
 		if (!preFlying_) {
 			timer_.Measurement(transform_->GetTranslation().x);
+			isSplash_ = true;
 		}
 	} else {
 		isFlying_ = false;
 
 		if (preFlying_) {
 			timer_.Finish(transform_->GetTranslation().x);
+			isSplash_ = true;
 		}
 	}
 
 	// 体の更新
+	UpdateBody();
 	for(auto& body : followModels_){
 		body->Update();
 	}
@@ -105,7 +114,6 @@ void Player::Update(){
 	} else if(Input::IsTriggerKey(DIK_DOWN)){
 		EraseBody();
 	}
-
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -174,19 +182,23 @@ void Player::Move(){
 		// 上昇を徐々に遅くする
 		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.1f,1.0f);
 
+		// SPACE押して翼の開閉
+		if(!isFacedBird_){
+			if(Input::IsTriggerKey(DIK_SPACE)) {
+				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+				isFalling_ = true;
+			}
+		}
+
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
 
 			isCloseWing_ = false;
+			isFacedBird_ = false;
 			dropSpeed_ = 0.0f;
 
 		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
-
-			// SPACE押して翼の開閉
-			if(Input::IsTriggerKey(DIK_SPACE)) {
-				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
-			}
 
 			// 下降ベクトルを格納する変数
 			Vector3 dropVec{};
@@ -198,6 +210,7 @@ void Player::Move(){
 
 			} else{//////// 翼を閉じている際 ////////
 
+				pressTime_ *= 0.5f * GameTimer::TimeRate();
 				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 			}
@@ -209,6 +222,7 @@ void Player::Move(){
 			if(transform_->GetTranslation().y < 0.0f){
 				isDiving_ = true;
 				isFalling_ = false;
+				isFacedBird_ = false;
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 				// 潜水速度を一定範囲に保つ
 				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
@@ -242,7 +256,6 @@ void Player::Move(){
 	}
 
 	MoveLimit();
-	preFlying_ = isFlying_;
 }
 
 
@@ -253,7 +266,9 @@ void Player::MoveLimit(){
 		Vector3 translate = transform_->GetTranslation();
 		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
 		pressTime_ = 0.0f;
-		moveSpeed_ -= moveSpeed_ * 0.5f * GameTimer::DeltaTime();
+		// 減速させる
+		moveSpeed_ += (kMinMoveSpeed_ - moveSpeed_) * 0.5f * GameTimer::DeltaTime();
+		moveSpeed_ = std::clamp(moveSpeed_, kMinMoveSpeed_, kMaxMoveSpeed_);
 	}
 
 }
@@ -288,6 +303,17 @@ const Vector3 Player::GetWorldTranslation() const{
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　胴体の追加
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Player::UpdateBody(){
+	float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
+	int bodyCount = kMinBodyCount_ + int(chargePower_ / division);
+
+	if(bodyCount > bodyCount_){
+		AddBody(followModels_.back().get());
+	} else if(bodyCount < bodyCount_){
+		EraseBody();
+	}
+}
 
 void Player::AddBody(BaseGameObject* pTarget){
 
@@ -371,14 +397,32 @@ void Player::OnCollision(Collider* other){
 
 	//障害物に当たった場合
 	if(other->GetObjectType() == (int)ObjectType::FISH){
-		moveSpeed_ -= 10.0f;
-		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
-		hitSe_->Play(false, true);
+
+		// fish型に変換
+		Fish* pFish = dynamic_cast<Fish*>(other);
+		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
+
+		// 魚を食べられたとき
+		if(chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()){
+
+			chargePower_ += pFish->GetEnergy();
+			chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
+
+		} else{// 食べられなかったとき
+
+			chargePower_ -= 0.05f;
+			chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
+
+			moveSpeed_ -= 10.0f;
+			moveSpeed_ = std::clamp(moveSpeed_, kMinMoveSpeed_, kMaxMoveSpeed_);
+
+			hitSe_->Play(false, true);
+		}
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::ITEM){
 		moveSpeed_ += 10.0f;
-		moveSpeed_ = std::clamp(moveSpeed_, 10.0f, 100.0f);
+		moveSpeed_ = std::clamp(moveSpeed_, kMinMoveSpeed_, kMaxMoveSpeed_);
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::COIN) {
@@ -396,6 +440,7 @@ void Player::OnCollision(Collider* other){
 			isCloseWing_ = false;
 		} else{
 			moveSpeed_ *= 0.5f;
+			isFacedBird_ = true;
 			isCloseWing_ = true;
 		}
 	}

@@ -50,6 +50,8 @@ public:
 
 	void SetColor(const Vector4& color) { material_->color = color; }
 
+	void SetIsLighting(bool isLighting){ material_->enableLighting = isLighting; };
+
 	void SetMaterialData(Model::ModelMaterialData materialData);
 
 	void SetUvScale(const Vector3& scale) { uvScale_ = scale; }

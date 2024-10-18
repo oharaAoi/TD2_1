@@ -173,6 +173,7 @@ void GameScene::Update(){
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 
+	/*-------------- object -------------*/
  	player_->Update();
 
 	for(auto& ground : ground_){
@@ -184,18 +185,23 @@ void GameScene::Update(){
 		waterSpace->Update();
 	}
 
+	worldWall_->Update();
+	waterWeed_->Update();
+	
+	/*------------- manager -------------*/
 	obstaclesManager_->Debug_Gui();
-
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
 
-	// trail
+	/*-------------- effect -------------*/
 	trail_->Update();
 	trail_->AddTrail(player_->GetTransform()->GetTranslation());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
-	worldWall_->Update();
-	waterWeed_->Update();
+	CheckAddSplash();
+	for(auto& splash : splash_){
+		splash->Update();
+	}
 
 	// -------------------------------------------------
 	// ↓ 開始時にコライダーのリストを更新する
@@ -209,6 +215,12 @@ void GameScene::Update(){
 	PlayerWaveCollision();
 	collisionManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	collisionManager_->CheckAllCollision();
+
+	// -------------------------------------------------
+	// ↓ 不要になった要素などの削除
+	// -------------------------------------------------
+
+	splash_.remove_if([](auto& splash){return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -266,17 +278,18 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NormalPipeline);
+	Engine::SetPipeline(PipelineType::NormalPipeline);//----------------//
 
 	worldWall_->Draw();
 	waterWeed_->Draw();
 
-	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
+	Engine::SetPipeline(PipelineType::WaterLightingPipeline);//---------//
 	for (auto& ground : ground_) {
 		ground->Draw();
 	}
 
-	Engine::SetPipeline(PipelineType::NormalPipeline);
+	Engine::SetPipeline(PipelineType::NormalPipeline);//----------------//
+
 #ifdef _DEBUG
 
 	// editorの描画
@@ -285,13 +298,16 @@ void GameScene::Draw() const{
 #endif // _DEBUG
 
 	obstaclesManager_->Draw();
-
-
 	player_->Draw();
 
-	// effectの描画
-	Engine::SetPipeline(PipelineType::AddPipeline);
+	for(auto& splash : splash_){
+		splash->Draw();
+	}
+
+	/*------- effect -------*/
+	Engine::SetPipeline(PipelineType::AddPipeline);//--------------------//
 	trail_->Draw();
+
 
 #pragma endregion
 
@@ -432,6 +448,22 @@ void GameScene::EndlessStage(){
 		}
 	}
 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　条件を満たしたら水しぶきエフェクトを追加する
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GameScene::CheckAddSplash(){
+	if(player_->GetIsSplash()){
+
+		Vector3 emitPos = player_->GetTransform()->GetTranslation();
+		emitPos.y = 0.01f;
+
+		splash_.emplace_back(
+			std::make_unique<Splash>(emitPos, 5.0f * (player_->GetMoveSpeed()/50.0f))
+		);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -67,6 +67,12 @@ void BaseGameObject::SetColor(const Vector4& color) {
 	}
 }
 
+void BaseGameObject::SetIsLighting(bool isLighting){
+	for(size_t oi = 0; oi < materials.size(); ++oi) {
+		materials[oi]->SetIsLighting(isLighting);
+	}
+}
+
 #ifdef _DEBUG
 void BaseGameObject::Debug_Gui() {
 	transform_->Debug_Gui();

@@ -31,6 +31,7 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other) override;
 	const Vector3 GetWorldTranslation() const;
 
+	void UpdateBody();
 	void AddBody(BaseGameObject* pTarget);
 	void EraseBody();
 
@@ -43,10 +44,9 @@ public:
 	float GetSwimmingDepth(){ return swimmigDepth_; }
 	bool GetIsFlying(){ return isFlying_; }
 	const Vector3& GetVelocity()const{ return velocity_; }
-
 	const uint32_t GetCoinNum() const{ return getCoinNum_; }
-
 	const bool GetIsMove() const {return isMove_;}
+	const bool GetIsSplash()const{ return isSplash_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -69,14 +69,22 @@ private:
 	Quaternion restPoseRotation_;
 	Quaternion slerpRotation_;
 
+	float lookAtT_;
+
+	// 移動パラメーター
 	Vector3 velocity_;
 	float moveSpeed_;
-	float lookAtT_;
+	const float defaultSpeed = 35.0f;
+	const float kMinMoveSpeed_ = 25.0f;
+	const float kMaxMoveSpeed_ = 100.0f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
 	float pressTime_;
 	float currentAngle_;
 	const float kMaxAngle_ = 3.14f * 0.38f;
+
+	// 食べてチャージして溜める
+	float chargePower_;
 
 	// 着水して水に潜った際の猶予時間
 	const float kDiveTime_ = 1.0f;
@@ -91,11 +99,12 @@ private:
 	bool hitWaterSurface_;
 	bool isMove_ = true;
 	bool isFlying_;
+	bool preFlying_; // 前フレームで飛んでいたか
 	bool isFalling_;// 下降中かどうか
 	bool isDiving_;	// 飛行後終了して水に入った瞬間を得るフラグ
 	bool isCloseWing_;// 飛行中に翼を閉じているかどうか
-
-	bool preFlying_; // 前フレームで飛んでいたか
+	bool isSplash_;// 水しぶき発生フラグ
+	bool isFacedBird_;// 鳥に正面衝突したかどうか
 
 	// データ格納変数　----------------------------------
 
