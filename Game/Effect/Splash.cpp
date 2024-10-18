@@ -33,7 +33,7 @@ Splash::Splash(const Vector3& emitPos, float velocity){
 		splash->GetTransform()->SetTranslaion(emitPos_);
 
 		Vector3 rotate = {
-			RandomFloat(0.0f,3.14f),
+			0.0f,//RandomFloat(0.0f,3.14f),
 			RandomFloat(0.0f,3.14f * 2.0f),
 			RandomFloat(0.0f,3.14f),
 		};
@@ -145,9 +145,9 @@ void Splash::Update(){
 
 		// だんだん広げていく
 		ripples_[i]->GetTransform()->SetScale({
-			radius_ * index_t * (1.0f - time_t),
-			radius_ * index_t * (1.0f - time_t),
-			1.0f
+			radius_ * 4.0f *index_t * (1.0f - time_t),
+			1.0f,
+			radius_ * 4.0f *index_t * (1.0f - time_t),
 		});
 
 		// 透明度を下げていく

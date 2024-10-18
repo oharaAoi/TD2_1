@@ -78,7 +78,13 @@ void ObstaclesManager::Draw() const {
 
 void ObstaclesManager::RandomImportCreate() {
 	for (auto it = randomImportArray_.begin(); it != randomImportArray_.end();) {
+
 		float length = std::abs(it->pos_.x - playerPos_.x);
+
+		// 仮初期化ゾーン
+		FISH_SIZE fishSize = FISH_SIZE::SMALL;
+		Fish* fish = nullptr;
+
 		if (length < playerDrawLenght_) {
 			auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
 			obj->Init();
@@ -96,19 +102,27 @@ void ObstaclesManager::RandomImportCreate() {
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
 			case PlacementObjType::FISH:
+
 				obj.reset(new Fish);
-				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				fish = dynamic_cast<Fish*>(obj.get());
+				fishSize = FISH_SIZE(RandomInt(0, (int)FISH_SIZE::kFishSizeCount - 1));
+
+				fish->Init();
+				fish->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				fish->SetFishSize(fishSize);
+
 				break;
 			case PlacementObjType::BIRD:
 				obj.reset(new Bird);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->SetObbSize(obj->GetRadius());
 				break;
 			case PlacementObjType::ITEM:
 				obj.reset(new Item);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->SetObbSize(obj->GetRadius());
 				break;
 			case PlacementObjType::DRIFTWOOD:
 				obj.reset(new Driftwood);
@@ -181,6 +195,7 @@ void ObstaclesManager::Inport(const std::string& fileName) {
 			obj.reset(new Bird);
 			obj->Init();
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->SetObbSize(obj->GetRadius());
 			break;
 
 		case PlacementObjType::ITEM:
@@ -188,6 +203,7 @@ void ObstaclesManager::Inport(const std::string& fileName) {
 			obj.reset(new Item);
 			obj->Init();
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->SetObbSize(obj->GetRadius());
 			break;
 
 		case PlacementObjType::DRIFTWOOD:
@@ -320,7 +336,7 @@ void ObstaclesManager::RandomAddObject() {
 					Vector3(1.0f,1.0f,1.0f),			// scale
 					Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
 					Vector3(10.0f * i, depth, 0.0f),	// 位置
-					1.0f,								// 半径
+					3.0f,								// 半径
 					PlacementObjType::ITEM				// type
 				};
 
@@ -340,7 +356,7 @@ void ObstaclesManager::RandomAddObject() {
 				Vector3(1.0f,1.0f,1.0f),			// scale
 				Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
 				Vector3(10.0f * i, height, 0.0f),	// 位置
-				2.0f,								// 半径
+				3.0f,								// 半径
 				PlacementObjType::BIRD				// type
 			};
 

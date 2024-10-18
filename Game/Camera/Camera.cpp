@@ -31,6 +31,11 @@ void Camera::Update(){
 	} else{
 		target_ = pPlayer_->GetTransform();
 		offsetLength_ = 80.0f;
+
+		if(pPlayer_->GetTransform()->GetTranslation().y > 20.0f){
+			offsetLength_ = 80.0f + std::clamp(pPlayer_->GetTransform()->GetTranslation().y - 20.0f / 40.0f, 0.0f, 1.0f) * 30.0f;
+			offsetLength_ = std::clamp(offsetLength_, 80.0f, 1000.0f);
+		}
 	}
 
 	// -------------------------------------------------

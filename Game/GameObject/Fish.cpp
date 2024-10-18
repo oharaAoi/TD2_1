@@ -54,3 +54,36 @@ void Fish::OnCollision(Collider* other){
 		isActive_ = false;
 	}
 }
+
+void Fish::SetFishSize(const FISH_SIZE& fishSize){
+	fishSize_ = fishSize;
+	
+	switch((int)fishSize_)
+	{
+	case (int)FISH_SIZE::SMALL:
+
+		radius_ = 1.0f;
+		energy_ = 0.05f;
+		break;
+
+	case (int)FISH_SIZE::MIDIUM:
+
+		radius_ = 3.0f;
+		energy_ = 0.1f;
+		break;
+
+	case (int)FISH_SIZE::LARGE:
+
+		radius_ = 5.0f;
+		energy_ = 0.2f;
+
+		break;
+
+	default:
+		break;
+	}
+
+	float size = radius_ * 0.5f;
+	obb_.size = { size, size, size };
+	transform_->SetScale({ radius_,radius_,radius_ });
+}
