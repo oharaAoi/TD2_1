@@ -28,6 +28,13 @@ void Bird::Init() {
 //////////////////////////////////////////////////////
 
 void Bird::Update() {
+
+	if(isMove_){
+		float move_t = std::sinf(3.14f * time_);// -1.0 ~ 1.0 になる
+		transform_->SetTranslaion(firstPos_ + (moveDirection_.Normalize() * (moveRadius_ * move_t)));
+		time_ += GameTimer::DeltaTime();
+	}
+
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
@@ -52,4 +59,9 @@ void Bird::OnCollision(Collider* other) {
 		isHitPlayer_ = true;
 		isActive_ = false;
 	}
+}
+
+void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate, const Vector3& pos, const float& radius){
+	BasePlacementObject::ApplyLoadData(scale, rotate, pos, radius);
+	firstPos_ = pos;
 }

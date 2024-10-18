@@ -35,7 +35,7 @@ public:
 	void Debug_Gui();
 #endif // _DEBUG
 
-	void ApplyLoadData(const Vector3& scale, const Quaternion& rotate, const Vector3& pos, const float& radius);
+	virtual void ApplyLoadData(const Vector3& scale, const Quaternion& rotate, const Vector3& pos, const float& radius);
 
 public:
 
