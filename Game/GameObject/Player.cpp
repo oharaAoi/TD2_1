@@ -182,21 +182,23 @@ void Player::Move(){
 		// 上昇を徐々に遅くする
 		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.1f,1.0f);
 
+		// SPACE押して翼の開閉
+		if(!isFacedBird_){
+			if(Input::IsTriggerKey(DIK_SPACE)) {
+				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+				isFalling_ = true;
+			}
+		}
+
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
 
 			isCloseWing_ = false;
+			isFacedBird_ = false;
 			dropSpeed_ = 0.0f;
 
 		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
-
-			// SPACE押して翼の開閉
-			if(!isFacedBird_){
-				if(Input::IsTriggerKey(DIK_SPACE)) {
-					isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
-				}
-			}
 
 			// 下降ベクトルを格納する変数
 			Vector3 dropVec{};
@@ -208,6 +210,7 @@ void Player::Move(){
 
 			} else{//////// 翼を閉じている際 ////////
 
+				pressTime_ *= 0.5f * GameTimer::TimeRate();
 				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 			}
@@ -437,8 +440,8 @@ void Player::OnCollision(Collider* other){
 			isCloseWing_ = false;
 		} else{
 			moveSpeed_ *= 0.5f;
+			isFacedBird_ = true;
 			isCloseWing_ = true;
-			isFacedBird_ - true;
 		}
 	}
 }

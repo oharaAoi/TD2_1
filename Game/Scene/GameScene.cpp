@@ -461,7 +461,7 @@ void GameScene::CheckAddSplash(){
 		emitPos.y = 0.01f;
 
 		splash_.emplace_back(
-			std::make_unique<Splash>(emitPos, 5.0f)
+			std::make_unique<Splash>(emitPos, 5.0f * (player_->GetMoveSpeed()/50.0f))
 		);
 	}
 }

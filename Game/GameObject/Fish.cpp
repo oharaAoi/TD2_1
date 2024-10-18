@@ -57,33 +57,37 @@ void Fish::OnCollision(Collider* other){
 
 void Fish::SetFishSize(const FISH_SIZE& fishSize){
 	fishSize_ = fishSize;
-	
+
+	Vector3 scale{};
+
 	switch((int)fishSize_)
 	{
 	case (int)FISH_SIZE::SMALL:
 
-		radius_ = 1.0f;
-		energy_ = 0.05f;
+		radius_ = 2.0f;
+		energy_ = 0.075f;
+		scale = { 1.0f,1.0f,1.0f };
 		break;
 
 	case (int)FISH_SIZE::MIDIUM:
 
 		radius_ = 3.0f;
 		energy_ = 0.1f;
+		scale = { 3.0f,3.0f,3.0f };
 		break;
 
 	case (int)FISH_SIZE::LARGE:
 
-		radius_ = 5.0f;
+		radius_ = 4.0f;
 		energy_ = 0.2f;
-
+		scale = { 6.0f,6.0f,6.0f };
 		break;
 
 	default:
 		break;
 	}
 
-	float size = radius_ * 0.5f;
+	float size = radius_ * 2.0f;
 	obb_.size = { size, size, size };
-	transform_->SetScale({ radius_,radius_,radius_ });
+	transform_->SetScale(scale);
 }

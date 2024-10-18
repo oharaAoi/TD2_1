@@ -33,7 +33,7 @@ void Camera::Update(){
 		offsetLength_ = 80.0f;
 
 		if(pPlayer_->GetTransform()->GetTranslation().y > 20.0f){
-			offsetLength_ = 80.0f + std::clamp(pPlayer_->GetTransform()->GetTranslation().y - 20.0f / 40.0f, 0.0f, 1.0f) * 30.0f;
+			offsetLength_ = 80.0f +std::clamp(pPlayer_->GetTransform()->GetTranslation().y - 20.0f / 40.0f, 0.0f, 1.0f) * 30.0f;
 			offsetLength_ = std::clamp(offsetLength_, 80.0f, 1000.0f);
 		}
 	}
@@ -89,9 +89,7 @@ void Camera::Update(){
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate.x += dif.x * 0.04f * GameTimer::TimeRate() * velocityRate_;
-		transform_.translate.y += dif.y * 0.05f * GameTimer::TimeRate() * velocityRate_;
-		transform_.translate.z += dif.z * 0.05f * GameTimer::TimeRate() * velocityRate_;
+		transform_.translate += dif * 0.04f * GameTimer::TimeRate();
 	}
 
 	BaseCamera::Update();
