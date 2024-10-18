@@ -11,6 +11,7 @@
 #include "Game/GameObject/Waterweed.h"
 #include "Game/GameObject/Coin.h"
 #include "Game/Information/StageInformation.h"
+#include "Engine/Math/MyRandom.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -39,6 +40,8 @@ public:
 
 	struct Group {
 		std::vector<LoadData> loadData_;
+		uint32_t level;
+		float coolTime_= 5;
 	};
 
 	struct ObjectData {
@@ -55,13 +58,15 @@ public:
 	void Init();
 	void Update();
 	void Draw() const;
+
+	void RandomImport();
 	
 	// ランダム配置の追加
 	void RandomImportCreate();
 	
 	// 配置系
 	void SetObstacles(const std::vector<std::string>& stageInformation);
-	void Inport(const std::string& fileName);
+	void Inport(const std::string& fileName, uint32_t level);
 
 	// 読み込み系
 	void LoadAllFile();
@@ -86,6 +91,7 @@ private:
 
 	std::string inportFileName_;
 	int inportIndex_;
+	uint32_t debug_importLevel_ = 0;
 
 #endif // _DEBUG
 
@@ -96,15 +102,24 @@ private:
 	// 障害物のリスト
 	std::list<std::unique_ptr<BasePlacementObject>> obstaclesList_;
 	// 障害物の位置が入っているリスト
-	std::map<std::string, Group> groupMap_;
+	std::map<int, std::map<std::string, Group>> groupMap_;
 	// ファイル名が入っているリスト
 	std::vector<std::string> fileNames_;
+	// レベルごとでのファイル名
+	std::map<int, std::vector<std::string>> levelFileName_;
 
 	std::list<LoadData> randomImportArray_;
 
-	Vector3 playerPos_;
-	float playerDrawLenght_ = 200.0f;
+	// 現在のレベル
+	uint32_t importLevel_;
 
+	// playerに関する情報
+	Vector3 playerPos_;
+	Vector3 prePlayerPos_;
+	// 描画をする距離(この距離以上離れているオブジェクトは描画しない)
+	float playerDrawLenght_ = 400.0f;
+
+	// coinの数
 	uint32_t coinNum_ = 0;
 };
 

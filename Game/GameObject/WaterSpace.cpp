@@ -49,7 +49,7 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 	// ↓ Materialの色を設定する
 	// -------------------------------------------------
 	for (uint32_t oi = 0; oi < materials_.size(); ++oi) {
-		materials_[oi]->SetColor({1.0f ,1.0f, 1.0f, 0.5f});
+		materials_[oi]->SetColor({1.0f ,1.0f, 1.0f, 0.7f});
 		materials_[oi]->SetUvScale({ 8000.0f, 0.78f, 1.0f });
 	}
 

@@ -11,6 +11,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3DResourceLeakChecker debugChecker;
 
 	std::unique_ptr<SceneManager> sceneManager_ = std::make_unique<SceneManager>();
+	sceneManager_->Init();
 	sceneManager_->Run();
 
 	return 0;

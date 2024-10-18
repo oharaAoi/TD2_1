@@ -182,7 +182,8 @@ PixelShaderOutput main(VertexShaderOutput input){
 	float tilingFactor = 20.0; // タイリングを小さくするためのスケール（2.0でテクスチャが2倍のサイズに見える）
 	float2 scaledUV = transformedUV.xy * tilingFactor; // UV座標をスケーリング
 	float3 normalMap = gNormapMap.Sample(gSampler, scaledUV).xyz * 2.0 - 1.0;
-	float3 normal = normalize(mul(normalMap, input.tangentMat));
+	//float3 normal = normalize(mul(normalMap, input.tangentMat));
+	float3 normal = normalize(input.normal);
 	
 	//=======================================================
 	// ラフネスとメタリックのmapを計算する
