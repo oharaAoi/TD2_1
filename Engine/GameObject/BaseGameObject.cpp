@@ -37,8 +37,8 @@ void BaseGameObject::Draw() const {
 	} else {
 		//Engine::SetSkinning(animetor_->GetSkinning(), model_->GetMesh(0));
 		//model_->GetMesh(0)->CopyVertexData(animetor_->GetSkinning()->GetVertexData());
-		Engine::SetPipeline(PipelineType::SkinningPipeline);
 		//Render::DrawModel(model_, transform_.get(), materials);
+		Engine::SetPipeline(PipelineType::SkinningPipeline);
 		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 	}
 }

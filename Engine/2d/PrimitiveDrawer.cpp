@@ -82,7 +82,6 @@ void PrimitiveDrawer::Draw(ID3D12GraphicsCommandList* commandList, const Vector3
 	*wvpData_ = vpMat;
 
 	// コマンドリストの設定
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);
 	commandList->SetGraphicsRootConstantBufferView(0, materialBuffer_->GetGPUVirtualAddress());

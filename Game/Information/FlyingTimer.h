@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include "Engine.h"
 
 /// <summary>
 /// 飛んでいる時間を計測するクラス
@@ -11,6 +13,7 @@ public:
 
 	void Init();
 	void Update(float posX);
+	void Draw() const;
 
 	/// <summary>
 	/// 計測を行う
@@ -26,6 +29,9 @@ public:
 	void Debug_Gui();
 #endif
 
+	const float GetCurrentLength() const { return currentFlyingLength_; }
+	const float GetMaxLnegth() const { return maxFlyingLength_; }
+
 private:
 	bool isMeasurement_; // 計測をしているか
 	// 現在の飛んでいる量
@@ -33,11 +39,8 @@ private:
 	// 最大の飛んだ距離
 	float maxFlyingLength_;
 
-	/// <summary>
-	/// 開始位置
-	/// </summary>
+	// 開始位置
 	float flyingStartPosX_;
-
 	float flyingFinalPosX_;
 };
 

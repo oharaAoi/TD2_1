@@ -48,7 +48,6 @@ void GameScene::Init(){
 
 		// 地面
 		ground_[i] = std::make_unique<Ground>();
-
 		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * stageWidthEvery_, groundDepth_, 0.0f));
 
 		// 水
@@ -77,6 +76,12 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
+
+	// -------------------------------------------------
+	// ↓ UIの初期化
+	// -------------------------------------------------
+	flyingTimerUI_ = std::make_unique<FlyingTimerUI>();
+	flyingTimerUI_->Init();
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -234,11 +239,15 @@ void GameScene::Update(){
 	splash_.remove_if([](auto& splash){return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
+	// ↓ UIの更新
+	// -------------------------------------------------
+	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
+
+	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
-
 
 	if (player_->GetIsMove()) {
 		gamePlayTimer_->Update();
@@ -258,47 +267,35 @@ void GameScene::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const{
-#pragma region Primitive
+
+
+	/////////////////////////////////
+	// 3Dオブジェクトなどの表示(基本ここ)
+	/////////////////////////////////
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+
+	worldWall_->Draw();
+	waterWeed_->Draw();
+
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
-
 	// コライダーの表示
-	if(Collider::isColliderBoxDraw_) {
-		if(!isDegugCameraActive_) {
+	if (Collider::isColliderBoxDraw_) {
+		if (!isDegugCameraActive_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
 		} else {
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
 
-#pragma endregion
-
-#pragma region NormalPipeline
-
-	/////////////////////////////////
-	// 3Dオブジェクトなどの表示(基本ここ)
-	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NormalPipeline);//----------------//
-
-	worldWall_->Draw();
-	waterWeed_->Draw();
-
-	Engine::SetPipeline(PipelineType::WaterLightingPipeline);//---------//
+	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
 	for (auto& ground : ground_) {
 		ground->Draw();
 	}
 
-	Engine::SetPipeline(PipelineType::NormalPipeline);//----------------//
-
-#ifdef _DEBUG
-
-	// editorの描画
-	placementObjectEditor_->Draw();
-
-#endif // _DEBUG
-
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 	obstaclesManager_->Draw();
 	player_->Draw();
 
@@ -306,14 +303,18 @@ void GameScene::Draw() const{
 		splash->Draw();
 	}
 
-	/*------- effect -------*/
-	Engine::SetPipeline(PipelineType::AddPipeline);//--------------------//
+#ifdef _DEBUG
+	// editorの描画
+	placementObjectEditor_->Draw();
+#endif // _DEBUG
+
+
+	/////////////////////////////////
+	// Effectの描画
+	/////////////////////////////////
+	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
 
-
-#pragma endregion
-
-#pragma region WaterSpace
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
@@ -323,12 +324,10 @@ void GameScene::Draw() const{
 		waterSpace->Draw();
 	}
 
-#pragma endregion
-
-	// CSを実行する
+	/////////////////////////////////
+	// 3Dオブジェクトに対してCsを実行する
+	/////////////////////////////////
 	//Engine::RunCS();
-
-#pragma region Sprite
 
 	/////////////////////////////////
 	// スプライトの表示
@@ -336,8 +335,7 @@ void GameScene::Draw() const{
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	gamePlayTimer_->Draw();
-
-#pragma endregion
+	flyingTimerUI_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

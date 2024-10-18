@@ -23,8 +23,6 @@ void ObstaclesManager::Init() {
 
 	RandomAddObject();
 
-	Inport("./Game/Resources/GameData/WaterWeed.json", 1);
-
 	playerDrawLenght_ = 50.0f;
 	RandomImport();
 
