@@ -61,7 +61,7 @@ void ObstaclesManager::Update() {
 		// 更新をする
 		(*it)->Update();
 		float length = (((*it)->GetWorldTranslation().x - playerPos_.x));
-		if(length < -50.0f) {
+		if(length < -35.0f) {
  			(*it)->SetIsActive(false);
 		}
 		++it;
@@ -182,6 +182,8 @@ void ObstaclesManager::RandomImportCreate() {
 				break;
 			}
 
+			obj->SetIsLighting(false);
+
 			it = randomImportArray_.erase(it);
 		} else {
 			++it;
@@ -251,6 +253,8 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level) {
 			coinNum_++;
 			break;
 		}
+
+		obj->SetIsLighting(false);
 	}
 }
 

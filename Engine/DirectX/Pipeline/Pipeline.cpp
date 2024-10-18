@@ -5,7 +5,8 @@ Pipeline::~Pipeline() {}
 
 void Pipeline::Initialize(ID3D12Device* device, DirectXCompiler* dxCompiler,
 						  const Shader::ShaderData& shaderData, const RootSignatureType& rootSignatureType,
-						  const std::vector<D3D12_INPUT_ELEMENT_DESC>& desc, const Blend::BlendMode& blendMode) {
+						  const std::vector<D3D12_INPUT_ELEMENT_DESC>& desc, const Blend::BlendMode& blendMode, 
+						  bool isCulling) {
 	device_ = device;
 	dxCompiler_ = dxCompiler;
 
@@ -14,7 +15,7 @@ void Pipeline::Initialize(ID3D12Device* device, DirectXCompiler* dxCompiler,
 	elementDescs = desc;
 	ShaderCompile(shaderData);
 
-	CreatePSO(blendMode);
+	CreatePSO(blendMode, isCulling);
 }
 
 void Pipeline::Draw(ID3D12GraphicsCommandList* commandList) {
@@ -53,10 +54,14 @@ void Pipeline::ShaderCompile(const Shader::ShaderData& shaderData) {
 //------------------------------------------------------------------------------------------------------
 // ↓ラスタライズの設定
 //------------------------------------------------------------------------------------------------------
-D3D12_RASTERIZER_DESC Pipeline::SetRasterizerState() {
+D3D12_RASTERIZER_DESC Pipeline::SetRasterizerState(bool isCulling) {
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	// 裏面を表示しない
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	if (isCulling) {
+		rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	} else {
+		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	}
 	// 三角形の中を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -83,7 +88,7 @@ D3D12_DEPTH_STENCIL_DESC Pipeline::SetDepthStencilState() {
 //------------------------------------------------------------------------------------------------------
 // ↓PSOの追加
 //------------------------------------------------------------------------------------------------------
-void Pipeline::CreatePSO(const Blend::BlendMode& blendMode) {
+void Pipeline::CreatePSO(const Blend::BlendMode& blendMode, bool isCulling) {
 	// PSOの生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc{};
 	desc.pRootSignature = rootSignature_->GetRootSignature();
@@ -91,7 +96,7 @@ void Pipeline::CreatePSO(const Blend::BlendMode& blendMode) {
 	desc.VS = { vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize() };
 	desc.PS = { pixelShaderBlob_->GetBufferPointer(), pixelShaderBlob_->GetBufferSize() };
 	desc.BlendState = blend_.SetBlend(blendMode);
-	desc.RasterizerState = SetRasterizerState();
+	desc.RasterizerState = SetRasterizerState(isCulling);
 	desc.DepthStencilState = SetDepthStencilState();
 	desc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	// 書き込むRTVの情報

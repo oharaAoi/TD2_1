@@ -45,6 +45,7 @@ private:
 	float gameTimeLimit_;
 
 	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;
+	Vector2 originPos_;
 
 };
 

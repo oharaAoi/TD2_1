@@ -505,6 +505,9 @@
       <Filter>Engine\DirectX\Template</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\FlyingTimerUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TitleUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -924,6 +927,9 @@
       <Filter>Engine\DirectX\Template</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\FlyingTimerUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TitleUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,11 +39,11 @@ void RenderTarget::SetRenderTarget(ID3D12GraphicsCommandList* commandList, const
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles{};
 	//rtvHandles = RTVHandle_[type].handleCPU;
 	commandList->OMSetRenderTargets(1, &RTVHandle_[type].handleCPU, false, &dsvHandle);
-	// 指定した深度で画面をクリア
-	commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	float clearColor[] = { 0.1f, 0.25f, 0.5f, 0.0f };
 	// RenderTargetはoffScreen用のRenderTargetを指定しておく
 	commandList->ClearRenderTargetView(RTVHandle_[type].handleCPU, clearColor, 0, nullptr);
+	// 指定した深度で画面をクリア
+	commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	// srv
 	ID3D12DescriptorHeap* descriptorHeaps[] = { dxHeap_->GetSRVHeap() };
 	commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);

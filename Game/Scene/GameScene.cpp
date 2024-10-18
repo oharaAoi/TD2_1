@@ -70,6 +70,7 @@ void GameScene::Init(){
 	waterWeed_->SetObject("Ground_WaterPlant.obj");
 	waterWeed_->GetTransform()->SetTranslaion(worldWall_->GetTransform()->GetTranslation());
 	waterWeed_->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+	waterWeed_->SetIsLighting(false);
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -273,22 +274,21 @@ void GameScene::Draw() const{
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-
 	worldWall_->Draw();
 	waterWeed_->Draw();
 
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::PrimitivePipeline);
-	// コライダーの表示
-	if (Collider::isColliderBoxDraw_) {
-		if (!isDegugCameraActive_) {
-			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-		} else {
-			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
-		}
-	}
+	//Engine::SetPipeline(PipelineType::PrimitivePipeline);
+	//// コライダーの表示
+	//if (Collider::isColliderBoxDraw_) {
+	//	if (!isDegugCameraActive_) {
+	//		collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+	//	} else {
+	//		collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+	//	}
+	//}
 
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
 	for (auto& ground : ground_) {
@@ -297,7 +297,6 @@ void GameScene::Draw() const{
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	obstaclesManager_->Draw();
-	player_->Draw();
 
 	for(auto& splash : splash_){
 		splash->Draw();
@@ -308,17 +307,19 @@ void GameScene::Draw() const{
 	placementObjectEditor_->Draw();
 #endif // _DEBUG
 
+	Engine::SetPipeline(PipelineType::NotCullingPipeline);
+	player_->Draw();
 
 	/////////////////////////////////
 	// Effectの描画
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::AddPipeline);
-	trail_->Draw();
+	/*Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();*/
 
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NormalPipeline);
+	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	// このクラスは一番最後に描画
 	for(auto& waterSpace : waterSpace_){
 		waterSpace->Draw();
@@ -526,6 +527,10 @@ void GameScene::Debug_Gui(){
 
 	gamePlayTimer_->Debug_Gui();
 
+	ImGui::End();
+
+	ImGui::Begin("UI");
+	flyingTimerUI_->Debug_Gui();
 	ImGui::End();
 }
 #endif

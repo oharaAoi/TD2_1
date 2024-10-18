@@ -215,21 +215,9 @@ std::unique_ptr<Triangle> Engine::CreateTriangle(const Mesh::Vertices& vertex, c
 	return triangle;
 }
 
-std::unique_ptr<Sprite> Engine::CreateSprite(const Mesh::RectVetices& rect) {
+std::unique_ptr<Sprite> Engine::CreateSprite(const std::string& fileName) {
 	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
-	sprite->Init(dxDevice_->GetDevice(), rect);
-	return sprite;
-}
-
-std::unique_ptr<Sprite> Engine::CreateSprite(const Vector2& centerPos, const Vector2& size) {
-	Mesh::RectVetices rect = {
-		{centerPos.x - (size.x / 2.0f), centerPos.y - (size.y / 2.0f), 0.0f, 1.0f},
-		{centerPos.x + (size.x / 2.0f), centerPos.y - (size.y / 2.0f), 0.0f, 1.0f},
-		{centerPos.x - (size.x / 2.0f), centerPos.y + (size.y / 2.0f), 0.0f, 1.0f},
-		{centerPos.x + (size.x / 2.0f), centerPos.y + (size.y / 2.0f), 0.0f, 1.0f},
-	};
-	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
-	sprite->Init(dxDevice_->GetDevice(), rect);
+	sprite->Init(dxDevice_->GetDevice(), fileName);
 	return sprite;
 }
 
@@ -324,6 +312,9 @@ void Engine::SetPipeline(const PipelineType& kind) {
 		break;
 	case PipelineType::WaterLightingPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::WaterLightingPipeline, dxCommands_->GetCommandList());
+		break;
+	case PipelineType::NotCullingPipeline:
+		graphicsPipelines_->SetPipeline(PipelineType::NotCullingPipeline, dxCommands_->GetCommandList());
 		break;
 	}
 }
