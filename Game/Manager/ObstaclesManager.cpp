@@ -118,6 +118,8 @@ void ObstaclesManager::RandomImportCreate() {
 			switch (it->type_) {
 			case PlacementObjType::ROCK:
 				obj.reset(new Rock);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
 			case PlacementObjType::FISH:
 
@@ -144,18 +146,21 @@ void ObstaclesManager::RandomImportCreate() {
 				break;
 			case PlacementObjType::DRIFTWOOD:
 				obj.reset(new Driftwood);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
 			case PlacementObjType::WATERWEED:
 				obj.reset(new Waterweed);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
 			case PlacementObjType::COIN:
 				obj.reset(new Coin);
+				obj->Init();
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				coinNum_++;
 				break;
 			}
-
-			obj->Init();
-			obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 
 			it = randomImportArray_.erase(it);
 		} else {
@@ -189,9 +194,13 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level) {
 		switch (objData[oi].type_) {
 		case PlacementObjType::ROCK:
 			obj.reset(new Rock);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			break;
 		case PlacementObjType::FISH:
 			obj.reset(new Fish);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			break;
 		case PlacementObjType::BIRD:
 			obj.reset(new Bird);
@@ -207,18 +216,21 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level) {
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.reset(new Driftwood);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			break;
 		case PlacementObjType::WATERWEED:
 			obj.reset(new Waterweed);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			break;
 		case PlacementObjType::COIN:
 			obj.reset(new Coin);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			coinNum_++;
 			break;
 		}
-
-		obj->Init();
-		obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 	}
 }
 
