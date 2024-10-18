@@ -116,7 +116,7 @@ Vector2 GamePlayTimer::CalculationSpriteLT(int value) {
 		return { 64.0f, 128.0f };
 	} else if (value == 9) {
 		return { 128.0f, 128.0f };
-	} else if (value == 0) {
+	} else {
 		return { 0.0f, 192.0f };
 	}
 }

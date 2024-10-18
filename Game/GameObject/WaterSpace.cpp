@@ -101,8 +101,8 @@ void WaterSpace::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WaterSpace::Draw() const {
-	Render::DrawLightGroup(4);
 	ID3D12GraphicsCommandList* commandList = Engine::GetCommandList();
+	Render::DrawLightGroup(4);
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		meshArray_[oi]->Draw(commandList);
 		materials_[oi]->Draw(commandList);

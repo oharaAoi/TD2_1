@@ -41,4 +41,5 @@ void GraphicsPipelines::Init(ID3D12Device* device, DirectXCompiler* dxCompiler, 
 
 void GraphicsPipelines::SetPipeline(const PipelineType& type, ID3D12GraphicsCommandList* commandList) {
 	pipelineMap_[type]->Draw(commandList);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

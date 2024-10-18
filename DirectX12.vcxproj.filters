@@ -504,6 +504,9 @@
     <ClCompile Include="Engine\DirectX\Template\Pool.cpp">
       <Filter>Engine\DirectX\Template</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\FlyingTimerUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -919,6 +922,9 @@
     </ClInclude>
     <ClInclude Include="Engine\DirectX\Template\Pool.h">
       <Filter>Engine\DirectX\Template</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\FlyingTimerUI.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

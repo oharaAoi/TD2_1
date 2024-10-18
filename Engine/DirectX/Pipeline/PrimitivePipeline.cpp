@@ -20,6 +20,7 @@ void PrimitivePipeline::Init(ID3D12Device* device, DirectXCompiler* dxCompiler, 
 void PrimitivePipeline::Draw(ID3D12GraphicsCommandList* commandList) {
 	commandList->SetGraphicsRootSignature(rootSignature_->GetRootSignature());
 	commandList->SetPipelineState(graphicsPipelineState_.Get());
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
 void PrimitivePipeline::Finalize() {

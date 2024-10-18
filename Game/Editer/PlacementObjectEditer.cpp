@@ -473,6 +473,12 @@ void PlacementObjectEditer::Inport() {
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
 			obj.type_ = PlacementObjType::WATERWEED;
 			break;
+		case PlacementObjType::COIN:
+			obj.object_.reset(new Coin);
+			obj.object_->Init();
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.type_ = PlacementObjType::COIN;
+			break;
 		}
 	}
 }

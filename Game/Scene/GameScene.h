@@ -28,6 +28,8 @@
 #include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
 #include "Game/Information/GamePlayTimer.h"
+/*------ UI ------*/
+#include "Game/UI/FlyingTimerUI.h"
 
 
 class GameScene 
@@ -90,4 +92,7 @@ private:
 
 	// ---------- information ---------- //
 	std::unique_ptr<GamePlayTimer> gamePlayTimer_;
+
+	// ---------- UI ---------- //
+	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 };
