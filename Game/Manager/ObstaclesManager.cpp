@@ -84,6 +84,8 @@ void ObstaclesManager::RandomImportCreate() {
 		// 仮初期化ゾーン
 		FISH_SIZE fishSize = FISH_SIZE::SMALL;
 		Fish* fish = nullptr;
+		float randTheta = 0.0f;
+		Vector3 direction{};
 
 		if (length < playerDrawLenght_) {
 			auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
@@ -94,13 +96,16 @@ void ObstaclesManager::RandomImportCreate() {
 				it->rotate_.z,
 				it->rotate_.w
 			};
+
 			Vector3 createPos = it->pos_;
 			switch (it->type_) {
 			case PlacementObjType::ROCK:
+
 				obj.reset(new Rock);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
+
 			case PlacementObjType::FISH:
 
 				obj.reset(new Fish);
@@ -110,31 +115,48 @@ void ObstaclesManager::RandomImportCreate() {
 				fish->Init();
 				fish->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				fish->SetFishSize(fishSize);
-
 				break;
+
 			case PlacementObjType::BIRD:
+
 				obj.reset(new Bird);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				obj->SetObbSize(obj->GetRadius());
+
+
+				randTheta = RandomFloat(0.0f, 3.14f * 2.0f);
+				direction = { std::cosf(randTheta),std::sinf(randTheta),0.0f };
+				dynamic_cast<Bird*>(obj.get())->SetMoveDirection(direction);
+				dynamic_cast<Bird*>(obj.get())->SetMoveRadius(RandomFloat(6.0f, 10.0f));
+				dynamic_cast<Bird*>(obj.get())->SetIsMove(RandomInt(0,1));
+
 				break;
+
 			case PlacementObjType::ITEM:
+
 				obj.reset(new Item);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				obj->SetObbSize(obj->GetRadius());
 				break;
+
 			case PlacementObjType::DRIFTWOOD:
+
 				obj.reset(new Driftwood);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
+
 			case PlacementObjType::WATERWEED:
+
 				obj.reset(new Waterweed);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
 				break;
+
 			case PlacementObjType::COIN:
+
 				obj.reset(new Coin);
 				obj->Init();
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
