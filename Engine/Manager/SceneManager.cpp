@@ -15,7 +15,7 @@ void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
 	
-	scene_ = std::make_unique<GameScene>();
+	scene_ = std::make_unique<TitleScene>();
 	scene_->Load();
 	scene_->Init();
 
@@ -50,7 +50,7 @@ void SceneManager::Run() {
 		// ------------------------------------ //
 		#ifdef _DEBUG
 		ImGui::Begin("SceneManager");
-		if (ImGui::Combo("Scene", &selectSceneNum_, "Title\0Select\0Game\0Result\0GameOver\0Test\0")) {
+		if (ImGui::Combo("Scene", &selectSceneNum_, "Title\0Game\0Result\0Test\0")) {
 			isSceneChange_ = true;
 
 		}
@@ -128,17 +128,14 @@ void SceneManager::GetScene() {
 	case SceneType::Scene_Title:
 		scene_.reset(new TitleScene);
 		break;
-	case SceneType::Scene_Select:
-		scene_.reset(new SelectScene);
+	case Scene_Tutorial:
+		scene_.reset(new TutorialScene);
 		break;
 	case SceneType::Scene_Game:
 		scene_.reset(new GameScene);
 		break;
 	case SceneType::Scene_Result:
 		scene_.reset(new ResultScene);
-		break;
-	case SceneType::Scene_GameOver:
-		scene_.reset(new GameOverScene);
 		break;
 	case SceneType::Scene_Test:
 		scene_.reset(new TestScene);

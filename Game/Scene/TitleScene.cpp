@@ -29,6 +29,14 @@ void TitleScene::Update() {
 
 	UI_title_->Update();
 
+	if (Input::IsTriggerKey(DIK_1)) {
+		SetNextScene(SceneType::Scene_Game);
+	}
+
+	if (Input::IsTriggerKey(DIK_2)) {
+		SetNextScene(SceneType::Scene_Tutorial);
+	}
+
 #ifdef _DEBUG
 	Debug_Gui();
 #endif 
@@ -46,9 +54,8 @@ void TitleScene::Draw() const {
 #ifdef _DEBUG
 void TitleScene::Debug_Gui() {
 	ImGui::Begin("TitleScene");
-	if (ImGui::Button("NextScene")) {
-		SetNextScene(SceneType::Scene_Select);
-	}
+	ImGui::Text("tirggerKey : 1 [goGame]");
+	ImGui::Text("tirggerKey : 2 [goTutorial]");
 	ImGui::End();
 }
 #endif 

@@ -23,7 +23,7 @@ void BaseCamera::Init() {
 	// worldの生成
 	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
 	viewMatrix_ = Inverse(cameraMatrix_);
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 600.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 0.5f, 600.0f);
 
 	// sprite描画のためのMatrixの初期化
 	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(kWindowWidth_), float(kWindowHeight_), 0.0f, 100.0f);

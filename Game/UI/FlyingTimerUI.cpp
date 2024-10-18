@@ -23,7 +23,7 @@ void FlyingTimerUI::Init() {
 		sprite->SetRectRange(rangeSize_);
 		sprite->SetTextureSize(rangeSize_);
 		sprite->SetTextureCenterPos(currentPos_);
-
+		
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
 		sprite->Update();
 	}
@@ -54,8 +54,8 @@ void FlyingTimerUI::Update(float current, float max) {
 	// -------------------------------------------------
 	// ↓ 桁数の更新
 	// -------------------------------------------------
-	currentDigit_ = DegitCount(current);
-	maxDigit_ = DegitCount(max);
+	currentDigit_ = static_cast<uint32_t>(DegitCount(current));
+	maxDigit_ = static_cast<uint32_t>(DegitCount(max));
 
 	// 桁数と現在の配列の数が違う数だったら新しい桁を作成する
 	if (currentDigit_ != UI_flyingLength_.size()) {
@@ -106,7 +106,7 @@ float FlyingTimerUI::DegitCount(float value) {
 
 float FlyingTimerUI::IntegerCount(float value, int n) {
 	// n桁目を取得するために数値を10で割ったあまりから割り出す
-	int num = (value / static_cast<int>(std::pow(10, n - 1)));
+	int num = (static_cast<int>(value) / static_cast<int>(std::pow(10, n - 1)));
 	int result = num % 10;
 	return static_cast<float>(result);
 }

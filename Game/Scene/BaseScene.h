@@ -4,10 +4,9 @@
 
 enum SceneType {
 	Scene_Title,
-	Scene_Select,
+	Scene_Tutorial,
 	Scene_Game,
 	Scene_Result,
-	Scene_GameOver,
 	Scene_Test
 };
 

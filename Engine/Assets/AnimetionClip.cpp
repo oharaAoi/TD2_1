@@ -10,7 +10,7 @@ void AnimetionClip::Init() {
 }
 
 void AnimetionClip::Update() {
-	animationTime_ += 1.0f / 60.0f;
+	animationTime_ += GameTimer::DeltaTime();
 	animationTime_ = std::fmod(animationTime_, animation_.duration);
 
 	////// =======================================================================================

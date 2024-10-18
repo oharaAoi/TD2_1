@@ -26,7 +26,7 @@ void GamePlayTimer::Init(float limit) {
 		sprite->SetRectRange({ 64.0f, 64.0f });
 		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (80.0f * static_cast<float>(oi)), originPos_.y });
 		sprite->SetTextureSize({ 64.0f, 64.0f });
-		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(gameTimeLimit_), oi)));
+		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimeLimit_), oi)));
 		sprite->Update();
 	}
 

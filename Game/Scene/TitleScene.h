@@ -2,7 +2,8 @@
 #include "Engine.h"
 #include "Game/Scene/BaseScene.h"
 #include "Game/Camera/BaseCamera.h"
-
+#include "Game/Scene/TutorialScene.h"
+#include "Game/Scene/GameScene.h"
 #include "Game/UI/TitleUI.h"
 
 class TitleScene 

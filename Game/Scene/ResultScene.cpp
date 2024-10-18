@@ -31,9 +31,6 @@ void ResultScene::Draw() const {
 #ifdef _DEBUG
 void ResultScene::Debug_Gui() {
 	ImGui::Begin("GameScene");
-	if (ImGui::Button("Go_Select")) {
-		SetNextScene(SceneType::Scene_Select);
-	}
 	if (ImGui::Button("ReTry")) {
 		SetNextScene(SceneType::Scene_Game);
 	}

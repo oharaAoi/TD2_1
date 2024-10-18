@@ -12,18 +12,18 @@ void PlayerAnimator::Init() {
 void PlayerAnimator::Update() {
 	Quaternion moveRotate;
 	// joint(bone)の変更を行う
-	for (auto& pair : joints_) {
-		ImGui::DragFloat4(pair.first.c_str(), &moveRotate.x, 0.01f);
-		pair.second->transform.rotate = moveRotate * pair.second->transform.rotate;
-		moveRotate = Quaternion();
-	}
+	//for (auto& pair : joints_) {
+	//	ImGui::DragFloat4(pair.first.c_str(), &moveRotate.x, 0.01f);
+	//	pair.second->transform.rotate = moveRotate * pair.second->transform.rotate;
+	//	moveRotate = Quaternion();
+	//}
 
-	if (ImGui::TreeNode("originQuaternion")) {
+	/*if (ImGui::TreeNode("originQuaternion")) {
 		for (auto& pair : joints_) {
 			ImGui::DragFloat4(pair.first.c_str(), &pair.second->transform.rotate.x, 0.01f);
 		}
 		ImGui::TreePop();
-	}
+	}*/
 
 	// jointの更新
 	skeleton_->Update();

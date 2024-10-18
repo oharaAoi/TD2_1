@@ -184,7 +184,6 @@ void GameScene::Update(){
  	player_->Update();
 
 	for(auto& ground : ground_){
-		ground->SetPlayerVelocityX(player_->GetMoveVelocity().x);
 		ground->Update();
 	}
 
@@ -478,10 +477,6 @@ void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
 	if (ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("GameOverScene")) {
-		SetNextScene(SceneType::Scene_GameOver);
 	}
 
 	if(ImGui::Button("stop")) {

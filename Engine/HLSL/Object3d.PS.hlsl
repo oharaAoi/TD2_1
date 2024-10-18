@@ -108,6 +108,9 @@ PixelShaderOutput main(VertexShaderOutput input)
 	
 	if (gMaterial.enableLighting == 0){
 		output.color = gMaterial.color * textureColor;
+		if (output.color.a <= 0.1f) {
+			discard;
+		}
 		return output;
 	}
 	float3 normal = normalize(input.normal);

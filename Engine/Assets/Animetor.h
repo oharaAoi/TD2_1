@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Engine.h"
+#include "Engine/Lib/GameTimer.h"
 
 class AnimetionClip;
 class Skeleton;
