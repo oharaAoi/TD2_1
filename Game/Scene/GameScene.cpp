@@ -424,7 +424,7 @@ void GameScene::PlayerWaveCollision(){
 void GameScene::EndlessStage(){
 
 	// playerが一定間隔進んだら新しいステージを生成する
-	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) - 400.0f) {
+	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) - 500.0f) {
 		++stageLoopCount_;
 		// 新しく設置する座標を求める
 		Vector3 newPos = StageInformation::worldWallPos_;
