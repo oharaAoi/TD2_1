@@ -15,17 +15,18 @@ void GamePlayTimer::Init(float limit) {
 	gameTimer_ = limit;
 	gameTimeLimit_ = limit;
 
+	originPos_ = { 360.0f, 100.0f };
+
 	// -------------------------------------------------
 	// ↓ 制限時間のUIのSpriteを作成する
 	// -------------------------------------------------
 	int digit = DegitCount(gameTimeLimit_);
 	for (int oi = 1; oi <= digit; ++oi) {
-		auto& sprite = limitTimeUI_.emplace_back(
-			Engine::CreateSprite(Vector2{ 360 - (80.0f * static_cast<float>(oi)), 100.0f }, Vector2{ 64.0f, 64.0f })
-		);
-		sprite->SetTexture("number.png");
+		auto& sprite = limitTimeUI_.emplace_back(Engine::CreateSprite("number.png"));
 		sprite->SetRectRange({ 64.0f, 64.0f });
-		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(gameTimeLimit_), oi)));
+		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (80.0f * static_cast<float>(oi)), originPos_.y });
+		sprite->SetTextureSize({ 64.0f, 64.0f });
+		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimeLimit_), oi)));
 		sprite->Update();
 	}
 
@@ -116,7 +117,7 @@ Vector2 GamePlayTimer::CalculationSpriteLT(int value) {
 		return { 64.0f, 128.0f };
 	} else if (value == 9) {
 		return { 128.0f, 128.0f };
-	} else if (value == 0) {
+	} else {
 		return { 0.0f, 192.0f };
 	}
 }

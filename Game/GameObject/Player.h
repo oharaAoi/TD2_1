@@ -52,6 +52,9 @@ public:
 	void Debug_Gui();
 #endif // _DEBUG
 
+	const float GetFlyingTime() const { return timer_.GetCurrentLength(); }
+	const float GetMaxFlyingTime() const { return timer_.GetMaxLnegth(); }
+
 private:
 
 	AdjustmentItem* adjustmentItem_;

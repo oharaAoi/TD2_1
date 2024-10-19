@@ -77,6 +77,7 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 	worldTopFaceList_.resize(topFaceList_.size());
 
 	transform_->SetScale(Vector3{ 1,1.17f,1 });
+	transform_->SetQuaternion(Quaternion::AngleAxis(-90.0f * toRadian, { 0.0f, 1.0f ,0.0f }));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,8 +102,8 @@ void WaterSpace::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WaterSpace::Draw() const {
-	Render::DrawLightGroup(4);
 	ID3D12GraphicsCommandList* commandList = Engine::GetCommandList();
+	Render::DrawLightGroup(4);
 	for (uint32_t oi = 0; oi < meshArray_.size(); oi++) {
 		meshArray_[oi]->Draw(commandList);
 		materials_[oi]->Draw(commandList);

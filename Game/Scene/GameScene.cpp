@@ -6,7 +6,7 @@ GameScene::GameScene(){}
 GameScene::~GameScene(){}
 
 void GameScene::Finalize(){
-	for(auto& waterSpace : waterSpace_){
+	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Finalize();
 	}
 }
@@ -43,40 +43,37 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	// ↓ gameObjectの初期化
 	// -------------------------------------------------
-
-	for(int32_t i = 0; i < kStageModelCount_; i++){
-
-		// 地面
-		ground_[i] = std::make_unique<Ground>();
-
-		ground_[i]->GetTransform()->SetTranslaion(Vector3(i * stageWidthEvery_, groundDepth_, 0.0f));
-
-		// 水
-		waterSpace_[i] = std::make_unique<WaterSpace>();
-		waterSpace_[i]->Init("./Game/Resources/Model/Watersurface/", "Wotersurface.obj");
-		waterSpace_[i]->SetTranslate(Vector3(i * stageWidthEvery_, 0.0f, 0.0f));
-	}
-
 	player_ = std::make_unique<Player>();
 
 	// trail
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	worldWall_ = std::make_unique<WorldWall>();
-	worldWall_->Init();
-
-	waterWeed_ = std::make_unique<BaseGameObject>();
-	waterWeed_->Init();
-	waterWeed_->SetObject("Ground_WaterPlant.obj");
-	waterWeed_->GetTransform()->SetTranslaion(worldWall_->GetTransform()->GetTranslation());
-	waterWeed_->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+	// 壁
+	auto& worldWall = worldWalls_.emplace_back(std::make_unique<WorldWall>());
+	worldWall->Init();
+	// 水草
+	auto& waterWeed = waterWeeds_.emplace_back(std::make_unique<Waterweed>());
+	waterWeed->Init();
+	waterWeed->SetWorldWallPos(StageInformation::worldWallPos_);
+	// 地面
+	auto& ground = grounds_.emplace_back(std::make_unique<Ground>());
+	ground->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
+	// 水面
+	auto& waterSpace = waterSpaces_.emplace_back(std::make_unique<WaterSpace>());
+	waterSpace->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
 	// -------------------------------------------------
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
+
+	// -------------------------------------------------
+	// ↓ UIの初期化
+	// -------------------------------------------------
+	flyingTimerUI_ = std::make_unique<FlyingTimerUI>();
+	flyingTimerUI_->Init();
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -115,7 +112,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed1.obj");
 
 	// 仕様上連続して読み込みたい物
-	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Wotersurface.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
 	//ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
@@ -177,17 +174,19 @@ void GameScene::Update(){
 	/*-------------- object -------------*/
  	player_->Update();
 
-	for(auto& ground : ground_){
-		ground->SetPlayerVelocityX(player_->GetMoveVelocity().x);
+	EndlessStage();
+	for (std::unique_ptr<WorldWall>& wall : worldWalls_) {
+		wall->Update();
+	}
+	for (std::unique_ptr<Waterweed>& weed : waterWeeds_) {
+		weed->Update();
+	}
+	for (std::unique_ptr<Ground>& ground : grounds_) {
 		ground->Update();
 	}
-
-	for(auto& waterSpace : waterSpace_){
+	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Update();
 	}
-
-	worldWall_->Update();
-	waterWeed_->Update();
 	
 	/*------------- manager -------------*/
 	obstaclesManager_->Debug_Gui();
@@ -234,11 +233,15 @@ void GameScene::Update(){
 	splash_.remove_if([](auto& splash){return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
+	// ↓ UIの更新
+	// -------------------------------------------------
+	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
+
+	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
-
 
 	if (player_->GetIsMove()) {
 		gamePlayTimer_->Update();
@@ -258,77 +261,71 @@ void GameScene::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const{
-#pragma region Primitive
-	/////////////////////////////////
-	// 線の描画
-	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 
-	// コライダーの表示
-	if(Collider::isColliderBoxDraw_) {
-		if(!isDegugCameraActive_) {
-			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-		} else {
-			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
-		}
-	}
-
-#pragma endregion
-
-#pragma region NormalPipeline
 
 	/////////////////////////////////
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NormalPipeline);//----------------//
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	for (const std::unique_ptr<WorldWall>& wall : worldWalls_) {
+		wall->Draw();
+	}
+	for (const std::unique_ptr<Waterweed>& weed : waterWeeds_) {
+		weed->Draw();
+	}
 
-	worldWall_->Draw();
-	waterWeed_->Draw();
+	/////////////////////////////////
+	// 線の描画
+	/////////////////////////////////
+	//Engine::SetPipeline(PipelineType::PrimitivePipeline);
+	//// コライダーの表示
+	//if (Collider::isColliderBoxDraw_) {
+	//	if (!isDegugCameraActive_) {
+	//		collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+	//	} else {
+	//		collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+	//	}
+	//}
 
-	Engine::SetPipeline(PipelineType::WaterLightingPipeline);//---------//
-	for (auto& ground : ground_) {
+	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
+	for (const std::unique_ptr<Ground>& ground : grounds_) {
 		ground->Draw();
 	}
 
-	Engine::SetPipeline(PipelineType::NormalPipeline);//----------------//
-
-#ifdef _DEBUG
-
-	// editorの描画
-	placementObjectEditor_->Draw();
-
-#endif // _DEBUG
-
 	obstaclesManager_->Draw();
-	player_->Draw();
 
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 	for(auto& splash : splash_){
 		splash->Draw();
 	}
 
-	/*------- effect -------*/
-	Engine::SetPipeline(PipelineType::AddPipeline);//--------------------//
-	trail_->Draw();
+#ifdef _DEBUG
+	// editorの描画
+	placementObjectEditor_->Draw();
+#endif // _DEBUG
 
+	Engine::SetPipeline(PipelineType::NotCullingPipeline);
+	player_->Draw();
 
-#pragma endregion
+	/////////////////////////////////
+	// Effectの描画
+	/////////////////////////////////
+	/*Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();*/
 
-#pragma region WaterSpace
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NormalPipeline);
+	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	// このクラスは一番最後に描画
-	for(auto& waterSpace : waterSpace_){
+	for (const std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Draw();
 	}
 
-#pragma endregion
-
-	// CSを実行する
+	/////////////////////////////////
+	// 3Dオブジェクトに対してCsを実行する
+	/////////////////////////////////
 	//Engine::RunCS();
-
-#pragma region Sprite
 
 	/////////////////////////////////
 	// スプライトの表示
@@ -336,8 +333,7 @@ void GameScene::Draw() const{
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	gamePlayTimer_->Draw();
-
-#pragma endregion
+	flyingTimerUI_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,7 +391,7 @@ void GameScene::UpdateColliderList(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::PlayerWaveCollision(){
-	for(auto& waterSpace : waterSpace_){
+	for(auto& waterSpace : waterSpaces_){
 
 		// デカい距離で初期化
 		float minLength = 999;
@@ -427,28 +423,36 @@ void GameScene::PlayerWaveCollision(){
 
 void GameScene::EndlessStage(){
 
-	for(int32_t i = 0; i < kStageModelCount_; i++){
+	// playerが一定間隔進んだら新しいステージを生成する
+	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) - 400.0f) {
+		++stageLoopCount_;
+		// 新しく設置する座標を求める
+		Vector3 newPos = StageInformation::worldWallPos_;
+		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_);
 
-		// 通り過ぎたかどうか判定
-		if(ground_[i]->GetTransform()->GetTranslation().x <
-			player_->GetTransform()->GetTranslation().x - stageWidthEvery_
-			){
+		auto& worldWall = worldWalls_.emplace_back(std::make_unique<WorldWall>());
+		worldWall->Init();
+		worldWall->GetTransform()->SetTranslaion(newPos);
+		// 水草
+		auto& waterWeed = waterWeeds_.emplace_back(std::make_unique<Waterweed>());
+		waterWeed->Init();
+		waterWeed->SetWorldWallPos(newPos);
+		// 地面
+		auto& ground = grounds_.emplace_back(std::make_unique<Ground>());
+		ground->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		// 水面
+		auto& waterSpace = waterSpaces_.emplace_back(std::make_unique<WaterSpace>());
+		waterSpace->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+		waterSpace->SetTranslate({ newPos.x, 0.0f, 0.0f });
+	}
 
-			Vector3 nextPos{};
-
-			// 次の設置場所を求める
-			if(i - 1 >= 0){
-				nextPos = ground_[i - 1]->GetTransform()->GetTranslation()
-					+ Vector3(stageWidthEvery_, 0.0f, 0.0f);
-			} else{
-				nextPos = ground_[kStageModelCount_ - 1]->GetTransform()->GetTranslation()
-					+ Vector3(stageWidthEvery_, 0.0f, 0.0f);
-			}
-
-			// 配置
-			ground_[i]->GetTransform()->SetTranslaion(nextPos);
-			waterSpace_[i]->SetTranslate({ nextPos.x,0.0f,nextPos.z });
-		}
+	// playerが一定間隔進んだら古いステージを削除する
+	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageDeleteCount_ + 1)) + 120.0f) {
+		++stageDeleteCount_;
+		worldWalls_.pop_front();
+		waterWeeds_.pop_front();
+		grounds_.pop_front();
+		waterSpaces_.pop_front();
 	}
 
 }
@@ -480,10 +484,6 @@ void GameScene::Debug_Gui(){
 	if (ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("GameOverScene")) {
-		SetNextScene(SceneType::Scene_GameOver);
-	}
 
 	if(ImGui::Button("stop")) {
 		isPause_ = true;
@@ -503,31 +503,36 @@ void GameScene::Debug_Gui(){
 	ImGui::SameLine();
 	ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
 
-	for (auto& ground : ground_) {
-		ground->Debug_Gui();
-	}
-
-	worldWall_->GetTransform()->Debug_Gui();
-
-	ImGui::End();
-
-	ImGui::Begin("GameObjects");
-	ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
 	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
-	player_->Debug_Gui();
 
-	for(auto& waterSpace : waterSpace_) {
-		waterSpace->Debug_Gui();
+	{
+		ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
+		if (ImGui::TreeNode("Camera")) {
+			if (!isDegugCameraActive_) {
+				camera_->Debug_Gui();
+			} else {
+				debugCamera_->Debug_Gui();
+			}
+			ImGui::TreePop();
+		}
 	}
 
-	if(!isDegugCameraActive_) {
-		camera_->Debug_Gui();
+	{
+		if (ImGui::TreeNode("UI")) {
+			ImGui::Begin("UI");
+			flyingTimerUI_->Debug_Gui();
+			ImGui::End();
+			ImGui::TreePop();
+		}
 	}
 
-	debugCamera_->Debug_Gui();
-
-	gamePlayTimer_->Debug_Gui();
-
+	{
+		if (ImGui::TreeNode("Player")) {
+			player_->Debug_Gui();
+			gamePlayTimer_->Debug_Gui();
+			ImGui::TreePop();
+		}
+	}
 	ImGui::End();
 }
 #endif

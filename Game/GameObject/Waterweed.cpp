@@ -17,10 +17,8 @@ void Waterweed::Init() {
 
 	BaseGameObject::Init();
 	SetObject("Ground_WaterPlant.obj");
-
-	obb_.size = { 1.0f, 2.5f, 1.0f };
-	obb_.center = GetWorldTranslation();
-
+	SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+	SetIsLighting(false);
 	radius_ = 2.5f;
 }
 
@@ -29,9 +27,6 @@ void Waterweed::Init() {
 //////////////////////////////////////////////////////
 
 void Waterweed::Update() {
-	SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
-	obb_.center = GetWorldTranslation();
-	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
 }
 
@@ -48,9 +43,12 @@ void Waterweed::Draw() const {
 //////////////////////////////////////////////////////
 
 void Waterweed::OnCollision(Collider* other) {
-
 	//プレイヤーに当たった場合
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
 		//isActive_ = false;
 	}
+}
+
+void Waterweed::SetWorldWallPos(const Vector3& pos) {
+	GetTransform()->SetTranslaion(pos);
 }

@@ -18,6 +18,7 @@ void ImGuiManager::Init(HWND hwnd, ID3D12Device* device, uint32_t bufferCount, I
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontFromFileTTF("./Engine/Resources/Font/FiraMono-Medium.ttf", 14);
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(hwnd);

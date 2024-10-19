@@ -23,8 +23,6 @@ void ObstaclesManager::Init() {
 
 	RandomAddObject();
 
-	Inport("./Game/Resources/GameData/WaterWeed.json", 1);
-
 	playerDrawLenght_ = 50.0f;
 	RandomImport();
 
@@ -45,6 +43,9 @@ void ObstaclesManager::Update() {
 	//	// mapに格納されているデータの位置を
 	//}
 
+	animationDrawList_.clear();
+	normalDrawList_.clear();
+
 	if (playerPos_.x - prePlayerPos_.x > 100.0f) {
  		RandomImport();
 		prePlayerPos_ = playerPos_;
@@ -63,9 +64,17 @@ void ObstaclesManager::Update() {
 		// 更新をする
 		(*it)->Update();
 		float length = (((*it)->GetWorldTranslation().x - playerPos_.x));
-		if(length < -50.0f) {
+		if(length < -60.0f) {
  			(*it)->SetIsActive(false);
 		}
+
+		// 描画のリストにアニメーションがあるかないかで設定をする
+		if ((*it)->IsSetAnimetor()) {
+			animationDrawList_.push_back((*it).get());
+		} else {
+			normalDrawList_.push_back((*it).get());
+		}
+
 		++it;
 	}
 }
@@ -75,7 +84,25 @@ void ObstaclesManager::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ObstaclesManager::Draw() const {
-	for (std::list<std::unique_ptr<BasePlacementObject>>::const_iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
+	/*for (std::list<std::unique_ptr<BasePlacementObject>>::const_iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
+		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
+		if (length < playerDrawLenght_) {
+			(*it)->Draw();
+		}
+		++it;
+	}*/
+
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	for (std::list<BasePlacementObject*>::const_iterator it = normalDrawList_.begin(); it != normalDrawList_.end();) {
+		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
+		if (length < playerDrawLenght_) {
+			(*it)->Draw();
+		}
+		++it;
+	}
+
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+	for (std::list<BasePlacementObject*>::const_iterator it = animationDrawList_.begin(); it != animationDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
 		if (length < playerDrawLenght_) {
 			(*it)->Draw();
@@ -184,6 +211,8 @@ void ObstaclesManager::RandomImportCreate() {
 				break;
 			}
 
+			obj->SetIsLighting(false);
+
 			it = randomImportArray_.erase(it);
 		} else {
 			++it;
@@ -253,6 +282,8 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level) {
 			coinNum_++;
 			break;
 		}
+
+		obj->SetIsLighting(false);
 	}
 }
 

@@ -2,6 +2,9 @@
 #include "Engine.h"
 #include "Game/Scene/BaseScene.h"
 #include "Game/Camera/BaseCamera.h"
+#include "Game/Scene/TutorialScene.h"
+#include "Game/Scene/GameScene.h"
+#include "Game/UI/TitleUI.h"
 
 class TitleScene 
 	: public BaseScene {
@@ -24,6 +27,9 @@ private:
 
 	// ---------- camera ---------- //
 	std::unique_ptr<BaseCamera> camera_ = nullptr;
+
+	// ---------- UI ---------- //
+	std::unique_ptr<TitleUI> UI_title_ = nullptr;
 
 };
 

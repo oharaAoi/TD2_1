@@ -63,6 +63,8 @@ void Player::Init(){
 	coinGetSe_ = std::make_unique<AudioPlayer>();
 	hitSe_->Init("./Game/Resources/Audio/test.wav");
 	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
+
+	SetIsLighting(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,7 +333,7 @@ void Player::AddBody(BaseGameObject* pTarget){
 	body->SetSpace(3.0f);
 	body->GetTransform()->SetTranslaion(pTarget->GetTransform()->GetTranslation());
 	body->GetTransform()->SetQuaternion(Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f)));
-
+	body->SetIsLighting(false);
 	// 更新
 	body->Update();
 
@@ -356,6 +358,7 @@ void Player::EraseBody(){
 void Player::Debug_Gui(){
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
+	ImGui::DragFloat3("worldPos", &worldPos_.x, 0.1f);
 	ImGui::Separator();
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);

@@ -9,7 +9,7 @@ Sprite::~Sprite() {
 	transformBuffer_.Reset();
 }
 
-void Sprite::Init(ID3D12Device* device, const Mesh::RectVetices& rect) {
+void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 	// ----------------------------------------------------------------------------------
 	vertexBuffer_ = CreateBufferResource(device, sizeof(TextureMesh) * 4);
 	// リソースの先頭のアドレスから使う
@@ -22,6 +22,15 @@ void Sprite::Init(ID3D12Device* device, const Mesh::RectVetices& rect) {
 	vertexData_ = nullptr;
 	// アドレスを取得
 	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
+	textureSize_ = TextureManager::GetInstance()->GetTextureSize(fileName);
+	textureName_ = fileName;
+	Mesh::RectVetices rect = {
+		{-(textureSize_.x / 2.0f), -(textureSize_.y / 2.0f), 0.0f, 1.0f},
+		{+(textureSize_.x / 2.0f), -(textureSize_.y / 2.0f), 0.0f, 1.0f},
+		{-(textureSize_.x / 2.0f), +(textureSize_.y / 2.0f), 0.0f, 1.0f},
+		{+(textureSize_.x / 2.0f), +(textureSize_.y / 2.0f), 0.0f, 1.0f},
+	};
 
 	vertexData_[0].pos = rect.leftBottom;
 	vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
@@ -65,17 +74,17 @@ void Sprite::Init(ID3D12Device* device, const Mesh::RectVetices& rect) {
 		* MakeIdentity4x4()
 		* MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f)
 	);
+
+	rectRange_ = textureSize_;
+	leftTop_ = { 0.0f, 0.0f };
+	anchorPoint_ = { 0.5f, 0.5f };
 }
 
 void Sprite::Update() {
 	materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
 
-	//Vector2 drawRange = textureSize_;
-	//if (rectRange.x != 0 && rectRange.y != 0) {
-	//	drawRange = rectRange;
-	//}
 	materialData_->uvTransform.m[0][0] = rectRange_.x / textureSize_.x;	// Xスケーリング
-	materialData_->uvTransform.m[1][1] = rectRange_.y/ textureSize_.y;	// Yスケーリング
+	materialData_->uvTransform.m[1][1] = rectRange_.y / textureSize_.y;	// Yスケーリング
 	materialData_->uvTransform.m[3][0] = leftTop_.x / textureSize_.x;	// Xオフセット
 	materialData_->uvTransform.m[3][1] = leftTop_.y / textureSize_.y;	// Yオフセット
 
@@ -90,7 +99,7 @@ void Sprite::Draw() {
 	Render::DrawSprite(this);
 }
 
-void Sprite::Draw(ID3D12GraphicsCommandList* commandList) {
+void Sprite::Draw(ID3D12GraphicsCommandList* commandList) const {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);
@@ -106,25 +115,77 @@ void Sprite::SetTexture(const std::string& fileName) {
 	rectRange_ = textureSize_;
 }
 
-void Sprite::RestTextureSize(const Vector2& centerPos, const Vector2& size) {
+void Sprite::SetTextureCenterPos(const Vector2& centerPos) {
+	transform_.translate.x = centerPos.x;
+	transform_.translate.y = centerPos.y;
+	transform_.translate.z = 0;
+}
+
+void Sprite::SetTextureSize(const Vector2& size) {
 	Mesh::RectVetices rect = {
-		{centerPos.x - (size.x / 2.0f), centerPos.y - (size.y / 2.0f), 0.0f, 1.0f},
-		{centerPos.x + (size.x / 2.0f), centerPos.y - (size.y / 2.0f), 0.0f, 1.0f},
-		{centerPos.x - (size.x / 2.0f), centerPos.y + (size.y / 2.0f), 0.0f, 1.0f},
-		{centerPos.x + (size.x / 2.0f), centerPos.y + (size.y / 2.0f), 0.0f, 1.0f},
+		{-(size.x / 2.0f), -(size.y / 2.0f), 0.0f, 1.0f},
+		{+(size.x / 2.0f), -(size.y / 2.0f), 0.0f, 1.0f},
+		{-(size.x / 2.0f), +(size.y / 2.0f), 0.0f, 1.0f},
+		{+(size.x / 2.0f), +(size.y / 2.0f), 0.0f, 1.0f},
 	};
 
 	vertexData_[0].pos = rect.leftBottom;
+	vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
 	vertexData_[1].pos = rect.leftTop;
+	vertexData_[1].texcoord = { 0.0f, 0.0f }; // 左上
 	vertexData_[2].pos = rect.rightBottom; // 右下
+	vertexData_[2].texcoord = { 1.0f, 1.0f };
 	vertexData_[3].pos = rect.rightTop;		// 右上
+	vertexData_[3].texcoord = { 1.0f, 0.0f };
+}
+
+void Sprite::SetDrawTextureSize(const Vector2& size) {
+	Mesh::RectVetices rect = {
+		{-(size.x / 2.0f), -(size.y / 2.0f), 0.0f, 1.0f},
+		{+(size.x / 2.0f), -(size.y / 2.0f), 0.0f, 1.0f},
+		{-(size.x / 2.0f), +(size.y / 2.0f), 0.0f, 1.0f},
+		{+(size.x / 2.0f), +(size.y / 2.0f), 0.0f, 1.0f},
+	};
+
+	vertexData_[0].pos = rect.leftBottom;
+	vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
+	vertexData_[1].pos = rect.leftTop;
+	vertexData_[1].texcoord = { 0.0f, 0.0f }; // 左上
+	vertexData_[2].pos = rect.rightBottom; // 右下
+	vertexData_[2].texcoord = { 1.0f, 1.0f };
+	vertexData_[3].pos = rect.rightTop;		// 右上
+	vertexData_[3].texcoord = { 1.0f, 0.0f };
+
+	rectRange_ = size;
+}
+
+void Sprite::SetPivot(const Vector2& pivot) {
+	Vector2 pivotOffset = { pivot.x * rectRange_.x, pivot.y * rectRange_.y };
+
+	// Meshの頂点座標をピボット位置に基づいて設定
+	Mesh::RectVetices rect = {
+		{-pivotOffset.x, -pivotOffset.y, 0.0f, 1.0f},                     // 左下
+		{ rectRange_.x - pivotOffset.x, -pivotOffset.y, 0.0f, 1.0f},     // 右下
+		{-pivotOffset.x, rectRange_.y - pivotOffset.y, 0.0f, 1.0f},     // 左上
+		{ rectRange_.x - pivotOffset.x, rectRange_.y - pivotOffset.y, 0.0f, 1.0f}  // 右上
+	};
+
+	// 頂点データを設定
+	vertexData_[0].pos = rect.leftBottom;
+	vertexData_[0].texcoord = { 0.0f, 1.0f };  // 左下
+	vertexData_[1].pos = rect.leftTop;
+	vertexData_[1].texcoord = { 0.0f, 0.0f };  // 左上
+	vertexData_[2].pos = rect.rightBottom;
+	vertexData_[2].texcoord = { 1.0f, 1.0f };  // 右下
+	vertexData_[3].pos = rect.rightTop;
+	vertexData_[3].texcoord = { 1.0f, 0.0f };  // 右上
 }
 
 #ifdef _DEBUG
 void Sprite::Debug_Gui() {
 	ImGui::DragFloat2("translation", &transform_.translate.x, 2.0f);
 	ImGui::DragFloat2("scale", &transform_.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("rotation", &transform_.rotate.z);
+	ImGui::DragFloat3("rotation", &transform_.rotate.x, 0.1f);
 	if (ImGui::TreeNode("material")) {
 		ImGui::DragFloat2("uvTranslation", &uvTransform_.translate.x, 0.1f);
 		ImGui::DragFloat2("uvScale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
