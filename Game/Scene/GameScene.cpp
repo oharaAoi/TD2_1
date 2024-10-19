@@ -122,15 +122,15 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
 
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -220,7 +220,7 @@ void GameScene::Update(){
 
 	/*-------------- effect -------------*/
 	trail_->Update();
-	trail_->AddTrail(player_->GetTransform()->GetTranslation());
+	trail_->AddTrail(player_->GetTransform()->GetTranslation(),player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
 	CheckAddSplash();

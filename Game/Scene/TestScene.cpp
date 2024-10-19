@@ -86,7 +86,7 @@ void TestScene::Update() {
 	testObj_->Update();
 	testObj2_->Update();
 	trail_->Update();
-	trail_->AddTrail(testObj_->GetTransform()->GetTranslation());
+	//trail_->AddTrail(testObj_->GetTransform()->GetTranslation()m);
 	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
 
 	triangle_->Update();

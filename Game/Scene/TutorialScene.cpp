@@ -150,7 +150,7 @@ void TutorialScene::Update() {
 	}
 
 	trail_->Update();
-	trail_->AddTrail(player_->GetTransform()->GetTranslation());
+	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetTransform()->GetQuaternion(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
 	// -------------------------------------------------
