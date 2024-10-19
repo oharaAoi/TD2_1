@@ -502,10 +502,10 @@
       <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\TitleUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\TutorialScene.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -921,10 +921,10 @@
       <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\TitleUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\TutorialScene.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

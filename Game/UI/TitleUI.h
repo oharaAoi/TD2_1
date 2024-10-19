@@ -19,5 +19,7 @@ public:
 private:
 	std::unique_ptr<Sprite> UI_title_;
 	std::unique_ptr<Sprite> UI_startKeyUI_;
+
+	float rotate_;
 };
 

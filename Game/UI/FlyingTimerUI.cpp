@@ -20,8 +20,7 @@ void FlyingTimerUI::Init() {
 	for (int oi = 1; oi <= 1; ++oi) {
 		auto& sprite = UI_flyingLength_.emplace_back(Engine::CreateSprite("number.png"));
 
-		sprite->SetRectRange(rangeSize_);
-		sprite->SetTextureSize(rangeSize_);
+		sprite->SetDrawTextureSize(rangeSize_);
 		sprite->SetTextureCenterPos(currentPos_);
 		
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
@@ -34,8 +33,7 @@ void FlyingTimerUI::Init() {
 	for (int oi = 1; oi <= 1; ++oi) {
 		auto& sprite = UI_flyingMaxLength_.emplace_back(Engine::CreateSprite("number.png"));
 
-		sprite->SetRectRange(rangeSize_);
-		sprite->SetTextureSize(rangeSize_);
+		sprite->SetDrawTextureSize(rangeSize_);
 		sprite->SetTextureCenterPos(maxPos_);
 
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
@@ -144,8 +142,7 @@ void FlyingTimerUI::CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array,
 		auto& newDigite = array.emplace_back(Engine::CreateSprite("number.png"));
 
 		newDigite->SetTexture("number.png");
-		newDigite->SetRectRange(rangeSize_);
-		newDigite->SetTextureSize(rangeSize_);
+		newDigite->SetDrawTextureSize(rangeSize_);
 		newDigite->SetTextureCenterPos(Vector2{ origin.x - (80.0f * static_cast<int>(array.size() - 1)), origin.y });
 		newDigite->SetLeftTop(CalculationSpriteLT(IntegerCount(value, static_cast<int>(array.size() - 1))));
 
@@ -162,6 +159,7 @@ void FlyingTimerUI::Debug_Gui() {
 
 		for (int oi = 0; oi < UI_flyingLength_.size(); ++oi) {
 			UI_flyingLength_[oi]->SetTextureCenterPos(Vector2{ currentPos_.x - (80.0f * static_cast<float>(oi)), currentPos_.y });
+			UI_flyingLength_[oi]->Debug_Gui();
 		}
 
 		for (int oi = 0; oi < UI_flyingMaxLength_.size(); ++oi) {

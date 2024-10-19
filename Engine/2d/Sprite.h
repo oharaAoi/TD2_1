@@ -53,22 +53,59 @@ public:
 
 public:
 
+	/// <summary>
+	/// Textureを設定し直す
+	/// </summary>
+	/// <param name="fileName">: Textureの名前</param>
 	void SetTexture(const std::string& fileName);
+	
+	/// <summary>
+	/// Textureの中心の位置を設定する
+	/// </summary>
+	/// <param name="centerPos">: newPosition</param>
 	void SetTextureCenterPos(const Vector2& centerPos);
-	void SetTextureSize(const Vector2& size);
 
-	// 描画する範囲の設定
+	/// <summary>
+	/// 元となるTextureの大きさを設定する
+	/// </summary>
+	/// <param name="size">: Textureのsizeを設定する</param>
+	void SetTextureSize(const Vector2& size);
+	
+	/// <summary>
+	/// 描画するSpriteのsizeを変更する
+	/// </summary>
+	/// <param name="size">: sizeの大きさで描画される</param>
+	void SetDrawTextureSize(const Vector2& size);
+
+	/// <summary>
+	/// 描画する範囲を設定する
+	/// </summary>
+	/// <param name="rectRange">: uv座標系上の描画する範囲</param>
 	void SetRectRange(const Vector2& rectRange) { rectRange_ = rectRange; };
-	// 描画する範囲の設定
+
+	/// <summary>
+	/// Textureの左上を設定する
+	/// </summary>
+	/// <param name="leftTop">: 左上の位置(Textureのuv座標系上の位置)</param>
 	void SetLeftTop(const Vector2& leftTop) { leftTop_ = leftTop; }
+	
+	/// <summary>
+	/// Textureの中心位置を変更する
+	/// </summary>
+	/// <param name="pivot">: 0~1の範囲で設定</param>
+	void SetPivot(const Vector2& pivot);
 
 	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
 	const Vector2 GetScale() const { return Vector2(transform_.scale.x, transform_.scale.y); }
-	const Vector2 GetRotate() const { return Vector2(transform_.rotate.x, transform_.rotate.y); }
+	const float GetRotate() const { return transform_.rotate.z; }
 
 	void SetCenterPos(const Vector2 pos) { transform_.translate.x = pos.x, transform_.translate.y = pos.y; }
 	void SetScale(const Vector2 scale) { transform_.scale.x = scale.x, transform_.scale.y = scale.y, transform_.scale.z = 1.0f; }
-	void SetRotate(const Vector2 rotate) { transform_.rotate.x = rotate.y, transform_.rotate.y = rotate.y, transform_.rotate.z = 0.0f; }
+	/// <summary>
+	/// 回転量の設定
+	/// </summary>
+	/// <param name="rotate">: ラジアン</param>
+	void SetRotate(float rotate) { transform_.rotate.z = rotate; }
 		 
 private:
 
