@@ -56,6 +56,13 @@ void TitleScene::Debug_Gui() {
 	ImGui::Begin("TitleScene");
 	ImGui::Text("tirggerKey : 1 [goGame]");
 	ImGui::Text("tirggerKey : 2 [goTutorial]");
+
+	{
+		if (ImGui::TreeNode("title")) {
+			UI_title_->Debug_Gui();
+			ImGui::TreePop();
+		}
+	}
 	ImGui::End();
 }
 #endif 

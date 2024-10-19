@@ -1,0 +1,20 @@
+{
+    "FlyingGaugeUI": {
+        "bar_position": [
+            1080.0,
+            100.0
+        ],
+        "outside_position": [
+            1080.0,
+            100.0
+        ],
+        "position": [
+            1080.0,
+            60.0
+        ],
+        "rank_position": [
+            1080.0,
+            100.0
+        ]
+    }
+}

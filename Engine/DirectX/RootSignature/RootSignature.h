@@ -74,7 +74,7 @@ public:
 
 	ComPtr<ID3D12RootSignature> Create(const RootSignatureType& type);
 
-	D3D12_STATIC_SAMPLER_DESC CreateSampler();
+	D3D12_STATIC_SAMPLER_DESC CreateSampler(D3D12_TEXTURE_ADDRESS_MODE mode);
 
 public:
 

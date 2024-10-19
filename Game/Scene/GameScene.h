@@ -30,6 +30,7 @@
 #include "Game/Information/GamePlayTimer.h"
 /*------ UI ------*/
 #include "Game/UI/FlyingTimerUI.h"
+#include "Game/UI/FlyingGaugeUI.h"
 
 
 class GameScene 
@@ -71,13 +72,14 @@ private:
 	std::list<std::unique_ptr<Splash>>splash_;
 
 	// ---------- worldobject ---------- //
+	static const uint32_t kStageMax_ = 2;
 	uint32_t stageLoopCount_ = 0;
-	uint32_t stageDeleteCount_ = 0;
-	std::list<std::unique_ptr<WorldWall>> worldWalls_;
-	std::list<std::unique_ptr<Waterweed>> waterWeeds_;
+	bool nowStageIndex_ = 0;
+	std::unique_ptr<WorldWall> worldWalls_[kStageMax_];
+	std::unique_ptr<Waterweed> waterWeeds_[kStageMax_];
 
-	std::list<std::unique_ptr<Ground>> grounds_;
-	std::list<std::unique_ptr<WaterSpace>> waterSpaces_;
+	std::unique_ptr<Ground> grounds_[kStageMax_];
+	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
@@ -97,4 +99,5 @@ private:
 
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
+	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 };
