@@ -101,6 +101,10 @@ void GameScene::Init(){
 	debugModel2_ = std::make_unique<BaseGameObject>();
 	debugModel2_->Init();
 	debugModel2_->SetObject("MountenTree.obj");
+
+	debugModel3_ = std::make_unique<BaseGameObject>();
+	debugModel3_->Init();
+	debugModel3_->SetObject("MountainGrass.obj");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +163,7 @@ void GameScene::Load(){
 	//デバッグ用、モデル確認
 	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
 
 }
 
@@ -209,6 +214,7 @@ void GameScene::Update(){
 		//デバッグ用、モデル確認
 	debugModel_->Update();
 	debugModel2_->Update();
+	debugModel3_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -306,6 +312,7 @@ void GameScene::Draw() const{
 	}
 	debugModel_->Draw();
 	debugModel2_->Draw();
+	debugModel3_->Draw();
 
 	/////////////////////////////////
 	// 線の描画
