@@ -50,7 +50,7 @@ void SceneManager::Run() {
 		// ------------------------------------ //
 		#ifdef _DEBUG
 		ImGui::Begin("SceneManager");
-		if (ImGui::Combo("Scene", &selectSceneNum_, "Title\0Game\0Result\0Test\0")) {
+		if (ImGui::Combo("Scene", &selectSceneNum_, "Title\0Tutorial\0Game\0Result\0Test\0")) {
 			isSceneChange_ = true;
 
 		}
@@ -97,17 +97,24 @@ void SceneManager::Run() {
 		#ifdef _DEBUG
 		if (isSceneChange_) {
 			switch (selectSceneNum_) {
+			case SceneType::Scene_Title:
+				scene_.reset(new TitleScene);
+				break;
+			case SceneType::Scene_Tutorial:
+				scene_.reset(new TutorialScene);
+				break;
 			case SceneType::Scene_Game:
 				scene_.reset(new GameScene);
-				scene_->Load();
-				scene_->Init();
+				break;
+			case SceneType::Scene_Result:
+				scene_.reset(new ResultScene);
 				break;
 			case SceneType::Scene_Test:
 				scene_.reset(new TestScene);
-				scene_->Load();
-				scene_->Init();
 				break;
 			}
+			scene_->Load();
+			scene_->Init();
 			isSceneChange_ = false;
 		}
 		#endif
