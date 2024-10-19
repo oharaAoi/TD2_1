@@ -59,7 +59,7 @@ void Camera::Update(){
 				float heightRatio = std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 1.0f) / 40.0f, 0.0f, 1.0f);
 
 				// 飛行中のプレイヤーの高さに応じた追加の調整ベクトルを計算
-				addVec.y = 7.0f * (pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f;
+				addVec.y = 7.0f * std::clamp((pPlayer_->GetTransform()->GetTranslation().y - 10.0f) / 40.0f,0.0f,1.0f);
 				addVec.x = -10.0f * heightRatio;
 				addVec.y += pPlayer_->GetVelocity().y * 30.0f;
 
@@ -89,7 +89,7 @@ void Camera::Update(){
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate += dif * 0.04f * GameTimer::TimeRate();
+		transform_.translate += dif* 0.04f * GameTimer::TimeRate();
 	}
 
 	BaseCamera::Update();

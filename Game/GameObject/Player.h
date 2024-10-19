@@ -38,8 +38,8 @@ public:
 public:
 
 	void SetHitWaterSurface(const bool& ishit){ hitWaterSurface_ = ishit; }
-	const Vector3 GetMoveVelocity() const{ return velocity_ * moveSpeed_; }
-	const float GetMoveSpeed()const{ return moveSpeed_; }
+	const float GetMoveSpeed()const{ return std::clamp(baseSpeed_ + temporaryAcceleration_,kMinMoveSpeed_,kMaxMoveSpeed_); }
+	const Vector3 GetMoveVelocity() const{ return velocity_ * GetMoveSpeed();}
 	WorldTransform* GetAboveSurfaceTransform(){ return aboveWaterSurfacePos.get(); }
 	float GetSwimmingDepth(){ return swimmigDepth_; }
 	bool GetIsFlying(){ return isFlying_; }
@@ -73,10 +73,15 @@ private:
 
 	// 移動パラメーター
 	Vector3 velocity_;
-	float moveSpeed_;
+	float baseSpeed_;// 加速しない状態での速度
+	float temporaryAcceleration_;// 一時的な加速度
 	const float defaultSpeed = 35.0f;
 	const float kMinMoveSpeed_ = 25.0f;
-	const float kMaxMoveSpeed_ = 100.0f;
+	const float kMaxMoveSpeed_ = 150.0f;
+
+	// アイテム取得時などに追加する速度
+	float increaseVelocity_ = 40.0f;
+	float decreaseVelocity_ = -20.0f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
 	float pressTime_;
@@ -85,6 +90,7 @@ private:
 
 	// 食べてチャージして溜める
 	float chargePower_;
+	const float kBodyLaunchSpeed_ = 10.0f;
 
 	// 着水して水に潜った際の猶予時間
 	const float kDiveTime_ = 1.0f;
