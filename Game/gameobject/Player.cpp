@@ -28,7 +28,7 @@ void Player::Init(){
 
 		// 自身を後続のモデルのターゲットに設定
 		pTarget = followModels_.back().get();
-  
+
 	}
 
 
@@ -42,7 +42,7 @@ void Player::Init(){
 	const char* groupName = "Player";
 	adjustmentItem_->AddItem(groupName, "position", transform_->GetTranslation());
 	adjustmentItem_->AddItem(groupName, "velocity", velocity_);
-	adjustmentItem_->AddItem(groupName, "moveSpeed", moveSpeed_);
+	adjustmentItem_->AddItem(groupName, "temporaryAcceleration_", temporaryAcceleration_);
 	adjustmentItem_->AddItem(groupName, "lookAtT", lookAtT_);
 	adjustmentItem_->AddItem(groupName, "radius", radius_);
 
@@ -54,7 +54,7 @@ void Player::Init(){
 	obb_.center = GetWorldTranslation();
 
 	isMove_ = false;
-	moveSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
+	baseSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
 	radius_ = 2.0f;
 
 	getCoinNum_ = 0;
@@ -88,14 +88,14 @@ void Player::Update(){
 	if(transform_->GetTranslation().y > 0.0f) {
 		isFlying_ = true;
 
-		if (!preFlying_) {
+		if(!preFlying_) {
 			timer_.Measurement(transform_->GetTranslation().x);
 			isSplash_ = true;
 		}
 	} else {
 		isFlying_ = false;
 
-		if (preFlying_) {
+		if(preFlying_) {
 			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
 		}
@@ -160,6 +160,15 @@ void Player::Move(){
 				pressTime_ -= 0.025f * GameTimer::TimeRate();
 			}
 
+			// 一時加速、減速を徐々に元に戻す
+			if(temporaryAcceleration_ > 0.0f){
+				temporaryAcceleration_ -= (increaseVelocity_ * 0.5f) * GameTimer::DeltaTime();
+			} else{
+				temporaryAcceleration_ += (increaseVelocity_ * 0.5f) * GameTimer::DeltaTime();
+			}
+			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+		
+		
 		} else{// 着水直後
 
 			diveTime_ -= GameTimer::DeltaTime();// 着水後の猶予時間を減らす
@@ -182,7 +191,7 @@ void Player::Move(){
 	} else{// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
-		pressTime_  = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(),-0.1f,1.0f);
+		pressTime_ = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(), -0.1f, 1.0f);
 
 		// SPACE押して翼の開閉
 		if(!isFacedBird_){
@@ -224,6 +233,7 @@ void Player::Move(){
 			if(transform_->GetTranslation().y < 0.0f){
 				isDiving_ = true;
 				isFalling_ = false;
+				isFlying_ = false;
 				isFacedBird_ = false;
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 				// 潜水速度を一定範囲に保つ
@@ -239,7 +249,7 @@ void Player::Move(){
 
 	// 移動量を加算
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
-	velocity_ *= moveSpeed_ * std::fabsf(GameTimer::DeltaTime());
+	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
 	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
 
 	// プレイヤー上部の水面の座標を取得
@@ -250,10 +260,23 @@ void Player::Move(){
 	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 
 	// 下降フラグの更新
-	if(!isFalling_){
-		// ある程度上昇が収まったら下降フラグをオンに
-		if(currentAngle_ <= 0.1f){
-			isFalling_ = true;
+	if(isFlying_){
+		if(!isFalling_){
+
+			// ある程度上昇が収まったら下降フラグをオンに
+			if(bodyCount_ > kMinBodyCount_){
+				// 胴体スタックがあるときは再上昇
+				if(currentAngle_ <= 0.1f){
+					float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
+					chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
+					pressTime_ = 0.7f;
+				}
+			} else{
+
+				if(currentAngle_ <= 0.1f){
+					isFalling_ = true;
+				}
+			}
 		}
 	}
 
@@ -269,8 +292,8 @@ void Player::MoveLimit(){
 		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
 		pressTime_ = 0.0f;
 		// 減速させる
-		moveSpeed_ += (kMinMoveSpeed_ - moveSpeed_) * 0.5f * GameTimer::DeltaTime();
-		moveSpeed_ = std::clamp(moveSpeed_, kMinMoveSpeed_, kMaxMoveSpeed_);
+		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.5f * GameTimer::DeltaTime();
+		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 	}
 
 }
@@ -292,7 +315,7 @@ void Player::LookAtDirection(const float& angle){
 void Player::AdaptAdjustmentItem(){
 	const char* groupName = "Player";
 	transform_->SetTranslaion(adjustmentItem_->GetValue<Vector3>(groupName, "position"));
-	moveSpeed_ = adjustmentItem_->GetValue<float>(groupName, "moveSpeed");
+	temporaryAcceleration_ = adjustmentItem_->GetValue<float>(groupName, "temporaryAcceleration_");
 	velocity_ = adjustmentItem_->GetValue<Vector3>(groupName, "velocity");
 	lookAtT_ = adjustmentItem_->GetValue<float>(groupName, "lookAtT");
 	radius_ = adjustmentItem_->GetValue<float>(groupName, "radius");
@@ -362,9 +385,9 @@ void Player::Debug_Gui(){
 	ImGui::Separator();
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
-	ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
+	ImGui::DragFloat("temporaryAcceleration_", &temporaryAcceleration_, 0.1f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
-	
+
 	ImGui::DragFloat("radius", &radius_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
 
@@ -382,7 +405,7 @@ void Player::Debug_Gui(){
 	}
 
 	/*if (ImGui::TreeNode("FlyingTimer")) {*/
-		timer_.Debug_Gui();
+	timer_.Debug_Gui();
 	/*	ImGui::TreePop();
 	}*/
 
@@ -408,24 +431,32 @@ void Player::OnCollision(Collider* other){
 		// 魚を食べられたとき
 		if(chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()){
 
+			// チャージを行う
 			chargePower_ += pFish->GetEnergy();
 			chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
+			// 一時加速する
+			temporaryAcceleration_ += increaseVelocity_;
+			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 
 		} else{// 食べられなかったとき
 
-			chargePower_ -= 0.05f;
-			chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
+			if(!isDiving_){
 
-			moveSpeed_ -= 10.0f;
-			moveSpeed_ = std::clamp(moveSpeed_, kMinMoveSpeed_, kMaxMoveSpeed_);
+				// チャージが減る
+				chargePower_ -= 0.05f;
+				chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 
-			hitSe_->Play(false, true);
+				// 一時減速する
+				temporaryAcceleration_ += decreaseVelocity_;
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+
+				hitSe_->Play(false, true);
+			}
 		}
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::ITEM){
-		moveSpeed_ += 10.0f;
-		moveSpeed_ = std::clamp(moveSpeed_, kMinMoveSpeed_, kMaxMoveSpeed_);
+
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::COIN) {
@@ -437,12 +468,27 @@ void Player::OnCollision(Collider* other){
 
 		if(isFlying_ && !isFalling_){ return; }
 
+		// 翼を閉じて落下しているときだけ踏みつけられる
 		if(isCloseWing_){
-			pressTime_ = 1.0f;
-			isFalling_ = false;
-			isCloseWing_ = false;
+
+			// ある程度上から踏みつけないといけない
+			if(dropSpeed_ < gravity_ * 0.25f){
+				pressTime_ = 1.0f;
+				isFalling_ = false;
+				isCloseWing_ = false;
+			
+			} else{
+				// 正面衝突の場合
+				temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+				isFacedBird_ = true;
+				isCloseWing_ = true;
+			}
+
 		} else{
-			moveSpeed_ *= 0.5f;
+			// 正面衝突の場合
+			temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
+			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			isFacedBird_ = true;
 			isCloseWing_ = true;
 		}
