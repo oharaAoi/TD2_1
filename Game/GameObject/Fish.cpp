@@ -64,21 +64,21 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 	{
 	case (int)FISH_SIZE::SMALL:
 
-		radius_ = 2.0f;
+		radius_ = 1.3f;
 		energy_ = 0.075f;
-		scale = { 1.0f,1.0f,1.0f };
+		scale = { 2.0f,2.0f,2.0f };
 		break;
 
 	case (int)FISH_SIZE::MIDIUM:
 
-		radius_ = 3.0f;
+		radius_ = 2.0f;
 		energy_ = 0.1f;
 		scale = { 3.0f,3.0f,3.0f };
 		break;
 
 	case (int)FISH_SIZE::LARGE:
 
-		radius_ = 4.0f;
+		radius_ = 3.0f;
 		energy_ = 0.2f;
 		scale = { 6.0f,6.0f,6.0f };
 		break;

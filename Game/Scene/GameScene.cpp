@@ -277,15 +277,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
-	//Engine::SetPipeline(PipelineType::PrimitivePipeline);
-	//// コライダーの表示
-	//if (Collider::isColliderBoxDraw_) {
-	//	if (!isDegugCameraActive_) {
-	//		collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-	//	} else {
-	//		collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
-	//	}
-	//}
+	
 
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
 	for (const std::unique_ptr<Ground>& ground : grounds_) {
@@ -298,7 +290,16 @@ void GameScene::Draw() const{
 	for(auto& splash : splash_){
 		splash->Draw();
 	}
-
+	Engine::SetPipeline(PipelineType::PrimitivePipeline);
+	// コライダーの表示
+	if (Collider::isColliderBoxDraw_) {
+		if (!isDegugCameraActive_) {
+			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+		}
+		else {
+			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+		}
+	}
 #ifdef _DEBUG
 	// editorの描画
 	placementObjectEditor_->Draw();
