@@ -105,4 +105,5 @@ private:
 
 	//デバッグ用、モデル確認
 	std::unique_ptr<BaseGameObject>debugModel_ = nullptr;
+	std::unique_ptr<BaseGameObject>debugModel2_ = nullptr;
 };

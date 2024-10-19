@@ -97,6 +97,10 @@ void GameScene::Init(){
 	debugModel_= std::make_unique<BaseGameObject>();
 	debugModel_->Init();
 	debugModel_->SetObject("Mountain.obj");
+
+	debugModel2_ = std::make_unique<BaseGameObject>();
+	debugModel2_->Init();
+	debugModel2_->SetObject("MountenTree.obj");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +158,7 @@ void GameScene::Load(){
 
 	//デバッグ用、モデル確認
 	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
 
 }
 
@@ -203,6 +208,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 		//デバッグ用、モデル確認
 	debugModel_->Update();
+	debugModel2_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -299,6 +305,7 @@ void GameScene::Draw() const{
 		waterWeeds_[oi]->Draw();
 	}
 	debugModel_->Draw();
+	debugModel2_->Draw();
 
 	/////////////////////////////////
 	// 線の描画
@@ -496,7 +503,7 @@ void GameScene::CheckAddSplash(){
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
 	//ImGui::DragFloat3()
-	debugModel_->Debug_Gui();
+	debugModel2_->Debug_Gui();
 	if (ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
 	}
