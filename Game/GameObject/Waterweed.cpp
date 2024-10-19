@@ -52,3 +52,6 @@ void Waterweed::OnCollision(Collider* other) {
 void Waterweed::SetWorldWallPos(const Vector3& pos) {
 	GetTransform()->SetTranslaion(pos);
 }
+
+void Waterweed::IndividualFromCommon(const SubAttributeType& subType) {
+}

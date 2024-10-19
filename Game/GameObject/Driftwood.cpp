@@ -53,3 +53,6 @@ void Driftwood::OnCollision(Collider* other) {
 		//isActive_ = false;
 	}
 }
+
+void Driftwood::IndividualFromCommon(const SubAttributeType& subType) {
+}

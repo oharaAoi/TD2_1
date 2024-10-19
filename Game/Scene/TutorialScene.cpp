@@ -28,7 +28,6 @@ void TutorialScene::Init() {
 	player_ = std::make_unique<Player>();
 	player_->Init();
 
-
 	// -------------------------------------------------
 	// ↓ worldObjectの初期化
 	// -------------------------------------------------
@@ -56,6 +55,10 @@ void TutorialScene::Init() {
 		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
 	}
 
+	// trail
+	trail_ = std::make_unique<Trail>();
+	trail_->Init();
+
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
@@ -65,6 +68,8 @@ void TutorialScene::Init() {
 	// ↓ その他メンバ変数の初期化
 	// -------------------------------------------------
 	stageLoopCount_ = 0;
+
+	session_ = Session::Session_1;
 
 }
 
@@ -144,6 +149,10 @@ void TutorialScene::Update() {
 		splash->Update();
 	}
 
+	trail_->Update();
+	trail_->AddTrail(player_->GetTransform()->GetTranslation());
+	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
+
 	// -------------------------------------------------
 	// ↓ 不要になった要素などの削除
 	// -------------------------------------------------
@@ -171,6 +180,12 @@ void TutorialScene::Draw() const {
 	for (auto& splash : splash_) {
 		splash->Draw();
 	}
+
+	/////////////////////////////////
+	// Effectの描画
+	/////////////////////////////////
+	Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();
 
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
 	for (const std::unique_ptr<Ground>& ground : grounds_) {
