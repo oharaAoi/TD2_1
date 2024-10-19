@@ -81,6 +81,8 @@ private:
 	std::unique_ptr<Ground> grounds_[kStageMax_];
 	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
+	std::list<std::unique_ptr<BaseGameObject>>backgroundObjects_;
+
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;

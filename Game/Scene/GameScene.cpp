@@ -109,6 +109,10 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
 
+	ModelManager::LoadModel("./Game/Resources/Model/Wood/", "Wood.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass2.obj");
+
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Bird.obj");
