@@ -76,11 +76,14 @@ private:
 
 	float lookAtT_;
 
+	float addPressTime_= 0.025f;
+	float totalSpeedRatio;//現在の速度で、0から最高速度までの割合
+
 	// 移動パラメーター
 	Vector3 velocity_;
 	float baseSpeed_;// 加速しない状態での速度
 	float temporaryAcceleration_;// 一時的な加速度
-	const float defaultSpeed = 35.0f;
+	const float defaultSpeed = 38.0f;
 	const float kMinMoveSpeed_ = 25.0f;
 	const float kMaxMoveSpeed_ = 150.0f;
 

@@ -112,7 +112,7 @@ void Player::Update(){
 
 	animetor_->Update();
 	timer_.Update(transform_->GetTranslation().x);
-
+	totalSpeedRatio = GetMoveSpeed() / kMaxMoveSpeed_;
 
 	if(Input::IsTriggerKey(DIK_UP)){
 		AddBody(followModels_.back().get());
@@ -157,10 +157,10 @@ void Player::Move(){
 
 			// 押すと上昇、離すと沈む
 			if(Input::IsPressKey(DIK_SPACE)) {
-				pressTime_ += 0.025f * GameTimer::TimeRate();
+				pressTime_ += addPressTime_ * GameTimer::TimeRate();
 
 			} else {
-				pressTime_ -= 0.025f * GameTimer::TimeRate();
+				pressTime_ -= addPressTime_ * GameTimer::TimeRate();
 			}
 
 			// 一時加速、減速を徐々に元に戻す
@@ -402,6 +402,8 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat("baseSpeed_", &baseSpeed_, 0.1f);
 	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f,1.0f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
+	ImGui::Text("totalSpeedRatio=%f",totalSpeedRatio);
+	ImGui::DragFloat("addPressTime_=%f", &addPressTime_,0.001f);
 
 	ImGui::DragFloat("radius", &radius_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
