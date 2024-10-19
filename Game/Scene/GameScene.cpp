@@ -496,6 +496,8 @@ void GameScene::CheckAddSplash(){
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
+	//ImGui::DragFloat3()
+	debugModel_->Debug_Gui();
 	if (ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
 	}
