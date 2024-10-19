@@ -64,9 +64,6 @@ private:
 	bool isDegugCameraActive_ = false;
 
 	// ---------- gameobject ---------- //
-	static const int kStageModelCount_ = 1;
-	std::unique_ptr<Ground> ground_[kStageModelCount_];
-	std::unique_ptr<WaterSpace> waterSpace_[kStageModelCount_];
 	std::unique_ptr<Player> player_ = nullptr;
 
 	// ------------ effect ------------ //
@@ -74,8 +71,13 @@ private:
 	std::list<std::unique_ptr<Splash>>splash_;
 
 	// ---------- worldobject ---------- //
-	std::unique_ptr<WorldWall> worldWall_ = nullptr;
-	std::unique_ptr<BaseGameObject> waterWeed_;
+	uint32_t stageLoopCount_ = 0;
+	uint32_t stageDeleteCount_ = 0;
+	std::list<std::unique_ptr<WorldWall>> worldWalls_;
+	std::list<std::unique_ptr<Waterweed>> waterWeeds_;
+
+	std::list<std::unique_ptr<Ground>> grounds_;
+	std::list<std::unique_ptr<WaterSpace>> waterSpaces_;
 
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;

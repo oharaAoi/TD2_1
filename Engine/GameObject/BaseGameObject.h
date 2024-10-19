@@ -37,6 +37,8 @@ public:
 
 	void SetIsLighting(bool isLighting);
 
+	bool IsSetAnimetor();
+
 protected:
 
 	Model* model_;

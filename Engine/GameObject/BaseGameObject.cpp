@@ -32,13 +32,11 @@ void BaseGameObject::Update() {
 
 void BaseGameObject::Draw() const {
 	if (animetor_ == nullptr) {
-		Engine::SetPipeline(PipelineType::NormalPipeline);
 		Render::DrawModel(model_, transform_.get(), materials);
 	} else {
 		//Engine::SetSkinning(animetor_->GetSkinning(), model_->GetMesh(0));
 		//model_->GetMesh(0)->CopyVertexData(animetor_->GetSkinning()->GetVertexData());
 		//Render::DrawModel(model_, transform_.get(), materials);
-		Engine::SetPipeline(PipelineType::SkinningPipeline);
 		Render::DrawAnimationModel(model_, animetor_->GetSkinning(), transform_.get(), materials);
 	}
 }
@@ -71,6 +69,14 @@ void BaseGameObject::SetColor(const Vector4& color) {
 void BaseGameObject::SetIsLighting(bool isLighting){
 	for(size_t oi = 0; oi < materials.size(); ++oi) {
 		materials[oi]->SetIsLighting(isLighting);
+	}
+}
+
+bool BaseGameObject::IsSetAnimetor() {
+	if (animetor_ == nullptr) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
