@@ -44,6 +44,8 @@ public:
 
 	void NewObjectTypeSelect();
 
+	void SubTypeChange(SubAttributeType& subType);
+
 	const bool GetIsPlay() const { return isCheckCollision_; }
 	
 	std::list<ObstaclesManager::ObjectData>& GetDebugPlacementObjs() { return debug_BasePlacementObj_; }
@@ -77,6 +79,8 @@ private:
 
 	std::vector<std::string> fileNames_;
 
+	std::list<BasePlacementObject*> normalDrawList_;
+	std::list<BasePlacementObject*> animationDrawList_;
 };
 
 

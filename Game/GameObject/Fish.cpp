@@ -22,6 +22,8 @@ void Fish::Init(){
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
+
+	IndividualFromCommon();
 }
 
 //////////////////////////////////////////////////////
@@ -29,6 +31,7 @@ void Fish::Init(){
 //////////////////////////////////////////////////////
 
 void Fish::Update(){
+	IndividualFromCommon(subType_);
 	transform_->SetQuaternion(Quaternion::AngleAxis((-90.0f * toRadian), Vector3{ 0.0, 1.0f, 0.0f }));
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -55,6 +58,38 @@ void Fish::OnCollision(Collider* other){
 	}
 }
 
+void Fish::IndividualFromCommon(const SubAttributeType& subType) {
+	Vector3 scale{};
+
+	switch (subType) {
+	case SubAttributeType::NONE:
+
+		break;
+	case SubAttributeType::SMALL:
+		fishSize_ = FISH_SIZE::SMALL;
+		radius_ = 1.3f;
+		energy_ = 0.075f;
+		scale = { 2.0f,2.0f,2.0f };
+		break;
+	case SubAttributeType::MIDIUM:
+		fishSize_ = FISH_SIZE::MIDIUM;
+		radius_ = 2.0f;
+		energy_ = 0.1f;
+		scale = { 3.0f,3.0f,3.0f };
+		break;
+	case SubAttributeType::LARGE:
+		fishSize_ = FISH_SIZE::LARGE;
+		radius_ = 3.0f;
+		energy_ = 0.2f;
+		scale = { 6.0f,6.0f,6.0f };
+		break;
+	}
+
+	float size = radius_ * 2.0f;
+	obb_.size = { size, size, size };
+	transform_->SetScale(scale);
+}
+
 void Fish::SetFishSize(const FISH_SIZE& fishSize){
 	fishSize_ = fishSize;
 
@@ -67,6 +102,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 		radius_ = 1.3f;
 		energy_ = 0.075f;
 		scale = { 2.0f,2.0f,2.0f };
+		subType_ = SubAttributeType::SMALL;
 		break;
 
 	case (int)FISH_SIZE::MIDIUM:
@@ -74,6 +110,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 		radius_ = 2.0f;
 		energy_ = 0.1f;
 		scale = { 3.0f,3.0f,3.0f };
+		subType_ = SubAttributeType::MIDIUM;
 		break;
 
 	case (int)FISH_SIZE::LARGE:
@@ -81,6 +118,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 		radius_ = 3.0f;
 		energy_ = 0.2f;
 		scale = { 6.0f,6.0f,6.0f };
+		subType_ = SubAttributeType::LARGE;
 		break;
 
 	default:

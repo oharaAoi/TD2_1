@@ -12,6 +12,13 @@ enum class PlacementObjType {
 	COIN,
 };
 
+enum class SubAttributeType {
+	NONE,
+	SMALL,
+	MIDIUM,
+	LARGE,
+};
+
 /// <summary>
 /// 障害物などのオブジェクトの元となるクラス
 /// </summary>
@@ -35,7 +42,12 @@ public:
 	void Debug_Gui();
 #endif // _DEBUG
 
-	virtual void ApplyLoadData(const Vector3& scale, const Quaternion& rotate, const Vector3& pos, const float& radius);
+	virtual void ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
+							   const Vector3& pos, const float& radius, const SubAttributeType& subType);
+
+	virtual void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE) {};
+
+	void SetSubType(const SubAttributeType& subType) { subType_ = subType; }
 
 public:
 
@@ -43,7 +55,7 @@ public:
 
 protected:
 
-
+	SubAttributeType subType_;
 
 };
 

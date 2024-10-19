@@ -107,7 +107,6 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Bird.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "Driftwood.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
 	
 	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
@@ -123,6 +122,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed1.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -201,7 +201,6 @@ void GameScene::Update(){
 	}
 	
 	/*------------- manager -------------*/
-	obstaclesManager_->Debug_Gui();
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
 
@@ -222,6 +221,7 @@ void GameScene::Update(){
 
 		// editorの処理
 		placementObjectEditor_->Update();
+		obstaclesManager_->Debug_Gui();
 	}
 #endif
 
@@ -323,8 +323,8 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// Effectの描画
 	/////////////////////////////////
-	/*Engine::SetPipeline(PipelineType::AddPipeline);
-	trail_->Draw();*/
+	Engine::SetPipeline(PipelineType::AddPipeline);
+	trail_->Draw();
 
 	/////////////////////////////////
 	// 水の表示

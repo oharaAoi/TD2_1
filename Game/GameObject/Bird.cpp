@@ -61,7 +61,11 @@ void Bird::OnCollision(Collider* other) {
 	}
 }
 
-void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate, const Vector3& pos, const float& radius){
-	BasePlacementObject::ApplyLoadData(scale, rotate, pos, radius);
+void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
+						 const Vector3& pos, const float& radius, const SubAttributeType& subType){
+	BasePlacementObject::ApplyLoadData(scale, rotate, pos, radius, subType);
 	firstPos_ = pos;
+}
+
+void Bird::IndividualFromCommon(const SubAttributeType& subType) {
 }

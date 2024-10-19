@@ -133,6 +133,9 @@
     <Filter Include="Engine\DirectX\Template">
       <UniqueIdentifier>{da0f4114-7515-4278-a995-67fb384b1c8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameObject\Placement">
+      <UniqueIdentifier>{62aa89db-42d1-461e-9af7-b8c5f7f9cd21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -435,9 +438,6 @@
     <ClCompile Include="Game\Manager\ObstaclesManager.cpp">
       <Filter>Game\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\Fish.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scene\ResultScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
@@ -450,32 +450,14 @@
     <ClCompile Include="Game\Information\StageInformation.cpp">
       <Filter>Game\Information</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\Item.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameObject\Fish.cpp">
       <Filter>Game\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Game\Attachment\PlayerAnimator.cpp">
       <Filter>Game\Attachment</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\Bird.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\Driftwood.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\Rock.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\AudioPlayer.cpp">
       <Filter>Engine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\Coin.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameObject\Waterweed.cpp">
-      <Filter>Game\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Game\Effect\Splash.cpp">
       <Filter>ソース ファイル</Filter>
@@ -509,6 +491,27 @@
     </ClCompile>
     <ClCompile Include="Game\UI\FlyingGaugeUI.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Bird.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Coin.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Driftwood.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Fish.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Item.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Rock.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Waterweed.cpp">
+      <Filter>Game\GameObject\Placement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -848,9 +851,6 @@
     <ClInclude Include="Game\Effect\Trail.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\Fish.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scene\ResultScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
@@ -866,9 +866,6 @@
     <ClInclude Include="Game\GameObject\Fish.h">
       <Filter>Game\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\Item.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Manager\MeshManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
@@ -881,23 +878,8 @@
     <ClInclude Include="Game\Attachment\PlayerAnimator.h">
       <Filter>Game\Attachment</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\Bird.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\Driftwood.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\Rock.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\AudioPlayer.h">
       <Filter>Engine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\Coin.h">
-      <Filter>Game\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject\Waterweed.h">
-      <Filter>Game\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Game\Effect\Splash.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -931,6 +913,27 @@
     </ClInclude>
     <ClInclude Include="Game\UI\FlyingGaugeUI.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Bird.h">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Coin.h">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Driftwood.h">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Fish.h">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Item.h">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Rock.h">
+      <Filter>Game\GameObject\Placement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Waterweed.h">
+      <Filter>Game\GameObject\Placement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

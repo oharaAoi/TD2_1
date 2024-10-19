@@ -144,6 +144,7 @@ void FlyingGaugeUI::AdaptAdjustmentItem() {
 // ↓　Debug表示
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef _DEBUG
 void FlyingGaugeUI::Debug_Gui() {
 	if (ImGui::TreeNode("FlyingTGaugeUI")) {
 		Vector2 outsidePos = outside_->GetCenterPos();
@@ -167,3 +168,4 @@ void FlyingGaugeUI::Debug_Gui() {
 		ImGui::TreePop();
 	}
 }
+#endif // _DEBUG

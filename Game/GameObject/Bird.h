@@ -17,12 +17,14 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other)override;
 	void ApplyLoadData(
 		const Vector3& scale, const Quaternion& rotate,
-		const Vector3& pos, const float& radius
+		const Vector3& pos, const float& radius, const SubAttributeType& subType
 	)override;
 
 	void SetMoveDirection(const Vector3& direction){ moveDirection_ = direction; }
 	void SetMoveRadius(float radius){ moveRadius_ = radius; }
 	void SetIsMove(bool flag){ isMove_ = flag; }
+
+	void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE) override;
 
 private:
 

@@ -18,6 +18,8 @@ public:
 
 	void SetWorldWallPos(const Vector3& pos);
 
+	void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE) override;
+
 private:
 
 

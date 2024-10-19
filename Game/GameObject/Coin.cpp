@@ -52,3 +52,6 @@ void Coin::OnCollision(Collider* other) {
 		isActive_ = false;
 	}
 }
+
+void Coin::IndividualFromCommon(const SubAttributeType& subType) {
+}

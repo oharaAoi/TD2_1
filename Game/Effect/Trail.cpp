@@ -7,7 +7,7 @@ Trail::~Trail() {
 }
 
 void Trail::Init() {
-	newLifeTime_ = 2.0f;
+	newLifeTime_ = 1.0f;
 }
 
 void Trail::Update() {
@@ -16,7 +16,7 @@ void Trail::Update() {
 		// ↓ trailの位置をplayerに合わせる
 		// -------------------------------------------------
 		Vector3 trailPos = (*it).entity->GetTransform()->GetTranslation();
-		trailPos = trailPos.Lerp(trailPos, playerPosition_, 0.05f);
+		//trailPos = trailPos.Lerp(trailPos, playerPosition_, 0.05f);
 		(*it).entity->GetTransform()->SetTranslaion(trailPos);
 
 		(*it).entity->Update();
@@ -51,7 +51,7 @@ void Trail::AddTrail(const Vector3& pos) {
 	}
 
 	if (createCoolTime_ <= 0.0f) {
- 		createCoolTime_ = 0.2f;
+ 		createCoolTime_ = 0.1f;
 		trails_.emplace_back(TrailData{ pos, newLifeTime_ });
 	}
 }
