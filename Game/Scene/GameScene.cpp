@@ -109,7 +109,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed1.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");

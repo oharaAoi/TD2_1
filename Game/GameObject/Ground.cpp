@@ -13,7 +13,7 @@ Ground::~Ground() {
 
 void Ground::Init() {
 	BaseGameObject::Init();
-	SetObject("Riverbed1.obj");
+	SetObject("Riverbed.obj");
 	for (uint32_t oi = 0; oi < materials.size(); ++oi) {
 		materials[oi]->SetUvScale({ 1.0f, 1.0f, 1.0f });
 	}
