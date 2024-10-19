@@ -88,13 +88,16 @@ void Player::Update(){
 	if(transform_->GetTranslation().y > 0.0f) {
 		isFlying_ = true;
 
+		// 水から出た瞬間
 		if(!preFlying_) {
 			timer_.Measurement(transform_->GetTranslation().x);
 			isSplash_ = true;
+			isEnableLaunch_ = true;
 		}
 	} else {
 		isFlying_ = false;
 
+		// 着水した瞬間
 		if(preFlying_) {
 			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
@@ -203,6 +206,7 @@ void Player::Move(){
 			if(Input::IsTriggerKey(DIK_SPACE)) {
 				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
 				isFalling_ = true;
+				isEnableLaunch_ = false;// 再発射できないようにする
 			}
 		}
 
@@ -267,14 +271,15 @@ void Player::Move(){
 	// 下降フラグの更新
 	if(isFlying_){
 		if(!isFalling_){
-
 			// ある程度上昇が収まったら下降フラグをオンに
 			if(bodyCount_ > kMinBodyCount_){
 				// 胴体スタックがあるときは再上昇
 				if(currentAngle_ <= 0.1f){
-					float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
-					chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
-					pressTime_ = 0.7f;
+					if(isEnableLaunch_){
+						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
+						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
+						pressTime_ = 0.7f;
+					}
 				}
 			} else{
 

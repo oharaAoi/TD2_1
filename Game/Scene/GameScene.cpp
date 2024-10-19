@@ -49,19 +49,29 @@ void GameScene::Init(){
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	// 壁
-	auto& worldWall = worldWalls_.emplace_back(std::make_unique<WorldWall>());
-	worldWall->Init();
-	// 水草
-	auto& waterWeed = waterWeeds_.emplace_back(std::make_unique<Waterweed>());
-	waterWeed->Init();
-	waterWeed->SetWorldWallPos(StageInformation::worldWallPos_);
-	// 地面
-	auto& ground = grounds_.emplace_back(std::make_unique<Ground>());
-	ground->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
-	// 水面
-	auto& waterSpace = waterSpaces_.emplace_back(std::make_unique<WaterSpace>());
-	waterSpace->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		Vector3 newPos = StageInformation::worldWallPos_;
+		newPos.x += StageInformation::stageWidthEvery_ * (oi);
+
+		worldWalls_[oi] = std::make_unique<WorldWall>();
+		worldWalls_[oi]->Init();
+		// 水草
+		waterWeeds_[oi] = std::make_unique<Waterweed>();
+		waterWeeds_[oi]->Init();
+		waterWeeds_[oi]->SetWorldWallPos(StageInformation::worldWallPos_);
+		// 地面
+		grounds_[oi] = std::make_unique<Ground>();
+		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
+		// 水面
+		waterSpaces_[oi] = std::make_unique<WaterSpace>();
+		waterSpaces_[oi]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+
+		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
+		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
+		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+	}
+
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -74,6 +84,9 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	flyingTimerUI_ = std::make_unique<FlyingTimerUI>();
 	flyingTimerUI_->Init();
+
+	flyingGaugeUI_ = std::make_unique<FlyingGaugeUI>();
+	flyingGaugeUI_->Init();
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -124,6 +137,11 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_icon.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,17 +193,11 @@ void GameScene::Update(){
  	player_->Update();
 
 	EndlessStage();
-	for (std::unique_ptr<WorldWall>& wall : worldWalls_) {
-		wall->Update();
-	}
-	for (std::unique_ptr<Waterweed>& weed : waterWeeds_) {
-		weed->Update();
-	}
-	for (std::unique_ptr<Ground>& ground : grounds_) {
-		ground->Update();
-	}
-	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
-		waterSpace->Update();
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		worldWalls_[oi]->Update();
+		waterWeeds_[oi]->Update();
+		grounds_[oi]->Update();
+		waterSpaces_[oi]->Update();
 	}
 	
 	/*------------- manager -------------*/
@@ -236,6 +248,7 @@ void GameScene::Update(){
 	// ↓ UIの更新
 	// -------------------------------------------------
 	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
+	flyingGaugeUI_->Update(player_->GetFlyingTime());
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -267,12 +280,11 @@ void GameScene::Draw() const{
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for (const std::unique_ptr<WorldWall>& wall : worldWalls_) {
-		wall->Draw();
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		worldWalls_[oi]->Draw();
+		waterWeeds_[oi]->Draw();
 	}
-	for (const std::unique_ptr<Waterweed>& weed : waterWeeds_) {
-		weed->Draw();
-	}
+
 
 	/////////////////////////////////
 	// 線の描画
@@ -335,6 +347,7 @@ void GameScene::Draw() const{
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	gamePlayTimer_->Draw();
 	flyingTimerUI_->Draw();
+	flyingGaugeUI_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,39 +436,25 @@ void GameScene::PlayerWaveCollision(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::EndlessStage(){
-
 	// playerが一定間隔進んだら新しいステージを生成する
-	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) - 500.0f) {
+	if (player_->GetWorldTranslation().x < 3000.0f) {
+		return;
+	}
+
+	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) + 200.0f) {
 		++stageLoopCount_;
+		size_t index = static_cast<size_t>(nowStageIndex_);
 		// 新しく設置する座標を求める
 		Vector3 newPos = StageInformation::worldWallPos_;
-		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_);
+		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1);
 
-		auto& worldWall = worldWalls_.emplace_back(std::make_unique<WorldWall>());
-		worldWall->Init();
-		worldWall->GetTransform()->SetTranslaion(newPos);
-		// 水草
-		auto& waterWeed = waterWeeds_.emplace_back(std::make_unique<Waterweed>());
-		waterWeed->Init();
-		waterWeed->SetWorldWallPos(newPos);
-		// 地面
-		auto& ground = grounds_.emplace_back(std::make_unique<Ground>());
-		ground->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
-		// 水面
-		auto& waterSpace = waterSpaces_.emplace_back(std::make_unique<WaterSpace>());
-		waterSpace->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-		waterSpace->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
+		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
+		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+
+		nowStageIndex_ = !nowStageIndex_;
 	}
-
-	// playerが一定間隔進んだら古いステージを削除する
-	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageDeleteCount_ + 1)) + 120.0f) {
-		++stageDeleteCount_;
-		worldWalls_.pop_front();
-		waterWeeds_.pop_front();
-		grounds_.pop_front();
-		waterSpaces_.pop_front();
-	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -522,6 +521,7 @@ void GameScene::Debug_Gui(){
 		if (ImGui::TreeNode("UI")) {
 			ImGui::Begin("UI");
 			flyingTimerUI_->Debug_Gui();
+			flyingGaugeUI_->Debug_Gui();
 			ImGui::End();
 			ImGui::TreePop();
 		}

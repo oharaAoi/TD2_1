@@ -38,5 +38,6 @@ void TitleUI::Draw() const {
 
 #ifdef _DEBUG
 void TitleUI::Debug_Gui() {
+	UI_title_->Debug_Gui();
 }
 #endif // _DEBUG

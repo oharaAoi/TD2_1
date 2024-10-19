@@ -62,14 +62,21 @@ public:
 	// 描画する範囲の設定
 	void SetLeftTop(const Vector2& leftTop) { leftTop_ = leftTop; }
 
+	/// <summary>
+	/// pivotの設定
+	/// </summary>
+	/// <param name="pivot">: 0~1の範囲</param>
+	void SetPivot(const Vector2& pivot);
+
 	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
 	const Vector2 GetScale() const { return Vector2(transform_.scale.x, transform_.scale.y); }
-	const Vector2 GetRotate() const { return Vector2(transform_.rotate.x, transform_.rotate.y); }
-
+	const float GetRotate() const { return transform_.rotate.z; }
+	const Vector2 GetTextureSize() const { return textureSize_; }
+	
 	void SetCenterPos(const Vector2 pos) { transform_.translate.x = pos.x, transform_.translate.y = pos.y; }
 	void SetScale(const Vector2 scale) { transform_.scale.x = scale.x, transform_.scale.y = scale.y, transform_.scale.z = 1.0f; }
-	void SetRotate(const Vector2 rotate) { transform_.rotate.x = rotate.y, transform_.rotate.y = rotate.y, transform_.rotate.z = 0.0f; }
-		 
+	void SetRotate(float rotate) { transform_.rotate.z = rotate; }
+
 private:
 
 	// 定数バッファ
@@ -88,8 +95,6 @@ private:
 	TextureMaterial* materialData_;
 	TextureTransformData* transformData_;
 
-	Vector2 anchorPoint_;
-
 	// Transform情報
 	kTransform transform_;
 	kTransform uvTransform_;
@@ -101,6 +106,8 @@ private:
 	// 左上座標
 	Vector2 leftTop_ = { 0.0f, 0.0f };
 	Vector2 centerPos_; 
+
+	Vector2 pivot_;
 
 	// Textureのサイズ
 	Vector2 textureSize_;

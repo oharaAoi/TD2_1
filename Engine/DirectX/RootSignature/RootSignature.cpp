@@ -29,12 +29,12 @@ ComPtr<ID3D12RootSignature> RootSignature::Create(const RootSignatureType& type)
 // samplerの作成
 //////////////////////////////////////////////////////////////////////////////////////
 
-D3D12_STATIC_SAMPLER_DESC RootSignature::CreateSampler() {
+D3D12_STATIC_SAMPLER_DESC RootSignature::CreateSampler(D3D12_TEXTURE_ADDRESS_MODE mode) {
 	D3D12_STATIC_SAMPLER_DESC spriteStaticSampler = {};
 	spriteStaticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	spriteStaticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	spriteStaticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	spriteStaticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	spriteStaticSampler.AddressU = mode;
+	spriteStaticSampler.AddressV = mode;
+	spriteStaticSampler.AddressW = mode;
 	spriteStaticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
 	spriteStaticSampler.MaxLOD = D3D12_FLOAT32_MAX;
 	spriteStaticSampler.ShaderRegister = 0;
@@ -62,7 +62,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateRootSignature() {
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // directionalLight用
 		.AddCBV(2, D3D12_SHADER_VISIBILITY_PIXEL)  // pointLight用
 		.AddCBV(3, D3D12_SHADER_VISIBILITY_PIXEL)  // spotLight用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -84,7 +84,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateTexturelessRootSignature() {
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // directionalLight用
 		.AddCBV(2, D3D12_SHADER_VISIBILITY_PIXEL)  // pointLight用
 		.AddCBV(3, D3D12_SHADER_VISIBILITY_PIXEL)  // spotLight用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -114,7 +114,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateSkinnigRootSignature() {
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // directionalLight用
 		.AddCBV(2, D3D12_SHADER_VISIBILITY_PIXEL)  // pointLight用
 		.AddCBV(3, D3D12_SHADER_VISIBILITY_PIXEL)  // spotLight用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -150,7 +150,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateParticleRootSignature() {
 		.AddDescriptorTable(descriptorRangeForInstancing, 1, D3D12_SHADER_VISIBILITY_VERTEX) // Instancing描画用
 		.AddDescriptorTable(spriteDescriptorRange, 1, D3D12_SHADER_VISIBILITY_PIXEL) // texture用
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // Light用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -169,7 +169,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateSpriteRootSignature() {
 		.AddCBV(0, D3D12_SHADER_VISIBILITY_PIXEL)  // Material用
 		.AddCBV(0, D3D12_SHADER_VISIBILITY_VERTEX) // Transform用
 		.AddDescriptorTable(spriteDescriptorRange, 1, D3D12_SHADER_VISIBILITY_PIXEL) // Texture用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_BORDER))
 		.Build(device_);
 }
 
@@ -192,7 +192,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreatePBRRootSignature() {
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // directionalLight用
 		.AddCBV(2, D3D12_SHADER_VISIBILITY_PIXEL)  // pointLight用
 		.AddCBV(3, D3D12_SHADER_VISIBILITY_PIXEL)  // spotLight用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -218,7 +218,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateComputeShaderRootSignature() {
 		.AddDescriptorTable(spriteDescriptorRange, 1, D3D12_SHADER_VISIBILITY_ALL) // 参照用
 		.AddDescriptorTable(descriptorRangeUAV, 1, D3D12_SHADER_VISIBILITY_ALL) // 出力用
 		.AddCBV(0, D3D12_SHADER_VISIBILITY_ALL)  // 参照用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -284,7 +284,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateBlendShaderRootSignature() {
 	return builder_
 		.AddDescriptorTable(spriteDescriptorRange, 1, D3D12_SHADER_VISIBILITY_ALL) // 参照用
 		.AddDescriptorTable(descriptorRangeUAV, 1, D3D12_SHADER_VISIBILITY_ALL) // 出力用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -316,7 +316,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateResultRenderRootSignature() {
 		.AddDescriptorTable(object3DDescriptorRange, 1, D3D12_SHADER_VISIBILITY_ALL) // object3d用
 		.AddDescriptorTable(spriteDescriptorRange, 1, D3D12_SHADER_VISIBILITY_ALL) // sprite用
 		.AddDescriptorTable(descriptorRangeUAV, 1, D3D12_SHADER_VISIBILITY_ALL) // 出力用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -340,7 +340,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateWaterSpaceRootSignature() {
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // directionalLight用
 		.AddCBV(2, D3D12_SHADER_VISIBILITY_PIXEL)  // pointLight用
 		.AddCBV(3, D3D12_SHADER_VISIBILITY_PIXEL)  // spotLight用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
@@ -359,7 +359,7 @@ ComPtr<ID3D12RootSignature> RootSignature::CreateWaterLightingRootSignature() {
 		.AddCBV(1, D3D12_SHADER_VISIBILITY_PIXEL)  // directionalLight用
 		.AddCBV(2, D3D12_SHADER_VISIBILITY_PIXEL)  // pointLight用
 		.AddCBV(3, D3D12_SHADER_VISIBILITY_PIXEL)  // spotLight用
-		.AddSampler(CreateSampler())
+		.AddSampler(CreateSampler(D3D12_TEXTURE_ADDRESS_MODE_WRAP))
 		.Build(device_);
 }
 
