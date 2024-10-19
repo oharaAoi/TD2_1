@@ -69,7 +69,7 @@ void DebugCamera::Debug_Gui() {
 
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::DragFloat4("rotate", &quaternion_.x, 0.01f);
-	ImGui::DragFloat("isMoveSpeed", &moveSpeed_, 0.1f, 0.0f, 10.0f);
+	ImGui::DragFloat("isMoveSpeed", &moveBaseSpeed_, 0.1f, 0.0f, 100.0f);
 	ImGui::DragFloat("sensitivity", &sensitivity_, 0.01f, 0.0f, 0.1f);
 	ImGui::Separator();
 	ImGui::DragFloat("yaw", &yaw_, 0.1f);

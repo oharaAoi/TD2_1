@@ -52,7 +52,7 @@ void GameScene::Init(){
 
 		// 水
 		waterSpace_[i] = std::make_unique<WaterSpace>();
-		waterSpace_[i]->Init("./Game/Resources/Model/Watersurface/", "Wotersurface.obj");
+		waterSpace_[i]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
 		waterSpace_[i]->SetTranslate(Vector3(i * stageWidthEvery_, 0.0f, 0.0f));
 	}
 
@@ -121,7 +121,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed1.obj");
 
 	// 仕様上連続して読み込みたい物
-	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Wotersurface.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
 	//ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
