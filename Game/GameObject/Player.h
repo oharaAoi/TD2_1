@@ -84,9 +84,15 @@ private:
 	const float kMinMoveSpeed_ = 25.0f;
 	const float kMaxMoveSpeed_ = 150.0f;
 
+	//基礎速度のパラメーター
+	const float kAddSpeed_ = 10;
+	const float kDecreaseSpeed_ = 10;
+	const float kMaxBaseSpeed_ = 70;
+	const float kMinBaseSpeed_ = 35;
+
 	// アイテム取得時などに追加する速度
-	float increaseVelocity_ = 40.0f;
-	float decreaseVelocity_ = -20.0f;
+	float increaseVelocity_ = 10.0f;
+	float decreaseVelocity_ = -5.0f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
 	float pressTime_;

@@ -95,7 +95,7 @@ void Player::Update(){
 			isEnableLaunch_ = true;
 		}
 	} else {
-		isFlying_ = false;
+		//isFlying_ = false;
 
 		// 着水した瞬間
 		if(preFlying_) {
@@ -170,8 +170,8 @@ void Player::Move(){
 				temporaryAcceleration_ += (increaseVelocity_ * 0.5f) * GameTimer::DeltaTime();
 			}
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
-		
-		
+
+
 		} else{// 着水直後
 
 			diveTime_ -= GameTimer::DeltaTime();// 着水後の猶予時間を減らす
@@ -247,6 +247,8 @@ void Player::Move(){
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 				// 潜水速度を一定範囲に保つ
 				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
+				baseSpeed_ = std::clamp(baseSpeed_ / 2, kMinBaseSpeed_, kMaxBaseSpeed_);
+				diveTime_ = kDiveTime_;
 			}
 		}
 	}
@@ -397,6 +399,7 @@ void Player::Debug_Gui(){
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("temporaryAcceleration_", &temporaryAcceleration_, 0.1f);
+	ImGui::DragFloat("baseSpeed_", &baseSpeed_, 0.1f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
 
 	ImGui::DragFloat("radius", &radius_, 0.1f);
@@ -448,6 +451,8 @@ void Player::OnCollision(Collider* other){
 			// 一時加速する
 			temporaryAcceleration_ += increaseVelocity_;
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+			//基礎速度の変動
+			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 
 		} else{// 食べられなかったとき
 
@@ -460,8 +465,10 @@ void Player::OnCollision(Collider* other){
 				// 一時減速する
 				temporaryAcceleration_ += decreaseVelocity_;
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
-
+				//基礎速度の変動
+				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 				hitSe_->Play(false, true);
+
 			}
 		}
 	}
@@ -487,7 +494,7 @@ void Player::OnCollision(Collider* other){
 				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;
-			
+
 			} else{
 				// 正面衝突の場合
 				temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
