@@ -100,4 +100,7 @@ private:
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
+
+	//デバッグ用、モデル確認
+	std::unique_ptr<BaseGameObject>debugModel_ = nullptr;
 };

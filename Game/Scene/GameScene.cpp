@@ -92,6 +92,11 @@ void GameScene::Init(){
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
  	camera_->SetPlayerPtr(player_.get());
+
+	//デバッグ用、モデル確認
+	debugModel_= std::make_unique<BaseGameObject>();
+	debugModel_->Init();
+	debugModel_->SetObject("Mountain.obj");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,6 +147,11 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_icon.png");
+
+
+	//デバッグ用、モデル確認
+	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +198,8 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
-
+		//デバッグ用、モデル確認
+	debugModel_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -284,7 +295,7 @@ void GameScene::Draw() const{
 		worldWalls_[oi]->Draw();
 		waterWeeds_[oi]->Draw();
 	}
-
+	debugModel_->Draw();
 
 	/////////////////////////////////
 	// 線の描画

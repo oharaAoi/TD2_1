@@ -29,7 +29,7 @@ void DebugCamera::Init() {
 	// worldの生成
 	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
 	viewMatrix_ = Inverse(cameraMatrix_);
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 600.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 110000.0f);
 
 	debugCameraMode_ = true;
 
@@ -55,7 +55,7 @@ void DebugCamera::Update() {
 	cameraMatrix_ =scaleMat_ * rotateMat_ * translateMat_;
 	viewMatrix_ = Inverse(cameraMatrix_);
 
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 0.1f, 100.0f);
+	//projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 6000);
 }
 
 #ifdef _DEBUG
@@ -69,7 +69,7 @@ void DebugCamera::Debug_Gui() {
 
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::DragFloat4("rotate", &quaternion_.x, 0.01f);
-	ImGui::DragFloat("isMoveSpeed", &moveBaseSpeed_, 0.1f, 0.0f, 100.0f);
+	ImGui::DragFloat("isMoveSpeed", &moveBaseSpeed_, 0.1f, 0.0f, 1000.0f);
 	ImGui::DragFloat("sensitivity", &sensitivity_, 0.01f, 0.0f, 0.1f);
 	ImGui::Separator();
 	ImGui::DragFloat("yaw", &yaw_, 0.1f);

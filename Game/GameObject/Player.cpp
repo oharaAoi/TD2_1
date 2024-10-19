@@ -400,6 +400,7 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("temporaryAcceleration_", &temporaryAcceleration_, 0.1f);
 	ImGui::DragFloat("baseSpeed_", &baseSpeed_, 0.1f);
+	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f,1.0f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
 
 	ImGui::DragFloat("radius", &radius_, 0.1f);
