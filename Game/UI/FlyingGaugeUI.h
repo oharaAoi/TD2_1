@@ -1,7 +1,16 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 #include "Engine.h"
 #include "Engine/Utilities/AdjustmentItem.h"
+
+enum class FlyingRank {
+	Rank_First,
+	Rank_B,
+	Rank_A,
+	Rank_S,
+	Rank_Master
+};
 
 class FlyingGaugeUI {
 public:
@@ -10,8 +19,12 @@ public:
 	~FlyingGaugeUI();
 
 	void Init();
-	void Update(float currentLength, float maxLength);
+	void Update(float currentLength);
 	void Draw() const;
+
+	void CalculationRaito(float currentLength);
+
+	void RankUp();
 
 	void AdaptAdjustmentItem();
 
@@ -26,6 +39,15 @@ private:
 
 	std::unique_ptr<Sprite> outside_;
 	std::unique_ptr<Sprite> bar_;
+	std::unique_ptr<Sprite> rank_;
+	std::unique_ptr<Sprite> icon_;
 
+	FlyingRank nowMaxRank_;
+
+	float rankLenghtMin_;
+	float rankLenghtMax_;
+
+	float lengthRaito_;
+	float maxLenghtRaito_;
 };
 

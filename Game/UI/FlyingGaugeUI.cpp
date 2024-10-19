@@ -13,25 +13,39 @@ FlyingGaugeUI::~FlyingGaugeUI() {
 void FlyingGaugeUI::Init() {
 	outside_ = Engine::CreateSprite("UI_flyingGaugeOut.png");
 	bar_ = Engine::CreateSprite("kari_UI_bar.png");
-
-	bar_->SetPivot({ 1.0f, 1.0f }); 
+	rank_ = Engine::CreateSprite("kari_UI_Rank_1.png");
+	icon_ = Engine::CreateSprite("kari_UI_icon.png");
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "FlyingGaugeUI";
 	// 登録
 	adjustmentItem_->AddItem(groupName_, "outside_position", outside_->GetCenterPos());
 	adjustmentItem_->AddItem(groupName_, "bar_position", bar_->GetCenterPos());
+	adjustmentItem_->AddItem(groupName_, "rank_position", rank_->GetCenterPos());
 	// 適応
 	AdaptAdjustmentItem();
+
+	bar_->SetLeftTop({ bar_->GetTextureSize().x ,0.0f });
+	rank_->SetTextureSize({ 48.0f, 48.0f });
+	rank_->SetRectRange({ 48.0f, 48.0f });
+
+	rankLenghtMin_ = 0.0f;
+	rankLenghtMax_ = 100.0f;
+
+	maxLenghtRaito_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FlyingGaugeUI::Update(float currentLength, float maxLength) {
+void FlyingGaugeUI::Update(float currentLength) {
+	CalculationRaito(currentLength);
+
 	outside_->Update();
 	bar_->Update();
+	rank_->Update();
+	icon_->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,8 +53,81 @@ void FlyingGaugeUI::Update(float currentLength, float maxLength) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingGaugeUI::Draw() const {
-	outside_->Draw();
 	bar_->Draw();
+	outside_->Draw();
+
+	if (static_cast<uint32_t>(nowMaxRank_) >= 1) {
+		rank_->Draw();
+	}
+
+	if (nowMaxRank_ != FlyingRank::Rank_Master) {
+		icon_->Draw();
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　現在の割合を出す
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void FlyingGaugeUI::CalculationRaito(float currentLength) {
+	lengthRaito_ = currentLength / rankLenghtMax_;
+
+	lengthRaito_ = std::clamp(lengthRaito_, 0.0f, 1.0f);
+
+	Vector2 st = outside_->GetCenterPos() - (outside_->GetTextureSize() * 0.5f);
+	Vector2 end = outside_->GetCenterPos() + (outside_->GetTextureSize() * 0.5f);
+	st.y = outside_->GetCenterPos().y - 30.0f;
+	end.y = outside_->GetCenterPos().y - 30.0f;
+	Vector2 pos = Vector2::Lerp(st, end, lengthRaito_);
+	icon_->SetCenterPos(pos);
+
+	if (nowMaxRank_ != FlyingRank::Rank_Master) {
+		if (maxLenghtRaito_ < lengthRaito_) {
+			bar_->SetLeftTop({ bar_->GetTextureSize().x - (bar_->GetTextureSize().x * lengthRaito_) ,0.0f });
+			maxLenghtRaito_ = lengthRaito_;
+		}
+
+		if (lengthRaito_ >= 1.0f) {
+			RankUp();
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　ランクの昇格を行う
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void FlyingGaugeUI::RankUp() {
+	maxLenghtRaito_ = 0.0f;
+	switch (nowMaxRank_) {
+	case FlyingRank::Rank_First:
+		nowMaxRank_ = FlyingRank::Rank_B;
+		rankLenghtMin_ = 101.0f;
+		rankLenghtMax_ = 200.0f;
+		rank_->SetLeftTop({ 0.0f, 0.0f });
+		break;
+	case FlyingRank::Rank_B:
+		nowMaxRank_ = FlyingRank::Rank_A;
+		rankLenghtMin_ = 501.0f;
+		rankLenghtMax_ = 1000.0f;
+		rank_->SetLeftTop({ 48.0f, 0.0f });
+		break;
+	case FlyingRank::Rank_A:
+		nowMaxRank_ = FlyingRank::Rank_S;
+		rankLenghtMin_ = 0.0f;
+		rankLenghtMax_ = 1000.0f;
+		rank_->SetLeftTop({ 96.0f, 0.0f });
+		break;
+	case FlyingRank::Rank_S:
+		nowMaxRank_ = FlyingRank::Rank_Master;
+		rank_->SetTexture("kari_UI_Rank_master.png");
+		break;
+	case FlyingRank::Rank_Master:
+
+		break;
+	default:
+		break;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +137,7 @@ void FlyingGaugeUI::Draw() const {
 void FlyingGaugeUI::AdaptAdjustmentItem() {
 	outside_->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "outside_position"));
 	bar_->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "bar_position"));
+	rank_->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "rank_position"));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +151,8 @@ void FlyingGaugeUI::Debug_Gui() {
 
 		ImGui::DragFloat2("outsidePos", &outsidePos.x, 1.0f);
 		ImGui::DragFloat2("barPos", &barPos.x, 1.0f);
+
+		ImGui::DragFloat("raito", &lengthRaito_, 0.01f);
 
 		bar_->Debug_Gui();
 

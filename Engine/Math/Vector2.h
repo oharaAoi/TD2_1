@@ -72,4 +72,11 @@ public:
 
         return result;
     }
+
+    static Vector2 Lerp(const Vector2& st, const Vector2& end, float t) {
+        return {
+            std::lerp(st.x, end.x, t),
+            std::lerp(st.y, end.y, t)
+        };
+    }
 };

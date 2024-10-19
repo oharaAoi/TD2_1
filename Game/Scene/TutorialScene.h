@@ -55,13 +55,14 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 
 	// ---------- worldobject ---------- //
+	static const uint32_t kStageMax_ = 2;
 	uint32_t stageLoopCount_ = 0;
-	uint32_t stageDeleteCount_ = 0;
-	std::list<std::unique_ptr<WorldWall>> worldWalls_;
-	std::list<std::unique_ptr<Waterweed>> waterWeeds_;
+	bool nowStageIndex_ = 0;
+	std::unique_ptr<WorldWall> worldWalls_[kStageMax_];
+	std::unique_ptr<Waterweed> waterWeeds_[kStageMax_];
 
-	std::list<std::unique_ptr<Ground>> grounds_;
-	std::list<std::unique_ptr<WaterSpace>> waterSpaces_;
+	std::unique_ptr<Ground> grounds_[kStageMax_];
+	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
 	// ------------ effect ------------ //
 	std::list<std::unique_ptr<Splash>>splash_;

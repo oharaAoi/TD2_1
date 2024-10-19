@@ -33,18 +33,28 @@ void TutorialScene::Init() {
 	// ↓ worldObjectの初期化
 	// -------------------------------------------------
 	// 壁
-	auto& worldWall = worldWalls_.emplace_back(std::make_unique<WorldWall>());
-	worldWall->Init();
-	// 水草
-	auto& waterWeed = waterWeeds_.emplace_back(std::make_unique<Waterweed>());
-	waterWeed->Init();
-	waterWeed->SetWorldWallPos(StageInformation::worldWallPos_);
-	// 地面
-	auto& ground = grounds_.emplace_back(std::make_unique<Ground>());
-	ground->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
-	// 水面
-	auto& waterSpace = waterSpaces_.emplace_back(std::make_unique<WaterSpace>());
-	waterSpace->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		Vector3 newPos = StageInformation::worldWallPos_;
+		newPos.x += StageInformation::stageWidthEvery_ * (oi);
+
+		worldWalls_[oi] = std::make_unique<WorldWall>();
+		worldWalls_[oi]->Init();
+		// 水草
+		waterWeeds_[oi] = std::make_unique<Waterweed>();
+		waterWeeds_[oi]->Init();
+		waterWeeds_[oi]->SetWorldWallPos(StageInformation::worldWallPos_);
+		// 地面
+		grounds_[oi] = std::make_unique<Ground>();
+		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
+		// 水面
+		waterSpaces_[oi] = std::make_unique<WaterSpace>();
+		waterSpaces_[oi]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+
+		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
+		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
+		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+	}
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -55,7 +65,6 @@ void TutorialScene::Init() {
 	// ↓ その他メンバ変数の初期化
 	// -------------------------------------------------
 	stageLoopCount_ = 0;
-	stageDeleteCount_ = 0;
 
 }
 
@@ -120,17 +129,11 @@ void TutorialScene::Update() {
 	player_->Update();
 
 	EndlessStage();
-	for (std::unique_ptr<WorldWall>& wall : worldWalls_) {
-		wall->Update();
-	}
-	for (std::unique_ptr<Waterweed>& weed : waterWeeds_) {
-		weed->Update();
-	}
-	for (std::unique_ptr<Ground>& ground : grounds_) {
-		ground->Update();
-	}
-	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
-		waterSpace->Update();
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		worldWalls_[oi]->Update();
+		waterWeeds_[oi]->Update();
+		grounds_[oi]->Update();
+		waterSpaces_[oi]->Update();
 	}
 
 	// -------------------------------------------------
@@ -160,12 +163,11 @@ void TutorialScene::Draw() const {
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for (const std::unique_ptr<WorldWall>& wall : worldWalls_) {
-		wall->Draw();
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		worldWalls_[oi]->Draw();
+		waterWeeds_[oi]->Draw();
 	}
-	for (const std::unique_ptr<Waterweed>& weed : waterWeeds_) {
-		weed->Draw();
-	}
+
 	for (auto& splash : splash_) {
 		splash->Draw();
 	}
@@ -216,35 +218,23 @@ void TutorialScene::CheckAddSplash() {
 
 void TutorialScene::EndlessStage() {
 	// playerが一定間隔進んだら新しいステージを生成する
-	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) - 400.0f) {
-		++stageLoopCount_;
-		// 新しく設置する座標を求める
-		Vector3 newPos = StageInformation::worldWallPos_;
-		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_);
-
-		auto& worldWall = worldWalls_.emplace_back(std::make_unique<WorldWall>());
-		worldWall->Init();
-		worldWall->GetTransform()->SetTranslaion(newPos);
-		// 水草
-		auto& waterWeed = waterWeeds_.emplace_back(std::make_unique<Waterweed>());
-		waterWeed->Init();
-		waterWeed->SetWorldWallPos(newPos);
-		// 地面
-		auto& ground = grounds_.emplace_back(std::make_unique<Ground>());
-		ground->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
-		// 水面
-		auto& waterSpace = waterSpaces_.emplace_back(std::make_unique<WaterSpace>());
-		waterSpace->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-		waterSpace->SetTranslate({ newPos.x, 0.0f, 0.0f });
+	if (player_->GetWorldTranslation().x < 3000.0f) {
+		return;
 	}
 
-	// playerが一定間隔進んだら古いステージを削除する
-	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageDeleteCount_ + 1)) + 120.0f) {
-		++stageDeleteCount_;
-		worldWalls_.pop_front();
-		waterWeeds_.pop_front();
-		grounds_.pop_front();
-		waterSpaces_.pop_front();
+	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) + 200.0f) {
+		++stageLoopCount_;
+		size_t index = static_cast<size_t>(nowStageIndex_);
+		// 新しく設置する座標を求める
+		Vector3 newPos = StageInformation::worldWallPos_;
+		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1);
+
+		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
+		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
+		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+
+		nowStageIndex_ = !nowStageIndex_;
 	}
 }
 
@@ -255,7 +245,6 @@ void TutorialScene::EndlessStage() {
 #ifdef _DEBUG
 void TutorialScene::Debug_Gui() {
 	ImGui::Begin("TutorialScene");
-	ImGui::Text("worldWallsCount: %d", (int)worldWalls_.size());
 	// カメラ
 	{
 		ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);

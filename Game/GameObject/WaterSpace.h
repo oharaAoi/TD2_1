@@ -42,6 +42,8 @@ public:
     const std::vector<Vector3>& GetWorldTopFaceList() { return worldTopFaceList_; }
     void SetTranslate(const Vector3& translate){ transform_->SetTranslaion(translate); }
 
+    const Vector3 GetWorldPos() const;
+
 private:
 
     /*ComPtr<ID3D12Resource> waveParameterBuffer_;

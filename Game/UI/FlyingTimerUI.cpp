@@ -129,7 +129,7 @@ Vector2 FlyingTimerUI::CalculationSpriteLT(float value) {
 	} else if (value == 8) {
 		return { rangeSize_.x, rangeSize_.y * 2.0f };
 	} else if (value == 9) {
-		return { rangeSize_.x * 3.0f, rangeSize_.y * 2.0f };
+		return { rangeSize_.x * 2.0f, rangeSize_.y * 2.0f };
 	} else {
 		return { 0.0f, rangeSize_.y * 3.0f };
 	}
