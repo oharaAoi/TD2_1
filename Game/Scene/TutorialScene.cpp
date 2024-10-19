@@ -4,6 +4,9 @@ TutorialScene::TutorialScene() {}
 TutorialScene::~TutorialScene() {}
 
 void TutorialScene::Finalize() {
+	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
+		waterSpace->Finalize();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

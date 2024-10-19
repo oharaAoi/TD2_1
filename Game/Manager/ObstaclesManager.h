@@ -95,6 +95,9 @@ private:
 
 #endif // _DEBUG
 
+	void SetImportLevel(uint32_t num) { importLevel_ = num; }
+	const uint32_t GetImportLevel() const { return importLevel_; }
+
 private:
 
 	// ファイルパス
@@ -121,5 +124,8 @@ private:
 
 	// coinの数
 	uint32_t coinNum_ = 0;
+
+	std::list<BasePlacementObject*> normalDrawList_;
+	std::list<BasePlacementObject*> animationDrawList_;
 };
 
