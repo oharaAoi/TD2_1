@@ -36,6 +36,8 @@ void Player::Init(){
 	animetor_->Init();
 	animetor_->LoadAnimation(model_);
 
+	SetIsLighting(false);
+
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
 	adjustmentItem_->AddItem(groupName, "position", transform_->GetTranslation());
