@@ -191,7 +191,12 @@ void Player::Move(){
 	} else{// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
-		pressTime_ = std::clamp(pressTime_ - 0.01f * GameTimer::TimeRate(), -0.1f, 1.0f);
+		float moveSpeedRate = GetMoveSpeed() / kMaxMoveSpeed_;
+		pressTime_ = std::clamp(
+			pressTime_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
+			-0.1f * (3.0f - (2.0f * moveSpeedRate)),
+			1.0f
+		);
 
 		// SPACE押して翼の開閉
 		if(!isFacedBird_){
@@ -288,6 +293,7 @@ void Player::MoveLimit(){
 
 	// 地面に接触したら
 	if(transform_->GetTranslation().y - radius_ < GameScene::GetGroundDepth()){
+		// 移動制限
 		Vector3 translate = transform_->GetTranslation();
 		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
 		pressTime_ = 0.0f;
