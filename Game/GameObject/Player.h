@@ -47,6 +47,8 @@ public:
 	const uint32_t GetCoinNum() const{ return getCoinNum_; }
 	const bool GetIsMove() const {return isMove_;}
 	const bool GetIsSplash()const{ return isSplash_; }
+	const bool GetIsCloseWing()const{ return isCloseWing_; }
+	const float GetDropSpeed()const{ return dropSpeed_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -114,6 +116,7 @@ private:
 	bool isCloseWing_;// 飛行中に翼を閉じているかどうか
 	bool isSplash_;// 水しぶき発生フラグ
 	bool isFacedBird_;// 鳥に正面衝突したかどうか
+	bool isEnableLaunch_;// 胴体で再発射可能かどうか
 
 	// データ格納変数　----------------------------------
 

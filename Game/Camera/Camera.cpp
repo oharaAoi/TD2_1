@@ -65,6 +65,10 @@ void Camera::Update(){
 				addVec.x += moveSpeedRate * 10.0f;
 				addVec.y += pPlayer_->GetVelocity().y * 30.0f;
 
+				if(pPlayer_->GetIsCloseWing()){
+					addVec.y += pPlayer_->GetDropSpeed() * 25.0f;
+				}
+
 				// 飛行中の定位置まで回転を加算
 				transform_.rotate.x += 0.005f * GameTimer::TimeRate() * velocityRate_;
 				transform_.rotate.x = std::clamp(transform_.rotate.x, baseRotate.x, baseRotate.x + 0.15f);
