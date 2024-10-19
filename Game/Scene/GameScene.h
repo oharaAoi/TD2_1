@@ -30,6 +30,7 @@
 #include "Game/Information/GamePlayTimer.h"
 /*------ UI ------*/
 #include "Game/UI/FlyingTimerUI.h"
+#include "Game/UI/FlyingGaugeUI.h"
 
 
 class GameScene 
@@ -97,4 +98,5 @@ private:
 
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
+	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 };

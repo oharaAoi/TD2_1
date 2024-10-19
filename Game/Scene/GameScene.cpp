@@ -75,6 +75,9 @@ void GameScene::Init(){
 	flyingTimerUI_ = std::make_unique<FlyingTimerUI>();
 	flyingTimerUI_->Init();
 
+	flyingGaugeUI_ = std::make_unique<FlyingGaugeUI>();
+	flyingGaugeUI_->Init();
+
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
@@ -124,6 +127,8 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +241,7 @@ void GameScene::Update(){
 	// ↓ UIの更新
 	// -------------------------------------------------
 	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
+	flyingGaugeUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -334,6 +340,7 @@ void GameScene::Draw() const{
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	gamePlayTimer_->Draw();
 	flyingTimerUI_->Draw();
+	flyingGaugeUI_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,6 +528,7 @@ void GameScene::Debug_Gui(){
 		if (ImGui::TreeNode("UI")) {
 			ImGui::Begin("UI");
 			flyingTimerUI_->Debug_Gui();
+			flyingGaugeUI_->Debug_Gui();
 			ImGui::End();
 			ImGui::TreePop();
 		}
