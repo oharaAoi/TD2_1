@@ -356,6 +356,7 @@ void Player::EraseBody(){
 void Player::Debug_Gui(){
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
+	ImGui::DragFloat3("worldPos", &worldPos_.x, 0.1f);
 	ImGui::Separator();
 	ImGui::Text("Parameter");
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);

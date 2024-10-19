@@ -38,6 +38,7 @@ public:
 	void Draw() const override;
 
 	void CheckAddSplash();
+	void EndlessStage();
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -54,8 +55,10 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 
 	// ---------- worldobject ---------- //
-	std::unique_ptr<WorldWall> worldWall_ = nullptr;
-	std::unique_ptr<Waterweed> waterWeed_ = nullptr;
+	uint32_t stageLoopCount_ = 0;
+	uint32_t stageDeleteCount_ = 0;
+	std::list<std::unique_ptr<WorldWall>> worldWalls_;
+	std::list<std::unique_ptr<Waterweed>> waterWeeds_;
 
 	std::list<std::unique_ptr<Ground>> grounds_;
 	std::list<std::unique_ptr<WaterSpace>> waterSpaces_;

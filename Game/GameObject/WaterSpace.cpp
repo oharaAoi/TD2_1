@@ -77,6 +77,7 @@ void WaterSpace::Init(const std::string& directorPath, const std::string& fileNa
 	worldTopFaceList_.resize(topFaceList_.size());
 
 	transform_->SetScale(Vector3{ 1,1.17f,1 });
+	transform_->SetQuaternion(Quaternion::AngleAxis(-90.0f * toRadian, { 0.0f, 1.0f ,0.0f }));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

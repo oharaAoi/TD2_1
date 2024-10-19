@@ -5,9 +5,10 @@
 
 std::vector<std::vector<std::string>> StageInformation::stageInformationArray_;
 uint32_t StageInformation::nowStageNum_ = 0;
-float StageInformation::stageWidth_ = 8000.0f;
-float StageInformation::stageWidthEvery_ = 32.0f;
+float StageInformation::stageWidth_ = 16000.0f;
+float StageInformation::stageWidthEvery_ = 4000.0f;
 float StageInformation::groundDepth_ = -44.0f;
+Vector3 StageInformation::worldWallPos_ = { 0.0f, -21.0f,31.0f };
 
 StageInformation::StageInformation() {
 	stageInformationArray_.clear();

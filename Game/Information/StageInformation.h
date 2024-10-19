@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include "Engine/Math/Vector3.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -35,6 +36,7 @@ public:
 	static float stageWidth_;
 	static float stageWidthEvery_;
 	static float groundDepth_;
+	static Vector3 worldWallPos_;
 
 private:
 	std::string  kDirectoryPath_ = "./Game/Resources/GameData/StageInformation/stage";
