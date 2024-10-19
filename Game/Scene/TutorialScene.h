@@ -25,6 +25,14 @@
 /*------ UI ------*/
 #include "Game/UI/FlyingTimerUI.h"
 
+enum class Session {
+	Session_1,
+	Session_2,
+	Session_3,
+	Session_4,
+	Session_5,
+};
+
 class TutorialScene : public BaseScene {
 public:
 
@@ -65,6 +73,10 @@ private:
 	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
 	// ------------ effect ------------ //
+	std::unique_ptr<Trail> trail_ = nullptr;
 	std::list<std::unique_ptr<Splash>>splash_;
+
+	// ------------ tutorial変数 ------------ //
+	Session session_;
 };
 

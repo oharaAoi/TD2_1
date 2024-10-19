@@ -19,8 +19,6 @@ void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
 		std::filesystem::create_directories(kDirectoryPath_);
 	}
 
-	isDraw_ = true;
-
 	LoadAllFile();
 }
 
@@ -31,6 +29,8 @@ void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
 void PlacementObjectEditer::LoadAllFile() {
 	fileNames_.clear();
 	groupMap_.clear();
+
+
 	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
@@ -58,16 +58,30 @@ void PlacementObjectEditer::MergeMaps(const std::map<std::string, ObstaclesManag
 void PlacementObjectEditer::Update() {
 	Debug_Gui();
 
+	animationDrawList_.clear();
+	normalDrawList_.clear();
 	// -------------------------------------------------
 	// ↓ リスト内にある更新処理を行う
 	// -------------------------------------------------
 	for (std::list<ObstaclesManager::ObjectData>::iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
 		(*it).object_->Update();
+		// 描画のリストにアニメーションがあるかないかで設定をする
+		if ((*it).object_->IsSetAnimetor()) {
+			animationDrawList_.push_back((*it).object_.get());
+		} else {
+			normalDrawList_.push_back((*it).object_.get());
+		}
 		++it;
 	}
 
 	for (std::list<ObstaclesManager::ObjectData>::iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
 		(*it).object_->Update();
+		// 描画のリストにアニメーションがあるかないかで設定をする
+		if ((*it).object_->IsSetAnimetor()) {
+			animationDrawList_.push_back((*it).object_.get());
+		} else {
+			normalDrawList_.push_back((*it).object_.get());
+		}
 		++it;
 	}
 }
@@ -83,7 +97,7 @@ void PlacementObjectEditer::Draw() const {
 	// -------------------------------------------------
 	// ↓ リスト内にある描画処理を行う
 	// -------------------------------------------------
-	for (std::list<ObstaclesManager::ObjectData>::const_iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
+	/*for (std::list<ObstaclesManager::ObjectData>::const_iterator it = debug_BasePlacementObj_.begin(); it != debug_BasePlacementObj_.end();) {
 		(*it).object_->Draw();
 		++it;
 	}
@@ -91,6 +105,22 @@ void PlacementObjectEditer::Draw() const {
 	for (std::list<ObstaclesManager::ObjectData>::const_iterator it = inport_BasePlacementObj_.begin(); it != inport_BasePlacementObj_.end();) {
 		(*it).object_->Draw();
 		++it;
+	}*/
+
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	for (std::list<BasePlacementObject*>::const_iterator it = normalDrawList_.begin(); it != normalDrawList_.end();) {
+		if ((*it) != nullptr) {
+			(*it)->Draw();
+		}
+		++it;
+	}
+
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+	for (std::list<BasePlacementObject*>::const_iterator it = animationDrawList_.begin(); it != animationDrawList_.end();) {
+		if ((*it) != nullptr) {
+			(*it)->Draw();
+			++it;
+		}
 	}
 }
 
@@ -165,36 +195,25 @@ void PlacementObjectEditer::NewGroup_Config() {
 			newObject.object_.reset(new Rock);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::ROCK;
+			newObject.subType_ = SubAttributeType::NONE;
 			break;
 		case PlacementObjType::FISH:
 			newObject.object_.reset(new Fish);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::FISH;
+			newObject.subType_ = SubAttributeType::SMALL;
 			break;
 		case PlacementObjType::BIRD:
 			newObject.object_.reset(new Bird);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::BIRD;
-			break;
-		case PlacementObjType::ITEM:
-			newObject.object_.reset(new Item);
-			newObject.object_->Init();
-			newObject.type_ = PlacementObjType::ITEM;
+			newObject.subType_ = SubAttributeType::NONE;
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			newObject.object_.reset(new Driftwood);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::DRIFTWOOD;
-			break;
-		case PlacementObjType::WATERWEED:
-			newObject.object_.reset(new Waterweed);
-			newObject.object_->Init();
-			newObject.type_ = PlacementObjType::WATERWEED;
-			break;
-		case PlacementObjType::COIN:
-			newObject.object_.reset(new Coin);
-			newObject.object_->Init();
-			newObject.type_ = PlacementObjType::COIN;
+			newObject.subType_ = SubAttributeType::NONE;
 			break;
 		}
 	}
@@ -222,6 +241,8 @@ void PlacementObjectEditer::NewGroup_Config() {
 				ImGui::TreePop();
 			}
 			(*it).object_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+			SubTypeChange((*it).subType_);
+			(*it).object_->SetSubType((*it).subType_);
 			ImGui::TreePop();
 		}
 
@@ -293,36 +314,25 @@ void PlacementObjectEditer::Edit_Config() {
 			newObject.object_.reset(new Rock);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::ROCK;
+			newObject.subType_ = SubAttributeType::NONE;
 			break;
 		case PlacementObjType::FISH:
 			newObject.object_.reset(new Fish);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::FISH;
+			newObject.subType_ = SubAttributeType::SMALL;
 			break;
 		case PlacementObjType::BIRD:
 			newObject.object_.reset(new Bird);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::BIRD;
-			break;
-		case PlacementObjType::ITEM:
-			newObject.object_.reset(new Item);
-			newObject.object_->Init();
-			newObject.type_ = PlacementObjType::ITEM;
+			newObject.subType_ = SubAttributeType::NONE;
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			newObject.object_.reset(new Driftwood);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::DRIFTWOOD;
-			break;
-		case PlacementObjType::WATERWEED:
-			newObject.object_.reset(new Waterweed);
-			newObject.object_->Init();
-			newObject.type_ = PlacementObjType::WATERWEED;
-			break;
-		case PlacementObjType::COIN:
-			newObject.object_.reset(new Coin);
-			newObject.object_->Init();
-			newObject.type_ = PlacementObjType::COIN;
+			newObject.subType_ = SubAttributeType::NONE;
 			break;
 		}
 	}
@@ -335,7 +345,7 @@ void PlacementObjectEditer::Edit_Config() {
 		std::string name = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
 		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
 		Vector3 scale = (*it).object_->GetTransform()->GetScale();
-		(*it).object_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		(*it).object_->SetIsLighting(false);
 		if (ImGui::TreeNode(name.c_str())) {
 			if (ImGui::TreeNode("scale")) {
 				ImGui::DragFloat3("scale", &scale.x, 0.1f);
@@ -349,7 +359,10 @@ void PlacementObjectEditer::Edit_Config() {
 				ImGui::DragFloat3("translation", &translate.x, 0.1f);
 				ImGui::TreePop();
 			}
-			(*it).object_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+			SubTypeChange((*it).subType_);
+			(*it).object_->SetSubType((*it).subType_);
+
+			(*it).object_->SetIsLighting(true);
 
 			ImGui::TreePop();
 		}
@@ -406,7 +419,8 @@ void PlacementObjectEditer::Save(const std::string& fileName,
 			{"rotate", rotateJoson},
 			{"scale", scaleJson},
 			{"radius", obj.object_->GetRadius()},
-			{"objType", obj.type_}
+			{"objType", obj.type_},
+			{"subType", obj.subType_}
 		};
 		++index;
 	}
@@ -440,44 +454,26 @@ void PlacementObjectEditer::Inport() {
 		case PlacementObjType::ROCK:
 			obj.object_.reset(new Rock);
 			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			obj.type_ = PlacementObjType::ROCK;
 			break;
 		case PlacementObjType::FISH:
 			obj.object_.reset(new Fish);
 			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			obj.type_ = PlacementObjType::FISH;
 			break;
 		case PlacementObjType::BIRD:
 			obj.object_.reset(new Rock);
 			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			obj.type_ = PlacementObjType::BIRD;
-			break;
-		case PlacementObjType::ITEM:
-			obj.object_.reset(new Item);
-			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj.type_ = PlacementObjType::ITEM;
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.object_.reset(new Driftwood);
 			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			obj.type_ = PlacementObjType::DRIFTWOOD;
-			break;
-		case PlacementObjType::WATERWEED:
-			obj.object_.reset(new Waterweed);
-			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj.type_ = PlacementObjType::WATERWEED;
-			break;
-		case PlacementObjType::COIN:
-			obj.object_.reset(new Coin);
-			obj.object_->Init();
-			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
-			obj.type_ = PlacementObjType::COIN;
 			break;
 		}
 	}
@@ -495,14 +491,8 @@ std::string PlacementObjectEditer::GetObjectString(const PlacementObjType& type)
 		return std::string("FISH_");
 	case PlacementObjType::BIRD:
 		return std::string("BIRD_");
-	case PlacementObjType::ITEM:
-		return std::string("ITEM_");
 	case PlacementObjType::DRIFTWOOD:
 		return std::string("DRIFTWOOD_");
-	case PlacementObjType::WATERWEED:
-		return std::string("WATERWEED_");
-	case PlacementObjType::COIN:
-		return std::string("COIN_");
 	default:
 		return std::string("???");
 	}
@@ -520,21 +510,28 @@ void PlacementObjectEditer::NewObjectTypeSelect() {
 	if (ImGui::RadioButton("BIRD", newPopType_ == PlacementObjType::BIRD)) {
 		newPopType_ = PlacementObjType::BIRD;
 	}
-	
-	if (ImGui::RadioButton("ITEM", newPopType_ == PlacementObjType::ITEM)) {
-		newPopType_ = PlacementObjType::ITEM;
-	}
 	ImGui::SameLine();
 	if (ImGui::RadioButton("DRIFTWOOD", newPopType_ == PlacementObjType::DRIFTWOOD)) {
 		newPopType_ = PlacementObjType::DRIFTWOOD;
 	}
-	ImGui::SameLine();
-	if (ImGui::RadioButton("WATERWEED", newPopType_ == PlacementObjType::WATERWEED)) {
-		newPopType_ = PlacementObjType::WATERWEED;
+
+}
+
+void PlacementObjectEditer::SubTypeChange(SubAttributeType& subType) {
+	if (ImGui::RadioButton("NONE", subType == SubAttributeType::NONE)) {
+		subType = SubAttributeType::NONE;
 	}
 	ImGui::SameLine();
-	if (ImGui::RadioButton("COIN", newPopType_ == PlacementObjType::COIN)) {
-		newPopType_ = PlacementObjType::COIN;
+	if (ImGui::RadioButton("SMALL", subType == SubAttributeType::SMALL)) {
+		subType = SubAttributeType::SMALL;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("MIDIUM", subType == SubAttributeType::MIDIUM)) {
+		subType = SubAttributeType::MIDIUM;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("LARGE", subType == SubAttributeType::LARGE)) {
+		subType = SubAttributeType::LARGE;
 	}
 }
 

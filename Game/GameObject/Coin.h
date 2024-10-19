@@ -16,6 +16,8 @@ public:
 
 	void OnCollision([[maybe_unused]] Collider* other)override;
 
+	void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE) override;
+
 private:
 
 

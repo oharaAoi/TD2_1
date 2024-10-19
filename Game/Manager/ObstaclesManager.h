@@ -31,10 +31,11 @@ public:
 		Vector4 rotate_;
 		float radius_;
 		PlacementObjType type_;
+		SubAttributeType subType_;
 
 		LoadData(const Vector3& scale, const Vector4& rotate, const Vector3& pos,
-				 float radius, const PlacementObjType& type) {
-			scale_ = scale, rotate_ = rotate, pos_ = pos, radius_ = radius, type_ = type;
+				 float radius, const PlacementObjType& type, const SubAttributeType& subType) {
+			scale_ = scale, rotate_ = rotate, pos_ = pos, radius_ = radius, type_ = type, subType_ = subType;
 		}
 	};
 
@@ -47,6 +48,7 @@ public:
 	struct ObjectData {
 		std::unique_ptr<BasePlacementObject> object_;
 		PlacementObjType type_;
+		SubAttributeType subType_;
 	};
 
 public:
@@ -58,6 +60,8 @@ public:
 	void Init();
 	void Update();
 	void Draw() const;
+
+	void AllFileClear();
 
 	void RandomImport();
 	
@@ -114,7 +118,7 @@ private:
 	std::list<LoadData> randomImportArray_;
 
 	// 現在のレベル
-	uint32_t importLevel_;
+	uint32_t importLevel_ = 1;
 
 	// playerに関する情報
 	Vector3 playerPos_;

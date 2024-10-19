@@ -51,3 +51,6 @@ void Rock::OnCollision(Collider* other) {
 		//isActive_ = false;
 	}
 }
+
+void Rock::IndividualFromCommon(const SubAttributeType& subType) {
+}

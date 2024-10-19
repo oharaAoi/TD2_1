@@ -14,7 +14,7 @@ public:
 		TrailData(const Vector3& pos, float lifeTime) {
 			entity = std::make_unique<BaseGameObject>();
 			entity->Init();
-			entity->SetObject("skin.obj");
+			entity->SetObject("Item.obj");
 			entity->GetTransform()->SetTranslaion(pos);
 			lifeTime_ = lifeTime;
 		}

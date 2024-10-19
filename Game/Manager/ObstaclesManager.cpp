@@ -23,12 +23,17 @@ void ObstaclesManager::Init(){
 
 	RandomAddObject();
 
-	playerDrawLenght_ = 50.0f;
-	RandomImport();
-
-	playerDrawLenght_ = 400.0f;
 	playerPos_ = { 0.0f, 0.0f,0.0f };
 	prePlayerPos_ = { 0.0f, 0.0f,0.0f };
+
+	playerDrawLenght_ = 250.0f;
+	RandomImport();
+
+	playerDrawLenght_ = 450.0f;
+	RandomImport();
+
+	playerDrawLenght_ = 450.0f;
+	importLevel_ = 1;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +51,7 @@ void ObstaclesManager::Update(){
 	animationDrawList_.clear();
 	normalDrawList_.clear();
 
-	if (playerPos_.x - prePlayerPos_.x > 100.0f) {
+	if (playerPos_.x - prePlayerPos_.x > 200.0f) {
  		RandomImport();
 		prePlayerPos_ = playerPos_;
 	}
@@ -111,6 +116,10 @@ void ObstaclesManager::Draw() const {
 	}
 }
 
+void ObstaclesManager::AllFileClear() {
+	levelFileName_.clear();
+}
+
 void ObstaclesManager::RandomImport(){
 	// レベルごとでファイル名が保存がされているため、現在のレベルの配列から文字列を取得する
 	int fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
@@ -150,7 +159,7 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Rock);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
 				break;
 
 			case PlacementObjType::FISH:
@@ -158,9 +167,10 @@ void ObstaclesManager::RandomImportCreate(){
 				obj.reset(new Fish);
 				fish = dynamic_cast<Fish*>(obj.get());
 				fishSize = FISH_SIZE(RandomInt(0, (int)FISH_SIZE::kFishSizeCount - 1));
-
+				
 				fish->Init();
-				fish->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				fish->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				fish->IndividualFromCommon(it->subType_);
 				fish->SetFishSize(fishSize);
 				break;
 
@@ -168,7 +178,7 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Bird);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
 				obj->SetObbSize(obj->GetRadius());
 
 
@@ -184,7 +194,7 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Item);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
 				obj->SetObbSize(obj->GetRadius());
 				break;
 
@@ -192,21 +202,21 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Driftwood);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
 				break;
 
 			case PlacementObjType::WATERWEED:
 
 				obj.reset(new Waterweed);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
 				break;
 
 			case PlacementObjType::COIN:
 
 				obj.reset(new Coin);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
 				coinNum_++;
 				break;
 			}
@@ -240,45 +250,46 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 		auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
+
 		createPos.x += playerPos_.x + playerDrawLenght_;
 
 		switch(objData[oi].type_) {
 		case PlacementObjType::ROCK:
 			obj.reset(new Rock);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			break;
 		case PlacementObjType::FISH:
 			obj.reset(new Fish);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			break;
 		case PlacementObjType::BIRD:
 			obj.reset(new Bird);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
 			break;
 		case PlacementObjType::ITEM:
 			obj.reset(new Item);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.reset(new Driftwood);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			break;
 		case PlacementObjType::WATERWEED:
 			obj.reset(new Waterweed);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			break;
 		case PlacementObjType::COIN:
 			obj.reset(new Coin);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
 			coinNum_++;
 			break;
 		}
@@ -331,12 +342,13 @@ std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const 
 				map[topKey].level = value;
 			} else {
 				PlacementObjType objType = value["objType"];
+				SubAttributeType subType = value["subType"];
 				Vector3 position = { value["position"][0], value["position"][1], value["position"][2] };
 				float radius = value["radius"];
 				Vector4 rotate = { value["rotate"][0], value["rotate"][1], value["rotate"][2], value["rotate"][3] };
 				Vector3 scale = { value["scale"][0], value["scale"][1], value["scale"][2] };
 
-				map[topKey].loadData_.emplace_back(scale, rotate, position, radius, objType);
+				map[topKey].loadData_.emplace_back(scale, rotate, position, radius, objType, subType);
 			}
 		}
 	}
@@ -391,7 +403,8 @@ void ObstaclesManager::RandomAddObject(){
 				Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
 				Vector3(10.0f * i, depth, 0.0f),	// 位置
 				1.0f,								// 半径
-				PlacementObjType::FISH				// type
+				PlacementObjType::FISH,				// type
+				SubAttributeType::NONE
 			};
 
 			randomImportArray_.push_back(data);
@@ -423,7 +436,8 @@ void ObstaclesManager::RandomAddObject(){
 				Vector4(0.0f,0.0f,0.0f, 1.0f),		// rotate
 				Vector3(10.0f * i, height, 0.0f),	// 位置
 				6.0f,								// 半径
-				PlacementObjType::BIRD				// type
+				PlacementObjType::BIRD,				// type
+				SubAttributeType::NONE
 			};
 
 			randomImportArray_.push_back(data);
@@ -460,7 +474,9 @@ void ObstaclesManager::Debug_Gui(){
 	}
 
 	if(!fileNames_.empty()) {
-		inportFileName_ = fileNames_[debug_importLevel_];
+		if (debug_importLevel_ < fileNames_.size()) {
+			inportFileName_ = fileNames_[debug_importLevel_];
+		}
 	}
 
 	//if (ImGui::TreeNode("All")) {
