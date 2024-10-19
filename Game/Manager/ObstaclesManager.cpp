@@ -23,13 +23,16 @@ void ObstaclesManager::Init(){
 
 	RandomAddObject();
 
-	playerDrawLenght_ = 50.0f;
-	RandomImport();
-
-	playerDrawLenght_ = 400.0f;
 	playerPos_ = { 0.0f, 0.0f,0.0f };
 	prePlayerPos_ = { 0.0f, 0.0f,0.0f };
 
+	playerDrawLenght_ = 250.0f;
+	RandomImport();
+
+	playerDrawLenght_ = 450.0f;
+	RandomImport();
+
+	playerDrawLenght_ = 450.0f;
 	importLevel_ = 1;
 }
 
@@ -48,7 +51,7 @@ void ObstaclesManager::Update(){
 	animationDrawList_.clear();
 	normalDrawList_.clear();
 
-	if (playerPos_.x - prePlayerPos_.x > 100.0f) {
+	if (playerPos_.x - prePlayerPos_.x > 200.0f) {
  		RandomImport();
 		prePlayerPos_ = playerPos_;
 	}
@@ -247,6 +250,7 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 		auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
+
 		createPos.x += playerPos_.x + playerDrawLenght_;
 
 		switch(objData[oi].type_) {
