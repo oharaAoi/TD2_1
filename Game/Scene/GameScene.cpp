@@ -177,9 +177,11 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
+
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -408,6 +410,9 @@ void GameScene::Draw() const{
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	player_->Draw();
 	
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+	player_->DrawAnimetor();
+
 	/////////////////////////////////
 	// Effectの描画
 	/////////////////////////////////
