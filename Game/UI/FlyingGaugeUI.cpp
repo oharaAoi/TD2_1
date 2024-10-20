@@ -25,7 +25,6 @@ void FlyingGaugeUI::Init() {
 	// 適応
 	AdaptAdjustmentItem();
 
-	bar_->SetLeftTop({ bar_->GetTextureSize().x ,0.0f });
 	rank_->SetTextureSize({ 384.0f, 100.0f });
 	rank_->SetRectRange({ 384.0f, 100.0f });
 
@@ -40,7 +39,7 @@ void FlyingGaugeUI::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingGaugeUI::Update(float currentLength) {
-	CalculationRaito(currentLength);
+	//CalculationRaito(currentLength);
 
 	outside_->Update();
 	bar_->Update();
@@ -54,7 +53,7 @@ void FlyingGaugeUI::Update(float currentLength) {
 
 void FlyingGaugeUI::Draw() const {
 	outside_->Draw();
-	//bar_->Draw();
+	bar_->Draw();
 
 	if (static_cast<uint32_t>(nowMaxRank_) >= 1) {
 		rank_->Draw();

@@ -402,16 +402,16 @@ void GameScene::Draw() const{
 
 	
 
-	//Engine::SetPipeline(PipelineType::PrimitivePipeline);
-	//// コライダーの表示
-	//if (Collider::isColliderBoxDraw_) {
-	//	if (!isDegugCameraActive_) {
-	//		collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-	//	}
-	//	else {
-	//		collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
-	//	}
-	//}
+	Engine::SetPipeline(PipelineType::PrimitivePipeline);
+	// コライダーの表示
+	if (Collider::isColliderBoxDraw_) {
+		if (!isDegugCameraActive_) {
+			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
+		}
+		else {
+			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
+		}
+	}
 #ifdef _DEBUG
 	// editorの描画
 	placementObjectEditor_->Draw();
@@ -456,8 +456,8 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
-	//gamePlayTimer_->Draw();
-	//flyingTimerUI_->Draw();
+	gamePlayTimer_->Draw();
+	flyingTimerUI_->Draw();
 	flyingGaugeUI_->Draw();
 	playerSpeedCounter_->Draw();
 }
