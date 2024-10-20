@@ -93,18 +93,27 @@ void GameScene::Init(){
 	// -------------------------------------------------
  	camera_->SetPlayerPtr(player_.get());
 
-	//デバッグ用、モデル確認
-	debugModel_= std::make_unique<BaseGameObject>();
-	debugModel_->Init();
-	debugModel_->SetObject("Mountain.obj");
 
-	debugModel2_ = std::make_unique<BaseGameObject>();
-	debugModel2_->Init();
-	debugModel2_->SetObject("MountenTree.obj");
+	// -------------------------------------------------
+	// ↓ 背景のモデルの生成
+	// -------------------------------------------------
+	auto& mountain = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
+	mountain->Init();
+	mountain->SetObject("Mountain.obj");
 
-	debugModel3_ = std::make_unique<BaseGameObject>();
-	debugModel3_->Init();
-	debugModel3_->SetObject("MountainGrass.obj");
+	auto& tree = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
+	tree->Init();
+	tree->SetObject("MountenTree.obj");
+
+	auto& grass = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
+	grass->Init();
+	grass->SetObject("MountainGrass.obj");
+
+	auto& cloud = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
+	cloud->Init();
+	cloud->SetObject("Cloud.obj");
+	cloud->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+	cloud->SetIsLighting(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,6 +173,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
 
 }
 
@@ -211,10 +221,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
-		//デバッグ用、モデル確認
-	debugModel_->Update();
-	debugModel2_->Update();
-	debugModel3_->Update();
+
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -226,6 +233,10 @@ void GameScene::Update(){
 		waterSpaces_[oi]->Update();
 	}
 	
+	for(auto& backgroundObject : backgroundObjects_){
+		backgroundObject->Update();
+	}
+
 	/*------------- manager -------------*/
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	obstaclesManager_->Update();
@@ -310,9 +321,10 @@ void GameScene::Draw() const{
 		worldWalls_[oi]->Draw();
 		waterWeeds_[oi]->Draw();
 	}
-	debugModel_->Draw();
-	debugModel2_->Draw();
-	debugModel3_->Draw();
+
+	for(auto& backgroundObject : backgroundObjects_){
+		backgroundObject->Draw();
+	}
 
 	/////////////////////////////////
 	// 線の描画
@@ -510,7 +522,6 @@ void GameScene::CheckAddSplash(){
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
 	//ImGui::DragFloat3()
-	debugModel2_->Debug_Gui();
 	if (ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
 	}
