@@ -54,7 +54,7 @@ void FlyingGaugeUI::Update(float currentLength) {
 
 void FlyingGaugeUI::Draw() const {
 	outside_->Draw();
-	bar_->Draw();
+	//bar_->Draw();
 
 	if (static_cast<uint32_t>(nowMaxRank_) >= 1) {
 		rank_->Draw();
