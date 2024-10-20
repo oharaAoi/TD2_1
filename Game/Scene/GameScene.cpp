@@ -101,6 +101,10 @@ void GameScene::Init(){
 	mountain->Init();
 	mountain->SetObject("Mountain.obj");
 
+	debugModel4_ = std::make_unique<BaseGameObject>();
+	debugModel4_->Init();
+	debugModel4_->SetObject("Moai.obj");
+
 	auto& tree = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
 	tree->Init();
 	tree->SetObject("MountenTree.obj");
@@ -174,6 +178,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
 
 }
 
@@ -221,7 +226,10 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
+		//デバッグ用、モデル確認
+	debugModel4_->GetTransform()->SetTranslaion(debugModelPos_);
 
+	debugModel4_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -325,6 +333,8 @@ void GameScene::Draw() const{
 	for(auto& backgroundObject : backgroundObjects_){
 		backgroundObject->Draw();
 	}
+
+	debugModel4_->Draw();
 
 	/////////////////////////////////
 	// 線の描画
