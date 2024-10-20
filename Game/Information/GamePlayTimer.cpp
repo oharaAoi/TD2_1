@@ -23,9 +23,9 @@ void GamePlayTimer::Init(float limit) {
 	int digit = DegitCount(gameTimeLimit_);
 	for (int oi = 1; oi <= digit; ++oi) {
 		auto& sprite = limitTimeUI_.emplace_back(Engine::CreateSprite("number.png"));
-		sprite->SetRectRange({ 64.0f, 64.0f });
+		sprite->SetRectRange(numberSpriteSize_);
 		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (80.0f * static_cast<float>(oi)), originPos_.y });
-		sprite->SetTextureSize({ 64.0f, 64.0f });
+		sprite->SetTextureSize(numberSpriteSize_);
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimeLimit_), oi)));
 		sprite->Update();
 	}
@@ -99,26 +99,26 @@ int GamePlayTimer::IntegerCount(int value, int n) {
 }
 
 Vector2 GamePlayTimer::CalculationSpriteLT(int value) {
-	if (value == 1) {
+	if (value == 0) {
 		return { 0.0f, 0.0f };
+	} else if (value == 1) {
+		return { numberSpriteSize_.x , 0.0f };
 	} else if (value == 2) {
-		return { 64.0f, 0.0f };
+		return { numberSpriteSize_.x * 2.0f, 0.0f };
 	} else if (value == 3) {
-		return { 128.0f, 0.0f };
+		return { numberSpriteSize_.x * 3.0f, 0.0f };
 	} else if (value == 4) {
-		return { 0.0f, 64.0f };
+		return { numberSpriteSize_.x * 4.0f, 0.0f };
 	} else if (value == 5) {
-		return { 64.0f, 64.0f };
+		return { numberSpriteSize_.x * 5.0f, 0.0f };
 	} else if (value == 6) {
-		return { 128.0f, 64.0f };
+		return { numberSpriteSize_.x * 6.0f, 0.0f };
 	} else if (value == 7) {
-		return { 0.0f, 128.0f };
+		return { numberSpriteSize_.x * 7.0f, 0.0f };
 	} else if (value == 8) {
-		return { 64.0f, 128.0f };
-	} else if (value == 9) {
-		return { 128.0f, 128.0f };
+		return { numberSpriteSize_.x * 8.0f , 0.0f };
 	} else {
-		return { 0.0f, 192.0f };
+		return { numberSpriteSize_.x * 9.0f , 0.0f };
 	}
 }
 

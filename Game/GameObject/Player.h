@@ -57,6 +57,8 @@ public:
 	const float GetDropSpeed()const{ return dropSpeed_; }
 	const Quaternion& GetSlerpRotate() const { return slerpRotation_; }
 
+	const float GetTotalSpeedRatio() const { return  totalSpeedRatio; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG

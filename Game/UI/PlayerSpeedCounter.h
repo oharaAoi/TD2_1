@@ -15,7 +15,7 @@ public:
 	~PlayerSpeedCounter();
 
 	void Init();
-	void Update(float speed);
+	void Update(float speed, float raito);
 	void Draw() const;
 
 	/// <summary>
@@ -43,7 +43,7 @@ public:
 	/// 新しい桁を追加する
 	/// </summary>
 	/// <param name="array"></param>
-	void CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin);
+	//void CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin);
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -58,14 +58,19 @@ private:
 	AdjustmentItem* adjustmentItem_;
 	const std::string groupName_ = "PlayerSpeedCounterUI";
 
-	Vector2 numberSpriteSize_ = { 64.0f, 64.0f };
+	Vector2 numberSpriteSize_ = { 42.0f, 72.0f };
 	Vector2 numberOriginPos_;
+
+	Vector2 timeDrawScale_;
 
 	std::unique_ptr<Sprite> backSprite_;
 	std::unique_ptr<Sprite> taniSprite_;
+	std::unique_ptr<Sprite> needleSprite_;
 	std::vector<std::unique_ptr<Sprite>> UI_speed_;
 
 	uint32_t currentDigit_;
 	uint32_t maxDigit_;
+
+	float needleAngleMax_ = 2.12f;
 };
 
