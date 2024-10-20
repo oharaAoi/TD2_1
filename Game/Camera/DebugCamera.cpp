@@ -15,6 +15,7 @@ void DebugCamera::Finalize() {
 }
 
 void DebugCamera::Init() {
+	BaseCamera::Init();
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
 		{0 , 0, 0.0f},

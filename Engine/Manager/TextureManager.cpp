@@ -107,7 +107,7 @@ void TextureManager::LoadTextureFile(const std::string& directoryPath, const std
 	// ------------------------------------------------------------
 	// metadataを元にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = metadata.format;
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
@@ -133,7 +133,7 @@ void TextureManager::LoadTextureFile(const std::string& directoryPath, const std
 DirectX::ScratchImage TextureManager::LoadTexture(const std::string& directoryPath, const std::string& filePath) {
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertWString(directoryPath + filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
+	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_RGB, nullptr, image);
 	assert(SUCCEEDED(hr));
 
 	// ミニマップの作成
@@ -227,7 +227,7 @@ D3D12_RESOURCE_DESC TextureManager::CreateResourceDesc(const DirectX::TexMetadat
 	desc.Height = UINT(metadata.height);							// Textureの高さ
 	desc.MipLevels = UINT16(metadata.mipLevels);					// mipmapの数
 	desc.DepthOrArraySize = UINT16(metadata.arraySize);				// 奥行き　or 配列Textureの配数
-	desc.Format = metadata.format;									// TextureのFormat
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;									// TextureのFormat
 	desc.SampleDesc.Count = 1;										// サンプリングカウント
 	desc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);	// Textureの次元数
 
