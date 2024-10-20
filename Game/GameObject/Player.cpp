@@ -47,9 +47,8 @@ void Player::Init(){
 	adjustmentItem_->AddItem(groupName, "radius", radius_);
 
 	AdaptAdjustmentItem();
-	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
-	transform_->SetQuaternion(restPoseRotation_);
-	transform_->SetTranslationY(GameScene::GetGroundDepth() * 0.5f);
+	//restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
+	//transform_->SetQuaternion(restPoseRotation_);
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
@@ -66,6 +65,8 @@ void Player::Init(){
 	coinGetSe_ = std::make_unique<AudioPlayer>();
 	hitSe_->Init("./Game/Resources/Audio/test.wav");
 	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
+
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +84,7 @@ void Player::Update(){
 		Move();
 	} else {
 		velocity_ = { 0.0f,0.0f,0.0f };
-		if (Input::IsTriggerKey(DIK_SPACE)) {
+		if(Input::IsTriggerKey(DIK_SPACE)) {
 			isMove_ = true;
 		}
 	}
@@ -124,9 +125,10 @@ void Player::Update(){
 		EraseBody();
 	}
 
-	obb_.center = GetWorldTranslation();
+	obb_.center = transform_->GetTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 
+	
 	BaseGameObject::Update();
 }
 
@@ -141,7 +143,6 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
-
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
@@ -152,7 +153,7 @@ void Player::Draw() const{
 void Player::Move(){
 
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
-		moveY_t_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
+		pressTime_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
 		// transformの更新
 		UpdateTransform();
 		MoveLimit();
@@ -170,10 +171,10 @@ void Player::Move(){
 
 			// 押すと上昇、離すと沈む
 			if(Input::IsPressKey(DIK_SPACE)) {
-				moveY_t_ += addPressTime_ * GameTimer::TimeRate();
+				pressTime_ += addPressTime_ * GameTimer::TimeRate();
 
 			} else {
-				moveY_t_ -= addPressTime_ * GameTimer::TimeRate();
+				pressTime_ -= addPressTime_ * GameTimer::TimeRate();
 			}
 
 			// 一時加速、減速を徐々に元に戻す
@@ -191,8 +192,9 @@ void Player::Move(){
 
 			// 潜る
 			float t = diveTime_ / kDiveTime_;
-			Vector3 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
-			transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
+			diveVec = { 0,0,0 };
+			 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
+			//transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
 
 			// 猶予時間が0になったら通常状態へ
 			if(diveTime_ <= 0.0f){
@@ -208,8 +210,8 @@ void Player::Move(){
 
 		// 上昇を徐々に遅くする
 		float moveSpeedRate = GetMoveSpeed() / kMaxMoveSpeed_;
-		moveY_t_ = std::clamp(
-			moveY_t_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
+		pressTime_ = std::clamp(
+			pressTime_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
 			-0.1f * (3.0f - (2.0f * moveSpeedRate)),
 			1.0f
 		);
@@ -234,8 +236,8 @@ void Player::Move(){
 
 
 			// 下降ベクトルを格納する変数
-			Vector3 dropVec{};
-
+			//Vector3 dropVec{};
+			dropVec = { 0,0,0 };
 			if(!isCloseWing_){//////// 翼を広げている際 ////////
 
 				// 下降ベクトル
@@ -243,13 +245,14 @@ void Player::Move(){
 
 			} else{//////// 翼を閉じている際 ////////
 
-				moveY_t_ *= 0.5f * GameTimer::TimeRate();
+				pressTime_ *= 0.5f * GameTimer::TimeRate();
 				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
+
 			}
 
 			// 座標の更新
-			transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
+			//transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
 
 			// 水に触れたらダイブのフラグをオンにする
 			if(transform_->GetTranslation().y < 0.0f){
@@ -266,8 +269,29 @@ void Player::Move(){
 		}
 	}
 
-	// transformの更新
-	UpdateTransform();
+	// 角度を加算
+	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;
+
+	// 移動量を加算
+	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
+	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
+
+
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_+ dropVec+ diveVec);
+	
+	float newAngle = std::atan2(-(velocity_.y + dropVec.y+ diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
+	newAngle += 3.141592 ;
+	LookAtDirection(newAngle);
+	dropVec = { 0,0,0 };
+	diveVec = { 0,0,0 };
+
+
+
+
+	// プレイヤー上部の水面の座標を取得
+	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
+	aboveWaterSurfacePos->Update();
 
 	// 下降フラグの更新
 	if(isFlying_){
@@ -279,7 +303,7 @@ void Player::Move(){
 					if(isEnableLaunch_){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
-						moveY_t_ = 0.7f;
+						pressTime_ = 0.7f;
 					}
 				}
 			} else{
@@ -302,7 +326,7 @@ void Player::MoveLimit(){
 		// 移動制限
 		Vector3 translate = transform_->GetTranslation();
 		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
-		moveY_t_ = 0.0f;
+		pressTime_ = 0.0f;
 		// 減速させる
 		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.5f * GameTimer::DeltaTime();
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
@@ -315,9 +339,11 @@ void Player::MoveLimit(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::LookAtDirection(const float& angle){
-	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
-	slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	transform_->SetQuaternion(moveRotation);
+	//Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
+	//slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
+	Quaternion newRotate = newRotate.AngleAxis(angle, { 0 ,0,1 });
+
+	transform_->SetQuaternion(newRotate);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -385,6 +411,13 @@ void Player::EraseBody(){
 	bodyCount_--;
 }
 
+void Player::Rounding(Vector3& velocity){
+	if(velocity.Length() < 0.1f){
+		velocity = { 0,0,0 };
+	}
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　debug表示
@@ -392,6 +425,8 @@ void Player::EraseBody(){
 
 #ifdef _DEBUG
 void Player::Debug_Gui(){
+	
+
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
 	ImGui::DragFloat3("worldPos", &worldPos_.x, 0.1f);
@@ -400,10 +435,10 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("temporaryAcceleration_", &temporaryAcceleration_, 0.1f);
 	ImGui::DragFloat("baseSpeed_", &baseSpeed_, 0.1f);
-	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f,1.0f);
+	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f, 1.0f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
-	ImGui::Text("totalSpeedRatio=%f",totalSpeedRatio);
-	ImGui::DragFloat("addPressTime_=%f", &addPressTime_,0.001f);
+	ImGui::Text("totalSpeedRatio=%f", totalSpeedRatio);
+	ImGui::DragFloat("addPressTime_=%f", &addPressTime_, 0.001f);
 
 	ImGui::DragFloat("radius", &radius_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
@@ -493,8 +528,8 @@ void Player::OnCollision(Collider* other){
 		if(isCloseWing_){
 
 			// ある程度上から踏みつけないといけない
-			if(dropSpeed_ < gravity_ * 0.25f){
-				moveY_t_ = 1.0f;
+			if(transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f){//dropSpeed_ < gravity_ * 0.25f
+				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;
 
@@ -525,8 +560,8 @@ void Player::Move_GAME(){}
 
 void Player::UpdateTransform(){
 	// 角度を加算
-	moveY_t_ = std::clamp(moveY_t_, -1.0f, 1.0f);
-	currentAngle_ = kMaxAngle_ * moveY_t_;
+	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;
 	LookAtDirection(currentAngle_);
 
 	// 移動量を加算

@@ -57,7 +57,7 @@ void RenderTexture::Init(ID3D12Device* device, DescriptorHeap* dxHeap) {
 	// ----------------------------------------------------------------------------------
 	materialBuffer_ = CreateBufferResource(device, sizeof(TextureMaterial));
 	materialBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = { 0.4f, 0.4f, 0.4f, 1.0f };
+	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	// ----------------------------------------------------------------------------------

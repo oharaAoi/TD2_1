@@ -19,8 +19,8 @@ void Camera::Init(){
 	};
 
 	offsetVec_ = Vector3(-20.4f, 0.3f, -25.7f).Normalize();
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 6000);
 
+	
 }
 
 void Camera::Update(){
@@ -101,6 +101,11 @@ void Camera::Update(){
 		transform_.translate += dif* 0.04f * GameTimer::TimeRate();
 	}
 
+	if(followOnly){
+		transform_.translate = pPlayer_->GetTransform()->GetTranslation() + Vector3(-20.4f* follwOfsetlength, 0.3f* follwOfsetlength, -25.7f* follwOfsetlength);
+		transform_.rotate = { 0.0f, 0.91f, 0.0f };
+	}
+
 
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
 		transform_.translate = pPlayer_->GetWorldTranslation() + Vector3(3.0f, 0.0f, -15.0f);
@@ -122,6 +127,11 @@ void Camera::Debug_Gui(){
 
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
+
+	if(ImGui::Button("FollowOnly")){
+		followOnly = !followOnly;
+	}
+	ImGui::DragFloat("follwOfsetlength", &follwOfsetlength, 0.03f);
 
 	ImGui::End();
 }

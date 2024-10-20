@@ -54,4 +54,8 @@ void Waterweed::SetWorldWallPos(const Vector3& pos) {
 }
 
 void Waterweed::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	case SubAttributeType::NONE:
+		break;
+	}
 }

@@ -55,4 +55,8 @@ void Driftwood::OnCollision(Collider* other) {
 }
 
 void Driftwood::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	case SubAttributeType::NONE:
+		break;
+	}
 }

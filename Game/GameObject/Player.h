@@ -43,6 +43,8 @@ private:
 
 	void UpdateTransform();
 
+	void Rounding(Vector3 &velocity);
+
 public:
 
 	void SetHitWaterSurface(const bool& ishit){ hitWaterSurface_ = ishit; }
@@ -88,6 +90,7 @@ private:
 	float addPressTime_= 0.025f;
 	float totalSpeedRatio;//現在の速度で、0から最高速度までの割合
 
+	
 	// 移動パラメーター
 	Vector3 velocity_;
 	float baseSpeed_;// 加速しない状態での速度
@@ -107,7 +110,7 @@ private:
 	float decreaseVelocity_ = -5.0f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
-	float moveY_t_;
+	float pressTime_;
 	float currentAngle_;
 	const float kMaxAngle_ = 3.14f * 0.38f;
 
@@ -118,6 +121,8 @@ private:
 	// 着水して水に潜った際の猶予時間
 	const float kDiveTime_ = 1.0f;
 	float diveTime_ = kDiveTime_;
+	Vector3 dropVec;
+	Vector3 diveVec;
 
 	// 落下時の重力
 	float gravity_ = -2.0f;
@@ -151,6 +156,9 @@ private:
 
 	std::unique_ptr<AudioPlayer> hitSe_;
 	std::unique_ptr<AudioPlayer> coinGetSe_;
+
+	
+
 
 
 public:// アクセッサ

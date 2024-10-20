@@ -32,6 +32,7 @@
 /*------ UI ------*/
 #include "Game/UI/FlyingTimerUI.h"
 #include "Game/UI/FlyingGaugeUI.h"
+#include "Game/UI/PlayerSpeedCounter.h"
 
 // ゲームシーン内での状態分けのenum
 enum class GAME_STATE : int32_t{
@@ -117,9 +118,14 @@ private:
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
+	std::unique_ptr<PlayerSpeedCounter> playerSpeedCounter_ = nullptr;
 
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
+
+	//デバッグ用
+	std::unique_ptr<BaseGameObject> debugModel_;
+
 
 };

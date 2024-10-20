@@ -29,4 +29,7 @@ private:
 	float velocityRate_;
 	float defaultVelocity_ = 50.0f;
 	float adjustX_;
+	bool followOnly;
+	float follwOfsetlength=4;
+
 };

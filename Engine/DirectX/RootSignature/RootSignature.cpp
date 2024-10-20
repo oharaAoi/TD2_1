@@ -39,7 +39,8 @@ D3D12_STATIC_SAMPLER_DESC RootSignature::CreateSampler(D3D12_TEXTURE_ADDRESS_MOD
 	spriteStaticSampler.MaxLOD = D3D12_FLOAT32_MAX;
 	spriteStaticSampler.ShaderRegister = 0;
 	spriteStaticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
+	
+	
 	return spriteStaticSampler;
 }
 

@@ -1,5 +1,4 @@
 #include "PlayerBody.h"
-
 PlayerBody::PlayerBody(){}
 
 PlayerBody::~PlayerBody(){}
@@ -19,16 +18,33 @@ void PlayerBody::Update(){
 		// 追従
 		transform_->SetTranslaion(pTargetObject_->GetTransform()->GetTranslation() + difVec.Normalize() * spaceLength_);
 
+		angle_ = std::atan2(-difVec.y, -difVec.x);
+
+
 		// 角度を補間
 		//float difAngle = transform_->GetQuaternion().z - pTargetObject_->GetTransform()->GetQuaternion().z;
-		Quaternion slerp = Quaternion::Slerp(
+		/*Quaternion slerp = Quaternion::Slerp(
 			pTargetObject_->GetTransform()->GetQuaternion().Normalize(),
 			transform_->GetQuaternion().Normalize(),
-			0.8f).Normalize();
-		transform_->SetQuaternion(slerp);
+			0.8f).Normalize();*/
+		newRotate = newRotate.AngleAxis(angle_, { 0,0,1 });
+		//transform_->GetQuaternion().Normalize()* newRotate.Normalize();
+		transform_->SetQuaternion(newRotate);
 	}
 
 	SetIsLighting(false);
 
 	BaseGameObject::Update();
+}
+
+void PlayerBody::Debug(int num){
+#ifdef _DEBUG
+	std::string name = "torso" + std::to_string(num);
+	ImGui::Begin(name.c_str());
+	//ImGui::DragFloat("torsoAngle", &angle_, 0.1f);
+	ImGui::DragFloat("angle", &angle_, 0.01f);
+	ImGui::Text("newRotate=%f,%f,%f", newRotate.x, newRotate.y, newRotate.z);
+	Debug_Gui();
+	ImGui::End();
+#endif // DEBUG}
 }

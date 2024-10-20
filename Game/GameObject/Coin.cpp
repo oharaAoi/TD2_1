@@ -54,4 +54,8 @@ void Coin::OnCollision(Collider* other) {
 }
 
 void Coin::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	case SubAttributeType::NONE:
+		break;
+	}
 }

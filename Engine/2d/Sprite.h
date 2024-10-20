@@ -39,13 +39,13 @@ public:
 	/// <param name="rectRange">: 描画する範囲</param>
 	/// <param name="leftTop">: 左上座標</param>
 	void Update();
-	void Draw();
+	void Draw(bool isBackGround = false);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="commandList"></param>
-	void Draw(ID3D12GraphicsCommandList* commandList) const;
+	void PostDraw(ID3D12GraphicsCommandList* commandList) const;
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -76,6 +76,8 @@ public:
 	void SetCenterPos(const Vector2 pos) { transform_.translate.x = pos.x, transform_.translate.y = pos.y; }
 	void SetScale(const Vector2 scale) { transform_.scale.x = scale.x, transform_.scale.y = scale.y, transform_.scale.z = 1.0f; }
 	void SetRotate(float rotate) { transform_.rotate.z = rotate; }
+
+	void SetColor(const Vector4& color) { materialData_->color = color; };
 
 private:
 
