@@ -17,7 +17,8 @@ void Bird::Init() {
 	typeID_ = (int)ObjectType::BIRD;
 
 	BaseGameObject::Init();
-	SetObject("Bird.obj");
+	SetObject("Bird.gltf");
+	SetAnimater("./Game/Resources/Model/Bird/", "Bird.gltf", true);
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();

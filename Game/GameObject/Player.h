@@ -110,6 +110,8 @@ private:
 	// 着水して水に潜った際の猶予時間
 	const float kDiveTime_ = 1.0f;
 	float diveTime_ = kDiveTime_;
+	Vector3 dropVec;
+	Vector3 diveVec;
 
 	// 落下時の重力
 	float gravity_ = -2.0f;

@@ -7,6 +7,7 @@ public:
 	PlayerBody();
 	~PlayerBody();
 	void Update()override;
+	void Debug(int num);
 
 public:
 
@@ -19,4 +20,7 @@ private:
 
 	// 前のオブジェクトとの間にあける距離
 	float spaceLength_;
+
+	float angle_;
+	Quaternion newRotate;
 };
