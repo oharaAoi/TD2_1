@@ -195,11 +195,11 @@ void GameScene::Load(){
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankBack.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankFront.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Rank.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_icon.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankIcon.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
 
