@@ -142,9 +142,15 @@ void GameScene::Init(){
 	backgroundObjects_["wing"]->SetObject("Wing.obj");
 	backgroundObjects_["wing"]->SetIsLighting(false);
 
+	backgroundObjects_["UFO"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["UFO"]->Init();
+	backgroundObjects_["UFO"]->SetObject("MountainUFO.obj");
+
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("Item.obj");
+	debugModel_->SetObject("FishDestroy.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", true);
+	debugModel_->SetIsLighting(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,9 +183,11 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
+
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -195,13 +203,15 @@ void GameScene::Load(){
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankBack.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankFront.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Rank.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_icon.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankIcon.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
 
 
 	//デバッグ用、モデル確認
@@ -212,6 +222,9 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
+
+	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 
 
 }
@@ -221,8 +234,6 @@ void GameScene::Load(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update(){
-
-	AdjustmentItem::GetInstance()->Update();
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -265,7 +276,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	/*-------------- object -------------*/
  	player_->Update();
-	
+	debugModel_->Update();
 
 	EndlessStage();
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
@@ -296,12 +307,14 @@ void GameScene::Update(){
 
 
 #ifdef _DEBUG
-	if(!isStepFrame_) {
-		Debug_Gui();
+	if (isGuiDraw_) {
+		if (!isStepFrame_) {
+			Debug_Gui();
 
-		// editorの処理
-		placementObjectEditor_->Update();
-		obstaclesManager_->Debug_Gui();
+			// editorの処理
+			placementObjectEditor_->Update();
+			obstaclesManager_->Debug_Gui();
+		}
 	}
 #endif
 
@@ -329,7 +342,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 	flyingGaugeUI_->Update(player_->GetFlyingTime());
-	playerSpeedCounter_->Update(player_->GetMoveSpeed());
+	playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -347,6 +360,10 @@ void GameScene::Update(){
 
 	if (Input::IsTriggerKey(DIK_R)) {
 		Init();
+	}
+
+	if (Input::IsTriggerKey(DIK_P)) {
+		isGuiDraw_ = !isGuiDraw_;
 	}
 }
 
@@ -408,11 +425,17 @@ void GameScene::Draw() const{
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	player_->Draw();
 	
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+	player_->DrawAnimetor();
+
 	/////////////////////////////////
 	// Effectの描画
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+
+	debugModel_->Draw();
 
 	/////////////////////////////////
 	// 水の表示
@@ -576,62 +599,65 @@ void GameScene::CheckAddSplash(){
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
-	ImGui::Begin("GameScene");
-	//ImGui::DragFloat3()
-	if (ImGui::Button("NextScene")) {
-		SetNextScene(SceneType::Scene_Result);
-	}
+	if (isGuiDraw_) {
+		AdjustmentItem::GetInstance()->Update();
+		ImGui::Begin("GameScene");
+		debugModel_->Debug_Gui();
+		if (ImGui::Button("NextScene")) {
+			SetNextScene(SceneType::Scene_Result);
+		}
 
-	if(ImGui::Button("stop")) {
-		isPause_ = true;
-	}
-	ImGui::SameLine();
-	if(ImGui::Button("play")) {
-		isPause_ = false;
-	}
-	if(isPause_) {
+		if (ImGui::Button("stop")) {
+			isPause_ = true;
+		}
 		ImGui::SameLine();
-		if(ImGui::Button("step")) {
-			isStepFrame_ = true;
+		if (ImGui::Button("play")) {
+			isPause_ = false;
 		}
-	}
-
-	ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
-	ImGui::SameLine();
-	ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
-
-	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
-
-	{
-		ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
-		if (ImGui::TreeNode("Camera")) {
-			if (!isDegugCameraActive_) {
-				camera_->Debug_Gui();
-			} else {
-				debugCamera_->Debug_Gui();
+		if (isPause_) {
+			ImGui::SameLine();
+			if (ImGui::Button("step")) {
+				isStepFrame_ = true;
 			}
-			ImGui::TreePop();
 		}
-	}
 
-	{
-		if (ImGui::TreeNode("UI")) {
-			ImGui::Begin("UI");
-			flyingTimerUI_->Debug_Gui();
-			flyingGaugeUI_->Debug_Gui();
-			playerSpeedCounter_->Debug_Gui();
-			ImGui::End();
-			ImGui::TreePop();
-		}
-	}
+		ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
+		ImGui::SameLine();
+		ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
 
-	{
-		if (ImGui::TreeNode("Player")) {
-			player_->Debug_Gui();
-			gamePlayTimer_->Debug_Gui();
-			ImGui::TreePop();
+		ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
+
+		{
+			ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
+			if (ImGui::TreeNode("Camera")) {
+				if (!isDegugCameraActive_) {
+					camera_->Debug_Gui();
+				} else {
+					debugCamera_->Debug_Gui();
+				}
+				ImGui::TreePop();
+			}
 		}
+
+		{
+			if (ImGui::TreeNode("UI")) {
+				ImGui::Begin("UI");
+				flyingTimerUI_->Debug_Gui();
+				flyingGaugeUI_->Debug_Gui();
+				playerSpeedCounter_->Debug_Gui();
+				ImGui::End();
+				ImGui::TreePop();
+			}
+		}
+
+		{
+			if (ImGui::TreeNode("Player")) {
+				player_->Debug_Gui();
+				gamePlayTimer_->Debug_Gui();
+				ImGui::TreePop();
+			}
+		}
+		ImGui::End();
 	}
-	ImGui::End();
 }
 #endif

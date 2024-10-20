@@ -110,8 +110,8 @@ void Engine::Finalize() {
 
 #ifdef _DEBUG
 void Engine::DrawImGui() {
-	ImGui::Begin("Engine");
-	ImGui::End();
+	/*ImGui::Begin("Engine");
+	ImGui::End();*/
 }
 #endif
 

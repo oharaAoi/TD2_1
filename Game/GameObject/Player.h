@@ -6,9 +6,11 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
-#include "Game/Attachment/PlayerAnimator.h"
 #include "Engine/Audio/AudioPlayer.h"
 #include "Game/Information/FlyingTimer.h"
+#include "Game/GameObject/PlayerWings.h"
+
+class PlayerAnimator;
 
 class Player :
 	public BaseGameObject,
@@ -21,6 +23,8 @@ public:
 	void Init() override;
 	void Update() override;
 	void Draw() const override;
+
+	void DrawAnimetor() const;
 
 	void Move();
 	void MoveLimit();
@@ -53,6 +57,8 @@ public:
 	const float GetDropSpeed()const{ return dropSpeed_; }
 	const Quaternion& GetSlerpRotate() const { return slerpRotation_; }
 
+	const float GetTotalSpeedRatio() const { return  totalSpeedRatio; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG
@@ -67,6 +73,7 @@ private:
 
 	// 付属モデル---------------------------------------
 
+	std::unique_ptr<PlayerWings> wings_;
 	std::list<std::unique_ptr<PlayerBody>>followModels_;
 	const int kMinBodyCount_ = 2;
 	const int kMaxBodyCount_ = 8;
@@ -125,13 +132,13 @@ private:
 	bool hitWaterSurface_;
 	bool isMove_ = true;
 	bool isFlying_;
-	bool preFlying_; // 前フレームで飛んでいたか
-	bool isFalling_;// 下降中かどうか
-	bool isDiving_;	// 飛行後終了して水に入った瞬間を得るフラグ
-	bool isCloseWing_;// 飛行中に翼を閉じているかどうか
-	bool isSplash_;// 水しぶき発生フラグ
-	bool isFacedBird_;// 鳥に正面衝突したかどうか
-	bool isEnableLaunch_;// 胴体で再発射可能かどうか
+	bool preFlying_;		// 前フレームで飛んでいたか
+	bool isFalling_;		// 下降中かどうか
+	bool isDiving_;			// 飛行後終了して水に入った瞬間を得るフラグ
+	bool isCloseWing_;		// 飛行中に翼を閉じているかどうか
+	bool isSplash_;			// 水しぶき発生フラグ
+	bool isFacedBird_;		// 鳥に正面衝突したかどうか
+	bool isEnableLaunch_;	// 胴体で再発射可能かどうか
 
 	// データ格納変数　----------------------------------
 

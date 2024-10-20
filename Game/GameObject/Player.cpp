@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Game/Scene/GameScene.h"
+#include "Game/Attachment/PlayerAnimator.h"
 
 Player::Player(){
 	Init();
@@ -18,6 +19,7 @@ void Player::Init(){
 	BaseGameObject::Init();
 	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
+	SetIsLighting(false);
 
 	//
 	BaseGameObject* pTarget = this;
@@ -31,12 +33,11 @@ void Player::Init(){
 
 	}
 
-
 	animetor_ = std::make_unique<PlayerAnimator>();
-	animetor_->Init();
-	animetor_->LoadAnimation(model_);
+	animetor_->Init(this);
 
-	SetIsLighting(false);
+	wings_ = std::make_unique<PlayerWings>();
+	wings_->Init();
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	const char* groupName = "Player";
@@ -115,7 +116,6 @@ void Player::Update(){
 		body->Update();
 	}
 
-	animetor_->Update();
 	timer_.Update(transform_->GetTranslation().x);
 	totalSpeedRatio = GetMoveSpeed() / kMaxMoveSpeed_;
 
@@ -125,11 +125,32 @@ void Player::Update(){
 		EraseBody();
 	}
 
+	// -------------------------------------------------
+	// ↓ obbの更新
+	// -------------------------------------------------
 	obb_.center = transform_->GetTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 
+	// -------------------------------------------------
+	// ↓ 羽根の更新
+	// -------------------------------------------------
+	if (isFlying_) {
+		const PlayerBody* topBody = followModels_.begin()->get();
+		if (isFalling_ && isCloseWing_) {
+			wings_->Update(topBody->GetTranslation(), topBody->GetQuaternion(), true);
+		} else {
+			wings_->Update(topBody->GetTranslation(), topBody->GetQuaternion(), false);
+		}
+	} else {
+		wings_->NotFlying();
+	}
 	
 	BaseGameObject::Update();
+
+	// -------------------------------------------------
+	// ↓ Effectの更新
+	// -------------------------------------------------
+	animetor_->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +164,14 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
+	if (isFlying_) {
+		wings_->Draw();
+	}
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
+}
+
+void Player::DrawAnimetor() const {
+	animetor_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,8 +363,7 @@ void Player::MoveLimit(){
 void Player::LookAtDirection(const float& angle){
 	//Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
 	//slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	Quaternion newRotate = newRotate.AngleAxis(angle, { 0 ,0,1 });
-
+	Quaternion newRotate = Quaternion::AngleAxis(angle, { 0 ,0,1 });
 	transform_->SetQuaternion(newRotate);
 }
 
@@ -450,6 +477,8 @@ void Player::Debug_Gui(){
 		ImGui::Text("not Hit");
 	}
 
+	wings_->Debug_Gui();
+
 	/*if (ImGui::TreeNode("FlyingTimer")) {*/
 	timer_.Debug_Gui();
 	/*	ImGui::TreePop();
@@ -522,7 +551,7 @@ void Player::OnCollision(Collider* other){
 		if(isCloseWing_){
 
 			// ある程度上から踏みつけないといけない
-			if(transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f){//dropSpeed_ < gravity_ * 0.25f
+			if(dropSpeed_ < gravity_ * 0.25f){//dropSpeed_ < gravity_ * 0.25f//transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f
 				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;

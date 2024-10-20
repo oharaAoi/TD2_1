@@ -1,12 +1,16 @@
 {
     "PlayerSpeedCounterUI": {
         "backSprite_position": [
-            170.0,
-            520.0
+            75.0,
+            665.0
+        ],
+        "needleSprite_position": [
+            75.0,
+            665.0
         ],
         "numberoriginPos_": [
-            200.0,
-            550.0
+            71.0,
+            605.0
         ],
         "taniSprite_position": [
             220.0,

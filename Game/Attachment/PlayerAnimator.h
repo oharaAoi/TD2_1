@@ -1,8 +1,8 @@
 #pragma once
-#include <map>
+#include <memory>
 #include "Engine.h"
-#include "Engine/Assets/Skeleton.h"
-#include "Engine/Assets/Skinning.h"
+#include "Engine/GameObject/BaseGameObject.h"
+#include "Game/GameObject/Player.h"
 
 class PlayerAnimator {
 public:
@@ -10,19 +10,15 @@ public:
 	PlayerAnimator();
 	~PlayerAnimator();
 
-	void Init();
+	void Init(Player* pPlayer);
 	void Update();
-	void LoadAnimation(Model* model);
-
-	//Skinning* GetSkinning() { return skinning_.get(); }
-	const std::vector<std::unique_ptr<Skinning>>& GetSkinnings() { return skinning_; }
-
+	void Draw() const;
+	
 private:
 
-	std::unique_ptr<Skeleton> skeleton_ = nullptr;
-	std::vector<std::unique_ptr<Skinning>> skinning_;
+	Player* pPlayer_ = nullptr;
 
-	std::map<std::string, Skeleton::Joint*> joints_;
+	std::unique_ptr<BaseGameObject> playerHiSpeedEffect_;
 
 };
 

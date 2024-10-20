@@ -49,12 +49,12 @@ void SceneManager::Run() {
 		// シーン変更があるか
 		// ------------------------------------ //
 		#ifdef _DEBUG
-		ImGui::Begin("SceneManager");
+		/*ImGui::Begin("SceneManager");
 		if (ImGui::Combo("Scene", &selectSceneNum_, "Title\0Tutorial\0Game\0Result\0Test\0")) {
 			isSceneChange_ = true;
 
 		}
-		ImGui::End();
+		ImGui::End();*/
 
 		// ------------------------------------ //
 		// EffectEditerの処理
@@ -76,9 +76,9 @@ void SceneManager::Run() {
 		Engine::EndImGui();
 
 		#ifdef _DEBUG
-		if (effectSystem_->GetIsEffectEditer()) {
+		/*if (effectSystem_->GetIsEffectEditer()) {
 			effectSystem_->EndEditer();
-		}
+		}*/
 		#endif
 
 		Engine::EndFrame();

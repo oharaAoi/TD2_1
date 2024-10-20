@@ -53,3 +53,10 @@ void Item::OnCollision(Collider* other){
 	}
 }
 
+void Item::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	default:
+		break;
+	}
+}
+

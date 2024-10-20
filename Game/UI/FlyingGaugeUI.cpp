@@ -11,10 +11,10 @@ FlyingGaugeUI::~FlyingGaugeUI() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingGaugeUI::Init() {
-	outside_ = Engine::CreateSprite("UI_flyingGaugeOut.png");
-	bar_ = Engine::CreateSprite("kari_UI_bar.png");
-	rank_ = Engine::CreateSprite("kari_UI_Rank_1.png");
-	icon_ = Engine::CreateSprite("kari_UI_icon.png");
+	outside_ = Engine::CreateSprite("RankBack.png");
+	bar_ = Engine::CreateSprite("RankFront.png");
+	rank_ = Engine::CreateSprite("Rank.png");
+	icon_ = Engine::CreateSprite("RankIcon.png");
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "FlyingGaugeUI";
@@ -25,9 +25,8 @@ void FlyingGaugeUI::Init() {
 	// 適応
 	AdaptAdjustmentItem();
 
-	bar_->SetLeftTop({ bar_->GetTextureSize().x ,0.0f });
-	rank_->SetTextureSize({ 48.0f, 48.0f });
-	rank_->SetRectRange({ 48.0f, 48.0f });
+	rank_->SetTextureSize({ 384.0f, 100.0f });
+	rank_->SetRectRange({ 384.0f, 100.0f });
 
 	rankLenghtMin_ = 0.0f;
 	rankLenghtMax_ = 100.0f;
@@ -40,7 +39,7 @@ void FlyingGaugeUI::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingGaugeUI::Update(float currentLength) {
-	CalculationRaito(currentLength);
+	//CalculationRaito(currentLength);
 
 	outside_->Update();
 	bar_->Update();
@@ -53,8 +52,8 @@ void FlyingGaugeUI::Update(float currentLength) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingGaugeUI::Draw() const {
-	bar_->Draw();
 	outside_->Draw();
+	bar_->Draw();
 
 	if (static_cast<uint32_t>(nowMaxRank_) >= 1) {
 		rank_->Draw();
