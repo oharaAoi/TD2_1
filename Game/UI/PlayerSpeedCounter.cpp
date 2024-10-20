@@ -38,9 +38,10 @@ void PlayerSpeedCounter::Init() {
 }
 
 void PlayerSpeedCounter::Update(float speed, float raito) {
+	easeRatio = std::lerp(easeRatio, raito, easeT);
 	backSprite_->Update();
 	taniSprite_->Update();
-	needleSprite_->SetRotate(std::lerp(0.0f, needleAngleMax_, raito));
+	needleSprite_->SetRotate(std::lerp(0.0f, needleAngleMax_, easeRatio));
 	needleSprite_->Update();
 
 	for (int oi = 0; oi < UI_speed_.size(); ++oi) {

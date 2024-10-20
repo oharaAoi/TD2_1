@@ -72,5 +72,7 @@ private:
 	uint32_t maxDigit_;
 
 	float needleAngleMax_ = 2.12f;
+	float easeT=0.1f;
+	float easeRatio;
 };
 

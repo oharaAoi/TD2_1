@@ -199,6 +199,8 @@ void Player::Move(){
 
 		if(!isDiving_){// 着水直後ではないとき
 
+			addPressTime_ = std::lerp(maxAddPress, minAddPress, totalSpeedRatio);
+
 			// 押すと上昇、離すと沈む
 			if(Input::IsPressKey(DIK_SPACE)) {
 				pressTime_ += addPressTime_ * GameTimer::TimeRate();
@@ -294,7 +296,7 @@ void Player::Move(){
 				// 潜水速度を一定範囲に保つ
 				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
 				baseSpeed_ = kMinBaseSpeed_+10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_+ decreaseVelocity_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_+ decreaseVelocity_*3, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				diveTime_ = kDiveTime_;
 			}
 		}
