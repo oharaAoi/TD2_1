@@ -264,6 +264,20 @@ void GameScene::Load() {
 
 void GameScene::Update() {
 
+#ifdef _DEBUG
+
+	if(Input::IsTriggerKey(DIK_SPACE)){
+		if(currentState_ == GAME_STATE::TITLE){
+			currentState_ = GAME_STATE::TUTORIAL;
+		
+		} else if(currentState_ == GAME_STATE::TUTORIAL){
+			currentState_ = GAME_STATE::GAME;
+		}
+	}
+
+#endif // _DEBUG
+
+
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
