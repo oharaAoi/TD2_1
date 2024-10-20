@@ -18,6 +18,9 @@ void WorldObjects::Init() {
 		Vector3 newPos = StageInformation::worldWallPos_;
 		newPos.x += StageInformation::stageWidthEvery_ * (oi);
 
+		Vector3 newMountainPos = { 0.0f, 0.0f, 0.0f };
+		newMountainPos.x += (StageInformation::stageWidthEvery_ * 2.0f) * (oi);
+
 		worldWalls_[oi] = std::make_unique<WorldWall>();
 		worldWalls_[oi]->Init();
 		// 水草
@@ -54,7 +57,11 @@ void WorldObjects::Init() {
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
 		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
 		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
-		mountains_[oi]->GetTransform()->SetTranslationX(newPos.x);
+
+		mountains_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		trees_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		grass_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		cloud_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 	}
 }
 
@@ -126,16 +133,25 @@ void WorldObjects::LoopStage() {
 
 		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
-		mountains_[index]->GetTransform()->SetTranslaion(newPos);
 		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
 		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
-		mountains_[index]->GetTransform()->SetTranslationX(newPos.x);
-
-		trees_[index]->GetTransform()->SetTranslaion(newPos);
-		grass_[index]->GetTransform()->SetTranslaion(newPos);
-		cloud_[index]->GetTransform()->SetTranslaion(newPos);
 
 		nowStageIndex_ = !nowStageIndex_;
+	}
+
+	if (playerPos_ > ((StageInformation::stageWidthEvery_ * 2.0f) * (mountainLoopCount_ + 1)) + 400.0f) {
+		++mountainLoopCount_;
+		size_t index = static_cast<size_t>(nowMountainIndex_);
+		// 新しく設置する座標を求める
+		Vector3 newPos = {0.0f, 0.0f, 0.0f};
+		newPos.x += (StageInformation::stageWidthEvery_ * 2.0f) * (mountainLoopCount_ + 1);
+
+		mountains_[index]->GetTransform()->SetTranslaion(newPos);
+		trees_[index ]->GetTransform()->SetTranslaion(newPos);
+		grass_[index ]->GetTransform()->SetTranslaion(newPos);
+		cloud_[index ]->GetTransform()->SetTranslaion(newPos);
+
+		nowMountainIndex_ = !nowMountainIndex_;
 	}
 }
 

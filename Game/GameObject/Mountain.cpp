@@ -10,11 +10,12 @@ void Mountain::Init() {
 	BaseGameObject::Init();
 	SetObject("Mountain.obj");
 	SetIsLighting(false);
-	offset_ = { 0.0f, -11.8f, 20.0f };
 	transform_->SetTranslaion(offset_);
 }
 
 void Mountain::Update() {
+	transform_->SetTranslationY(0.6f);
+	transform_->SetTranslationZ(-2.6f);
 	BaseGameObject::Update();
 }
 

@@ -37,6 +37,8 @@ private:
 	std::unique_ptr<Ground> grounds_[kStageMax_];
 	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
+	uint32_t mountainLoopCount_ = 0;
+	bool nowMountainIndex_ = 0;
 	std::unique_ptr<BaseGameObject> trees_[kStageMax_];
 	std::unique_ptr<BaseGameObject> grass_[kStageMax_];
 	std::unique_ptr<BaseGameObject> cloud_[kStageMax_];
