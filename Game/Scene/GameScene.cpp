@@ -97,27 +97,29 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
-	auto& mountain = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
-	mountain->Init();
-	mountain->SetObject("Mountain.obj");
+	backgroundObjects_["mountain"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["mountain"]->Init();
+	backgroundObjects_["mountain"]->SetObject("Mountain.obj");
 
-	debugModel4_ = std::make_unique<BaseGameObject>();
-	debugModel4_->Init();
-	debugModel4_->SetObject("Moai.obj");
 
-	auto& tree = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
-	tree->Init();
-	tree->SetObject("MountenTree.obj");
+	backgroundObjects_["tree"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["tree"]->Init();
+	backgroundObjects_["tree"]->SetObject("MountenTree.obj");
 
-	auto& grass = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
-	grass->Init();
-	grass->SetObject("MountainGrass.obj");
+	backgroundObjects_["grass"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["grass"]->Init();
+	backgroundObjects_["grass"]->SetObject("MountainGrass.obj");
 
-	auto& cloud = backgroundObjects_.emplace_back(std::make_unique<BaseGameObject>());
-	cloud->Init();
-	cloud->SetObject("Cloud.obj");
-	cloud->SetColor({ 1.0f,1.0f,1.0f,0.5f });
-	cloud->SetIsLighting(false);
+	backgroundObjects_["cloud"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["cloud"]->Init();
+	backgroundObjects_["cloud"]->SetObject("Cloud.obj");
+	backgroundObjects_["cloud"]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+	backgroundObjects_["cloud"]->SetIsLighting(false);
+
+	backgroundObjects_["moai"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["moai"]->Init();
+	backgroundObjects_["moai"]->SetObject("Moai.obj");
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,10 +228,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
-		//デバッグ用、モデル確認
-	debugModel4_->GetTransform()->SetTranslaion(debugModelPos_);
 
-	debugModel4_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -242,7 +241,7 @@ void GameScene::Update(){
 	}
 	
 	for(auto& backgroundObject : backgroundObjects_){
-		backgroundObject->Update();
+		backgroundObject.second->Update();
 	}
 
 	/*------------- manager -------------*/
@@ -331,10 +330,9 @@ void GameScene::Draw() const{
 	}
 
 	for(auto& backgroundObject : backgroundObjects_){
-		backgroundObject->Draw();
+		backgroundObject.second->Draw();
 	}
 
-	debugModel4_->Draw();
 
 	/////////////////////////////////
 	// 線の描画

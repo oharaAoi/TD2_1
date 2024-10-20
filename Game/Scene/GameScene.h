@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine.h"
+#include <unordered_map>
 
 /*---- game object ---*/
 #include "Game/GameObject/Ground.h"
@@ -81,7 +82,7 @@ private:
 	std::unique_ptr<Ground> grounds_[kStageMax_];
 	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
-	std::list<std::unique_ptr<BaseGameObject>>backgroundObjects_;
+	std::unordered_map<std::string,std::unique_ptr<BaseGameObject>>backgroundObjects_;
 
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
@@ -103,7 +104,4 @@ private:
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 
-	//デバッグ用、モデル確認
-	Vector3 debugModelPos_;
-	std::unique_ptr<BaseGameObject>debugModel4_ = nullptr;//モアイ
 };
