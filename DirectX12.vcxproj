@@ -210,6 +210,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameObject\Rock.cpp" />
     <ClCompile Include="Game\GameObject\WaterSpace.cpp" />
     <ClCompile Include="Game\GameObject\Waterweed.cpp" />
+    <ClCompile Include="Game\GameObject\WorldObjects.cpp" />
     <ClCompile Include="Game\GameObject\WorldWall.cpp" />
     <ClCompile Include="Game\Information\FlyingTimer.cpp" />
     <ClCompile Include="Game\Information\GamePlayTimer.cpp" />
@@ -353,6 +354,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameObject\Rock.h" />
     <ClInclude Include="Game\GameObject\WaterSpace.h" />
     <ClInclude Include="Game\GameObject\Waterweed.h" />
+    <ClInclude Include="Game\GameObject\WorldObjects.h" />
     <ClInclude Include="Game\GameObject\WorldWall.h" />
     <ClInclude Include="Game\Information\FlyingTimer.h" />
     <ClInclude Include="Game\Information\GamePlayTimer.h" />
