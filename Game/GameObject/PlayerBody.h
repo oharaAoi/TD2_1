@@ -14,6 +14,9 @@ public:
 	void SetTarget(BaseGameObject* target){ pTargetObject_ = target; }
 	void SetSpace(float spaceLength){ spaceLength_ = spaceLength; }
 
+	const Vector3 GetTranslation() const { return transform_->GetTranslation(); }
+	const Quaternion GetQuaternion() const { return transform_->GetQuaternion(); }
+
 private:
 	// 追従する対象のポインタ
 	BaseGameObject* pTargetObject_ = nullptr;

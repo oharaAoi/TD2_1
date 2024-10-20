@@ -45,7 +45,7 @@ public:
 	virtual void ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 							   const Vector3& pos, const float& radius, const SubAttributeType& subType);
 
-	virtual void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE) {};
+	virtual void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE);
 
 	void SetSubType(const SubAttributeType& subType) { subType_ = subType; }
 
