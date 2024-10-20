@@ -223,6 +223,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
