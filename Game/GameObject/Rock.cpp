@@ -53,4 +53,8 @@ void Rock::OnCollision(Collider* other) {
 }
 
 void Rock::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	case SubAttributeType::NONE:
+		break;
+	}
 }

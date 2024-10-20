@@ -77,6 +77,8 @@ public:
 	void SetScale(const Vector2 scale) { transform_.scale.x = scale.x, transform_.scale.y = scale.y, transform_.scale.z = 1.0f; }
 	void SetRotate(float rotate) { transform_.rotate.z = rotate; }
 
+	void SetColor(const Vector4& color) { materialData_->color = color; };
+
 private:
 
 	// 定数バッファ
