@@ -18,7 +18,8 @@ void Rock::Init() {
 	BaseGameObject::Init();
 	SetObject("Rock.obj");
 
-	obb_.size = { 1.0f, 1.0f, 1.0f };
+	radius_ = 4.0f;
+	obb_.size = { radius_, radius_ * 2.0f, radius_ };
 	obb_.center = GetWorldTranslation();
 }
 
@@ -48,7 +49,7 @@ void Rock::OnCollision(Collider* other) {
 
 	//プレイヤーに当たった場合
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
-		//isActive_ = false;
+		isActive_ = false;
 	}
 }
 

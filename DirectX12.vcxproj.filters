@@ -522,9 +522,6 @@
     <ClCompile Include="Game\Effect\BaseParticle2D.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\WorldObjects.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Manager\AudioManager.cpp">
       <Filter>Engine\Manager</Filter>
     </ClCompile>
@@ -538,6 +535,9 @@
       <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject\PlayerBody.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\WorldObjects.cpp">
       <Filter>Game\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -971,9 +971,6 @@
     <ClInclude Include="Game\Effect\BaseParticle2D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\WorldObjects.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Manager\AudioManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
@@ -987,6 +984,9 @@
       <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameObject\PlayerBody.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\WorldObjects.h">
       <Filter>Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>

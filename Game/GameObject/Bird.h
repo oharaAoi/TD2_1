@@ -3,6 +3,7 @@
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/Lib/GameTimer.h"
 #include "Easing.h"
+#include "Engine/Math/MyRandom.h"
 
 class Bird : public BasePlacementObject {
 public:
@@ -17,7 +18,7 @@ public:
 	void OnCollision([[maybe_unused]] Collider* other)override;
 	void ApplyLoadData(
 		const Vector3& scale, const Quaternion& rotate,
-		const Vector3& pos, const float& radius, const SubAttributeType& subType
+		const Vector3& pos, const SubAttributeType& subType
 	)override;
 
 	void SetMoveDirection(const Vector3& direction){ moveDirection_ = direction; }

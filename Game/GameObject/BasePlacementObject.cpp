@@ -41,11 +41,10 @@ void BasePlacementObject::Debug_Gui() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void BasePlacementObject::ApplyLoadData(const Vector3& scale, const Quaternion& rotate, 
-										const Vector3& pos, const float& radius, const SubAttributeType& subType) {
+										const Vector3& pos, const SubAttributeType& subType) {
 	transform_->SetScale(scale);
 	transform_->SetQuaternion(rotate);
 	transform_->SetTranslaion(pos);
-	SetRadius(radius);
 	subType_ = subType;
 }
 

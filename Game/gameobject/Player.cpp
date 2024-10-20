@@ -58,7 +58,7 @@ void Player::Init(){
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
 
-	isMove_ = true;
+	isMove_ = false;
 	baseSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
 	radius_ = 2.0f;
 
@@ -95,7 +95,7 @@ void Player::Update(){
 	// 飛行フラグ更新
 	if(transform_->GetTranslation().y > 0.0f) {
 		isFlying_ = true;
-
+		
 		// 水から出た瞬間
 		if(!preFlying_) {
 			timer_.Measurement(transform_->GetTranslation().x);
@@ -582,6 +582,23 @@ void Player::OnCollision(Collider* other){
 			isFacedBird_ = true;
 			isCloseWing_ = true;
 		}
+	}
+
+	if (other->GetObjectType() == (int)ObjectType::DRIFTWOOD) {
+		// 一時減速する
+		temporaryAcceleration_ += decreaseVelocity_;
+		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+		//基礎速度の変動
+		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+		//AudioPlayer::SinglShotPlay("test.wav", 0.5f);
+
+	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
+		// 一時減速する
+		temporaryAcceleration_ += decreaseVelocity_;
+		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+		//基礎速度の変動
+		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+		//AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 	}
 }
 
