@@ -1,7 +1,11 @@
 #include "GameScene.h"
 
+/*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
+GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
 
+
+/*-------------- コンストラクタ・デストラクタ ---------------*/
 GameScene::GameScene(){}
 GameScene::~GameScene(){}
 
@@ -616,3 +620,8 @@ void GameScene::Debug_Gui(){
 	ImGui::End();
 }
 #endif
+
+
+void GameScene::Update_TITLE(){}
+void GameScene::Update_TUTORIAL(){}
+void GameScene::Update_GAME(){}

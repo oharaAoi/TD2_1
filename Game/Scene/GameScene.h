@@ -57,12 +57,17 @@ public:
 	void Debug_Gui();
 #endif 
 
+	void Update_TITLE();
+	void Update_TUTORIAL();
+	void Update_GAME();
+
 	void UpdateColliderList();
 	void PlayerWaveCollision();
 	void EndlessStage();
 
 public:
 	static float GetGroundDepth(){ return groundDepth_; }
+	static GAME_STATE GetGameState(){ return currentState_; }
 	void CheckAddSplash();
 
 private:
@@ -107,13 +112,14 @@ private:
 	// ---------- information ---------- //
 
 	std::unique_ptr<GamePlayTimer> gamePlayTimer_;
-	GAME_STATE currentState_ = GAME_STATE::TITLE;
+	static GAME_STATE currentState_;
 
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 
 	// ------------ Sprite ---------- //
+	std::unique_ptr<Sprite>titleLogo_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
 
 };

@@ -6,6 +6,7 @@
 float GameTimer::deletaTime_ = 0.0f;
 float GameTimer::fps_ = 60.0f;
 float GameTimer::timeRate_ = 0.0f;
+float GameTimer::totalTime_ = 0.0f;
 
 GameTimer::GameTimer(const uint32_t& fps) {
 	frameDuration_ = std::chrono::milliseconds(1000 / fps);
@@ -21,6 +22,7 @@ void GameTimer::CalculationFrame() {
 	
 	deletaTime_ = std::chrono::duration<float>(currentTime - preFrameTime_).count();
 	timeRate_ = deletaTime_ / kDeltaTime_;
+	totalTime_ += deletaTime_;
 	preFrameTime_ = currentTime;
 }
 

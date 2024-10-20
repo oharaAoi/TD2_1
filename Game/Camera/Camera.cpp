@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Game/Scene/GameScene.h"
 
 Camera::Camera(){
 	Init();
@@ -98,6 +99,12 @@ void Camera::Update(){
 
 		// 少し遅らせて追従
 		transform_.translate += dif* 0.04f * GameTimer::TimeRate();
+	}
+
+
+	if(GameScene::GetGameState() == GAME_STATE::TITLE){
+		transform_.translate = pPlayer_->GetWorldTranslation() + Vector3(3.0f, 0.0f, -15.0f);
+		transform_.rotate = { 0.0f,0.0f,0.0f };
 	}
 
 	BaseCamera::Update();

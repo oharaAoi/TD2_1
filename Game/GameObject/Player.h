@@ -10,6 +10,7 @@
 #include "Engine/Audio/AudioPlayer.h"
 #include "Game/Information/FlyingTimer.h"
 
+
 class Player :
 	public BaseGameObject,
 	public Collider{
@@ -34,6 +35,13 @@ public:
 	void UpdateBody();
 	void AddBody(BaseGameObject* pTarget);
 	void EraseBody();
+
+private:
+	void Move_TITLE();
+	void Move_TUTORIAL();
+	void Move_GAME();
+
+	void UpdateTransform();
 
 public:
 
@@ -99,7 +107,7 @@ private:
 	float decreaseVelocity_ = -5.0f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
-	float pressTime_;
+	float moveY_t_;
 	float currentAngle_;
 	const float kMaxAngle_ = 3.14f * 0.38f;
 

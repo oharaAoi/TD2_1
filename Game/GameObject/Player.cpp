@@ -49,11 +49,12 @@ void Player::Init(){
 	AdaptAdjustmentItem();
 	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
 	transform_->SetQuaternion(restPoseRotation_);
+	transform_->SetTranslationY(GameScene::GetGroundDepth() * 0.5f);
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
 
-	isMove_ = false;
+	isMove_ = true;
 	baseSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
 	radius_ = 2.0f;
 
@@ -150,6 +151,15 @@ void Player::Draw() const{
 
 void Player::Move(){
 
+	if(GameScene::GetGameState() == GAME_STATE::TITLE){
+		moveY_t_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
+		// transformの更新
+		UpdateTransform();
+		MoveLimit();
+		return;
+	}
+
+
 	// 前フレームの値を保存
 	prePos_ = transform_->GetTranslation();
 
@@ -160,10 +170,10 @@ void Player::Move(){
 
 			// 押すと上昇、離すと沈む
 			if(Input::IsPressKey(DIK_SPACE)) {
-				pressTime_ += addPressTime_ * GameTimer::TimeRate();
+				moveY_t_ += addPressTime_ * GameTimer::TimeRate();
 
 			} else {
-				pressTime_ -= addPressTime_ * GameTimer::TimeRate();
+				moveY_t_ -= addPressTime_ * GameTimer::TimeRate();
 			}
 
 			// 一時加速、減速を徐々に元に戻す
@@ -198,8 +208,8 @@ void Player::Move(){
 
 		// 上昇を徐々に遅くする
 		float moveSpeedRate = GetMoveSpeed() / kMaxMoveSpeed_;
-		pressTime_ = std::clamp(
-			pressTime_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
+		moveY_t_ = std::clamp(
+			moveY_t_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
 			-0.1f * (3.0f - (2.0f * moveSpeedRate)),
 			1.0f
 		);
@@ -233,7 +243,7 @@ void Player::Move(){
 
 			} else{//////// 翼を閉じている際 ////////
 
-				pressTime_ *= 0.5f * GameTimer::TimeRate();
+				moveY_t_ *= 0.5f * GameTimer::TimeRate();
 				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 			}
@@ -256,22 +266,8 @@ void Player::Move(){
 		}
 	}
 
-	// 角度を加算
-	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
-	currentAngle_ = kMaxAngle_ * pressTime_;
-	LookAtDirection(currentAngle_);
-
-	// 移動量を加算
-	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
-	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
-	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
-
-	// プレイヤー上部の水面の座標を取得
-	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
-	aboveWaterSurfacePos->Update();
-
-	// 深さを更新
-	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
+	// transformの更新
+	UpdateTransform();
 
 	// 下降フラグの更新
 	if(isFlying_){
@@ -283,7 +279,7 @@ void Player::Move(){
 					if(isEnableLaunch_){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
-						pressTime_ = 0.7f;
+						moveY_t_ = 0.7f;
 					}
 				}
 			} else{
@@ -306,7 +302,7 @@ void Player::MoveLimit(){
 		// 移動制限
 		Vector3 translate = transform_->GetTranslation();
 		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
-		pressTime_ = 0.0f;
+		moveY_t_ = 0.0f;
 		// 減速させる
 		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.5f * GameTimer::DeltaTime();
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
@@ -388,6 +384,7 @@ void Player::EraseBody(){
 	followModels_.back()->SetObject("Player_Tail.obj");
 	bodyCount_--;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　debug表示
@@ -497,7 +494,7 @@ void Player::OnCollision(Collider* other){
 
 			// ある程度上から踏みつけないといけない
 			if(dropSpeed_ < gravity_ * 0.25f){
-				pressTime_ = 1.0f;
+				moveY_t_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;
 
@@ -517,4 +514,30 @@ void Player::OnCollision(Collider* other){
 			isCloseWing_ = true;
 		}
 	}
+}
+
+
+
+
+void Player::Move_TITLE(){}
+void Player::Move_TUTORIAL(){}
+void Player::Move_GAME(){}
+
+void Player::UpdateTransform(){
+	// 角度を加算
+	moveY_t_ = std::clamp(moveY_t_, -1.0f, 1.0f);
+	currentAngle_ = kMaxAngle_ * moveY_t_;
+	LookAtDirection(currentAngle_);
+
+	// 移動量を加算
+	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
+	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
+
+	// プレイヤー上部の水面の座標を取得
+	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
+	aboveWaterSurfacePos->Update();
+
+	// 深さを更新
+	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 }
