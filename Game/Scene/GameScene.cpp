@@ -79,6 +79,9 @@ void GameScene::Init(){
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->AddCollider(player_.get());
 
+	//backgroundObjectManager_ = std::make_unique<BackgroundObjectManager>();
+	//backgroundObjectManager_->Initialize(player_.get());
+
 	// -------------------------------------------------
 	// ↓ UIの初期化
 	// -------------------------------------------------
@@ -99,6 +102,8 @@ void GameScene::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Load(){
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "white.png");
+
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player.fbx");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
@@ -139,7 +144,6 @@ void GameScene::Load(){
 	// Texture
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
-
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
@@ -243,6 +247,12 @@ void GameScene::Update(){
 	collisionManager_->CheckAllCollision();
 
 	// -------------------------------------------------
+	// ↓ 背景オブジェクトの更新
+	// -------------------------------------------------
+
+	//backgroundObjectManager_->Update();
+
+	// -------------------------------------------------
 	// ↓ 不要になった要素などの削除
 	// -------------------------------------------------
 
@@ -288,6 +298,12 @@ void GameScene::Draw() const{
 		worldWalls_[oi]->Draw();
 		waterWeeds_[oi]->Draw();
 	}
+
+	// -------------------------------------------------
+	// ↓ 背景オブジェクトの更新
+	// -------------------------------------------------
+
+	//backgroundObjectManager_->Draw();
 
 
 	/////////////////////////////////

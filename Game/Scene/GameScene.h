@@ -14,6 +14,7 @@
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Game/Manager/ObstaclesManager.h"
+#include "Game/Manager/BackgroundObjectManager.h"
 
 /*--------- lib ----------*/
 #include "Engine/Math/MyRandom.h"
@@ -81,8 +82,6 @@ private:
 	std::unique_ptr<Ground> grounds_[kStageMax_];
 	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
 
-	std::list<std::unique_ptr<BaseGameObject>>backgroundObjects_;
-
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
@@ -91,6 +90,7 @@ private:
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
+	//std::unique_ptr<BackgroundObjectManager> backgroundObjectManager_ = nullptr;
 
 	// ---------- editor ----------- //
 
