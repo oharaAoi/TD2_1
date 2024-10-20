@@ -142,6 +142,10 @@ void GameScene::Init(){
 	backgroundObjects_["wing"]->SetObject("Wing.obj");
 	backgroundObjects_["wing"]->SetIsLighting(false);
 
+	backgroundObjects_["UFO"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["UFO"]->Init();
+	backgroundObjects_["UFO"]->SetObject("MountainUFO.obj");
+
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
 	debugModel_->SetObject("FishDestroy.gltf");
@@ -218,6 +222,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 
