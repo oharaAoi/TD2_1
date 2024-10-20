@@ -97,10 +97,10 @@ void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 void Sprite::Update() {
 	materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
 
-	materialData_->uvTransform.m[0][0] = rectRange_.x / textureSize_.x;	// Xスケーリング
-	materialData_->uvTransform.m[1][1] = rectRange_.y / textureSize_.y;	// Yスケーリング
-	materialData_->uvTransform.m[3][0] = leftTop_.x / textureSize_.x;	// Xオフセット
-	materialData_->uvTransform.m[3][1] = leftTop_.y / textureSize_.y;	// Yオフセット
+	//materialData_->uvTransform.m[0][0] = rectRange_.x / textureSize_.x;	// Xスケーリング
+	//materialData_->uvTransform.m[1][1] = rectRange_.y / textureSize_.y;	// Yスケーリング
+	//materialData_->uvTransform.m[3][0] = leftTop_.x / textureSize_.x;	// Xオフセット
+	//materialData_->uvTransform.m[3][1] = leftTop_.y / textureSize_.y;	// Yオフセット
 	
 	/*float uvLeft = leftTop_.x / textureSize_.x;
 	float uvRight = (leftTop_.x + rectRange_.x) / textureSize_.x;
@@ -249,42 +249,25 @@ void Sprite::SetPivot(const Vector2& pivot) {
 
 #ifdef _DEBUG
 void Sprite::Debug_Gui() {
-	ImGui::DragFloat3("translation", &transform_.translate.x, 2.0f);
-	ImGui::DragFloat2("scale", &transform_.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("rotation", &transform_.rotate.z);
 	ImGui::DragFloat2("pivot", &pivot_.x, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat2("textureSize", &textureSize_.x, 1.0f);
 	ImGui::DragFloat2("rectRange", &rectRange_.x, 1.0f);
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 
-	Vector3 pivotOffset = {
-	textureSize_.x * pivot_.x,
-	textureSize_.y * pivot_.y,
-	0.0f
-	};
+	if (ImGui::TreeNode("transform")) {
+		ImGui::DragFloat3("translation", &transform_.translate.x, 0.1f);
+		ImGui::DragFloat2("scale", &transform_.scale.x, 0.01f);
+		ImGui::SliderAngle("rotation", &transform_.rotate.z);
+		ImGui::TreePop();
+	}
 
-	// スプライトのサイズを基に頂点を設定
-	Mesh::RectVetices rect = {
-		{-pivotOffset.x, -pivotOffset.y, 0.0f, 1.0f},
-		{textureSize_.x - pivotOffset.x, 0.0f - pivotOffset.y, 0.0f, 1.0f},
-		{0.0f - pivotOffset.x, textureSize_.y - pivotOffset.y, 0.0f , 1.0f},
-		{textureSize_.x - pivotOffset.x, textureSize_.y - pivotOffset.y , 0.0f, 1.0f},
-	};
-
-	vertexData_[0].pos = rect.leftBottom;
-	vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
-	vertexData_[1].pos = rect.leftTop;
-	vertexData_[1].texcoord = { 0.0f, 0.0f }; // 左上
-	vertexData_[2].pos = rect.rightBottom; // 右下
-	vertexData_[2].texcoord = { 1.0f, 1.0f };
-	vertexData_[3].pos = rect.rightTop;		// 右上
-	vertexData_[3].texcoord = { 1.0f, 0.0f };
-	
-	if (ImGui::TreeNode("material")) {
-		ImGui::DragFloat2("uvTranslation", &uvTransform_.translate.x, 0.1f);
-		ImGui::DragFloat2("uvScale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
+	if (ImGui::TreeNode("uv")) {
+		ImGui::DragFloat2("uvTranslation", &uvTransform_.translate.x, 0.01f);
+		ImGui::DragFloat2("uvScale", &uvTransform_.scale.x, 0.01f);
 		ImGui::SliderAngle("uvRotation", &uvTransform_.rotate.z);
 		ImGui::TreePop();
 	}
+
+
 }
 #endif

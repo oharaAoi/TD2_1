@@ -120,6 +120,6 @@ private:
 
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;
-	bool isGuiDraw_ = false;
+	bool isGuiDraw_ = true;
 
 };
