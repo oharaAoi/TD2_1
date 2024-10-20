@@ -1,0 +1,167 @@
+#include "WorldObjects.h"
+
+WorldObjects::WorldObjects() {
+}
+
+WorldObjects::~WorldObjects() {
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		waterSpaces_[oi]->Finalize();
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　初期化処理
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WorldObjects::Init() {
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		Vector3 newPos = StageInformation::worldWallPos_;
+		newPos.x += StageInformation::stageWidthEvery_ * (oi);
+
+		worldWalls_[oi] = std::make_unique<WorldWall>();
+		worldWalls_[oi]->Init();
+		// 水草
+		waterWeeds_[oi] = std::make_unique<Waterweed>();
+		waterWeeds_[oi]->Init();
+		waterWeeds_[oi]->SetWorldWallPos(StageInformation::worldWallPos_);
+		// 地面
+		grounds_[oi] = std::make_unique<Ground>();
+		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
+		// 水面
+		waterSpaces_[oi] = std::make_unique<WaterSpace>();
+		waterSpaces_[oi]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+		// 山
+		mountains_[oi] = std::make_unique<Mountain>();
+		mountains_[oi]->Init();
+		// 木
+		trees_[oi] = std::make_unique<BaseGameObject>();
+		trees_[oi]->Init();
+		trees_[oi]->SetObject("MountenTree.obj");
+		trees_[oi]->SetIsLighting(true);
+		// 草
+		grass_[oi] = std::make_unique<BaseGameObject>();
+		grass_[oi]->Init();
+		grass_[oi]->SetObject("MountainGrass.obj");
+		grass_[oi]->SetIsLighting(true);
+		//雲
+		cloud_[oi] = std::make_unique<BaseGameObject>();
+		cloud_[oi]->Init();
+		cloud_[oi]->SetObject("Cloud.obj");
+		cloud_[oi]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+		cloud_[oi]->SetIsLighting(false);
+
+		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
+		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
+		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		mountains_[oi]->GetTransform()->SetTranslationX(newPos.x);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　更新処理
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WorldObjects::Update(float playerPos) {
+	playerPos_ = playerPos;
+
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		worldWalls_[oi]	->Update();
+		waterWeeds_[oi]	->Update();
+		grounds_[oi]	->Update();
+		waterSpaces_[oi]->Update();
+		mountains_[oi]	->Update();
+		trees_[oi]		->Update();
+		grass_[oi]		->Update();
+		cloud_[oi]		->Update();
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　描画処理
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WorldObjects::Draw() const {
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+		worldWalls_[oi]->Draw();
+		waterWeeds_[oi]->Draw();
+		mountains_[oi]->Draw();
+
+		trees_[oi]->Draw();
+		grass_[oi]->Draw();
+		cloud_[oi]->Draw();
+	}
+
+	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
+	for (const std::unique_ptr<Ground>& ground : grounds_) {
+		ground->Draw();
+	}
+}
+
+void WorldObjects::DrawWater() const {
+	Engine::SetPipeline(PipelineType::NotCullingPipeline);
+	// このクラスは一番最後に描画
+	for (const std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
+		waterSpace->Draw();
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　るーぷ
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WorldObjects::LoopStage() {
+	// playerが一定間隔進んだら新しいステージを生成する
+	if (playerPos_ < 3000.0f) {
+		return;
+	}
+
+	if (playerPos_ > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) + 200.0f) {
+		++stageLoopCount_;
+		size_t index = static_cast<size_t>(nowStageIndex_);
+		// 新しく設置する座標を求める
+		Vector3 newPos = StageInformation::worldWallPos_;
+		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1);
+
+		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
+		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
+		mountains_[index]->GetTransform()->SetTranslaion(newPos);
+		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
+		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		mountains_[index]->GetTransform()->SetTranslationX(newPos.x);
+
+		trees_[index]->GetTransform()->SetTranslaion(newPos);
+		grass_[index]->GetTransform()->SetTranslaion(newPos);
+		cloud_[index]->GetTransform()->SetTranslaion(newPos);
+
+		nowStageIndex_ = !nowStageIndex_;
+	}
+}
+
+void WorldObjects::CollisionPlayerToWaterSpace(Player* player) {
+	for (auto& waterSpace : waterSpaces_) {
+
+		// デカい距離で初期化
+		float minLength = 999;
+
+		// 水面との距離を求める
+		for (size_t oi = 0; oi < waterSpace->GetWorldTopFaceList().size(); ++oi) {
+			// playerのY座標と波の面のY座標との最短の距離を求める
+			Vector3 distans = player->GetTransform()->GetTranslation() - waterSpace->GetWorldTopFaceList()[oi];
+			distans.z = 0;
+			float length = std::abs(distans.Length());
+			if (length < minLength) {
+				minLength = length;
+			}
+		}
+
+		// 距離に応じた水との接触判定
+		if (minLength < player->GetRadius()) {
+			player->SetHitWaterSurface(true);
+			break;
+		} else {
+			player->SetHitWaterSurface(false);
+		}
+	}
+}

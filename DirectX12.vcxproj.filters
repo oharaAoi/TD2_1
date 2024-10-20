@@ -459,9 +459,6 @@
     <ClCompile Include="Engine\Audio\AudioPlayer.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\PlayerBody.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\DirectX\Descriptor\DescriptorAllocator.cpp">
       <Filter>Engine\DirectX\Descriptor</Filter>
     </ClCompile>
@@ -504,9 +501,6 @@
     <ClCompile Include="Game\GameObject\Waterweed.cpp">
       <Filter>Game\GameObject\Placement</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\Mountain.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\UI\TitleUI.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
@@ -519,9 +513,6 @@
     <ClCompile Include="Game\Effect\EmissionEffect.cpp">
       <Filter>Game\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\PlayerSpeedCounter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Effect\ParticleManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -531,11 +522,23 @@
     <ClCompile Include="Game\Effect\BaseParticle2D.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\PlayerWings.cpp">
+    <ClCompile Include="Game\GameObject\WorldObjects.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Manager\AudioManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Mountain.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\PlayerWings.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayerSpeedCounter.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\PlayerBody.cpp">
+      <Filter>Game\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -905,9 +908,6 @@
     <ClInclude Include="Engine\Audio\AudioPlayer.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\PlayerBody.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\DirectX\Descriptor\DescriptorAllocator.h">
       <Filter>Engine\DirectX\Descriptor</Filter>
     </ClInclude>
@@ -950,9 +950,6 @@
     <ClInclude Include="Game\GameObject\Waterweed.h">
       <Filter>Game\GameObject\Placement</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\Mountain.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\UI\TitleUI.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
@@ -965,9 +962,6 @@
     <ClInclude Include="Game\Effect\EmissionEffect.h">
       <Filter>Game\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\PlayerSpeedCounter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Effect\ParticleManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -977,11 +971,23 @@
     <ClInclude Include="Game\Effect\BaseParticle2D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject\PlayerWings.h">
+    <ClInclude Include="Game\GameObject\WorldObjects.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Manager\AudioManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\Mountain.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\PlayerWings.h">
+      <Filter>Game\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayerSpeedCounter.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject\PlayerBody.h">
+      <Filter>Game\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
