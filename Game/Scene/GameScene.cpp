@@ -174,8 +174,8 @@ void GameScene::Init() {
 
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("JumpEffect.gltf");
-	debugModel_->SetAnimater("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf", true);
+	debugModel_->SetObject("BirdJumpEffect.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", true);
 	debugModel_->SetIsLighting(false);
 }
 
@@ -253,7 +253,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
 
 
-	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
