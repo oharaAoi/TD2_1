@@ -3,13 +3,10 @@
 #include <unordered_map>
 
 /*---- game object ---*/
-#include "Game/GameObject/Ground.h"
-#include "Game/GameObject/WaterSpace.h"
 #include "Game/GameObject/Player.h"
 #include "Game/GameObject/Fish.h"
 #include "Game/GameObject/Bird.h"
-#include "Game/GameObject/Mountain.h"
-
+#include "Game/GameObject/WorldObjects.h"
 /*------ manager,editor ------*/
 #include "Engine/ParticleSystem/EffectSystem.h"
 #include "Engine/Manager/CollisionManager.h"
@@ -27,7 +24,6 @@
 #include "Game/Camera/DebugCamera.h"
 #include "Game/Effect/Trail.h"
 #include "Game/Effect/Splash.h"
-#include "Game/GameObject/WorldWall.h"
 #include "Game/Information/StageInformation.h"
 #include  "Game/Effect/Trail.h"
 #include "Game/Information/GamePlayTimer.h"
@@ -68,9 +64,7 @@ public:
 	void Update_GAME();
 
 	void UpdateColliderList();
-	void PlayerWaveCollision();
-	void EndlessStage();
-
+	
 public:
 	static float GetGroundDepth(){ return groundDepth_; }
 	static GAME_STATE GetGameState(){ return currentState_; }
@@ -90,15 +84,7 @@ private:
 	std::list<std::unique_ptr<Splash>>splash_;
 
 	// ---------- worldobject ---------- //
-	static const uint32_t kStageMax_ = 2;
-	uint32_t stageLoopCount_ = 0;
-	bool nowStageIndex_ = 0;
-	std::unique_ptr<WorldWall> worldWalls_[kStageMax_];
-	std::unique_ptr<Waterweed> waterWeeds_[kStageMax_];
-	std::unique_ptr<Mountain> mountains_[kStageMax_];
-
-	std::unique_ptr<Ground> grounds_[kStageMax_];
-	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
+	std::unique_ptr<WorldObjects> worldObjects_;
 
 	std::unordered_map<std::string,std::unique_ptr<BaseGameObject>>backgroundObjects_;
 

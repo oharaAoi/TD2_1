@@ -2,7 +2,7 @@
 
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
-GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
+GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
 
 
 /*-------------- コンストラクタ・デストラクタ ---------------*/
@@ -10,9 +10,7 @@ GameScene::GameScene(){}
 GameScene::~GameScene(){}
 
 void GameScene::Finalize(){
-	for(std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
-		waterSpace->Finalize();
-	}
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,32 +51,9 @@ void GameScene::Init() {
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
-		Vector3 newPos = StageInformation::worldWallPos_;
-		newPos.x += StageInformation::stageWidthEvery_ * (oi);
-
-		worldWalls_[oi] = std::make_unique<WorldWall>();
-		worldWalls_[oi]->Init();
-		// 水草
-		waterWeeds_[oi] = std::make_unique<Waterweed>();
-		waterWeeds_[oi]->Init();
-		waterWeeds_[oi]->SetWorldWallPos(StageInformation::worldWallPos_);
-		// 地面
-		grounds_[oi] = std::make_unique<Ground>();
-		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
-		// 水面
-		waterSpaces_[oi] = std::make_unique<WaterSpace>();
-		waterSpaces_[oi]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-		// 山
-		mountains_[oi] = std::make_unique<Mountain>();
-		mountains_[oi]->Init();
-
-		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
-		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
-		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
-		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
-		mountains_[oi]->GetTransform()->SetTranslationX(newPos.x);
-	}
+	// worldObject
+	worldObjects_ = std::make_unique<WorldObjects>();
+	worldObjects_->Init();
 
 	// 仕切り
 	partition_ = std::make_unique<BaseGameObject>();
@@ -135,7 +110,7 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
-	backgroundObjects_["mountain"] = std::make_unique<BaseGameObject>();
+	/*backgroundObjects_["mountain"] = std::make_unique<BaseGameObject>();
 	backgroundObjects_["mountain"]->Init();
 	backgroundObjects_["mountain"]->SetObject("Mountain.obj");
 
@@ -152,7 +127,7 @@ void GameScene::Init() {
 	backgroundObjects_["cloud"]->Init();
 	backgroundObjects_["cloud"]->SetObject("Cloud.obj");
 	backgroundObjects_["cloud"]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
-	backgroundObjects_["cloud"]->SetIsLighting(false);
+	backgroundObjects_["cloud"]->SetIsLighting(false);*/
 
 	backgroundObjects_["moai"] = std::make_unique<BaseGameObject>();
 	backgroundObjects_["moai"]->Init();
@@ -323,14 +298,8 @@ void GameScene::Update() {
  	player_->Update();
 	debugModel_->Update();
 
-	EndlessStage();
-	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
-		worldWalls_[oi]->Update();
-		waterWeeds_[oi]->Update();
-		grounds_[oi]->Update();
-		waterSpaces_[oi]->Update();
-		mountains_[oi]->Update();
-	}
+	worldObjects_->LoopStage();
+	worldObjects_->Update(player_->GetWorldTranslation().x);
 
 	for(auto& backgroundObject : backgroundObjects_){
 		backgroundObject.second->Update();
@@ -393,7 +362,7 @@ void GameScene::Update() {
 	// -------------------------------------------------
 	// ↓ 当たり判定を取る
 	// -------------------------------------------------
-	PlayerWaveCollision();
+	worldObjects_->CollisionPlayerToWaterSpace(player_.get());
 	collisionManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	collisionManager_->CheckAllCollision();
 
@@ -448,12 +417,7 @@ void GameScene::Draw() const {
 	/////////////////////////////////
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
-		worldWalls_[oi]->Draw();
-		waterWeeds_[oi]->Draw();
-		mountains_[oi]->Draw();
-	}
+	worldObjects_->Draw();
 
 	if(currentState_ == GAME_STATE::TITLE){
 		partition_->Draw();
@@ -463,23 +427,14 @@ void GameScene::Draw() const {
 	// 線の描画
 	/////////////////////////////////
 
-
-	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
-	for(const std::unique_ptr<Ground>& ground : grounds_) {
-		ground->Draw();
-	}
-
 	obstaclesManager_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	for (auto& splash : splash_) {
 		splash->Draw();
 	}
 
-
-
-	Engine::SetPipeline(PipelineType::PrimitivePipeline);
-
 #ifdef _DEBUG
+	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
 	if(Collider::isColliderBoxDraw_) {
 		if(!isDegugCameraActive_) {
@@ -510,13 +465,9 @@ void GameScene::Draw() const {
 	/////////////////////////////////
 	// 水の表示
 	/////////////////////////////////
-	Engine::SetPipeline(PipelineType::NotCullingPipeline);
-	// このクラスは一番最後に描画
-	for(const std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
-		waterSpace->Draw();
-	}
-	Engine::SetPipeline(PipelineType::NormalPipeline);
+	worldObjects_->DrawWater();
 
+	Engine::SetPipeline(PipelineType::NormalPipeline);
 	for (auto& backgroundObject : backgroundObjects_) {
 		backgroundObject.second->Draw();
 	}
@@ -592,65 +543,6 @@ void GameScene::UpdateColliderList() {
 			collisionManager_->AddCollider(item.get());
 		}
 	}*/
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　波とPlayerの判定
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GameScene::PlayerWaveCollision() {
-	for (auto& waterSpace : waterSpaces_) {
-
-		// デカい距離で初期化
-		float minLength = 999;
-
-		// 水面との距離を求める
-		for (size_t oi = 0; oi < waterSpace->GetWorldTopFaceList().size(); ++oi) {
-			// playerのY座標と波の面のY座標との最短の距離を求める
-			Vector3 distans = player_->GetTransform()->GetTranslation() - waterSpace->GetWorldTopFaceList()[oi];
-			distans.z = 0;
-			float length = std::abs(distans.Length());
-			if (length < minLength) {
-				minLength = length;
-			}
-		}
-
-		// 距離に応じた水との接触判定
-		if (minLength < player_->GetRadius()) {
-			player_->SetHitWaterSurface(true);
-			break;
-		} else {
-			player_->SetHitWaterSurface(false);
-		}
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　ステージをループさせる
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-void GameScene::EndlessStage() {
-	// playerが一定間隔進んだら新しいステージを生成する
-	if(player_->GetWorldTranslation().x < 3000.0f) {
-		return;
-	}
-
-	if(player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) + 200.0f) {
-		++stageLoopCount_;
-		size_t index = static_cast<size_t>(nowStageIndex_);
-		// 新しく設置する座標を求める
-		Vector3 newPos = StageInformation::worldWallPos_;
-		newPos.x += StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1);
-
-		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
-		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
-		mountains_[index]->GetTransform()->SetTranslaion(newPos);
-		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
-		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
-		mountains_[index]->GetTransform()->SetTranslationX(newPos.x);
-
-		nowStageIndex_ = !nowStageIndex_;
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
