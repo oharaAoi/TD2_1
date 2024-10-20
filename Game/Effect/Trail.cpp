@@ -63,7 +63,7 @@ void Trail::AddTrail(const Vector3& pos, const Quaternion& rotate, bool isFlying
 
 	if (createCoolTime_ <= 0.0f) {
 		if (isFlying) {
-			useTrailName_ = "skyTrail.obj";
+			useTrailName_ = "staer.obj";
 		} else {
 			useTrailName_ = "waterTrail.obj";
 		}

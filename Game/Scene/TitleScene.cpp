@@ -26,6 +26,7 @@ void TitleScene::Update() {
 	camera_->Update();
 	Render::SetEyePos(camera_->GetWorldTranslate());
 	Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+	Render::SetViewProjection2D(camera_->GetViewMatrix2D(), camera_->GetProjectionMatrix2D());
 
 	UI_title_->Update();
 

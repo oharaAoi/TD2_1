@@ -105,4 +105,6 @@ private:
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 
+	std::unique_ptr<BaseGameObject> test_;
+
 };

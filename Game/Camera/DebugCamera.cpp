@@ -29,7 +29,6 @@ void DebugCamera::Init() {
 	// worldの生成
 	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
 	viewMatrix_ = Inverse(cameraMatrix_);
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 110000.0f);
 
 	debugCameraMode_ = true;
 

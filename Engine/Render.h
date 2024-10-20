@@ -102,6 +102,16 @@ public:
 	/// <param name="projection"></param>
 	static void SetViewProjection2D(const Matrix4x4& view, const Matrix4x4& projection);
 
+	static Matrix4x4 GetViewport2D();
+	static Matrix4x4 GetProjection2D();
+	static Matrix4x4 GetViewport3D();
+	static Matrix4x4 GetProjection3D();
+
+	static float GetNearClip();
+	static float GetNearClip2D();
+	static float GetFarClip();
+	static float GetFarClip2D();
+
 	static void SetEyePos(const Vector3& eyePos);
 
 	static const ViewProjection* GetViewProjection();
@@ -120,4 +130,9 @@ namespace {
 
 	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_ = nullptr;
 	PrimitivePipeline* primitivePipelines_ = nullptr;
+
+	float nearClip_;
+	float farClip_;
+	float nearClip2D_;
+	float farClip2D_;
 }

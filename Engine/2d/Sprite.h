@@ -39,13 +39,13 @@ public:
 	/// <param name="rectRange">: 描画する範囲</param>
 	/// <param name="leftTop">: 左上座標</param>
 	void Update();
-	void Draw();
+	void Draw(bool isBackGround = false);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="commandList"></param>
-	void Draw(ID3D12GraphicsCommandList* commandList) const;
+	void PostDraw(ID3D12GraphicsCommandList* commandList) const;
 
 #ifdef _DEBUG
 	void Debug_Gui();

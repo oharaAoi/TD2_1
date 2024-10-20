@@ -15,6 +15,12 @@ void BaseCamera::Init() {
 		{0.0f, 0.0f, -10.0f}
 	};
 
+	nearClip_ = 1.0f;
+	farClip_ = 10000.0f;
+
+	nearClip2D_ = 0.0f;
+	farClip2D_ = 100.0f;
+
 	// 行列の生成
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
 	rotateMat_ = MakeRotateXYZMatrix(transform_.rotate);
@@ -23,10 +29,10 @@ void BaseCamera::Init() {
 	// worldの生成
 	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
 	viewMatrix_ = Inverse(cameraMatrix_);
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 0.5f, 600.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), Render::GetNearClip(), Render::GetFarClip());
 
 	// sprite描画のためのMatrixの初期化
-	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(kWindowWidth_), float(kWindowHeight_), 0.0f, 100.0f);
+	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(kWindowWidth_), float(kWindowHeight_), Render::GetNearClip2D(), Render::GetFarClip2D());
 	viewMatrix2D_ = MakeIdentity4x4();
 }
 
