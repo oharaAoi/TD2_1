@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/Engine.h"
 #include "Engine/Audio/Audio.h"
+#include "Engine/Manager/AudioManager.h"
 
 class AudioPlayer {
 public:
@@ -20,6 +21,8 @@ public:
 	void Pause();
 	void ReStart();
 	void Stop();
+
+	static void SinglShotPlay(const std::string& filePath, float volume);
 
 private:
 

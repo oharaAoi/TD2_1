@@ -2,10 +2,10 @@
 
 float GameScene::groundDepth_ = -44.0f;
 
-GameScene::GameScene(){}
-GameScene::~GameScene(){}
+GameScene::GameScene() {}
+GameScene::~GameScene() {}
 
-void GameScene::Finalize(){
+void GameScene::Finalize() {
 	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Finalize();
 	}
@@ -15,7 +15,7 @@ void GameScene::Finalize(){
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Init(){
+void GameScene::Init() {
 
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
@@ -30,7 +30,7 @@ void GameScene::Init(){
 	if (StageInformation::GetStageNumMax() != 0) {
 		obstaclesManager_->SetObstacles(StageInformation::GetStage());
 	}
-	
+
 	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
 	placementObjectEditor_->Init(obstaclesManager_.get());
 
@@ -104,7 +104,7 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
- 	camera_->SetPlayerPtr(player_.get());
+	camera_->SetPlayerPtr(player_.get());
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -157,7 +157,7 @@ void GameScene::Init(){
 // ↓　読み込み
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Load(){
+void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player.fbx");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
@@ -171,7 +171,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
-	
+
 	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
@@ -223,23 +223,24 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
-
 	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 
-
+	// Adio
+	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Update(){
+void GameScene::Update() {
 
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	
-	if(!isDegugCameraActive_) {
+
+	if (!isDegugCameraActive_) {
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
@@ -250,23 +251,23 @@ void GameScene::Update(){
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 		Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
 	}
-	
+
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
 	if (Input::IsTriggerKey(DIK_ESCAPE)) {
 		isPause_ = true;
 	}
-	if(isPause_) {
+	if (isPause_) {
 		isStepFrame_ = false;
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 		Debug_Gui();
 		placementObjectEditor_->Update();
 		obstaclesManager_->Update();
-	#endif
+#endif
 		// stepフラグが立っていたら1フレームだけ進める
-		if(!isStepFrame_) {
+		if (!isStepFrame_) {
 			return;
 		}
 	}
@@ -286,8 +287,8 @@ void GameScene::Update(){
 		waterSpaces_[oi]->Update();
 		mountains_[oi]->Update();
 	}
-	
-	for(auto& backgroundObject : backgroundObjects_){
+
+	for (auto& backgroundObject : backgroundObjects_) {
 		backgroundObject.second->Update();
 	}
 
@@ -297,11 +298,11 @@ void GameScene::Update(){
 
 	/*-------------- effect -------------*/
 	trail_->Update();
-	trail_->AddTrail(player_->GetTransform()->GetTranslation(),player_->GetSlerpRotate(), player_->GetIsFlying());
+	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
 	CheckAddSplash();
-	for(auto& splash : splash_){
+	for (auto& splash : splash_) {
 		splash->Update();
 	}
 
@@ -335,7 +336,7 @@ void GameScene::Update(){
 	// ↓ 不要になった要素などの削除
 	// -------------------------------------------------
 
-	splash_.remove_if([](auto& splash){return splash->GetIsEndSplash(); });
+	splash_.remove_if([](auto& splash) {return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
 	// ↓ UIの更新
@@ -371,7 +372,7 @@ void GameScene::Update(){
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Draw() const{
+void GameScene::Draw() const {
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);
@@ -387,12 +388,12 @@ void GameScene::Draw() const{
 		mountains_[oi]->Draw();
 	}
 
-	
+
 
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
-	
+
 
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
 	for (const std::unique_ptr<Ground>& ground : grounds_) {
@@ -401,19 +402,18 @@ void GameScene::Draw() const{
 
 	obstaclesManager_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for(auto& splash : splash_){
+	for (auto& splash : splash_) {
 		splash->Draw();
 	}
 
-	
+
 
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
 	if (Collider::isColliderBoxDraw_) {
 		if (!isDegugCameraActive_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-		}
-		else {
+		} else {
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
@@ -424,7 +424,7 @@ void GameScene::Draw() const{
 
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	player_->Draw();
-	
+
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	player_->DrawAnimetor();
 
@@ -447,7 +447,7 @@ void GameScene::Draw() const{
 	}
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 
-	for(auto& backgroundObject : backgroundObjects_){
+	for (auto& backgroundObject : backgroundObjects_) {
 		backgroundObject.second->Draw();
 	}
 
@@ -471,7 +471,7 @@ void GameScene::Draw() const{
 // ↓　
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::UpdateColliderList(){
+void GameScene::UpdateColliderList() {
 
 	collisionManager_->Reset();
 
@@ -521,25 +521,25 @@ void GameScene::UpdateColliderList(){
 // ↓　波とPlayerの判定
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::PlayerWaveCollision(){
-	for(auto& waterSpace : waterSpaces_){
+void GameScene::PlayerWaveCollision() {
+	for (auto& waterSpace : waterSpaces_) {
 
 		// デカい距離で初期化
 		float minLength = 999;
 
 		// 水面との距離を求める
-		for(size_t oi = 0; oi < waterSpace->GetWorldTopFaceList().size(); ++oi) {
+		for (size_t oi = 0; oi < waterSpace->GetWorldTopFaceList().size(); ++oi) {
 			// playerのY座標と波の面のY座標との最短の距離を求める
 			Vector3 distans = player_->GetTransform()->GetTranslation() - waterSpace->GetWorldTopFaceList()[oi];
 			distans.z = 0;
 			float length = std::abs(distans.Length());
-			if(length < minLength) {
+			if (length < minLength) {
 				minLength = length;
 			}
 		}
 
 		// 距離に応じた水との接触判定
-		if(minLength < player_->GetRadius()) {
+		if (minLength < player_->GetRadius()) {
 			player_->SetHitWaterSurface(true);
 			break;
 		} else {
@@ -552,7 +552,7 @@ void GameScene::PlayerWaveCollision(){
 // ↓　ステージをループさせる
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::EndlessStage(){
+void GameScene::EndlessStage() {
 	// playerが一定間隔進んだら新しいステージを生成する
 	if (player_->GetWorldTranslation().x < 3000.0f) {
 		return;
@@ -580,14 +580,14 @@ void GameScene::EndlessStage(){
 // ↓　条件を満たしたら水しぶきエフェクトを追加する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::CheckAddSplash(){
-	if(player_->GetIsSplash()){
+void GameScene::CheckAddSplash() {
+	if (player_->GetIsSplash()) {
 
 		Vector3 emitPos = player_->GetTransform()->GetTranslation();
 		emitPos.y = 0.01f;
 
 		splash_.emplace_back(
-			std::make_unique<Splash>(emitPos, 5.0f * (player_->GetMoveSpeed()/50.0f))
+			std::make_unique<Splash>(emitPos, 5.0f * (player_->GetMoveSpeed() / 50.0f))
 		);
 	}
 }
@@ -598,7 +598,7 @@ void GameScene::CheckAddSplash(){
 
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
-void GameScene::Debug_Gui(){
+void GameScene::Debug_Gui() {
 	if (isGuiDraw_) {
 		AdjustmentItem::GetInstance()->Update();
 		ImGui::Begin("GameScene");

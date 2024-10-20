@@ -64,10 +64,8 @@ void Player::Init(){
 
 	hitSe_ = std::make_unique<AudioPlayer>();
 	coinGetSe_ = std::make_unique<AudioPlayer>();
-	hitSe_->Init("./Game/Resources/Audio/test.wav");
-	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
-
-	
+	hitSe_->Init("test.wav");
+	coinGetSe_->Init("kari_coinGet.wav");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -514,6 +512,7 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+			AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 
 		} else{// 食べられなかったとき
 
@@ -528,7 +527,7 @@ void Player::OnCollision(Collider* other){
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				//基礎速度の変動
 				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				hitSe_->Play(false, true);
+				AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 
 			}
 		}
@@ -539,7 +538,7 @@ void Player::OnCollision(Collider* other){
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::COIN) {
-		coinGetSe_->Play(false, 0.5f, true);
+		AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 		getCoinNum_++;
 	}
 

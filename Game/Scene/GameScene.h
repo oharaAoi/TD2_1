@@ -15,6 +15,7 @@
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Game/Manager/ObstaclesManager.h"
+#include "Engine/Manager/AudioManager.h"
 
 /*--------- lib ----------*/
 #include "Engine/Math/MyRandom.h"
