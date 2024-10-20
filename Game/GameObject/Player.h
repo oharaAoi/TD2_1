@@ -49,6 +49,7 @@ public:
 	const bool GetIsSplash()const{ return isSplash_; }
 	const bool GetIsCloseWing()const{ return isCloseWing_; }
 	const float GetDropSpeed()const{ return dropSpeed_; }
+	const Quaternion& GetSlerpRotate() const { return slerpRotation_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
