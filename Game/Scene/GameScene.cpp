@@ -139,7 +139,9 @@ void GameScene::Init(){
 	backgroundObjects_["wing"]->SetObject("Wing.obj");
 	backgroundObjects_["wing"]->SetIsLighting(false);
 
-	
+	debugModel_ = std::make_unique<BaseGameObject>();
+	debugModel_->Init();
+	debugModel_->SetObject("Item.obj");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +233,8 @@ void GameScene::Update(){
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 		Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
 	}
-
+	debugModel_->GetTransform()->SetTranslaion(player_->GetTransform()->GetTranslation());
+	debugModel_->Update();
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
@@ -257,6 +260,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	/*-------------- object -------------*/
  	player_->Update();
+	
 
 	EndlessStage();
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
@@ -373,11 +377,13 @@ void GameScene::Draw() const{
 	}
 
 	obstaclesManager_->Draw();
-
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	for(auto& splash : splash_){
 		splash->Draw();
 	}
+
+	debugModel_->Draw();
+
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
 	if (Collider::isColliderBoxDraw_) {
@@ -394,8 +400,8 @@ void GameScene::Draw() const{
 #endif // _DEBUG
 
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
-	player_->Draw();
-
+	//player_->Draw();
+	
 	/////////////////////////////////
 	// Effectの描画
 	/////////////////////////////////

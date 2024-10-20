@@ -116,4 +116,8 @@ private:
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>sky_ = nullptr;
 
+	//デバッグ用
+	std::unique_ptr<BaseGameObject> debugModel_;
+
+
 };

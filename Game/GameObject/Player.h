@@ -35,6 +35,8 @@ public:
 	void AddBody(BaseGameObject* pTarget);
 	void EraseBody();
 
+	void Rounding(Vector3 &velocity);
+
 public:
 
 	void SetHitWaterSurface(const bool& ishit){ hitWaterSurface_ = ishit; }
@@ -145,6 +147,9 @@ private:
 
 	std::unique_ptr<AudioPlayer> hitSe_;
 	std::unique_ptr<AudioPlayer> coinGetSe_;
+
+	
+
 
 
 public:// アクセッサ

@@ -65,6 +65,8 @@ void Player::Init(){
 	coinGetSe_ = std::make_unique<AudioPlayer>();
 	hitSe_->Init("./Game/Resources/Audio/test.wav");
 	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
+
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +128,7 @@ void Player::Update(){
 	obb_.center = transform_->GetTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 
+	
 	BaseGameObject::Update();
 }
 
@@ -140,7 +143,6 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
-
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
@@ -183,7 +185,7 @@ void Player::Move(){
 			float t = diveTime_ / kDiveTime_;
 			diveVec = { 0,0,0 };
 			 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
-			transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
+			//transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
 
 			// 猶予時間が0になったら通常状態へ
 			if(diveTime_ <= 0.0f){
@@ -241,7 +243,7 @@ void Player::Move(){
 			}
 
 			// 座標の更新
-			transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
+			//transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
 
 			// 水に触れたらダイブのフラグをオンにする
 			if(transform_->GetTranslation().y < 0.0f){
@@ -265,8 +267,14 @@ void Player::Move(){
 	// 移動量を加算
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
 	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
-	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
+
+	Rounding(velocity_);
+	Rounding(dropVec);
+	Rounding(diveVec);
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_+ dropVec+ diveVec);
+	
 	float newAngle = std::atan2(-(velocity_.y + dropVec.y+ diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
+	newAngle += 3.141592 ;
 	LookAtDirection(newAngle);
 	dropVec = { 0,0,0 };
 	diveVec = { 0,0,0 };
@@ -398,6 +406,14 @@ void Player::EraseBody(){
 	followModels_.back()->SetObject("Player_Tail.obj");
 	bodyCount_--;
 }
+
+void Player::Rounding(Vector3& velocity){
+	if(velocity.Length() < 0.1f){
+		velocity = { 0,0,0 };
+	}
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　debug表示
