@@ -222,6 +222,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
+	
 	if(!isDegugCameraActive_) {
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
@@ -233,8 +234,7 @@ void GameScene::Update(){
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 		Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
 	}
-	debugModel_->GetTransform()->SetTranslaion(player_->GetTransform()->GetTranslation());
-	debugModel_->Update();
+	
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
@@ -382,7 +382,7 @@ void GameScene::Draw() const{
 		splash->Draw();
 	}
 
-	debugModel_->Draw();
+	
 
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
@@ -400,7 +400,7 @@ void GameScene::Draw() const{
 #endif // _DEBUG
 
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
-	//player_->Draw();
+	player_->Draw();
 	
 	/////////////////////////////////
 	// Effectの描画

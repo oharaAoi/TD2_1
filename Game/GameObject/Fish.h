@@ -37,5 +37,6 @@ private:
 
 	float energy_;// プレイヤーが食べた時に得るエネルギー
 	FISH_SIZE fishSize_;
+	Vector3 initSize = { 0.5f,0.5f,1 };
 
 };

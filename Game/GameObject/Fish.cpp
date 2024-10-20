@@ -20,7 +20,7 @@ void Fish::Init(){
 	SetObject("Fish.gltf");
 	SetAnimater("./Game/Resources/Model/Fish/", "Fish.gltf", true);
 
-	obb_.size = { 1.0f, 1.0f, 1.0f };
+	obb_.size = { 1.0f, 1.0f, 2.0f };
 	obb_.center = GetWorldTranslation();
 
 	IndividualFromCommon();
@@ -67,26 +67,28 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 		break;
 	case SubAttributeType::SMALL:
 		fishSize_ = FISH_SIZE::SMALL;
-		radius_ = 1.3f;
+		radius_ = 2.6f;
 		energy_ = 0.075f;
 		scale = { 2.0f,2.0f,2.0f };
 		break;
 	case SubAttributeType::MIDIUM:
 		fishSize_ = FISH_SIZE::MIDIUM;
-		radius_ = 2.0f;
+		radius_ = 4.0f;
 		energy_ = 0.1f;
 		scale = { 3.0f,3.0f,3.0f };
 		break;
 	case SubAttributeType::LARGE:
 		fishSize_ = FISH_SIZE::LARGE;
-		radius_ = 3.0f;
+		radius_ = 6.0f;
 		energy_ = 0.2f;
 		scale = { 6.0f,6.0f,6.0f };
+
 		break;
 	}
 
-	float size = radius_ * 2.0f;
-	obb_.size = { size, size, size };
+	Vector3 newSize = initSize * radius_*2;
+	//float size = radius_ * 2.0f;
+	obb_.size = newSize;
 	transform_->SetScale(scale);
 }
 

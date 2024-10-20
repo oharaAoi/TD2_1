@@ -82,6 +82,7 @@ private:
 	float addPressTime_= 0.025f;
 	float totalSpeedRatio;//現在の速度で、0から最高速度までの割合
 
+	
 	// 移動パラメーター
 	Vector3 velocity_;
 	float baseSpeed_;// 加速しない状態での速度
