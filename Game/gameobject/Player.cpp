@@ -268,9 +268,7 @@ void Player::Move(){
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
 	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
 
-	Rounding(velocity_);
-	Rounding(dropVec);
-	Rounding(diveVec);
+
 	transform_->SetTranslaion(transform_->GetTranslation() + velocity_+ dropVec+ diveVec);
 	
 	float newAngle = std::atan2(-(velocity_.y + dropVec.y+ diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
