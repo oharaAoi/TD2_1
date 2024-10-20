@@ -94,6 +94,7 @@ void GameScene::Init(){
 
 	sky_ = Engine::CreateSprite("sky.png");
 	sky_->SetLeftTop({ 0.0f,0.0f });
+	sky_->SetCenterPos({ 640.0f, 360.0f });
 	sky_->SetTextureSize({ 1280.0f,720.0f });
 	sky_->SetRectRange({ 1280.0f,720.0f });
 
@@ -101,10 +102,6 @@ void GameScene::Init(){
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
  	camera_->SetPlayerPtr(player_.get());
-
-	test_ = std::make_unique<BaseGameObject>();
-	test_->Init();
-	test_->SetObject("staer.obj");
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -255,7 +252,6 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
-	test_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -348,7 +344,7 @@ void GameScene::Update(){
 void GameScene::Draw() const{
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
-	//sky_->Draw();
+	sky_->Draw(true);
 
 
 	/////////////////////////////////
