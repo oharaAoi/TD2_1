@@ -82,6 +82,9 @@ void Player::Update(){
 		Move();
 	} else {
 		velocity_ = { 0.0f,0.0f,0.0f };
+		if (Input::IsTriggerKey(DIK_SPACE)) {
+			isMove_ = true;
+		}
 	}
 
 	// 飛行フラグ更新

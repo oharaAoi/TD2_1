@@ -198,6 +198,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameObject\Fish.cpp" />
     <ClCompile Include="Game\GameObject\Ground.cpp" />
     <ClCompile Include="Game\GameObject\Item.cpp" />
+    <ClCompile Include="Game\GameObject\Mountain.cpp" />
     <ClCompile Include="Game\GameObject\Player.cpp" />
     <ClCompile Include="Game\GameObject\PlayerBody.cpp" />
     <ClCompile Include="Game\GameObject\Rock.cpp" />
@@ -333,6 +334,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameObject\Fish.h" />
     <ClInclude Include="Game\GameObject\Ground.h" />
     <ClInclude Include="Game\GameObject\Item.h" />
+    <ClInclude Include="Game\GameObject\Mountain.h" />
     <ClInclude Include="Game\GameObject\Player.h" />
     <ClInclude Include="Game\GameObject\PlayerBody.h" />
     <ClInclude Include="Game\GameObject\Rock.h" />

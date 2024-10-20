@@ -21,6 +21,9 @@ void TextureManager::Init(std::shared_ptr<DirectXDevice> device, ID3D12GraphicsC
 
 	commandList_ = commandList;
 
+
+	LoadTextureFile("./Engine/Resources/Develop/", "white.png");
+
 	//LoadTextureFile("Materials/brick/Brick_Cracked_001_1K_BaseColor.jpg");
 	//LoadTextureFile("Materials/brick/Brick_Cracked_001_1K_Normal.jpg");
 	//LoadTextureFile("Materials/brick/Brick_Cracked_001_1K_Metallic.jpg");

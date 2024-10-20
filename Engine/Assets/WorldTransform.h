@@ -43,6 +43,10 @@ public:
 	void SetTranslaion(const Vector3& translation) { translation_ = translation; }
 	void SetQuaternion(const Quaternion& quaternion) { rotation_ = quaternion; }
 
+	void SetTranslationX(float x) { translation_.x = x; }
+	void SetTranslationY(float y) { translation_.y = y; }
+	void SetTranslationZ(float z) { translation_.z = z; }
+
 	const Vector3 GetScale() const { return scale_; }
 	const Vector3 GetTranslation() const { return translation_; }
 	const Quaternion GetQuaternion() const { return rotation_; }

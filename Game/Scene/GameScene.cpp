@@ -65,11 +65,15 @@ void GameScene::Init(){
 		// 水面
 		waterSpaces_[oi] = std::make_unique<WaterSpace>();
 		waterSpaces_[oi]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+		// 山
+		mountains_[oi] = std::make_unique<Mountain>();
+		mountains_[oi]->Init();
 
 		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
 		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
 		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		mountains_[oi]->GetTransform()->SetTranslationX(newPos.x);
 	}
 
 
@@ -145,15 +149,15 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
 
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "test2.fbx");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -238,6 +242,7 @@ void GameScene::Update(){
 		waterWeeds_[oi]->Update();
 		grounds_[oi]->Update();
 		waterSpaces_[oi]->Update();
+		mountains_[oi]->Update();
 	}
 	
 	for(auto& backgroundObject : backgroundObjects_){
@@ -250,7 +255,7 @@ void GameScene::Update(){
 
 	/*-------------- effect -------------*/
 	trail_->Update();
-	trail_->AddTrail(player_->GetTransform()->GetTranslation());
+	trail_->AddTrail(player_->GetTransform()->GetTranslation(),player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
 	CheckAddSplash();
@@ -327,6 +332,7 @@ void GameScene::Draw() const{
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		worldWalls_[oi]->Draw();
 		waterWeeds_[oi]->Draw();
+		mountains_[oi]->Draw();
 	}
 
 	for(auto& backgroundObject : backgroundObjects_){
@@ -498,8 +504,10 @@ void GameScene::EndlessStage(){
 
 		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
+		mountains_[index]->GetTransform()->SetTranslaion(newPos);
 		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
 		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		mountains_[index]->GetTransform()->SetTranslationX(newPos.x);
 
 		nowStageIndex_ = !nowStageIndex_;
 	}
