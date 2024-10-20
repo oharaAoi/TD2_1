@@ -48,3 +48,10 @@ void BasePlacementObject::ApplyLoadData(const Vector3& scale, const Quaternion& 
 	SetRadius(radius);
 	subType_ = subType;
 }
+
+void BasePlacementObject::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	default:
+		break;
+	}
+}
