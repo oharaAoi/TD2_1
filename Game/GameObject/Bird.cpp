@@ -23,6 +23,8 @@ void Bird::Init() {
 	radius_ = RandomFloat(6.0f, 10.0f);
 	obb_.size = { radius_, radius_, radius_ };
 	obb_.center = GetWorldTranslation();
+
+	SetIsLighting(false);
 }
 
 //////////////////////////////////////////////////////
@@ -67,7 +69,7 @@ void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 						 const Vector3& pos, const SubAttributeType& subType){
 	BasePlacementObject::ApplyLoadData(scale, rotate, pos, subType);
 	transform_->SetScale({ 3.0f, 3.0f, 3.0f });
-	firstPos_ = pos;
+    	firstPos_ = pos;
 }
 
 void Bird::IndividualFromCommon(const SubAttributeType& subType) {

@@ -21,6 +21,7 @@ void Rock::Init() {
 	radius_ = 4.0f;
 	obb_.size = { radius_, radius_ * 2.0f, radius_ };
 	obb_.center = GetWorldTranslation();
+	SetIsLighting(true);
 }
 
 //////////////////////////////////////////////////////

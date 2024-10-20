@@ -23,6 +23,8 @@ void Fish::Init(){
 	obb_.size = { 1.0f, 1.0f, 2.0f };
 	obb_.center = GetWorldTranslation();
 
+	SetIsLighting(false);
+
 	IndividualFromCommon();
 }
 

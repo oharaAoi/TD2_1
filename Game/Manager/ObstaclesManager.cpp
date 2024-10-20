@@ -41,20 +41,10 @@ void ObstaclesManager::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ObstaclesManager::Update(){
-	//for (const auto& pair : groupMap_) {
-	//	const std::string& key = pair.first;	// key
-	//	const Group& value = pair.second;		// volue
-
-	//	// mapに格納されているデータの位置を
-	//}
-
 	if (playerPos_.x - prePlayerPos_.x > 200.0f) {
  		RandomImport();
 		prePlayerPos_ = playerPos_;
 	}
-
-	// randomに配置されている物をリストに追加していく
-	//RandomImportCreate();
 
 	animationDrawList_.clear();
 	normalDrawList_.clear();
@@ -88,14 +78,6 @@ void ObstaclesManager::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ObstaclesManager::Draw() const {
-	/*for (std::list<std::unique_ptr<BasePlacementObject>>::const_iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
-		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
-		if (length < playerDrawLenght_) {
-			(*it)->Draw();
-		}
-		++it;
-	}*/
-
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	for (std::list<BasePlacementObject*>::const_iterator it = normalDrawList_.begin(); it != normalDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
@@ -275,8 +257,6 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			break;
 		}
-
-		obj->SetIsLighting(false);
 	}
 }
 

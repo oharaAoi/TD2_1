@@ -23,6 +23,7 @@ void Driftwood::Init() {
 	obb_.center = GetWorldTranslation();
 
 	radius_ = obb_.size.x;
+	SetIsLighting(true);
 }
 
 //////////////////////////////////////////////////////
