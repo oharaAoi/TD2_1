@@ -128,6 +128,11 @@ void GameScene::Init(){
 	backgroundObjects_["Nico"]->Init();
 	backgroundObjects_["Nico"]->SetObject("Nico.obj");
 
+	backgroundObjects_["wing"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["wing"]->Init();
+	backgroundObjects_["wing"]->SetObject("Wing.obj");
+	backgroundObjects_["wing"]->SetIsLighting(false);
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,6 +195,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
 
 }
 
