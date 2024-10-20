@@ -33,6 +33,13 @@ void Render::Init(ID3D12GraphicsCommandList* commandList, ID3D12Device* device, 
 	lightGroup_->Init(device);
 
 	primitiveDrawer_->Init(device);
+
+
+	nearClip_ = 1.0f;
+	farClip_ = 10000.0f;
+
+	nearClip2D_ = 0.0f;
+	farClip2D_ = 100.0f;
 }
 
 void Render::Update() {
@@ -62,7 +69,7 @@ void Render::DrawTriangle(Triangle* triangle) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Render::DrawSprite(Sprite* sprite) {
-	sprite->Draw(commandList_);
+	sprite->PostDraw(commandList_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +137,38 @@ void Render::SetViewProjection(const Matrix4x4& view, const Matrix4x4& projectio
 
 void Render::SetViewProjection2D(const Matrix4x4& view, const Matrix4x4& projection) {
 	viewProjection2D_->SetViewProjection(view, projection);
+}
+
+Matrix4x4 Render::GetViewport2D() {
+	return  viewProjection2D_->GetViewMatrix();
+}
+
+Matrix4x4 Render::GetViewport3D() {
+	return viewProjection_->GetViewMatrix();
+}
+
+Matrix4x4 Render::GetProjection2D() {
+	return  viewProjection2D_->GetProjectionMatrix();
+}
+
+Matrix4x4 Render::GetProjection3D() {
+	return viewProjection_->GetProjectionMatrix();
+}
+
+float Render::GetNearClip() {
+	return nearClip_;
+}
+
+float Render::GetNearClip2D() {
+	return nearClip2D_;
+}
+
+float Render::GetFarClip() {
+	return farClip_;
+}
+
+float Render::GetFarClip2D() {
+	return farClip2D_;
 }
 
 void Render::SetEyePos(const Vector3& eyePos) {

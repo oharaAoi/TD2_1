@@ -516,6 +516,9 @@
     <ClCompile Include="Game\GameObject\Mountain.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Effect\EmissionEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -939,6 +942,9 @@
       <Filter>Game\GameObject\Placement</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameObject\Mountain.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\EmissionEffect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

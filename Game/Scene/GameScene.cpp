@@ -84,7 +84,7 @@ void GameScene::Init(){
 	collisionManager_->AddCollider(player_.get());
 
 	// -------------------------------------------------
-	// ↓ UIの初期化
+	// ↓ UI・スプライトの初期化
 	// -------------------------------------------------
 	flyingTimerUI_ = std::make_unique<FlyingTimerUI>();
 	flyingTimerUI_->Init();
@@ -92,11 +92,16 @@ void GameScene::Init(){
 	flyingGaugeUI_ = std::make_unique<FlyingGaugeUI>();
 	flyingGaugeUI_->Init();
 
+	sky_ = Engine::CreateSprite("sky.png");
+	sky_->SetLeftTop({ 0.0f,0.0f });
+	sky_->SetCenterPos({ 640.0f, 360.0f });
+	sky_->SetTextureSize({ 1280.0f,720.0f });
+	sky_->SetRectRange({ 1280.0f,720.0f });
+
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
  	camera_->SetPlayerPtr(player_.get());
-
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -169,6 +174,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -182,6 +188,7 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
@@ -217,10 +224,12 @@ void GameScene::Update(){
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+		Render::SetViewProjection2D(camera_->GetViewMatrix2D(), camera_->GetProjectionMatrix2D());
 	} else {
 		debugCamera_->Update();
 		Render::SetEyePos(debugCamera_->GetWorldTranslate());
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
+		Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
 	}
 
 	// -------------------------------------------------
@@ -246,7 +255,6 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
-
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -337,6 +345,9 @@ void GameScene::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const{
+
+	Engine::SetPipeline(PipelineType::SpritePipeline);
+	sky_->Draw(true);
 
 
 	/////////////////////////////////

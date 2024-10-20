@@ -5,6 +5,7 @@
 #include "Engine/Assets/WorldTransform.h"
 #include "Enviroment.h"
 #include "Engine/Lib/GameTimer.h"
+#include "Engine/Render.h"
 
 /// <summary>
 /// BaseとなるCamera
@@ -39,6 +40,12 @@ public:
 
 	void SetTarget(WorldTransform* target) { target_ = target; }
 
+	const float GetNearClip() const { return nearClip_; }
+	const float GetFarClip() const { return farClip_; }
+
+	const float GetNearClip2D() const { return nearClip2D_; }
+	const float GetFarClip2D() const { return farClip2D_; }
+
 protected:
 
 	WorldTransform* target_;
@@ -55,6 +62,12 @@ protected:
 	// 2d
 	Matrix4x4 projectionMatrix2D_;
 	Matrix4x4 viewMatrix2D_;
+
+	float nearClip_;
+	float farClip_;
+
+	float nearClip2D_;
+	float farClip2D_;
 
 };
 

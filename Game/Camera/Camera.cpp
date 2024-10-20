@@ -18,8 +18,6 @@ void Camera::Init(){
 	};
 
 	offsetVec_ = Vector3(-20.4f, 0.3f, -25.7f).Normalize();
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth_) / float(kWindowHeight_), 1.0f, 6000);
-
 }
 
 void Camera::Update(){
