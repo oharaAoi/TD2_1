@@ -38,6 +38,11 @@ public:
 		data_->projection = projection;
 	}
 
+	const Matrix4x4 GetViewProjection() { return data_->view * data_->projection; }
+
+	const Matrix4x4 GetViewMatrix() { return data_->view; }
+	const Matrix4x4 GetProjectionMatrix() { return data_->projection; }
+
 private:
 
 	ComPtr<ID3D12Resource> cBuffer_;

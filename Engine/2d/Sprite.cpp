@@ -112,11 +112,34 @@ void Sprite::Update() {
 	vertexData_[2].texcoord = { uvRight, uvBottom };
 	vertexData_[3].texcoord = { uvRight, uvTop };*/
 
+	//Vector2 pivotOffset = {
+	//	(pivot_.x - 0.5f) * textureSize_.x,  // ピボットオフセット（中心からのオフセット）
+	//	(pivot_.y - 0.5f) * textureSize_.y   // ピボットオフセット（中心からのオフセット）
+	//};
+
+	//// アフィン変換行列の作成
+	//Matrix4x4 affineMatrix = MakeAffineMatrix(transform_);
+	//// テクスチャ位置を保持するための補正行列
+	//Matrix4x4 correctionTranslation = MakeTranslateMatrix({ pivotOffset.x, pivotOffset.y, 0.0f });
+
+	//// 最終的なスプライトの変換行列
+	//transformData_->wvp = Matrix4x4(
+	//	affineMatrix *  // ピボットによる変位を元に戻す
+	//	correctionTranslation *
+	//	MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f)
+	//);
+}
+
+void Sprite::Draw(bool isBackGround) {
 	Vector2 pivotOffset = {
 		(pivot_.x - 0.5f) * textureSize_.x,  // ピボットオフセット（中心からのオフセット）
 		(pivot_.y - 0.5f) * textureSize_.y   // ピボットオフセット（中心からのオフセット）
 	};
 
+	Matrix4x4 projection = Render::GetProjection2D();
+	if (isBackGround) {
+		transform_.translate.z = Render::GetFarClip();
+	}
 	// アフィン変換行列の作成
 	Matrix4x4 affineMatrix = MakeAffineMatrix(transform_);
 	// テクスチャ位置を保持するための補正行列
@@ -126,15 +149,13 @@ void Sprite::Update() {
 	transformData_->wvp = Matrix4x4(
 		affineMatrix *  // ピボットによる変位を元に戻す
 		correctionTranslation *
-		MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f)
+		projection
 	);
-}
 
-void Sprite::Draw() {
 	Render::DrawSprite(this);
 }
 
-void Sprite::Draw(ID3D12GraphicsCommandList* commandList) const {
+void Sprite::PostDraw(ID3D12GraphicsCommandList* commandList) const {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);
@@ -228,7 +249,7 @@ void Sprite::SetPivot(const Vector2& pivot) {
 
 #ifdef _DEBUG
 void Sprite::Debug_Gui() {
-	ImGui::DragFloat2("translation", &transform_.translate.x, 2.0f);
+	ImGui::DragFloat3("translation", &transform_.translate.x, 2.0f);
 	ImGui::DragFloat2("scale", &transform_.scale.x, 0.01f, -10.0f, 10.0f);
 	ImGui::SliderAngle("rotation", &transform_.rotate.z);
 	ImGui::DragFloat2("pivot", &pivot_.x, 0.01f, 0.0f, 1.0f);

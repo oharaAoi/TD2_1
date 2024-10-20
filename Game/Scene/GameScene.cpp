@@ -102,6 +102,9 @@ void GameScene::Init(){
 	// -------------------------------------------------
  	camera_->SetPlayerPtr(player_.get());
 
+	test_ = std::make_unique<BaseGameObject>();
+	test_->Init();
+	test_->SetObject("staer.obj");
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -172,6 +175,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
@@ -220,10 +224,12 @@ void GameScene::Update(){
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
+		Render::SetViewProjection2D(camera_->GetViewMatrix2D(), camera_->GetProjectionMatrix2D());
 	} else {
 		debugCamera_->Update();
 		Render::SetEyePos(debugCamera_->GetWorldTranslate());
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
+		Render::SetViewProjection2D(camera_->GetViewMatrix2D(), camera_->GetProjectionMatrix2D());
 	}
 
 	// -------------------------------------------------
@@ -249,7 +255,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
-
+	test_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
