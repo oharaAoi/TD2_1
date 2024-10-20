@@ -33,6 +33,7 @@ public:
 
 	WorldTransform* GetTransform() { return transform_.get(); }
 
+	const Vector4& GetColor()const{ return color_; }
 	void SetColor(const Vector4& color);
 
 	void SetIsLighting(bool isLighting);

@@ -12,6 +12,7 @@
 
 class PlayerAnimator;
 
+
 class Player :
 	public BaseGameObject,
 	public Collider{
@@ -38,6 +39,13 @@ public:
 	void UpdateBody();
 	void AddBody(BaseGameObject* pTarget);
 	void EraseBody();
+
+private:
+	void Move_TITLE();
+	void Move_TUTORIAL();
+	void Move_GAME();
+
+	void UpdateTransform();
 
 	void Rounding(Vector3 &velocity);
 

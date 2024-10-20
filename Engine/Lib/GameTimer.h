@@ -18,7 +18,7 @@ public:
 	void FPS();
 
 	static float DeltaTime() { return deletaTime_; }
-
+	static float TotalTime(){ return totalTime_; }
 	static float TimeRate() { return timeRate_; }
 
 	static float fps_;
@@ -28,6 +28,7 @@ private:
 	std::chrono::milliseconds frameDuration_;				// フレームの間隔
 	static float deletaTime_;
 	static float timeRate_;
+	static float totalTime_;
 };
 
 const float kDeltaTime_ = (1.0f / GameTimer::fps_);
