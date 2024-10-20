@@ -340,10 +340,7 @@ void GameScene::Draw() const{
 		mountains_[oi]->Draw();
 	}
 
-	for(auto& backgroundObject : backgroundObjects_){
-		backgroundObject.second->Draw();
-	}
-
+	
 
 	/////////////////////////////////
 	// 線の描画
@@ -392,6 +389,11 @@ void GameScene::Draw() const{
 	// このクラスは一番最後に描画
 	for (const std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Draw();
+	}
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+
+	for(auto& backgroundObject : backgroundObjects_){
+		backgroundObject.second->Draw();
 	}
 
 	/////////////////////////////////
