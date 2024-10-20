@@ -149,8 +149,8 @@ void GameScene::Init() {
 
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("AddTorso.gltf");
-	debugModel_->SetAnimater("./Game/Resources/Model/AddTorso/", "AddTorso.gltf", true);
+	debugModel_->SetObject("DriftWoodDestroy.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", true);
 	debugModel_->SetIsLighting(false);
 }
 
@@ -228,7 +228,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
 
 
-	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
