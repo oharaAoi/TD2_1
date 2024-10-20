@@ -43,7 +43,7 @@ public:
 #endif // _DEBUG
 
 	virtual void ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
-							   const Vector3& pos, const float& radius, const SubAttributeType& subType);
+							   const Vector3& pos, const SubAttributeType& subType);
 
 	virtual void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE);
 

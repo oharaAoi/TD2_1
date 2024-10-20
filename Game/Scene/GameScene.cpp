@@ -168,6 +168,9 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass2.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Partition/", "Partition.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood2.obj");
+
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
@@ -232,6 +235,7 @@ void GameScene::Load() {
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 }
 
@@ -326,6 +330,7 @@ void GameScene::Update() {
 
 	/*------------- manager -------------*/
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
+	obstaclesManager_->Debug_Gui();
 	obstaclesManager_->Update();
 
 	/*-------------- effect -------------*/
@@ -348,7 +353,6 @@ void GameScene::Update() {
 
 			// editorの処理
 			placementObjectEditor_->Update();
-			obstaclesManager_->Debug_Gui();
 		}
 	}
 #endif

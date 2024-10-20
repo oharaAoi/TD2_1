@@ -21,7 +21,7 @@ void ObstaclesManager::Init(){
 
 	LoadAllFile();
 
-	RandomAddObject();
+	//RandomAddObject();
 
 	playerPos_ = { 0.0f, 0.0f,0.0f };
 	prePlayerPos_ = { 0.0f, 0.0f,0.0f };
@@ -48,17 +48,16 @@ void ObstaclesManager::Update(){
 	//	// mapに格納されているデータの位置を
 	//}
 
-	animationDrawList_.clear();
-	normalDrawList_.clear();
-
 	if (playerPos_.x - prePlayerPos_.x > 200.0f) {
  		RandomImport();
 		prePlayerPos_ = playerPos_;
 	}
 
 	// randomに配置されている物をリストに追加していく
-	RandomImportCreate();
+	//RandomImportCreate();
 
+	animationDrawList_.clear();
+	normalDrawList_.clear();
 	// リストの更新を行う
 	for(std::list<std::unique_ptr<BasePlacementObject>>::iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
 		if(!(*it)->GetIsActive()) {
@@ -159,7 +158,7 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Rock);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				break;
 
 			case PlacementObjType::FISH:
@@ -169,7 +168,7 @@ void ObstaclesManager::RandomImportCreate(){
 				fishSize = FISH_SIZE(RandomInt(0, (int)FISH_SIZE::kFishSizeCount - 1));
 				
 				fish->Init();
-				fish->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				fish->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				fish->IndividualFromCommon(it->subType_);
 				fish->SetFishSize(fishSize);
 				break;
@@ -178,7 +177,7 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Bird);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				obj->SetObbSize(obj->GetRadius());
 
 
@@ -194,7 +193,7 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Item);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				obj->SetObbSize(obj->GetRadius());
 				break;
 
@@ -202,21 +201,21 @@ void ObstaclesManager::RandomImportCreate(){
 
 				obj.reset(new Driftwood);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				break;
 
 			case PlacementObjType::WATERWEED:
 
 				obj.reset(new Waterweed);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				break;
 
 			case PlacementObjType::COIN:
 
 				obj.reset(new Coin);
 				obj->Init();
-				obj->ApplyLoadData(it->scale_, rotate, createPos, it->radius_, it->subType_);
+				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				coinNum_++;
 				break;
 			}
@@ -257,40 +256,23 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 		case PlacementObjType::ROCK:
 			obj.reset(new Rock);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			break;
 		case PlacementObjType::FISH:
 			obj.reset(new Fish);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			break;
 		case PlacementObjType::BIRD:
 			obj.reset(new Bird);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
-			obj->SetObbSize(obj->GetRadius());
-			break;
-		case PlacementObjType::ITEM:
-			obj.reset(new Item);
-			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.reset(new Driftwood);
 			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
-			break;
-		case PlacementObjType::WATERWEED:
-			obj.reset(new Waterweed);
-			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
-			break;
-		case PlacementObjType::COIN:
-			obj.reset(new Coin);
-			obj->Init();
-			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].radius_, objData[oi].subType_);
-			coinNum_++;
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			break;
 		}
 

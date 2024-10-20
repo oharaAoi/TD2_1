@@ -16,9 +16,10 @@ void Driftwood::Init() {
 	typeID_ = (int)ObjectType::DRIFTWOOD;
 
 	BaseGameObject::Init();
-	SetObject("Driftwood.obj");
+	SetObject("Driftwood2.obj");
 
-	obb_.size = { 3.0f, 0.6f, 0.6f };
+	radius_ = 9.0f;
+	obb_.size = { radius_ * 3.0f , radius_ , 2.5f };
 	obb_.center = GetWorldTranslation();
 
 	radius_ = obb_.size.x;
