@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Game/Scene/GameScene.h"
 
 Camera::Camera(){
 	Init();
@@ -103,6 +104,12 @@ void Camera::Update(){
 	if(followOnly){
 		transform_.translate = pPlayer_->GetTransform()->GetTranslation() + Vector3(-20.4f* follwOfsetlength, 0.3f* follwOfsetlength, -25.7f* follwOfsetlength);
 		transform_.rotate = { 0.0f, 0.91f, 0.0f };
+	}
+
+
+	if(GameScene::GetGameState() == GAME_STATE::TITLE){
+		transform_.translate = pPlayer_->GetWorldTranslation() + Vector3(3.0f, 0.0f, -15.0f);
+		transform_.rotate = { 0.0f,0.0f,0.0f };
 	}
 
 	BaseCamera::Update();
