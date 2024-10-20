@@ -112,26 +112,26 @@ float FlyingTimerUI::IntegerCount(float value, int n) {
 }
 
 Vector2 FlyingTimerUI::CalculationSpriteLT(float value) {
-	if (value == 1) {
+	if (value == 0) {
 		return { 0.0f, 0.0f };
-	} else if (value == 2) {
+	} else if (value == 1) {
 		return { rangeSize_.x , 0.0f };
-	} else if (value == 3) {
+	} else if (value == 2) {
 		return { rangeSize_.x * 2.0f, 0.0f };
+	} else if (value == 3) {
+		return { rangeSize_.x * 3.0f , 0.0f };
 	} else if (value == 4) {
-		return { 0.0f, rangeSize_.y };
+		return { rangeSize_.x * 4.0f , 0.0f };
 	} else if (value == 5) {
-		return { rangeSize_.x, rangeSize_.y };
+		return { rangeSize_.x * 5.0f, 0.0f };
 	} else if (value == 6) {
-		return { rangeSize_.x * 2.0f, rangeSize_.y };
+		return { rangeSize_.x * 6.0f, 0.0f };
 	} else if (value == 7) {
-		return { 0.0f, rangeSize_.y * 2.0f };
+		return { rangeSize_.x * 7.0f, 0.0f };
 	} else if (value == 8) {
-		return { rangeSize_.x, rangeSize_.y * 2.0f };
-	} else if (value == 9) {
-		return { rangeSize_.x * 2.0f, rangeSize_.y * 2.0f };
+		return { rangeSize_.x * 8.0f, 0.0f };
 	} else {
-		return { 0.0f, rangeSize_.y * 3.0f };
+		return { rangeSize_.x , 0.0f };
 	}
 }
 

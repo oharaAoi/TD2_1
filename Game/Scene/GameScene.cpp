@@ -204,6 +204,8 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankIcon.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
 
 
 	//デバッグ用、モデル確認
@@ -331,7 +333,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 	flyingGaugeUI_->Update(player_->GetFlyingTime());
-	playerSpeedCounter_->Update(player_->GetMoveSpeed());
+	playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
