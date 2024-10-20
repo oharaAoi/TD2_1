@@ -226,8 +226,6 @@ void GameScene::Load(){
 
 void GameScene::Update(){
 
-	AdjustmentItem::GetInstance()->Update();
-
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
@@ -300,12 +298,14 @@ void GameScene::Update(){
 
 
 #ifdef _DEBUG
-	if(!isStepFrame_) {
-		Debug_Gui();
+	if (isGuiDraw_) {
+		if (!isStepFrame_) {
+			Debug_Gui();
 
-		// editorの処理
-		placementObjectEditor_->Update();
-		obstaclesManager_->Debug_Gui();
+			// editorの処理
+			placementObjectEditor_->Update();
+			obstaclesManager_->Debug_Gui();
+		}
 	}
 #endif
 
@@ -351,6 +351,10 @@ void GameScene::Update(){
 
 	if (Input::IsTriggerKey(DIK_R)) {
 		Init();
+	}
+
+	if (Input::IsTriggerKey(DIK_P)) {
+		isGuiDraw_ = !isGuiDraw_;
 	}
 }
 
@@ -583,62 +587,65 @@ void GameScene::CheckAddSplash(){
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
-	ImGui::Begin("GameScene");
-	//ImGui::DragFloat3()
-	if (ImGui::Button("NextScene")) {
-		SetNextScene(SceneType::Scene_Result);
-	}
+	if (isGuiDraw_) {
+		AdjustmentItem::GetInstance()->Update();
+		ImGui::Begin("GameScene");
+		//ImGui::DragFloat3()
+		if (ImGui::Button("NextScene")) {
+			SetNextScene(SceneType::Scene_Result);
+		}
 
-	if(ImGui::Button("stop")) {
-		isPause_ = true;
-	}
-	ImGui::SameLine();
-	if(ImGui::Button("play")) {
-		isPause_ = false;
-	}
-	if(isPause_) {
+		if (ImGui::Button("stop")) {
+			isPause_ = true;
+		}
 		ImGui::SameLine();
-		if(ImGui::Button("step")) {
-			isStepFrame_ = true;
+		if (ImGui::Button("play")) {
+			isPause_ = false;
 		}
-	}
-
-	ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
-	ImGui::SameLine();
-	ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
-
-	ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
-
-	{
-		ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
-		if (ImGui::TreeNode("Camera")) {
-			if (!isDegugCameraActive_) {
-				camera_->Debug_Gui();
-			} else {
-				debugCamera_->Debug_Gui();
+		if (isPause_) {
+			ImGui::SameLine();
+			if (ImGui::Button("step")) {
+				isStepFrame_ = true;
 			}
-			ImGui::TreePop();
 		}
-	}
 
-	{
-		if (ImGui::TreeNode("UI")) {
-			ImGui::Begin("UI");
-			flyingTimerUI_->Debug_Gui();
-			flyingGaugeUI_->Debug_Gui();
-			playerSpeedCounter_->Debug_Gui();
-			ImGui::End();
-			ImGui::TreePop();
-		}
-	}
+		ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
+		ImGui::SameLine();
+		ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
 
-	{
-		if (ImGui::TreeNode("Player")) {
-			player_->Debug_Gui();
-			gamePlayTimer_->Debug_Gui();
-			ImGui::TreePop();
+		ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
+
+		{
+			ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
+			if (ImGui::TreeNode("Camera")) {
+				if (!isDegugCameraActive_) {
+					camera_->Debug_Gui();
+				} else {
+					debugCamera_->Debug_Gui();
+				}
+				ImGui::TreePop();
+			}
 		}
+
+		{
+			if (ImGui::TreeNode("UI")) {
+				ImGui::Begin("UI");
+				flyingTimerUI_->Debug_Gui();
+				flyingGaugeUI_->Debug_Gui();
+				playerSpeedCounter_->Debug_Gui();
+				ImGui::End();
+				ImGui::TreePop();
+			}
+		}
+
+		{
+			if (ImGui::TreeNode("Player")) {
+				player_->Debug_Gui();
+				gamePlayTimer_->Debug_Gui();
+				ImGui::TreePop();
+			}
+		}
+		ImGui::End();
 	}
-	ImGui::End();
 }
 #endif
