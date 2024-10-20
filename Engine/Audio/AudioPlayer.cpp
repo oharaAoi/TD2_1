@@ -12,7 +12,8 @@ void AudioPlayer::Finalize() {
 }
 
 void AudioPlayer::Init(const std::string& filePath) {
-	audio_ = Engine::LoadAudio(filePath);
+	std::string path = AudioManager::GetInstance()->GetAudioName(filePath);
+	audio_ = Engine::LoadAudio(path);
 }
 
 void AudioPlayer::Play(bool isLoop, float volume, bool checkPlaying) {
@@ -29,4 +30,9 @@ void AudioPlayer::ReStart() {
 
 void AudioPlayer::Stop() {
 	Engine::Stop(audio_);
+}
+
+void AudioPlayer::SinglShotPlay(const std::string& filePath, float volume) {
+	std::string path = AudioManager::GetInstance()->GetAudioName(filePath);
+	Engine::SingleShotPlay(path, volume);
 }

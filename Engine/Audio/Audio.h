@@ -4,6 +4,7 @@
 #include <fstream>
 #include <wrl.h>
 #include <cassert>
+#include <list>
 
 // チャンクヘッダ
 struct ChunkHeader {
@@ -62,6 +63,8 @@ public:
 	/// </summary>
 	void Init();
 
+	void Update();
+
 	/// <summary>
 	/// 終了処理
 	/// </summary>
@@ -92,6 +95,8 @@ public:
 	void SoundPlayWave(const SoundData& soundData);
 
 	void PlayAudio(const AudioData& audioData, bool isLoop, float volume, bool checkPlaying = false);
+
+	void SinglShotPlay(const char* filename, float volume);
 
 	/// <summary>
 	/// サウンドの停止
@@ -128,5 +133,6 @@ private:
 	ComPtr<IXAudio2> xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_;
 
+	std::list<IXAudio2SourceVoice*> playingSourceList_;
 };
 

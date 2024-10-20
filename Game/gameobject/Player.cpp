@@ -51,10 +51,14 @@ void Player::Init(){
 	//restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
 	//transform_->SetQuaternion(restPoseRotation_);
 
+	if(GameScene::GetGameState() == GAME_STATE::TITLE){
+		transform_->SetTranslaion({ 0.0f,150.0f,0.0f });
+	}
+
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
 
-	isMove_ = false;
+	isMove_ = true;
 	baseSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
 	radius_ = 2.0f;
 
@@ -64,10 +68,8 @@ void Player::Init(){
 
 	hitSe_ = std::make_unique<AudioPlayer>();
 	coinGetSe_ = std::make_unique<AudioPlayer>();
-	hitSe_->Init("./Game/Resources/Audio/test.wav");
-	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
-
-	
+	hitSe_->Init("test.wav");
+	coinGetSe_->Init("kari_coinGet.wav");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +182,15 @@ void Player::DrawAnimetor() const {
 
 void Player::Move(){
 
+	if(GameScene::GetGameState() == GAME_STATE::TITLE){
+		pressTime_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
+		// transformの更新
+		UpdateTransform();
+		MoveLimit();
+		return;
+	}
+
+
 	// 前フレームの値を保存
 	prePos_ = transform_->GetTranslation();
 
@@ -212,7 +223,7 @@ void Player::Move(){
 			// 潜る
 			float t = diveTime_ / kDiveTime_;
 			diveVec = { 0,0,0 };
-			 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
+			diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
 			//transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
 
 			// 猶予時間が0になったら通常状態へ
@@ -298,10 +309,10 @@ void Player::Move(){
 	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
 
 
-	transform_->SetTranslaion(transform_->GetTranslation() + velocity_+ dropVec+ diveVec);
-	
-	float newAngle = std::atan2(-(velocity_.y + dropVec.y+ diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
-	newAngle += 3.141592 ;
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_ + dropVec + diveVec);
+
+	float newAngle = std::atan2(-(velocity_.y + dropVec.y + diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
+	newAngle += 3.141592f;
 	LookAtDirection(newAngle);
 	dropVec = { 0,0,0 };
 	diveVec = { 0,0,0 };
@@ -312,9 +323,6 @@ void Player::Move(){
 	// プレイヤー上部の水面の座標を取得
 	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
 	aboveWaterSurfacePos->Update();
-
-	// 深さを更新
-	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 
 	// 下降フラグの更新
 	if(isFlying_){
@@ -447,7 +455,7 @@ void Player::Rounding(Vector3& velocity){
 
 #ifdef _DEBUG
 void Player::Debug_Gui(){
-	
+
 
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
@@ -515,6 +523,7 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+			AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 
 		} else{// 食べられなかったとき
 
@@ -529,7 +538,7 @@ void Player::OnCollision(Collider* other){
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				//基礎速度の変動
 				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				hitSe_->Play(false, true);
+				AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 
 			}
 		}
@@ -540,7 +549,7 @@ void Player::OnCollision(Collider* other){
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::COIN) {
-		coinGetSe_->Play(false, 0.5f, true);
+		AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 		getCoinNum_++;
 	}
 
@@ -573,4 +582,30 @@ void Player::OnCollision(Collider* other){
 			isCloseWing_ = true;
 		}
 	}
+}
+
+
+
+
+void Player::Move_TITLE(){}
+void Player::Move_TUTORIAL(){}
+void Player::Move_GAME(){}
+
+void Player::UpdateTransform(){
+	// 角度を加算
+	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
+	currentAngle_ = kMaxAngle_ * pressTime_;
+	LookAtDirection(currentAngle_);
+
+	// 移動量を加算
+	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
+	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
+
+	// プレイヤー上部の水面の座標を取得
+	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
+	aboveWaterSurfacePos->Update();
+
+	// 深さを更新
+	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 }

@@ -160,6 +160,13 @@ public:
 	/// <param name="volume"></param>
 	static void SetVolume(const AudioData& soundData, float volume);
 
+	/// <summary>
+	/// 一度だけ再生し、他でも鳴って欲しい物
+	/// </summary>
+	/// <param name="fileName"></param>
+	/// <param name="volume"></param>
+	static void SingleShotPlay(const std::string& fileName, float volume);
+
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 苦肉の策
 	/////////////////////////////////////////////////////////////////////////////////////////////

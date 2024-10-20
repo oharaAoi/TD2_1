@@ -148,6 +148,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Light\Phong.cpp" />
     <ClCompile Include="Engine\Light\PointLight.cpp" />
     <ClCompile Include="Engine\Light\SpotLight.cpp" />
+    <ClCompile Include="Engine\Manager\AudioManager.cpp" />
     <ClCompile Include="Engine\Manager\CollisionManager.cpp" />
     <ClCompile Include="Engine\Manager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Manager\MeshManager.cpp" />
@@ -189,7 +190,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Camera\DebugCamera.cpp" />
     <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp" />
+    <ClCompile Include="Game\Effect\BaseParticle2D.cpp" />
+    <ClCompile Include="Game\Effect\Cherry.cpp" />
     <ClCompile Include="Game\Effect\EmissionEffect.cpp" />
+    <ClCompile Include="Game\Effect\ParticleManager.cpp" />
     <ClCompile Include="Game\Effect\Splash.cpp" />
     <ClCompile Include="Game\Effect\Trail.cpp" />
     <ClCompile Include="Game\GameObject\BasePlacementObject.cpp" />
@@ -279,6 +283,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Light\Phong.h" />
     <ClInclude Include="Engine\Light\PointLight.h" />
     <ClInclude Include="Engine\Light\SpotLight.h" />
+    <ClInclude Include="Engine\Manager\AudioManager.h" />
     <ClInclude Include="Engine\Manager\CollisionManager.h" />
     <ClInclude Include="Engine\Manager\ImGuiManager.h" />
     <ClInclude Include="Engine\Manager\MeshManager.h" />
@@ -328,7 +333,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Camera\DebugCamera.h" />
     <ClInclude Include="Game\Editer\PlacementObjectEditer.h" />
+    <ClInclude Include="Game\Effect\BaseParticle2D.h" />
+    <ClInclude Include="Game\Effect\Cherry.h" />
     <ClInclude Include="Game\Effect\EmissionEffect.h" />
+    <ClInclude Include="Game\Effect\ParticleManager.h" />
     <ClInclude Include="Game\Effect\Splash.h" />
     <ClInclude Include="Game\Effect\Trail.h" />
     <ClInclude Include="Game\GameObject\BasePlacementObject.h" />

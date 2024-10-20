@@ -15,6 +15,8 @@
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Game/Manager/ObstaclesManager.h"
+#include "Engine/Manager/AudioManager.h"
+#include "Game/Effect/ParticleManager.h"
 
 /*--------- lib ----------*/
 #include "Engine/Math/MyRandom.h"
@@ -33,6 +35,9 @@
 #include "Game/UI/FlyingTimerUI.h"
 #include "Game/UI/FlyingGaugeUI.h"
 #include "Game/UI/PlayerSpeedCounter.h"
+/*------ Sprite ------*/
+#include "Game/Effect/Cherry.h"
+
 
 // ゲームシーン内での状態分けのenum
 enum class GAME_STATE : int32_t{
@@ -58,12 +63,17 @@ public:
 	void Debug_Gui();
 #endif 
 
+	void Update_TITLE();
+	void Update_TUTORIAL();
+	void Update_GAME();
+
 	void UpdateColliderList();
 	void PlayerWaveCollision();
 	void EndlessStage();
 
 public:
 	static float GetGroundDepth(){ return groundDepth_; }
+	static GAME_STATE GetGameState(){ return currentState_; }
 	void CheckAddSplash();
 
 private:
@@ -92,6 +102,9 @@ private:
 
 	std::unordered_map<std::string,std::unique_ptr<BaseGameObject>>backgroundObjects_;
 
+	Vector4 editColor_;
+	std::unique_ptr<BaseGameObject>partition_ = nullptr;
+
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
@@ -100,6 +113,7 @@ private:
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
+	std::unique_ptr<ParticleManager<Cherry>> cherryEmitter_ = nullptr;
 
 	// ---------- editor ----------- //
 
@@ -108,7 +122,7 @@ private:
 	// ---------- information ---------- //
 
 	std::unique_ptr<GamePlayTimer> gamePlayTimer_;
-	GAME_STATE currentState_ = GAME_STATE::TITLE;
+	static GAME_STATE currentState_;
 
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
@@ -116,6 +130,7 @@ private:
 	std::unique_ptr<PlayerSpeedCounter> playerSpeedCounter_ = nullptr;
 
 	// ------------ Sprite ---------- //
+	std::unique_ptr<Sprite>titleLogo_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
 
 	//デバッグ用

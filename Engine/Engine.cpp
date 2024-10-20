@@ -145,6 +145,8 @@ void Engine::EndFrame() {
 	dxCommon_->End();
 
 	descriptorHeap_->FreeList();
+
+	audio_->Update();
 }
 
 void Engine::EndImGui() {
@@ -363,6 +365,10 @@ void Engine::Stop(const AudioData& soundData) {
 
 void Engine::SetVolume(const AudioData& soundData, float volume) {
 	audio_->SetVolume(soundData.pSourceVoice, volume);
+}
+
+void Engine::SingleShotPlay(const std::string& fileName, float volume) {
+	audio_->SinglShotPlay(fileName.c_str(), volume);
 }
 
 ID3D12Device* Engine::GetDevice() {

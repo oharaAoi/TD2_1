@@ -16,6 +16,21 @@ void Audio::Init() {
 	result = xAudio2_->CreateMasteringVoice(&masterVoice_);
 }
 
+void Audio::Update() {
+	for (auto it = playingSourceList_.begin(); it != playingSourceList_.end(); ) {
+		XAUDIO2_VOICE_STATE state;
+		(*it)->GetState(&state);
+
+		if (state.BuffersQueued == 0) {
+			// ボイスが再生終了した場合
+			(*it)->DestroyVoice();  // リソースの解放
+			it = playingSourceList_.erase(it); // リストから削除
+		} else {
+			++it; // 次のボイスへ
+		}
+	}
+}
+
 void Audio::Finalize() {
 
 }
@@ -213,6 +228,32 @@ void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, boo
 	assert(SUCCEEDED(result));
 	result = audioData.pSourceVoice->SetVolume(volume);
 	assert(SUCCEEDED(result));
+}
+
+void Audio::SinglShotPlay(const char* filename, float volume) {
+	LoadData loadData = LoadWave(filename);
+	// 読み込んだ音声データをreturn
+	AudioData audio = {};
+	audio.data.wfex = loadData.fmt;
+	audio.data.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
+	audio.data.bufferSize = loadData.dataSize;
+	HRESULT hr = xAudio2_->CreateSourceVoice(&audio.pSourceVoice, &audio.data.wfex);
+	assert(SUCCEEDED(hr));
+
+	// 再生する波形データの設定
+	XAUDIO2_BUFFER buf{};
+	buf.pAudioData = audio.data.pBuffer;
+	buf.AudioBytes = audio.data.bufferSize;
+	buf.Flags = XAUDIO2_END_OF_STREAM;
+	buf.LoopCount = 0; // ループしない
+
+	// 波形データの再生
+	hr = audio.pSourceVoice->SubmitSourceBuffer(&buf);
+	assert(SUCCEEDED(hr));
+	hr = audio.pSourceVoice->Start();
+	assert(SUCCEEDED(hr));
+	hr = audio.pSourceVoice->SetVolume(volume);
+	assert(SUCCEEDED(hr));
 }
 
 /// <summary>

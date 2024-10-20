@@ -50,13 +50,13 @@ void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 		{+(textureSize_.x * 0.5f) + pivotOffset.x, +(textureSize_.y * 0.5f) + pivotOffset.y, 0.0f, 1.0f},
 	};*/
 
-	vertexData_[0].pos = rect.leftBottom;
-	vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
-	vertexData_[1].pos = rect.leftTop;
-	vertexData_[1].texcoord = { 0.0f, 0.0f }; // 左上
-	vertexData_[2].pos = rect.rightBottom; // 右下
+	vertexData_[0].pos = rect.leftBottom;		// 左下
+	vertexData_[0].texcoord = { 0.0f, 1.0f };
+	vertexData_[1].pos = rect.leftTop;			// 左上
+	vertexData_[1].texcoord = { 0.0f, 0.0f };	
+	vertexData_[2].pos = rect.rightBottom;		// 右下
 	vertexData_[2].texcoord = { 1.0f, 1.0f };
-	vertexData_[3].pos = rect.rightTop;		// 右上
+	vertexData_[3].pos = rect.rightTop;			// 右上
 	vertexData_[3].texcoord = { 1.0f, 0.0f };
 
 	// ----------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 	materialBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	materialData_->uvTransform = MakeIdentity4x4();
-
+	
 	// ----------------------------------------------------------------------------------
 	transformBuffer_ = CreateBufferResource(device, sizeof(TextureTransformData));
 	transformBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&transformData_));
@@ -96,38 +96,32 @@ void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 
 void Sprite::Update() {
 	materialData_->uvTransform = MakeAffineMatrix(uvTransform_);
-
 	//materialData_->uvTransform.m[0][0] = rectRange_.x / textureSize_.x;	// Xスケーリング
 	//materialData_->uvTransform.m[1][1] = rectRange_.y / textureSize_.y;	// Yスケーリング
 	//materialData_->uvTransform.m[3][0] = leftTop_.x / textureSize_.x;	// Xオフセット
 	//materialData_->uvTransform.m[3][1] = leftTop_.y / textureSize_.y;	// Yオフセット
-	
-	/*float uvLeft = leftTop_.x / textureSize_.x;
-	float uvRight = (leftTop_.x + rectRange_.x) / textureSize_.x;
-	float uvTop = leftTop_.y / textureSize_.y;
-	float uvBottom = (leftTop_.y + rectRange_.y) / textureSize_.y;
+
+	float uvLeft	= leftTop_.x/					textureSize_.x;
+	float uvRight	= (leftTop_.x + rectRange_.x) / textureSize_.x;
+	float uvTop		= leftTop_.y /					textureSize_.y;
+	float uvBottom	= (leftTop_.y + rectRange_.y) / textureSize_.y;
 
 	vertexData_[0].texcoord = { uvLeft, uvBottom };
 	vertexData_[1].texcoord = { uvLeft, uvTop };
 	vertexData_[2].texcoord = { uvRight, uvBottom };
-	vertexData_[3].texcoord = { uvRight, uvTop };*/
+	vertexData_[3].texcoord = { uvRight, uvTop };
 
-	//Vector2 pivotOffset = {
-	//	(pivot_.x - 0.5f) * textureSize_.x,  // ピボットオフセット（中心からのオフセット）
-	//	(pivot_.y - 0.5f) * textureSize_.y   // ピボットオフセット（中心からのオフセット）
+	//Vector3 pivotOffset = {
+	//textureSize_.x * pivot_.x,
+	//textureSize_.y * pivot_.y,
+	//0.0f
 	//};
 
-	//// アフィン変換行列の作成
-	//Matrix4x4 affineMatrix = MakeAffineMatrix(transform_);
-	//// テクスチャ位置を保持するための補正行列
-	//Matrix4x4 correctionTranslation = MakeTranslateMatrix({ pivotOffset.x, pivotOffset.y, 0.0f });
-
-	//// 最終的なスプライトの変換行列
-	//transformData_->wvp = Matrix4x4(
-	//	affineMatrix *  // ピボットによる変位を元に戻す
-	//	correctionTranslation *
-	//	MakeOrthograhicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f)
-	//);
+	//// スプライトのサイズを基に頂点を設定
+	//vertexData_[0].pos = { -pivotOffset.x, pivotOffset.y, 0.0f }; // 左下
+	//vertexData_[1].pos = { -pivotOffset.x, textureSize_.y - pivotOffset.y, 0.0f }; // 左上
+	//vertexData_[2].pos = { textureSize_.x - pivotOffset.x, -pivotOffset.y, 0.0f }; // 右下
+	//vertexData_[3].pos = { textureSize_.x - pivotOffset.x, textureSize_.y - pivotOffset.y, 0.0f }; // 右上
 }
 
 void Sprite::Draw(bool isBackGround) {
@@ -223,28 +217,28 @@ void Sprite::SetTextureSize(const Vector2& size) {
 
 void Sprite::SetPivot(const Vector2& pivot) {
 	pivot_ = pivot;
-	Vector3 pivotOffset = {
-	textureSize_.x * pivot_.x,
-	textureSize_.y * pivot_.y,
-	0.0f
-	};
+	//Vector3 pivotOffset = {
+	//textureSize_.x * pivot_.x,
+	//textureSize_.y * pivot_.y,
+	//0.0f
+	//};
 
-	// スプライトのサイズを基に頂点を設定
-	Mesh::RectVetices rect = {
-		{-pivotOffset.x, -pivotOffset.y, 0.0f, 1.0f},
-		{textureSize_.x - pivotOffset.x, 0.0f - pivotOffset.y, 0.0f, 1.0f},
-		{0.0f - pivotOffset.x, textureSize_.y - pivotOffset.y, 0.0f , 1.0f},
-		{textureSize_.x - pivotOffset.x, textureSize_.y - pivotOffset.y , 0.0f, 1.0f},
-	};
+	//// スプライトのサイズを基に頂点を設定
+	//Mesh::RectVetices rect = {
+	//	{-pivotOffset.x, -pivotOffset.y, 0.0f, 1.0f},
+	//	{textureSize_.x - pivotOffset.x, 0.0f - pivotOffset.y, 0.0f, 1.0f},
+	//	{0.0f - pivotOffset.x, textureSize_.y - pivotOffset.y, 0.0f , 1.0f},
+	//	{textureSize_.x - pivotOffset.x, textureSize_.y - pivotOffset.y , 0.0f, 1.0f},
+	//};
 
-	vertexData_[0].pos = rect.leftBottom;
-	vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
-	vertexData_[1].pos = rect.leftTop;
-	vertexData_[1].texcoord = { 0.0f, 0.0f }; // 左上
-	vertexData_[2].pos = rect.rightBottom; // 右下
-	vertexData_[2].texcoord = { 1.0f, 1.0f };
-	vertexData_[3].pos = rect.rightTop;		// 右上
-	vertexData_[3].texcoord = { 1.0f, 0.0f };
+	//vertexData_[0].pos = rect.leftBottom;
+	//vertexData_[0].texcoord = { 0.0f, 1.0f }; // 左下
+	//vertexData_[1].pos = rect.leftTop;
+	//vertexData_[1].texcoord = { 0.0f, 0.0f }; // 左上
+	//vertexData_[2].pos = rect.rightBottom; // 右下
+	//vertexData_[2].texcoord = { 1.0f, 1.0f };
+	//vertexData_[3].pos = rect.rightTop;		// 右上
+	//vertexData_[3].texcoord = { 1.0f, 0.0f };
 }
 
 #ifdef _DEBUG
