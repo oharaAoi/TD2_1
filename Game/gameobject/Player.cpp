@@ -47,8 +47,8 @@ void Player::Init(){
 	adjustmentItem_->AddItem(groupName, "radius", radius_);
 
 	AdaptAdjustmentItem();
-	restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
-	transform_->SetQuaternion(restPoseRotation_);
+	//restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
+	//transform_->SetQuaternion(restPoseRotation_);
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
@@ -82,7 +82,7 @@ void Player::Update(){
 		Move();
 	} else {
 		velocity_ = { 0.0f,0.0f,0.0f };
-		if (Input::IsTriggerKey(DIK_SPACE)) {
+		if(Input::IsTriggerKey(DIK_SPACE)) {
 			isMove_ = true;
 		}
 	}
@@ -123,7 +123,7 @@ void Player::Update(){
 		EraseBody();
 	}
 
-	obb_.center = GetWorldTranslation();
+	obb_.center = transform_->GetTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 
 	BaseGameObject::Update();
@@ -181,7 +181,8 @@ void Player::Move(){
 
 			// 潜る
 			float t = diveTime_ / kDiveTime_;
-			Vector3 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
+			diveVec = { 0,0,0 };
+			 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
 			transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
 
 			// 猶予時間が0になったら通常状態へ
@@ -224,8 +225,8 @@ void Player::Move(){
 
 
 			// 下降ベクトルを格納する変数
-			Vector3 dropVec{};
-
+			//Vector3 dropVec{};
+			dropVec = { 0,0,0 };
 			if(!isCloseWing_){//////// 翼を広げている際 ////////
 
 				// 下降ベクトル
@@ -236,6 +237,7 @@ void Player::Move(){
 				pressTime_ *= 0.5f * GameTimer::TimeRate();
 				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
+
 			}
 
 			// 座標の更新
@@ -259,12 +261,18 @@ void Player::Move(){
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
 	currentAngle_ = kMaxAngle_ * pressTime_;
-	LookAtDirection(currentAngle_);
 
 	// 移動量を加算
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
 	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
 	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
+	float newAngle = std::atan2(-(velocity_.y + dropVec.y+ diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
+	LookAtDirection(newAngle);
+	dropVec = { 0,0,0 };
+	diveVec = { 0,0,0 };
+
+
+
 
 	// プレイヤー上部の水面の座標を取得
 	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
@@ -319,9 +327,11 @@ void Player::MoveLimit(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::LookAtDirection(const float& angle){
-	Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
-	slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
-	transform_->SetQuaternion(moveRotation);
+	//Quaternion moveRotation = Quaternion::EulerToQuaternion(Vector3(0.0f, 0.0f, angle)) * restPoseRotation_;//.Normalize()
+	//slerpRotation_ = Quaternion::Slerp(transform_->GetQuaternion().Normalize(), moveRotation.Normalize(), lookAtT_).Normalize();
+	Quaternion newRotate = newRotate.AngleAxis(angle, { 0 ,0,1 });
+
+	transform_->SetQuaternion(newRotate);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,6 +405,8 @@ void Player::EraseBody(){
 
 #ifdef _DEBUG
 void Player::Debug_Gui(){
+	
+
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
 	ImGui::DragFloat3("worldPos", &worldPos_.x, 0.1f);
@@ -403,10 +415,10 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
 	ImGui::DragFloat("temporaryAcceleration_", &temporaryAcceleration_, 0.1f);
 	ImGui::DragFloat("baseSpeed_", &baseSpeed_, 0.1f);
-	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f,1.0f);
+	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f, 1.0f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
-	ImGui::Text("totalSpeedRatio=%f",totalSpeedRatio);
-	ImGui::DragFloat("addPressTime_=%f", &addPressTime_,0.001f);
+	ImGui::Text("totalSpeedRatio=%f", totalSpeedRatio);
+	ImGui::DragFloat("addPressTime_=%f", &addPressTime_, 0.001f);
 
 	ImGui::DragFloat("radius", &radius_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
@@ -496,7 +508,7 @@ void Player::OnCollision(Collider* other){
 		if(isCloseWing_){
 
 			// ある程度上から踏みつけないといけない
-			if(dropSpeed_ < gravity_ * 0.25f){
+			if(transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f){//dropSpeed_ < gravity_ * 0.25f
 				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;
