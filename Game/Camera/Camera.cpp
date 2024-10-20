@@ -95,6 +95,7 @@ void Camera::Update(){
 
 
 		// 目的座標への差分
+		offsetLength_ = std::clamp(offsetLength_, 80.0f, 1000.0f);
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
@@ -119,6 +120,9 @@ void Camera::Update(){
 #include "Engine/Manager/ImGuiManager.h"
 void Camera::Debug_Gui(){
 	ImGui::Begin("Camera");
+
+	ImGui::Text("%f", &offsetLength_);
+
 	if(ImGui::Button("Reset")) {
 		transform_ = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -9.0f} };
 		transform_.rotate = { 0.0f, 0.0f, 0.0f };

@@ -317,7 +317,8 @@ void Player::Move(){
 	dropVec = { 0,0,0 };
 	diveVec = { 0,0,0 };
 
-
+	// 深さを更新
+	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
 
 
 	// プレイヤー上部の水面の座標を取得
