@@ -120,6 +120,10 @@ void GameScene::Init(){
 	backgroundObjects_["moai"]->Init();
 	backgroundObjects_["moai"]->SetObject("Moai.obj");
 
+	backgroundObjects_["Nico"] = std::make_unique<BaseGameObject>();
+	backgroundObjects_["Nico"]->Init();
+	backgroundObjects_["Nico"]->SetObject("Nico.obj");
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
