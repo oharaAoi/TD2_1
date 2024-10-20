@@ -522,7 +522,7 @@ void Player::OnCollision(Collider* other){
 		if(isCloseWing_){
 
 			// ある程度上から踏みつけないといけない
-			if(transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f){//dropSpeed_ < gravity_ * 0.25f
+			if(dropSpeed_ < gravity_ * 0.25f){//dropSpeed_ < gravity_ * 0.25f//transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f
 				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;
