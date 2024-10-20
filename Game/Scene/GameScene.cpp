@@ -144,7 +144,9 @@ void GameScene::Init(){
 
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("Item.obj");
+	debugModel_->SetObject("FishDestroy.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", true);
+	debugModel_->SetIsLighting(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,6 +219,8 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
 
+	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
+
 
 }
 
@@ -267,7 +271,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	/*-------------- object -------------*/
  	player_->Update();
-	
+	debugModel_->Update();
 
 	EndlessStage();
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
@@ -424,6 +428,9 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+
+	debugModel_->Draw();
 
 	/////////////////////////////////
 	// 水の表示
@@ -590,7 +597,7 @@ void GameScene::Debug_Gui(){
 	if (isGuiDraw_) {
 		AdjustmentItem::GetInstance()->Update();
 		ImGui::Begin("GameScene");
-		//ImGui::DragFloat3()
+		debugModel_->Debug_Gui();
 		if (ImGui::Button("NextScene")) {
 			SetNextScene(SceneType::Scene_Result);
 		}
