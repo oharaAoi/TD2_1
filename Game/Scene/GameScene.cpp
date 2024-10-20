@@ -105,6 +105,10 @@ void GameScene::Init(){
 	debugModel3_ = std::make_unique<BaseGameObject>();
 	debugModel3_->Init();
 	debugModel3_->SetObject("MountainGrass.obj");
+
+	debugModel4_ = std::make_unique<BaseGameObject>();
+	debugModel4_->Init();
+	debugModel4_->SetObject("Moai.obj");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,6 +168,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
 
 }
 
@@ -212,9 +217,14 @@ void GameScene::Update(){
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 		//デバッグ用、モデル確認
+	debugModel_->GetTransform()->SetTranslaion(debugModelPos_);
+	debugModel2_->GetTransform()->SetTranslaion(debugModelPos_);
+	debugModel3_->GetTransform()->SetTranslaion(debugModelPos_);
+	debugModel4_->GetTransform()->SetTranslaion(debugModelPos_);
 	debugModel_->Update();
 	debugModel2_->Update();
 	debugModel3_->Update();
+	debugModel4_->Update();
 	/*-------------- object -------------*/
  	player_->Update();
 
@@ -313,6 +323,7 @@ void GameScene::Draw() const{
 	debugModel_->Draw();
 	debugModel2_->Draw();
 	debugModel3_->Draw();
+	debugModel4_->Draw();
 
 	/////////////////////////////////
 	// 線の描画
@@ -510,7 +521,8 @@ void GameScene::CheckAddSplash(){
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
 	//ImGui::DragFloat3()
-	debugModel2_->Debug_Gui();
+	//debugModel2_->Debug_Gui();
+	ImGui::DragFloat3("debugModelPos_", &debugModelPos_.x, 1.0f);
 	if (ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
 	}

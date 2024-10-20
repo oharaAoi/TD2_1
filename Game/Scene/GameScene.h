@@ -104,7 +104,9 @@ private:
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 
 	//デバッグ用、モデル確認
-	std::unique_ptr<BaseGameObject>debugModel_ = nullptr;
-	std::unique_ptr<BaseGameObject>debugModel2_ = nullptr;
-	std::unique_ptr<BaseGameObject>debugModel3_ = nullptr;
+	Vector3 debugModelPos_;
+	std::unique_ptr<BaseGameObject>debugModel_ = nullptr;//山
+	std::unique_ptr<BaseGameObject>debugModel2_ = nullptr;//木
+	std::unique_ptr<BaseGameObject>debugModel3_ = nullptr;//草
+	std::unique_ptr<BaseGameObject>debugModel4_ = nullptr;//モアイ
 };
