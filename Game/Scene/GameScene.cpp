@@ -65,11 +65,15 @@ void GameScene::Init(){
 		// 水面
 		waterSpaces_[oi] = std::make_unique<WaterSpace>();
 		waterSpaces_[oi]->Init("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+		// 山
+		mountains_[oi] = std::make_unique<Mountain>();
+		mountains_[oi]->Init();
 
 		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
 		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
 		waterSpaces_[oi]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		mountains_[oi]->GetTransform()->SetTranslationX(newPos.x);
 	}
 
 
@@ -212,6 +216,7 @@ void GameScene::Update(){
 		waterWeeds_[oi]->Update();
 		grounds_[oi]->Update();
 		waterSpaces_[oi]->Update();
+		mountains_[oi]->Update();
 	}
 	
 	/*------------- manager -------------*/
@@ -297,6 +302,7 @@ void GameScene::Draw() const{
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		worldWalls_[oi]->Draw();
 		waterWeeds_[oi]->Draw();
+		mountains_[oi]->Draw();
 	}
 	debugModel_->Draw();
 
@@ -464,8 +470,10 @@ void GameScene::EndlessStage(){
 
 		worldWalls_[index]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[index]->GetTransform()->SetTranslaion(newPos);
+		mountains_[index]->GetTransform()->SetTranslaion(newPos);
 		grounds_[index]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
 		waterSpaces_[index]->SetTranslate({ newPos.x, 0.0f, 0.0f });
+		mountains_[index]->GetTransform()->SetTranslationX(newPos.x);
 
 		nowStageIndex_ = !nowStageIndex_;
 	}

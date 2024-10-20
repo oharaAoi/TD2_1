@@ -6,8 +6,8 @@
 #include "Game/GameObject/WaterSpace.h"
 #include "Game/GameObject/Player.h"
 #include "Game/GameObject/Fish.h"
-#include "Game/GameObject/Item.h"
 #include "Game/GameObject/Bird.h"
+#include "Game/GameObject/Mountain.h"
 
 /*------ manager,editor ------*/
 #include "Engine/ParticleSystem/EffectSystem.h"
@@ -77,6 +77,7 @@ private:
 	bool nowStageIndex_ = 0;
 	std::unique_ptr<WorldWall> worldWalls_[kStageMax_];
 	std::unique_ptr<Waterweed> waterWeeds_[kStageMax_];
+	std::unique_ptr<Mountain> mountains_[kStageMax_];
 
 	std::unique_ptr<Ground> grounds_[kStageMax_];
 	std::unique_ptr<WaterSpace> waterSpaces_[kStageMax_];
