@@ -282,7 +282,8 @@ void Player::Move(){
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 				// 潜水速度を一定範囲に保つ
 				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
-				baseSpeed_ = std::clamp(baseSpeed_ / 2, kMinBaseSpeed_, kMaxBaseSpeed_);
+				baseSpeed_ = kMinBaseSpeed_+10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_+ decreaseVelocity_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				diveTime_ = kDiveTime_;
 			}
 		}

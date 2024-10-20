@@ -58,6 +58,7 @@ public:
 	const Quaternion& GetSlerpRotate() const { return slerpRotation_; }
 
 	const float GetTotalSpeedRatio() const { return  totalSpeedRatio; }
+	const float GetMaxMoveSpeed() const { return  kMaxMoveSpeed_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -100,13 +101,13 @@ private:
 
 	//基礎速度のパラメーター
 	const float kAddSpeed_ = 10;
-	const float kDecreaseSpeed_ = 10;
+	const float kDecreaseSpeed_ = 20;
 	const float kMaxBaseSpeed_ = 70;
 	const float kMinBaseSpeed_ = 35;
 
 	// アイテム取得時などに追加する速度
 	float increaseVelocity_ = 10.0f;
-	float decreaseVelocity_ = -5.0f;
+	float decreaseVelocity_ = -8.0f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
 	float pressTime_;
