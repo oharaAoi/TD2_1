@@ -445,8 +445,8 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
-	gamePlayTimer_->Draw();
-	flyingTimerUI_->Draw();
+	//gamePlayTimer_->Draw();
+	//flyingTimerUI_->Draw();
 	flyingGaugeUI_->Draw();
 	playerSpeedCounter_->Draw();
 }
