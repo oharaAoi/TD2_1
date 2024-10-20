@@ -69,4 +69,8 @@ void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 }
 
 void Bird::IndividualFromCommon(const SubAttributeType& subType) {
+	switch (subType) {
+	case SubAttributeType::NONE:
+		break;
+	}
 }

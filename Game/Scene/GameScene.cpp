@@ -92,6 +92,9 @@ void GameScene::Init(){
 	flyingGaugeUI_ = std::make_unique<FlyingGaugeUI>();
 	flyingGaugeUI_->Init();
 
+	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
+	playerSpeedCounter_->Init();
+
 	sky_ = Engine::CreateSprite("sky.png");
 	sky_->SetLeftTop({ 0.0f,0.0f });
 	sky_->SetCenterPos({ 640.0f, 360.0f });
@@ -197,6 +200,8 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_icon.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
 
 
 	//デバッグ用、モデル確認
@@ -324,6 +329,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 	flyingGaugeUI_->Update(player_->GetFlyingTime());
+	playerSpeedCounter_->Update(player_->GetMoveSpeed());
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -435,6 +441,7 @@ void GameScene::Draw() const{
 	gamePlayTimer_->Draw();
 	flyingTimerUI_->Draw();
 	flyingGaugeUI_->Draw();
+	playerSpeedCounter_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -612,6 +619,7 @@ void GameScene::Debug_Gui(){
 			ImGui::Begin("UI");
 			flyingTimerUI_->Debug_Gui();
 			flyingGaugeUI_->Debug_Gui();
+			playerSpeedCounter_->Debug_Gui();
 			ImGui::End();
 			ImGui::TreePop();
 		}

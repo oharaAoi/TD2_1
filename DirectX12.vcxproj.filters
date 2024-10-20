@@ -459,9 +459,6 @@
     <ClCompile Include="Engine\Audio\AudioPlayer.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Effect\Splash.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameObject\PlayerBody.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -483,13 +480,7 @@
     <ClCompile Include="Game\UI\FlyingTimerUI.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\TitleUI.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scene\TutorialScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\FlyingGaugeUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject\Bird.cpp">
@@ -516,7 +507,19 @@
     <ClCompile Include="Game\GameObject\Mountain.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\TitleUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\FlyingGaugeUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\Splash.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Effect\EmissionEffect.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayerSpeedCounter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -887,9 +890,6 @@
     <ClInclude Include="Engine\Audio\AudioPlayer.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Effect\Splash.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameObject\PlayerBody.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -911,13 +911,7 @@
     <ClInclude Include="Game\UI\FlyingTimerUI.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\TitleUI.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scene\TutorialScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\FlyingGaugeUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameObject\Bird.h">
@@ -944,7 +938,19 @@
     <ClInclude Include="Game\GameObject\Mountain.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Game\UI\TitleUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\FlyingGaugeUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\Splash.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Effect\EmissionEffect.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayerSpeedCounter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
