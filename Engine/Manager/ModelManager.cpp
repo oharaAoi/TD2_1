@@ -27,7 +27,7 @@ void ModelManager::LoadModel(const std::string& directoryPath, const std::string
 
 Model* ModelManager::GetModel(const std::string& modelName) {
 	if (auto it = modelMap_.find(modelName); it == modelMap_.end()) {
-		assert("not find Model!");
+		assert(false && "Model not found!");
 	}
 
 	modelNameList_.push_back(modelName);

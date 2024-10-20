@@ -189,6 +189,7 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 
 }
 
