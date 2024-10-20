@@ -84,13 +84,18 @@ void GameScene::Init(){
 	collisionManager_->AddCollider(player_.get());
 
 	// -------------------------------------------------
-	// ↓ UIの初期化
+	// ↓ UI・スプライトの初期化
 	// -------------------------------------------------
 	flyingTimerUI_ = std::make_unique<FlyingTimerUI>();
 	flyingTimerUI_->Init();
 
 	flyingGaugeUI_ = std::make_unique<FlyingGaugeUI>();
 	flyingGaugeUI_->Init();
+
+	sky_ = Engine::CreateSprite("sky.png");
+	sky_->SetLeftTop({ 0.0f,0.0f });
+	sky_->SetTextureSize({ 1280.0f,720.0f });
+	sky_->SetRectRange({ 1280.0f,720.0f });
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -175,6 +180,7 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_bar.png");
@@ -328,6 +334,9 @@ void GameScene::Update(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const{
+
+	Engine::SetPipeline(PipelineType::SpritePipeline);
+	//sky_->Draw();
 
 
 	/////////////////////////////////
