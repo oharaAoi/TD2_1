@@ -15,6 +15,7 @@
 #include "Engine/Manager/CollisionManager.h"
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Game/Manager/ObstaclesManager.h"
+#include "Game/Effect/ParticleManager.h"
 
 /*--------- lib ----------*/
 #include "Engine/Math/MyRandom.h"
@@ -33,6 +34,9 @@
 #include "Game/UI/FlyingTimerUI.h"
 #include "Game/UI/FlyingGaugeUI.h"
 #include "Game/UI/PlayerSpeedCounter.h"
+/*------ Sprite ------*/
+#include "Game/Effect/Cherry.h"
+
 
 // ゲームシーン内での状態分けのenum
 enum class GAME_STATE : int32_t{
@@ -97,6 +101,9 @@ private:
 
 	std::unordered_map<std::string,std::unique_ptr<BaseGameObject>>backgroundObjects_;
 
+	Vector4 editColor_;
+	std::unique_ptr<BaseGameObject>partition_ = nullptr;
+
 	// --------- parameter ----------- //
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
@@ -105,6 +112,7 @@ private:
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
+	std::unique_ptr<ParticleManager<Cherry>> cherryEmitter_ = nullptr;
 
 	// ---------- editor ----------- //
 

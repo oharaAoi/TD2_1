@@ -50,6 +50,10 @@ void Player::Init(){
 	//restPoseRotation_ = Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f));
 	//transform_->SetQuaternion(restPoseRotation_);
 
+	if(GameScene::GetGameState() == GAME_STATE::TITLE){
+		transform_->SetTranslaion({ 0.0f,150.0f,0.0f });
+	}
+
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
 
@@ -66,7 +70,7 @@ void Player::Init(){
 	hitSe_->Init("./Game/Resources/Audio/test.wav");
 	coinGetSe_->Init("./Game/Resources/Audio/kari_coinGet.wav");
 
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +132,7 @@ void Player::Update(){
 	obb_.center = transform_->GetTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 
-	
+
 	BaseGameObject::Update();
 }
 
@@ -193,7 +197,7 @@ void Player::Move(){
 			// 潜る
 			float t = diveTime_ / kDiveTime_;
 			diveVec = { 0,0,0 };
-			 diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
+			diveVec = Vector3(0.0f, divingSpeed_ * 1.2f, 0.0f) * GameTimer::TimeRate() * t;
 			//transform_->SetTranslaion(transform_->GetTranslation() + diveVec * t);
 
 			// 猶予時間が0になったら通常状態へ
@@ -278,10 +282,10 @@ void Player::Move(){
 	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
 
 
-	transform_->SetTranslaion(transform_->GetTranslation() + velocity_+ dropVec+ diveVec);
-	
-	float newAngle = std::atan2(-(velocity_.y + dropVec.y+ diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
-	newAngle += 3.141592 ;
+	transform_->SetTranslaion(transform_->GetTranslation() + velocity_ + dropVec + diveVec);
+
+	float newAngle = std::atan2(-(velocity_.y + dropVec.y + diveVec.y), -(velocity_.x + dropVec.x + diveVec.x));
+	newAngle += 3.141592f;
 	LookAtDirection(newAngle);
 	dropVec = { 0,0,0 };
 	diveVec = { 0,0,0 };
@@ -425,7 +429,7 @@ void Player::Rounding(Vector3& velocity){
 
 #ifdef _DEBUG
 void Player::Debug_Gui(){
-	
+
 
 	ImGui::Begin("Player");
 	transform_->Debug_Gui();
@@ -528,7 +532,7 @@ void Player::OnCollision(Collider* other){
 		if(isCloseWing_){
 
 			// ある程度上から踏みつけないといけない
-			if(transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f){//dropSpeed_ < gravity_ * 0.25f
+			if(transform_->GetTranslation().y > other->GetWorldTranslation().y + other->GetObb().size.y * 0.25f){//dropSpeed_ < gravity_ * 0.25f
 				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;

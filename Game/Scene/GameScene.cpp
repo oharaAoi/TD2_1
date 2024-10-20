@@ -10,7 +10,7 @@ GameScene::GameScene(){}
 GameScene::~GameScene(){}
 
 void GameScene::Finalize(){
-	for (std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
+	for(std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Finalize();
 	}
 }
@@ -31,10 +31,10 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	obstaclesManager_ = std::make_unique<ObstaclesManager>();
 	obstaclesManager_->Init();
-	if (StageInformation::GetStageNumMax() != 0) {
+	if(StageInformation::GetStageNumMax() != 0) {
 		obstaclesManager_->SetObstacles(StageInformation::GetStage());
 	}
-	
+
 	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
 	placementObjectEditor_->Init(obstaclesManager_.get());
 
@@ -53,7 +53,7 @@ void GameScene::Init(){
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
 
-	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		Vector3 newPos = StageInformation::worldWallPos_;
 		newPos.x += StageInformation::stageWidthEvery_ * (oi);
 
@@ -80,6 +80,15 @@ void GameScene::Init(){
 		mountains_[oi]->GetTransform()->SetTranslationX(newPos.x);
 	}
 
+	// 仕切り
+	partition_ = std::make_unique<BaseGameObject>();
+	partition_->Init();
+	partition_->SetObject("Partition.obj");
+	partition_->GetTransform()->SetScale({ 100.0f, 100.0f, 1.0f });
+	partition_->GetTransform()->SetQuaternion(Quaternion::AngleAxis(3.14f, { 0.0f,1.0f,0.0f }));
+	partition_->SetColor({ 0.0f,0.266f,0.349f,0.0f });
+	partition_->SetIsLighting(false);
+	partition_->Update();
 
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -99,16 +108,29 @@ void GameScene::Init(){
 	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
 	playerSpeedCounter_->Init();
 
+	// 桜の花を散らすやつ
+	cherryEmitter_ = std::make_unique<ParticleManager<Cherry>>();
+	cherryEmitter_->SetEmitRange({ kWindowWidth_ * 0.5f,0.0f }, { kWindowWidth_,kWindowHeight_ * 0.5f });
+	cherryEmitter_->SetEmitCountEvery(2);
+
+	// 青空
 	sky_ = Engine::CreateSprite("sky.png");
 	sky_->SetLeftTop({ 0.0f,0.0f });
 	sky_->SetCenterPos({ 640.0f, 360.0f });
 	sky_->SetTextureSize({ 1280.0f,720.0f });
 	sky_->SetRectRange({ 1280.0f,720.0f });
 
+	// タイトルロゴ
+	titleLogo_ = Engine::CreateSprite("titleLogo.png");
+	titleLogo_->SetLeftTop({ 0.0f,0.0f });
+	titleLogo_->SetCenterPos({ 640.0f, 360.0f });
+	titleLogo_->SetTextureSize({ 1280.0f,720.0f });
+	titleLogo_->SetRectRange({ 1280.0f,720.0f });
+
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
- 	camera_->SetPlayerPtr(player_.get());
+	camera_->SetPlayerPtr(player_.get());
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -164,12 +186,12 @@ void GameScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/Wood/", "Wood.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass2.obj");
-
+	ModelManager::LoadModel("./Game/Resources/Model/Partition/", "Partition.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
-	
+
 	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
@@ -197,6 +219,8 @@ void GameScene::Load(){
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "cherry.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_flyingGaugeOut.png");
@@ -231,7 +255,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ Cameraの更新
 	// -------------------------------------------------
-	
+
 	if(!isDegugCameraActive_) {
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
@@ -243,11 +267,11 @@ void GameScene::Update(){
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 		Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
 	}
-	
+
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
-	if (Input::IsTriggerKey(DIK_ESCAPE)) {
+	if(Input::IsTriggerKey(DIK_ESCAPE)) {
 		isPause_ = true;
 	}
 	if(isPause_) {
@@ -268,20 +292,39 @@ void GameScene::Update(){
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	/*-------------- object -------------*/
- 	player_->Update();
-	
+	player_->Update();
+
 
 	EndlessStage();
-	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		worldWalls_[oi]->Update();
 		waterWeeds_[oi]->Update();
 		grounds_[oi]->Update();
 		waterSpaces_[oi]->Update();
 		mountains_[oi]->Update();
 	}
-	
+
 	for(auto& backgroundObject : backgroundObjects_){
 		backgroundObject.second->Update();
+	}
+
+
+	if(currentState_ == GAME_STATE::TITLE){
+
+	#ifdef _DEBUG
+
+		ImGui::Begin("color");
+		if(ImGui::ColorEdit4("color", &editColor_.x)){
+			partition_->SetColor(editColor_);
+		};
+		ImGui::End();
+
+	#endif // 
+
+		Vector3 pos = player_->GetWorldTranslation();
+		pos.z += 10.0f;
+		partition_->GetTransform()->SetTranslaion(pos);
+		partition_->Update();
 	}
 
 	/*------------- manager -------------*/
@@ -290,8 +333,10 @@ void GameScene::Update(){
 
 	/*-------------- effect -------------*/
 	trail_->Update();
-	trail_->AddTrail(player_->GetTransform()->GetTranslation(),player_->GetSlerpRotate(), player_->GetIsFlying());
+	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
+
+	cherryEmitter_->Update();
 
 	CheckAddSplash();
 	for(auto& splash : splash_){
@@ -331,9 +376,11 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ UIの更新
 	// -------------------------------------------------
-	flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
-	flyingGaugeUI_->Update(player_->GetFlyingTime());
-	playerSpeedCounter_->Update(player_->GetMoveSpeed());
+	if(currentState_ != GAME_STATE::TITLE){
+		flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
+		flyingGaugeUI_->Update(player_->GetFlyingTime());
+		playerSpeedCounter_->Update(player_->GetMoveSpeed());
+	}
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -341,15 +388,15 @@ void GameScene::Update(){
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
-	if (player_->GetIsMove()) {
+	if(player_->GetIsMove()) {
 		gamePlayTimer_->Update();
 
-		if (gamePlayTimer_->GetIsFinish()) {
+		if(gamePlayTimer_->GetIsFinish()) {
 			isPause_ = true;
 		}
 	}
 
-	if (Input::IsTriggerKey(DIK_R)) {
+	if(Input::IsTriggerKey(DIK_R)) {
 		Init();
 	}
 }
@@ -368,21 +415,23 @@ void GameScene::Draw() const{
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
+	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		worldWalls_[oi]->Draw();
 		waterWeeds_[oi]->Draw();
 		mountains_[oi]->Draw();
 	}
 
-	
+	if(currentState_ == GAME_STATE::TITLE){
+		partition_->Draw();
+	}
 
 	/////////////////////////////////
 	// 線の描画
 	/////////////////////////////////
-	
+
 
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
-	for (const std::unique_ptr<Ground>& ground : grounds_) {
+	for(const std::unique_ptr<Ground>& ground : grounds_) {
 		ground->Draw();
 	}
 
@@ -392,26 +441,26 @@ void GameScene::Draw() const{
 		splash->Draw();
 	}
 
-	
+
 
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
+
+#ifdef _DEBUG
 	// コライダーの表示
-	if (Collider::isColliderBoxDraw_) {
-		if (!isDegugCameraActive_) {
+	if(Collider::isColliderBoxDraw_) {
+		if(!isDegugCameraActive_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-		}
-		else {
+		} else {
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
-#ifdef _DEBUG
 	// editorの描画
 	placementObjectEditor_->Draw();
 #endif // _DEBUG
 
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	player_->Draw();
-	
+
 	/////////////////////////////////
 	// Effectの描画
 	/////////////////////////////////
@@ -423,7 +472,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	// このクラスは一番最後に描画
-	for (const std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
+	for(const std::unique_ptr<WaterSpace>& waterSpace : waterSpaces_) {
 		waterSpace->Draw();
 	}
 	Engine::SetPipeline(PipelineType::NormalPipeline);
@@ -442,10 +491,17 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
-	gamePlayTimer_->Draw();
-	flyingTimerUI_->Draw();
-	flyingGaugeUI_->Draw();
-	playerSpeedCounter_->Draw();
+
+	if(currentState_ != GAME_STATE::TITLE){
+		gamePlayTimer_->Draw();
+		flyingTimerUI_->Draw();
+		flyingGaugeUI_->Draw();
+		playerSpeedCounter_->Draw();
+
+	} else{
+		titleLogo_->Draw();
+		cherryEmitter_->Draw();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -458,25 +514,25 @@ void GameScene::UpdateColliderList(){
 
 	collisionManager_->AddCollider(player_.get());
 
-	for (auto& obstacle : obstaclesManager_->GetPlacementObject()) {
+	for(auto& obstacle : obstaclesManager_->GetPlacementObject()) {
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle->GetWorldTranslation()).Length());
-		if (lenght < obstaclesManager_->GetUpdateLenght()) {
+		if(lenght < obstaclesManager_->GetUpdateLenght()) {
 			collisionManager_->AddCollider(obstacle.get());
 		}
 	}
 
 #ifdef _DEBUG
 
-	for (auto& obstacle : placementObjectEditor_->GetDebugPlacementObjs()) {
+	for(auto& obstacle : placementObjectEditor_->GetDebugPlacementObjs()) {
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
-		if (lenght < obstaclesManager_->GetUpdateLenght()) {
+		if(lenght < obstaclesManager_->GetUpdateLenght()) {
 			collisionManager_->AddCollider(obstacle.object_.get());
 		}
 	}
 
-	for (auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()) {
+	for(auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()) {
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
-		if (lenght < obstaclesManager_->GetUpdateLenght()) {
+		if(lenght < obstaclesManager_->GetUpdateLenght()) {
 			collisionManager_->AddCollider(obstacle.object_.get());
 		}
 	}
@@ -535,11 +591,11 @@ void GameScene::PlayerWaveCollision(){
 
 void GameScene::EndlessStage(){
 	// playerが一定間隔進んだら新しいステージを生成する
-	if (player_->GetWorldTranslation().x < 3000.0f) {
+	if(player_->GetWorldTranslation().x < 3000.0f) {
 		return;
 	}
 
-	if (player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) + 200.0f) {
+	if(player_->GetWorldTranslation().x > (StageInformation::stageWidthEvery_ * (stageLoopCount_ + 1)) + 200.0f) {
 		++stageLoopCount_;
 		size_t index = static_cast<size_t>(nowStageIndex_);
 		// 新しく設置する座標を求める
@@ -568,7 +624,7 @@ void GameScene::CheckAddSplash(){
 		emitPos.y = 0.01f;
 
 		splash_.emplace_back(
-			std::make_unique<Splash>(emitPos, 5.0f * (player_->GetMoveSpeed()/50.0f))
+			std::make_unique<Splash>(emitPos, 5.0f * (player_->GetMoveSpeed() / 50.0f))
 		);
 	}
 }
@@ -581,8 +637,11 @@ void GameScene::CheckAddSplash(){
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
 	ImGui::Begin("GameScene");
+
+	ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
+
 	//ImGui::DragFloat3()
-	if (ImGui::Button("NextScene")) {
+	if(ImGui::Button("NextScene")) {
 		SetNextScene(SceneType::Scene_Result);
 	}
 
@@ -608,8 +667,8 @@ void GameScene::Debug_Gui(){
 
 	{
 		ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
-		if (ImGui::TreeNode("Camera")) {
-			if (!isDegugCameraActive_) {
+		if(ImGui::TreeNode("Camera")) {
+			if(!isDegugCameraActive_) {
 				camera_->Debug_Gui();
 			} else {
 				debugCamera_->Debug_Gui();
@@ -619,7 +678,7 @@ void GameScene::Debug_Gui(){
 	}
 
 	{
-		if (ImGui::TreeNode("UI")) {
+		if(ImGui::TreeNode("UI")) {
 			ImGui::Begin("UI");
 			flyingTimerUI_->Debug_Gui();
 			flyingGaugeUI_->Debug_Gui();
@@ -630,7 +689,7 @@ void GameScene::Debug_Gui(){
 	}
 
 	{
-		if (ImGui::TreeNode("Player")) {
+		if(ImGui::TreeNode("Player")) {
 			player_->Debug_Gui();
 			gamePlayTimer_->Debug_Gui();
 			ImGui::TreePop();
