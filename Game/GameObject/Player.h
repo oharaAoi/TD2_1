@@ -129,7 +129,7 @@ private:
 	const float kBodyLaunchSpeed_ = 10.0f;
 
 	// 着水して水に潜った際の猶予時間
-	const float kDiveTime_ = 1.0f;
+	const float kDiveTime_ = 0.5f;
 	float diveTime_ = kDiveTime_;
 	Vector3 dropVec;
 	Vector3 diveVec;
