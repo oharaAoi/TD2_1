@@ -94,21 +94,21 @@ void Player::Update(){
 
 	// 飛行フラグ更新
 	if(transform_->GetTranslation().y > 0.0f) {
-		isFlying_ = true;
-		
 		// 水から出た瞬間
 		if(!preFlying_) {
 			timer_.Measurement(transform_->GetTranslation().x);
+			isFlying_ = true;
 			isSplash_ = true;
 			isEnableLaunch_ = true;
+			AudioPlayer::SinglShotPlay("outWaterSurface.wav", 0.5f);
 		}
 	} else {
-		//isFlying_ = false;
-
 		// 着水した瞬間
 		if(preFlying_) {
 			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
+			isFlying_ = false;
+			AudioPlayer::SinglShotPlay("inWaterSurface.wav", 0.5f);
 		}
 	}
 
@@ -338,6 +338,7 @@ void Player::Move(){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
 						pressTime_ = 0.7f;
+						AudioPlayer::SinglShotPlay("boost.wav", 0.5f);
 					}
 				}
 			} else{
@@ -406,8 +407,10 @@ void Player::UpdateBody(){
 
 	if(bodyCount > bodyCount_){
 		AddBody(followModels_.back().get());
+		AudioPlayer::SinglShotPlay("incrementBody.wav", 0.5f);
 	} else if(bodyCount < bodyCount_){
 		EraseBody();
+		AudioPlayer::SinglShotPlay("decrementBody.wav", 0.5f);
 	}
 }
 
@@ -526,7 +529,8 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-			AudioPlayer::SinglShotPlay("test.wav", 0.5f);
+			AudioPlayer::SinglShotPlay("eat.wav", 0.5f);
+			AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
 
 		} else{// 食べられなかったとき
 
@@ -541,7 +545,7 @@ void Player::OnCollision(Collider* other){
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				//基礎速度の変動
 				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				AudioPlayer::SinglShotPlay("test.wav", 0.5f);
+				AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 
 			}
 		}
@@ -552,7 +556,6 @@ void Player::OnCollision(Collider* other){
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::COIN) {
-		AudioPlayer::SinglShotPlay("test.wav", 0.5f);
 		getCoinNum_++;
 	}
 
@@ -568,6 +571,7 @@ void Player::OnCollision(Collider* other){
 				pressTime_ = 1.0f;
 				isFalling_ = false;
 				isCloseWing_ = false;
+				AudioPlayer::SinglShotPlay("jumpBird.wav", 0.5f);
 
 			} else{
 				// 正面衝突の場合
@@ -592,7 +596,7 @@ void Player::OnCollision(Collider* other){
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-		//AudioPlayer::SinglShotPlay("test.wav", 0.5f);
+		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
 		// 一時減速する
@@ -600,7 +604,7 @@ void Player::OnCollision(Collider* other){
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-		//AudioPlayer::SinglShotPlay("test.wav", 0.5f);
+		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 	}
 }
 
