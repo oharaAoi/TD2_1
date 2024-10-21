@@ -12,6 +12,7 @@
 #include "Game/Editer/PlacementObjectEditer.h"
 #include "Engine/Manager/AudioManager.h"
 #include "Game/Effect/ParticleManager.h"
+#include "Game/Manager/AnimetionEffectManager.h"
 
 /*--------- lib ----------*/
 #include "Engine/Math/MyRandom.h"

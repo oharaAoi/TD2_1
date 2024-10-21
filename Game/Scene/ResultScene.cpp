@@ -2,9 +2,11 @@
 
 ResultScene::ResultScene(){}
 
-ResultScene::~ResultScene(){}
+ResultScene::~ResultScene() { Finalize(); }
 
-void ResultScene::Finalize(){}
+void ResultScene::Finalize() {
+	AnimetionEffectManager::GetInstance()->Finalize(); 
+}
 
 /////////////////////////////////////////////////////////////////
 //							初期化
@@ -113,7 +115,7 @@ void ResultScene::Init(){
 
 	/*--------------- sprite ---------------*/
 	backgroundSprite_ = Engine::CreateSprite("white.png");
-	backgroundSprite_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
+	backgroundSprite_->SetTextureSize({ kWindowWidth_ + 300.0f,kWindowHeight_ + 300.0f });
 	backgroundSprite_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
 	backgroundSprite_->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	backgroundSprite_->Update();
