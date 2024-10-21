@@ -41,6 +41,8 @@ public:
 private:
 	// 終了したか
 	bool isFinish_;
+	bool isOverTime_;
+	bool isPreFlying_;
 	// 時間系
 	float gameTimer_;
 	float gameTimeLimit_;

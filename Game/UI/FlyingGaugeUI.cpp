@@ -16,8 +16,6 @@ void FlyingGaugeUI::Init() {
 	rank_ = Engine::CreateSprite("Rank.png");
 	icon_ = Engine::CreateSprite("RankIcon.png");
 
-	bar_->SetIsDiscard(false);
-
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "FlyingGaugeUI";
 	// 登録

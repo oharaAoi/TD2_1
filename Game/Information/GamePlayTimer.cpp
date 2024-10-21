@@ -69,6 +69,14 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 			isFinish_ = true;
 			AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
 		}
+	} else { // オーバータイムに入る
+		isOverTime_ = true;
+
+		// 今飛んでいなくて前飛んでいたら
+		if (!isPlayerFlying && isPreFlying_) {
+			isFinish_ = true;
+			AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+		}
 	}
 }
 

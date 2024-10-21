@@ -22,8 +22,7 @@ public:
 		Vector4 color;
 		Matrix4x4 uvTransform;
 		Vector2 uvDrawRange;		// 0~1の範囲で指定する
-		int isDiscard;
-		int padding;
+		float padding[2];
 	};
 
 	struct TextureTransformData {
@@ -76,8 +75,6 @@ public:
 	void SetIsFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
 
 	void SetUvDrawRange(const Vector2& range) { materialData_->uvDrawRange = range; }
-
-	void SetIsDiscard(bool isDiscard) { materialData_->isDiscard = isDiscard; }
 
 	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
 	const Vector2 GetScale() const { return Vector2(transform_.scale.x, transform_.scale.y); }

@@ -22,7 +22,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(999.0f);
+	gamePlayTimer_->Init(180.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -101,8 +101,8 @@ void GameScene::Init() {
 	titleLogo_ = Engine::CreateSprite("titleLogo.png");
 	titleLogo_->SetLeftTop({ 0.0f,0.0f });
 	titleLogo_->SetCenterPos({ 640.0f, 360.0f });
-	titleLogo_->SetTextureSize({ 1280.0f,720.0f });
-	titleLogo_->SetRectRange({ 1280.0f,720.0f });
+	//titleLogo_->SetTextureSize({ 1280.0f,720.0f });
+	//titleLogo_->SetRectRange({ 1280.0f,720.0f });
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -455,9 +455,9 @@ void GameScene::Draw() const {
 	/////////////////////////////////
 	worldObjects_->Draw();
 
-	if (currentState_ == GAME_STATE::TITLE) {
-		partition_->Draw();
-	}
+	//if (currentState_ == GAME_STATE::TITLE) {
+	//	partition_->Draw();
+	//}
 
 	/////////////////////////////////
 	// 線の描画

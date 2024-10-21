@@ -4,7 +4,6 @@ struct Material {
 	float4 color;
 	float4x4 uvTransform;
 	float2 drawRange;
-	int isDiscard;
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);

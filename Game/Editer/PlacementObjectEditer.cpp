@@ -295,7 +295,7 @@ void PlacementObjectEditer::Edit_Config() {
 		ImGui::EndCombo();
 	}
 
-	ImGui::InputText(".json##EditFineName", &inportFileName_[0], sizeof(char) * 64);
+	ImGui::InputText(".json##ReName", &reNameInportFileName_[0], sizeof(char) * 64);
 
 	// -------------------------------------------------
 	// ↓ 生成するファイルのレベルを決める
@@ -398,11 +398,19 @@ void PlacementObjectEditer::Edit_Config() {
 		if (ImGui::Button("Save_Edit")) {
 			Save(inportFileName_, inport_BasePlacementObj_, editLevel_);
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("ReNameSave_Edit")) {
+			std::filesystem::rename(
+				obstaclesManager_->GetDirectoryPath() + inportFileName_ + ".json",
+				obstaclesManager_->GetDirectoryPath() + std::to_string(reNameInportFileName_[0]) + ".json");
+			//Save(reNameInportFileName_, inport_BasePlacementObj_, editLevel_);
+		}
 	}
 
-	if (ImGui::Button("Save_Edit")) {
+	if (ImGui::Button("Clear")) {
 		inport_BasePlacementObj_.clear();
 	}
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

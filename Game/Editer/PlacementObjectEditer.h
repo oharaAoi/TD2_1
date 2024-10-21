@@ -64,6 +64,7 @@ private:
 
 	char exportFileName_[64];
 	std::string inportFileName_;
+	char reNameInportFileName_[64];
 
 	int inportIndex_;
 

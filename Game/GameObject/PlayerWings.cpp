@@ -23,9 +23,9 @@ void PlayerWings::Init() {
 void PlayerWings::Update(const Vector3& parentPos, const Quaternion& rotate, bool isGliding) {
 	for (uint32_t oi = 0; oi < 2; ++oi) {
 
-		float hugo = 1;
+		float hugo = 1.0f;
 		if (oi == 1) {
-			hugo *= -1;
+			hugo *= -1.0f;
 		}
 
 		if (isGliding) {

@@ -4,6 +4,12 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Easing.h"
 
+enum class RockSize : int32_t {
+	SMALL = 6,
+	MIDIUM = 12,
+	LARGE = 18,
+};
+
 class Rock : public BasePlacementObject {
 public:
 

@@ -83,7 +83,7 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 		fishSize_ = FISH_SIZE::LARGE;
 		radius_ = 6.0f;
 		energy_ = 0.2f;
-		scale = { radius_,radius_,radius_ };
+		scale = { 4,4,4 };
 
 		break;
 	}

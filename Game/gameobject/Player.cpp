@@ -46,7 +46,7 @@ void Player::Init(){
 	obb_.size = { 1.0f, 1.0f, 1.0f };
 	obb_.center = GetWorldTranslation();
 
-	isMove_ = false;
+	isMove_ = true;
 	baseSpeed_ = defaultSpeed;//0.7f / (1.0f / 60.0f);
 	radius_ = 2.0f;
 
@@ -329,7 +329,7 @@ void Player::Move(){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
 						pressTime_ = 0.7f;
-						AudioPlayer::SinglShotPlay("boost.wav", 0.5f);
+						AudioPlayer::SinglShotPlay("boost.mp3", 0.5f);
 					}
 				}
 			} else{
