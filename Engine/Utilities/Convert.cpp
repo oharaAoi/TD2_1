@@ -27,3 +27,16 @@ std::string ConvertString(const std::wstring& str){
 	WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), result.data(), sizeNeeded, NULL, NULL);
 	return result;
 }
+
+std::wstring ConvertToWideString(const char* narrowStr) {
+	// 必要なワイド文字列のサイズを取得（null終端も含むために -1 を渡す）
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, narrowStr, -1, nullptr, 0);
+
+	// 必要なサイズのwstringを確保
+	std::wstring wideStr(size_needed, 0);
+
+	// マルチバイト文字列をワイド文字列に変換
+	MultiByteToWideChar(CP_UTF8, 0, narrowStr, -1, &wideStr[0], size_needed);
+
+	return wideStr;
+}

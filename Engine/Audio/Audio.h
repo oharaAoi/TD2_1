@@ -5,6 +5,16 @@
 #include <wrl.h>
 #include <cassert>
 #include <list>
+#include <vector>
+#include <mfapi.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+#include "Engine/Utilities/Convert.h"
+
+#pragma comment(lib, "Mf.lib")
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "Mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
 
 // チャンクヘッダ
 struct ChunkHeader {
@@ -32,12 +42,6 @@ struct SoundData {
 	BYTE* pBuffer;
 	// バッファサイズ
 	unsigned int bufferSize;
-};
-
-struct LoadData {
-	WAVEFORMATEX fmt;
-	char* pBuffer;
-	uint32_t dataSize;
 };
 
 struct AudioData {
@@ -75,11 +79,13 @@ public:
 	/// </summary>
 	/// <param name="filename"></param>
 	/// <returns></returns>
-	SoundData SoundLoadWave(const char* filename);
+	SoundData SoundLoad(const char* filename);
 
-	LoadData LoadWave(const char* filename);
+	SoundData LoadWave(const char* filename);
 
-	AudioData LoadAudio(const LoadData& loadAudioData);
+	SoundData LoadMP3(const wchar_t* filename);
+
+	AudioData LoadAudio(const SoundData& loadAudioData);
 
 	/// <summary>
 	/// 音声データの解放
@@ -96,7 +102,7 @@ public:
 
 	void PlayAudio(const AudioData& audioData, bool isLoop, float volume, bool checkPlaying = false);
 
-	void SinglShotPlay(const LoadData& loadAudioData, float volume);
+	void SinglShotPlay(const SoundData& loadAudioData, float volume);
 
 	/// <summary>
 	/// サウンドの停止
@@ -127,6 +133,8 @@ public:
 	/// </summary>
 	/// <param name="soundData"></param>
 	bool IsPlaying(IXAudio2SourceVoice* pSourceVoice);
+
+	const char* GetFileExtension(const char* filename);
 
 private:
 

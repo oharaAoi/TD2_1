@@ -40,7 +40,7 @@ void Audio::Finalize() {
 /// </summary>
 /// <param name="filename"></param>
 /// <returns></returns>
-LoadData Audio::LoadWave(const char* filename) {
+SoundData Audio::LoadWave(const char* filename) {
 	// --------------------------------------------------
 	// ファイルオープン
 	std::ifstream file;
@@ -121,20 +121,113 @@ LoadData Audio::LoadWave(const char* filename) {
 	// waveファイルを閉じる
 	file.close();
 
-	LoadData loadData;
-	loadData.fmt = format.fmt;
-	loadData.pBuffer = pBuffer;
-	loadData.dataSize = data.size;
+	SoundData loadData;
+	loadData.wfex = format.fmt;
+	loadData.pBuffer = (BYTE*)pBuffer;
+	loadData.bufferSize = data.size;
 
 	return loadData;
 }
 
-AudioData Audio::LoadAudio(const LoadData& loadAudioData) {
+SoundData Audio::LoadMP3(const wchar_t* filename) {
+
+	HRESULT hr = MFStartup(MF_VERSION);
+	if (FAILED(hr)) {
+		throw std::runtime_error("Media Foundation initialization failed.");
+	}
+
+	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
+
+	IMFSourceReader* pReader = nullptr;
+	IMFMediaType* pOutputType = nullptr;
+
+	// MP3ファイルのSource Readerを作成
+	hr = MFCreateSourceReaderFromURL(filename, nullptr, &pReader);
+	if (FAILED(hr)) {
+		MFShutdown();
+		throw std::runtime_error("Failed to create Source Reader.");
+	}
+
+	// 出力タイプをPCM (WAV) に設定
+	hr = MFCreateMediaType(&pOutputType);
+	if (FAILED(hr)) {
+		pReader->Release();
+		MFShutdown();
+		throw std::runtime_error("Failed to create output media type.");
+	}
+
+	hr = pOutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+	hr = pOutputType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+	hr = pReader->SetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, nullptr, pOutputType);
+
+	if (FAILED(hr)) {
+		pOutputType->Release();
+		pReader->Release();
+		MFShutdown();
+		throw std::runtime_error("Failed to set media type.");
+	}
+
+	pOutputType->Release();
+	pOutputType = nullptr;
+	pReader->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, &pOutputType);
+	// サンプルを読み取ってデータを抽出
+	std::vector<BYTE> audioData;
+
+	while (true) {
+		IMFSample* pMFSample{ nullptr };
+		DWORD dwStreamFlags{ 0 };
+		pReader->ReadSample((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, nullptr, &dwStreamFlags, nullptr, &pMFSample);
+
+		if (dwStreamFlags & MF_SOURCE_READERF_ENDOFSTREAM) {
+			break;
+		}
+
+		IMFMediaBuffer* pMFMediaBuffer{ nullptr };
+		pMFSample->ConvertToContiguousBuffer(&pMFMediaBuffer);
+
+		BYTE* pBuffer{ nullptr };
+		DWORD cbCurrentLength{ 0 };
+		pMFMediaBuffer->Lock(&pBuffer, nullptr, &cbCurrentLength);
+
+		audioData.resize(audioData.size() + cbCurrentLength);
+		memcpy(audioData.data() + audioData.size() - cbCurrentLength, pBuffer, cbCurrentLength);
+
+		pMFMediaBuffer->Unlock();
+
+		pMFMediaBuffer->Release();
+		pMFSample->Release();
+	}
+
+	// SoundDataにデータを格納
+	SoundData soundData;
+	soundData.pBuffer = new BYTE[audioData.size()];
+	std::copy(audioData.begin(), audioData.end(), soundData.pBuffer);
+	soundData.bufferSize = static_cast<uint32_t>(audioData.size());
+
+	// フォーマット情報を取得
+	hr = pOutputType->GetUINT32(MF_MT_AUDIO_NUM_CHANNELS, reinterpret_cast<UINT32*>(&soundData.wfex.nChannels));
+	hr = pOutputType->GetUINT32(MF_MT_AUDIO_SAMPLES_PER_SECOND, reinterpret_cast<UINT32*>(&soundData.wfex.nSamplesPerSec));
+	hr = pOutputType->GetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, reinterpret_cast<UINT32*>(&soundData.wfex.wBitsPerSample));
+
+	soundData.wfex.wFormatTag = WAVE_FORMAT_PCM;
+	soundData.wfex.nBlockAlign = soundData.wfex.nChannels * soundData.wfex.wBitsPerSample / 8;
+	soundData.wfex.nAvgBytesPerSec = soundData.wfex.nSamplesPerSec * soundData.wfex.nBlockAlign;
+
+	// 後始末
+	pOutputType->Release();
+	pReader->Release();
+	MFShutdown();
+
+	return soundData;
+}
+
+AudioData Audio::LoadAudio(const SoundData& loadAudioData) {
 	// 読み込んだ音声データをreturn
 	AudioData result = {};
-	result.data.wfex = loadAudioData.fmt;
+	result.data.wfex = loadAudioData.wfex;
 	result.data.pBuffer = reinterpret_cast<BYTE*>(loadAudioData.pBuffer);
-	result.data.bufferSize = loadAudioData.dataSize;
+	result.data.bufferSize = loadAudioData.bufferSize;
 	HRESULT hr = xAudio2_->CreateSourceVoice(&result.pSourceVoice, &result.data.wfex);
 	assert(SUCCEEDED(hr));
 
@@ -147,13 +240,18 @@ AudioData Audio::LoadAudio(const LoadData& loadAudioData) {
 /// </summary>
 /// <param name="filename"></param>
 /// <returns></returns>
-SoundData Audio::SoundLoadWave(const char* filename) {
-	LoadData loadData = LoadWave(filename);
+SoundData Audio::SoundLoad(const char* filename) {
+	SoundData loadData{};
+	if (std::strcmp(GetFileExtension(filename), "wav") == 0) {
+		loadData = LoadWave(filename);
+	} else {
+		loadData = LoadMP3(ConvertToWideString(filename).c_str());
+	}
 	// 読み込んだ音声データをreturn
 	SoundData soundData = {};
-	soundData.wfex = loadData.fmt;
+	soundData.wfex = loadData.wfex;
 	soundData.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
-	soundData.bufferSize = loadData.dataSize;
+	soundData.bufferSize = loadData.bufferSize;
 	
 	return soundData;
 }
@@ -229,12 +327,12 @@ void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, boo
 	assert(SUCCEEDED(result));
 }
 
-void Audio::SinglShotPlay(const LoadData& loadAudioData, float volume) {
+void Audio::SinglShotPlay(const SoundData& loadAudioData, float volume) {
 	// 読み込んだ音声データをreturn
 	AudioData audio = {};
-	audio.data.wfex = loadAudioData.fmt;
+	audio.data.wfex = loadAudioData.wfex;
 	audio.data.pBuffer = reinterpret_cast<BYTE*>(loadAudioData.pBuffer);
-	audio.data.bufferSize = loadAudioData.dataSize;
+	audio.data.bufferSize = loadAudioData.bufferSize;
 	HRESULT hr = xAudio2_->CreateSourceVoice(&audio.pSourceVoice, &audio.data.wfex);
 	assert(SUCCEEDED(hr));
 
@@ -303,4 +401,12 @@ bool Audio::IsPlaying(IXAudio2SourceVoice* pSourceVoice) {
 	XAUDIO2_VOICE_STATE state;
 	pSourceVoice->GetState(&state);
 	return state.BuffersQueued == 0;
+}
+
+const char* Audio::GetFileExtension(const char* filename) {
+	const char* ext = std::strrchr(filename, '.'); // 最後のピリオドを探す
+	if (ext == nullptr) {
+		return ""; // 拡張子がない場合は空文字を返す
+	}
+	return ext + 1; // ピリオドの次の文字から拡張子を返す
 }

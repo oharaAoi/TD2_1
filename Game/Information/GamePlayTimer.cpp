@@ -30,13 +30,19 @@ void GamePlayTimer::Init(float limit) {
 		sprite->Update();
 	}
 
+	timeleft10s_ = std::make_unique<AudioPlayer>();
+	timeleft10s_->Init("timeLeft_10s.wav");
+
+	timeleft60s_ = std::make_unique<AudioPlayer>();
+	timeleft60s_->Init("timeLeft_60s.wav");
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::Update() {
+void GamePlayTimer::Update(bool isPlayerFlying) {
 	gameTimer_ -= GameTimer::DeltaTime();
 	if (gameTimer_ < 0.0f) {
 		gameTimer_ = 0.0f;
@@ -49,17 +55,20 @@ void GamePlayTimer::Update() {
 
 	// タイムアップ10秒前
 	if (static_cast<int>(gameTimer_) == 10) {
-		AudioPlayer::SinglShotPlay("timeLeft_10s.wav", 0.6f);
+		timeleft10s_->Play(false, 0.5f, true);
 	}
 	// タイムアップ60秒前
 	if (static_cast<int>(gameTimer_) == 60) {
-		AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+		timeleft60s_->Play(false, 0.5f, true);
 	}
 
-	// 制限時間を超えたら
-	if (gameTimer_ <= 0.0f) {
-		isFinish_ = true;
-		AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+	// Playerが飛んでいたら
+	if (!isPlayerFlying) {
+		// 制限時間を超えたら
+		if (gameTimer_ <= 0.0f) {
+			isFinish_ = true;
+			AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+		}
 	}
 }
 
