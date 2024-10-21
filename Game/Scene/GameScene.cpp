@@ -7,10 +7,10 @@ GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
 
 /*-------------- コンストラクタ・デストラクタ ---------------*/
 GameScene::GameScene() {}
-GameScene::~GameScene() {}
+GameScene::~GameScene() { Finalize(); }
 
 void GameScene::Finalize() {
-
+	AnimetionEffectManager::GetInstance()->Finalize();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

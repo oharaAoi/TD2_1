@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <vector>
+#include <initializer_list>
 #include "Engine/2D/Sprite.h"
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Math/MyRandom.h"
@@ -18,6 +20,7 @@ public:
 public:
 	virtual bool GetIsActive()const{ return lifetime_ > 0.0f; }
 	float GetLifeTime()const{ return lifetime_; }
+	void InitRandomColor(const std::initializer_list<Vector4>& colorList);
 
 protected:
 

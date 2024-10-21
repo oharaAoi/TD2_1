@@ -33,6 +33,8 @@ public:
 	Matrix4x4 GetProjectionMatrix2D() const { return projectionMatrix2D_; }
 
 	Vector3 GetTranslate() const { return transform_.translate; }
+	Vector3 GetRotate()const{ return transform_.rotate; }
+	void SetRotate(const Vector3& rotate){ transform_.rotate = rotate; }
 	Vector3 GetWorldTranslate() const {
 		Matrix4x4 matViewInverse = Inverse(viewMatrix_);
 		return { matViewInverse.m[3][0], matViewInverse.m[3][1] ,matViewInverse.m[3][2] };

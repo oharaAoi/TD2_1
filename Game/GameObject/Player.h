@@ -41,14 +41,16 @@ public:
 	void AddBody(BaseGameObject* pTarget);
 	void EraseBody();
 
+	void UpdateMatrix();
+
+	void ResultSceneUpdate();
+
 private:
 	void Move_TITLE();
 	void Move_TUTORIAL();
 	void Move_GAME();
-
 	void UpdateTransform();
-
-	void Rounding(Vector3 &velocity);
+;	void Rounding(Vector3 &velocity);
 
 public:
 
@@ -91,7 +93,7 @@ private:
 	std::list<std::unique_ptr<PlayerBody>>followModels_;
 	const int kMinBodyCount_ = 2;
 	const int kMaxBodyCount_ = 8;
-	int bodyCount_ = kMinBodyCount_;
+	int bodyCount_ = 0;
 
 	// パラメータ---------------------------------------
 
