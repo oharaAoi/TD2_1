@@ -41,6 +41,21 @@ void BaseGameObject::Draw() const {
 	}
 }
 
+void BaseGameObject::UpdateMatrix(){
+	if(animetor_ != nullptr) {
+		animetor_->Update();
+	}
+
+	if(animationClip_) {
+		animationClip_->Update();
+		transform_->Update(animationClip_->GetMatrix());
+	} else {
+		transform_->Update();
+	}
+
+	worldPos_ = Vector3(0.0f, 0.0f, 0.0f) * transform_->GetWorldMatrix();
+}
+
 void BaseGameObject::SetObject(const std::string& objName) {
 	model_ = ModelManager::GetModel(objName);
 	materials.clear();

@@ -21,18 +21,6 @@ void Player::Init(){
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
 	SetIsLighting(false);
 
-	//
-	BaseGameObject* pTarget = this;
-	for(int i = 0; i < kMinBodyCount_; i++){
-
-		// 胴体を追加
-		AddBody(pTarget);
-
-		// 自身を後続のモデルのターゲットに設定
-		pTarget = followModels_.back().get();
-
-	}
-
 	animetor_ = std::make_unique<PlayerAnimator>();
 	animetor_->Init(this);
 
@@ -114,15 +102,17 @@ void Player::Update(){
 
 	// 体の更新
 	UpdateBody();
-	for(auto& body : followModels_){
-		body->Update();
-	}
+
 
 	timer_.Update(transform_->GetTranslation().x);
 	totalSpeedRatio = GetMoveSpeed() / kMaxMoveSpeed_;
 
 	if(Input::IsTriggerKey(DIK_UP)){
-		AddBody(followModels_.back().get());
+		if(followModels_.size() != 0){
+			AddBody(followModels_.back().get());
+		} else{
+			AddBody(this);
+		}
 	} else if(Input::IsTriggerKey(DIK_DOWN)){
 		EraseBody();
 	}
@@ -136,9 +126,9 @@ void Player::Update(){
 	// -------------------------------------------------
 	// ↓ 羽根の更新
 	// -------------------------------------------------
-	if (isFlying_) {
+	if(isFlying_) {
 		const PlayerBody* topBody = followModels_.begin()->get();
-		if (isFalling_ && isCloseWing_) {
+		if(isFalling_ && isCloseWing_) {
 			wings_->Update(topBody->GetTranslation(), topBody->GetQuaternion(), true);
 		} else {
 			wings_->Update(topBody->GetTranslation(), topBody->GetQuaternion(), false);
@@ -146,7 +136,7 @@ void Player::Update(){
 	} else {
 		wings_->NotFlying();
 	}
-	
+
 	BaseGameObject::Update();
 
 	// -------------------------------------------------
@@ -166,13 +156,13 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
-	if (isFlying_) {
+	if(isFlying_) {
 		wings_->Draw();
 	}
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
-void Player::DrawAnimetor() const {
+void Player::DrawAnimetor() const{
 	animetor_->Draw();
 }
 
@@ -293,8 +283,8 @@ void Player::Move(){
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 				// 潜水速度を一定範囲に保つ
 				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
-				baseSpeed_ = kMinBaseSpeed_+10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_+ decreaseVelocity_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+				baseSpeed_ = kMinBaseSpeed_ + 10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_ + decreaseVelocity_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				diveTime_ = kDiveTime_;
 			}
 		}
@@ -402,15 +392,24 @@ void Player::UpdateBody(){
 	float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 	int bodyCount = kMinBodyCount_ + int(chargePower_ / division);
 
-	if(bodyCount > bodyCount_){
-		AddBody(followModels_.back().get());
+	if(bodyCount > bodyCount_ or bodyCount_ < kMinBodyCount_){
+		if(followModels_.size() != 0){
+			AddBody(followModels_.back().get());
+		} else{
+			AddBody(this);
+		}
 	} else if(bodyCount < bodyCount_){
 		EraseBody();
+	}
+
+	for(auto& body : followModels_){
+		body->Update();
 	}
 }
 
 void Player::AddBody(BaseGameObject* pTarget){
 
+	pTarget->UpdateMatrix();
 	if(bodyCount_ >= kMaxBodyCount_){ return; }
 
 	if(followModels_.size() != 0){
@@ -592,6 +591,19 @@ void Player::Move_TITLE(){}
 void Player::Move_TUTORIAL(){}
 void Player::Move_GAME(){}
 
+
+
+void Player::ResultSceneUpdate(){
+
+	float scale = 1.0f + 0.1f * EaseOutSine(std::fabsf(std::sinf(3.14f * GameTimer::TotalTime()) * 1.5f));
+	transform_->SetScale({ scale,scale,scale });
+
+	UpdateMatrix();
+	UpdateBody();
+}
+
+
+
 void Player::UpdateTransform(){
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
@@ -609,4 +621,8 @@ void Player::UpdateTransform(){
 
 	// 深さを更新
 	swimmigDepth_ = 10.0f - transform_->GetTranslation().y;
+}
+
+void Player::UpdateMatrix(){
+	BaseGameObject::Update();
 }

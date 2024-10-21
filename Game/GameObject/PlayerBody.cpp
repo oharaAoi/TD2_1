@@ -12,7 +12,7 @@ void PlayerBody::Update(){
 
 		// 差分が0なら直接値を設定
 		if(Length(difVec) == 0.0f){
-			difVec = { -1.0f,0.0f,0.0f };
+			difVec = (Vector3(1.0f, 0.0f, 0.0f) * pTargetObject_->GetTransform()->GetQuaternion().MakeMatrix()) * -1.0f;
 		}
 
 		// 追従
@@ -20,13 +20,13 @@ void PlayerBody::Update(){
 
 		angle_ = std::atan2(-difVec.y, -difVec.x);
 
-
 		// 角度を補間
 		//float difAngle = transform_->GetQuaternion().z - pTargetObject_->GetTransform()->GetQuaternion().z;
 		/*Quaternion slerp = Quaternion::Slerp(
 			pTargetObject_->GetTransform()->GetQuaternion().Normalize(),
 			transform_->GetQuaternion().Normalize(),
 			0.8f).Normalize();*/
+
 		newRotate = newRotate.AngleAxis(angle_, { 0,0,1 });
 		//transform_->GetQuaternion().Normalize()* newRotate.Normalize();
 		transform_->SetQuaternion(newRotate);
@@ -47,4 +47,8 @@ void PlayerBody::Debug(int num){
 	Debug_Gui();
 	ImGui::End();
 #endif // DEBUG}
+}
+
+void PlayerBody::UpdateMatrix(){
+	BaseGameObject::Update();
 }
