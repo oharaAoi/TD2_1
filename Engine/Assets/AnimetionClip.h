@@ -64,12 +64,15 @@ public:
 
 	const Matrix4x4 GetMatrix() const { return animationMat_; }
 
+	const bool GetIsAnimationFinish() const { return isAnimationFinish_; }
+
 private:
 
 	std::vector<Animation> animations_;
 	Animation animation_;
 
 	float animationTime_ = 0.0f;
+	bool isAnimationFinish_;
 
 	Matrix4x4 animationMat_;
 

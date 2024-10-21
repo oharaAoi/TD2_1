@@ -10,8 +10,14 @@ void AnimetionClip::Init() {
 }
 
 void AnimetionClip::Update() {
+	isAnimationFinish_ = false;
 	animationTime_ += GameTimer::DeltaTime();
-	animationTime_ = std::fmod(animationTime_, animation_.duration);
+	// アニメーションが終了したら
+	if (animationTime_ > animation_.duration) {
+		isAnimationFinish_ = true;
+		animationTime_ = std::fmod(animationTime_, animation_.duration);
+	}
+	
 
 	////// =======================================================================================
 	//NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[rootName_];
