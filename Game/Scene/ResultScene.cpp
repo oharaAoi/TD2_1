@@ -1,8 +1,6 @@
 #include "ResultScene.h"
 
-ResultScene::ResultScene(){
-	Init();
-}
+ResultScene::ResultScene(){}
 
 ResultScene::~ResultScene(){}
 
@@ -16,6 +14,21 @@ void ResultScene::Init(){
 
 	// 読み込み
 	Load();
+
+	// スコアの決定
+	if(score_ < (int)SCORE_RANK::B){
+		rank_ = SCORE_RANK::C;
+	} else if(score_ < (int)SCORE_RANK::A){
+		rank_ = SCORE_RANK::B;
+	} else if(score_ < (int)SCORE_RANK::S){
+		rank_ = SCORE_RANK::A;
+	} else if(score_ < (int)SCORE_RANK::SS){
+		rank_ = SCORE_RANK::S;
+	} else if(score_ < (int)SCORE_RANK::SSS){
+		rank_ = SCORE_RANK::SS;
+	} else {
+		rank_ = SCORE_RANK::SSS;
+	}
 
 	/*--------------- camera ---------------*/
 	camera_ = std::make_unique<ResultCamera>();
@@ -33,21 +46,65 @@ void ResultScene::Init(){
 	);
 
 
+	/*---------------- string --------------*/
+	space_ = 2.7f;
+	auto& m = scoreNumberModels_.emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+	m->Init();
+	m->SetObject("m.obj");
+	m->GetTransform()->SetTranslaion({ -6.0f,0.0f,10.0f });
+	m->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+	m->UpdateMatrix();
+
 	int digit = 1;
 	while(true){
 
 		if(score_ / digit <= 0){
+			std::reverse(scoreNumberModels_.begin(), scoreNumberModels_.end());
 			break;
 		} else{
 			auto& num = scoreNumberModels_.emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
 			num->Init();
 			num->SetObject(std::to_string((score_ / digit) % 10) + ".obj");
-			num->GetTransform()->SetTranslaion(camera_->GetWorldTranslate());
+			translate_ = { -5.8f,0.4f,12.5f };
+			num->GetTransform()->SetTranslaion(translate_);
+			rotate_ = { 0.53f,-0.62f,-0.18f };
+			num->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate_));
 			num->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
 			num->UpdateMatrix();
+
 			digit *= 10;
 		}
 	}
+
+	// 文字の更新
+	for(int i = 0; i < scoreNumberModels_.size(); i++){
+		scoreNumberModels_[i]->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate_));
+		scoreNumberModels_[i]->GetTransform()->SetTranslaion(
+			translate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rotate_) * space_ * i
+		);
+
+		scoreNumberModels_[i]->Update();
+	}
+
+	scoreRankModel_ = std::make_unique<BaseGameObject>();
+	scoreRankModel_->Init();
+	if(rank_ == SCORE_RANK::C){
+		scoreRankModel_->SetObject("C.obj");
+	} else if(rank_ == SCORE_RANK::B){
+		scoreRankModel_->SetObject("B.obj");
+	} else if(rank_ == SCORE_RANK::A){
+		scoreRankModel_->SetObject("B.obj");
+	} else if(rank_ == SCORE_RANK::S){
+		scoreRankModel_->SetObject("S.obj");
+	} else if(rank_ == SCORE_RANK::SS){
+		scoreRankModel_->SetObject("SS.obj");
+	} else if(rank_ == SCORE_RANK::SSS){
+		scoreRankModel_->SetObject("SSS.obj");
+	}
+
+	scoreRankModel_->GetTransform()->SetTranslaion({ -4.2f,1.2f,-5.3f });
+	scoreRankModel_->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion({ -0.27f,2.58f,-0.16f }));
+	scoreRankModel_->Update();
 
 	/*---------------- effect ---------------*/
 	tickerTapeEmitter_ = std::make_unique<ParticleManager<TickerTape>>();
@@ -56,8 +113,8 @@ void ResultScene::Init(){
 
 	/*--------------- sprite ---------------*/
 	backgroundSprite_ = Engine::CreateSprite("white.png");
-	backgroundSprite_->SetTextureSize({kWindowWidth_,kWindowHeight_});
-	backgroundSprite_->SetCenterPos({kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f});
+	backgroundSprite_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
+	backgroundSprite_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
 	backgroundSprite_->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	backgroundSprite_->Update();
 
@@ -70,74 +127,6 @@ void ResultScene::Init(){
 
 void ResultScene::Load(){
 
-	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player.fbx");
-	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
-
-	//ModelManager::LoadModel("./Game/Resources/Model/Wood/", "Wood.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass2.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Partition/", "Partition.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
-
-	//ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
-
-	//ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
-
-	//ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
-	//ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
-	//ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
-
-	//ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
-
-	// 仕様上連続して読み込みたい物
-	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
-	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
-
-	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
-
-	// Texture
-	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
-	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
-
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "cherry.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankBack.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankFront.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Rank.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankIcon.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
-
-
-	//デバッグ用、モデル確認
-	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 
 	// スコア表示用の数字モデル
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "0.obj");
@@ -150,6 +139,13 @@ void ResultScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "7.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "8.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "9.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "m.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SSS.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SS.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "S.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "A.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "B.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "C.obj");
 
 	/* ---------------- audio ----------------*/
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -176,9 +172,9 @@ void ResultScene::Update(){
 
 	player_->ResultSceneUpdate();
 
-	for(auto& num : scoreNumberModels_){
-		num->Update();
-	}
+
+
+	scoreRankModel_->Update();
 
 	// ====================== effect ====================== //
 	tickerTapeEmitter_->Update();
@@ -195,6 +191,11 @@ void ResultScene::Update(){
 		Render::SetEyePos(debugCamera_->GetWorldTranslate());
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
 		Render::SetViewProjection2D(debugCamera_->GetViewMatrix2D(), debugCamera_->GetProjectionMatrix2D());
+	}
+
+
+	if(Input::IsTriggerKey(DIK_SPACE)){
+		SetNextScene(SceneType::Scene_Game);
 	}
 
 #ifdef _DEBUG
@@ -221,6 +222,8 @@ void ResultScene::Draw() const{
 		num->Draw();
 	}
 
+	scoreRankModel_->Draw();
+
 	// =======================  sprite ======================= //
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
@@ -234,9 +237,14 @@ void ResultScene::Draw() const{
 // ======================= GUI ========================= //
 #ifdef _DEBUG
 void ResultScene::Debug_Gui(){
+
+
+
 	ImGui::Begin("ResultScene");
 
 	ImGui::Checkbox("isDebugCameraActive", &isDebugCameraActive_);
+
+
 
 	if(ImGui::Button("ReTry")) {
 		SetNextScene(SceneType::Scene_Game);

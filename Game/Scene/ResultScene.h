@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Game/Information/StageInformation.h"
 #include <unordered_map>
+#include <algorithm> 
 
 /*---- game object ---*/
 #include "Game/GameObject/Player.h"
@@ -28,6 +29,17 @@
 
 /*------ Sprite ------*/
 
+
+enum class SCORE_RANK : int32_t{
+	SSS = 634,
+	SS = 500,
+	S = 365,
+	A = 200,
+	B = 100,
+	C = 0
+};
+
+
 class ResultScene 
 	: public BaseScene {
 public:
@@ -49,8 +61,10 @@ private:
 
 	/*---------- parameter ----------*/
 	Vector3 rotate_;
-	int score_ = 98765431;
-
+	Vector3 translate_;
+	float space_ = 2.0f;
+	int score_ = 634;
+	SCORE_RANK rank_;
 
 private:
 
@@ -60,6 +74,7 @@ private:
 	// ----------- object --------- //
 	std::unique_ptr<Player> player_ = nullptr;
 	std::vector<std::unique_ptr<BaseGameObject>>scoreNumberModels_;
+	std::unique_ptr<BaseGameObject>scoreRankModel_ = nullptr;
 
 	// ---------- camera ---------- //
 	bool isDebugCameraActive_;
