@@ -29,8 +29,10 @@ void Rock::Init() {
 //////////////////////////////////////////////////////
 
 void Rock::Update() {
+	IndividualFromCommon(subType_);
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
+	obb_.center.y += radius_;
 	BaseGameObject::Update();
 }
 
@@ -55,8 +57,33 @@ void Rock::OnCollision(Collider* other) {
 }
 
 void Rock::IndividualFromCommon(const SubAttributeType& subType) {
+	Vector3 scale{};
 	switch (subType) {
 	case SubAttributeType::NONE:
 		break;
+	case SubAttributeType::SMALL:
+		radius_ = 3.0f;
+		obb_.size = { radius_ * 2.0f, radius_ * 1.5f, radius_ };
+		obb_.center = GetWorldTranslation();
+		obb_.center.y += radius_;
+		scale = { 1.0f,1.0f,1.0f };
+		break;
+
+	case SubAttributeType::MIDIUM:
+		radius_ = 6.0f;
+		obb_.size = { radius_ * 2.0f, radius_ * 1.5f, radius_ };
+		obb_.center = GetWorldTranslation();
+		obb_.center.y += radius_;
+		scale = { 2.5f,2.5f,2.5f };
+		break;
+
+	case SubAttributeType::LARGE:
+		radius_ = 10.0f;
+		obb_.size = { radius_ * 2.0f, radius_ * 1.5f, radius_ };
+		obb_.center = GetWorldTranslation();
+		obb_.center.y += radius_;
+		scale = { 4,4,4 };
+		break;
 	}
+	transform_->SetScale(scale);
 }

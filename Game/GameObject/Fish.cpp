@@ -65,7 +65,7 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 
 	switch (subType) {
 	case SubAttributeType::NONE:
-
+		subType_ = SubAttributeType::SMALL;
 		break;
 	case SubAttributeType::SMALL:
 		fishSize_ = FISH_SIZE::SMALL;
@@ -81,9 +81,9 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 		break;
 	case SubAttributeType::LARGE:
 		fishSize_ = FISH_SIZE::LARGE;
-		radius_ = 4.0f;
+		radius_ = 6.0f;
 		energy_ = 0.2f;
-		scale = { 4.0f,4.0f,4.0f };
+		scale = { radius_,radius_,radius_ };
 
 		break;
 	}

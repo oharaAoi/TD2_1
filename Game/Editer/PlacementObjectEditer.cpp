@@ -14,9 +14,9 @@ PlacementObjectEditer::~PlacementObjectEditer() {
 
 void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
 	obstaclesManager_ = obstaclesManager;
-	std::filesystem::path dire(kDirectoryPath_);
-	if (!std::filesystem::exists(kDirectoryPath_)) {
-		std::filesystem::create_directories(kDirectoryPath_);
+	std::filesystem::path dire(obstaclesManager_->GetDirectoryPath());
+	if (!std::filesystem::exists(obstaclesManager_->GetDirectoryPath())) {
+		std::filesystem::create_directories(obstaclesManager_->GetDirectoryPath());
 	}
 
 	LoadAllFile();
@@ -31,7 +31,7 @@ void PlacementObjectEditer::LoadAllFile() {
 	groupMap_.clear();
 
 
-	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
+	for (const auto& entry : std::filesystem::directory_iterator(obstaclesManager_->GetDirectoryPath())) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
 		MergeMaps(obstaclesManager_->LoadFile(fileName));
@@ -198,7 +198,7 @@ void PlacementObjectEditer::NewGroup_Config() {
 			newObject.object_.reset(new Rock);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::ROCK;
-			newObject.subType_ = SubAttributeType::NONE;
+			newObject.subType_ = SubAttributeType::SMALL;
 			break;
 		case PlacementObjType::FISH:
 			newObject.object_.reset(new Fish);
@@ -295,6 +295,8 @@ void PlacementObjectEditer::Edit_Config() {
 		ImGui::EndCombo();
 	}
 
+	ImGui::InputText(".json##EditFineName", &inportFileName_[0], sizeof(char) * 64);
+
 	// -------------------------------------------------
 	// ↓ 生成するファイルのレベルを決める
 	// -------------------------------------------------
@@ -322,7 +324,7 @@ void PlacementObjectEditer::Edit_Config() {
 			newObject.object_.reset(new Rock);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::ROCK;
-			newObject.subType_ = SubAttributeType::NONE;
+			newObject.subType_ = SubAttributeType::SMALL;
 			break;
 		case PlacementObjType::FISH:
 			newObject.object_.reset(new Fish);
@@ -372,20 +374,21 @@ void PlacementObjectEditer::Edit_Config() {
 
 			(*it).object_->SetIsLighting(true);
 
+			std::string deleteName = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
+			deleteName = "delete/" + deleteName;
+			if (ImGui::Button(deleteName.c_str())) {
+				it = inport_BasePlacementObj_.erase(it);
+				ImGui::TreePop();
+				continue;
+			}
 			ImGui::TreePop();
 		}
 
 		(*it).object_->GetTransform()->SetTranslaion(translate);
 		(*it).object_->GetTransform()->SetScale(scale);
 
-		std::string deleteName = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
-		deleteName = "delete/" + deleteName;
-		if (ImGui::Button(deleteName.c_str())) {
-			it = inport_BasePlacementObj_.erase(it);
-		} else {
-			++it;
-			++popIndex;
-		}
+		++it;
+		++popIndex;
 	}
 
 	// -------------------------------------------------
@@ -395,6 +398,10 @@ void PlacementObjectEditer::Edit_Config() {
 		if (ImGui::Button("Save_Edit")) {
 			Save(inportFileName_, inport_BasePlacementObj_, editLevel_);
 		}
+	}
+
+	if (ImGui::Button("Save_Edit")) {
+		inport_BasePlacementObj_.clear();
 	}
 }
 
@@ -436,7 +443,7 @@ void PlacementObjectEditer::Save(const std::string& fileName,
 	// -------------------------------------------------
 	// ↓ 実際にファイルを保存する
 	// -------------------------------------------------
-	std::string filePath = kDirectoryPath_ + fileName + ".json";
+	std::string filePath = obstaclesManager_->GetDirectoryPath() + fileName + ".json";
 	std::ofstream ofs;
 	// ファイルを書き込みように開く
 	ofs.open(filePath);
@@ -464,24 +471,28 @@ void PlacementObjectEditer::Inport() {
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj.type_ = PlacementObjType::ROCK;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		case PlacementObjType::FISH:
 			obj.object_.reset(new Fish);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos,  objData[oi].subType_);
 			obj.type_ = PlacementObjType::FISH;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		case PlacementObjType::BIRD:
 			obj.object_.reset(new Bird);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj.type_ = PlacementObjType::BIRD;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.object_.reset(new Driftwood);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos,  objData[oi].subType_);
 			obj.type_ = PlacementObjType::DRIFTWOOD;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		}
 	}
