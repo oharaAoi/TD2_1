@@ -248,14 +248,14 @@ void Player::Move(){
 			1.0f
 		);
 
-		// SPACE押して翼の開閉
-		if(!isFacedBird_){
-			if(Input::IsTriggerKey(DIK_SPACE)) {
-				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
-				isFalling_ = true;
-				isEnableLaunch_ = false;// 再発射できないようにする
-			}
-		}
+		//// SPACE押して翼の開閉
+		//if(!isFacedBird_){
+		//	if(Input::IsTriggerKey(DIK_SPACE)) {
+		//		isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+		//		isFalling_ = true;
+		//		isEnableLaunch_ = false;// 再発射できないようにする
+		//	}
+		//}
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
@@ -430,7 +430,7 @@ void Player::AddBody(BaseGameObject* pTarget){
 	body->SetSpace(3.0f);
 	body->GetTransform()->SetTranslaion(pTarget->GetTransform()->GetTranslation());
 	body->GetTransform()->SetQuaternion(Quaternion::AngleAxis(90.0f * toRadian, Vector3(0.0f, 1.0f, 0.0f)));
-
+	AnimetionEffectManager::AddListEffect("./Game/Resources/Model/AddTorso/", "AddTorso.gltf", body->GetTransform(), true);
 	// 更新
 	body->Update();
 
@@ -440,6 +440,8 @@ void Player::AddBody(BaseGameObject* pTarget){
 // 最後尾を削除
 void Player::EraseBody(){
 	if(followModels_.size() > kMinBodyCount_){
+		const auto& popObj = followModels_.back();
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf", popObj->GetTransform(), false);
 		followModels_.pop_back();
 	}
 
@@ -546,6 +548,7 @@ void Player::OnCollision(Collider* other){
 				//基礎速度の変動
 				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 				AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", transform_.get(), false);
 
 			}
 		}
@@ -572,6 +575,7 @@ void Player::OnCollision(Collider* other){
 				isFalling_ = false;
 				isCloseWing_ = false;
 				AudioPlayer::SinglShotPlay("jumpBird.wav", 0.5f);
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false);
 
 			} else{
 				// 正面衝突の場合
@@ -579,6 +583,7 @@ void Player::OnCollision(Collider* other){
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				isFacedBird_ = true;
 				isCloseWing_ = true;
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false);
 			}
 
 		} else{
@@ -587,6 +592,7 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			isFacedBird_ = true;
 			isCloseWing_ = true;
+			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false);
 		}
 	}
 
@@ -597,6 +603,7 @@ void Player::OnCollision(Collider* other){
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false);
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
 		// 一時減速する
@@ -605,6 +612,7 @@ void Player::OnCollision(Collider* other){
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false);
 	}
 }
 

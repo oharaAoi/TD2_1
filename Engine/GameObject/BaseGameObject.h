@@ -40,6 +40,8 @@ public:
 
 	bool IsSetAnimetor();
 
+	const bool GetIsAnimationFinish() const { return animetor_->GetIsAnimationFinish(); }
+
 protected:
 
 	Model* model_;

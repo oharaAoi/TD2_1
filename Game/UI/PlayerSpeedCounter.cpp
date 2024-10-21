@@ -11,6 +11,7 @@ void PlayerSpeedCounter::Init() {
 	backSprite_ = Engine::CreateSprite("Mater.png");
 	taniSprite_ = Engine::CreateSprite("tani.png");
 	needleSprite_ = Engine::CreateSprite("MaterStaple.png");
+	needleSprite_->SetIsDiscard(false);
 	// 200, 520
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();

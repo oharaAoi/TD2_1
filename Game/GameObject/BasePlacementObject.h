@@ -48,6 +48,7 @@ public:
 	virtual void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE);
 
 	void SetSubType(const SubAttributeType& subType) { subType_ = subType; }
+	const SubAttributeType GetSubType() const { return subType_; }
 
 public:
 

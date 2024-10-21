@@ -19,7 +19,9 @@ public:
 	struct TextureMaterial {
 		Vector4 color;
 		Matrix4x4 uvTransform;
-
+		Vector2 uvDrawRange;		// 0~1の範囲で指定する
+		int isDiscard;
+		int padding;
 	};
 
 	struct TextureTransformData {

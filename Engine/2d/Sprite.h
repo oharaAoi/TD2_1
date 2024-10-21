@@ -21,6 +21,9 @@ public:
 	struct TextureMaterial {
 		Vector4 color;
 		Matrix4x4 uvTransform;
+		Vector2 uvDrawRange;		// 0~1の範囲で指定する
+		int isDiscard;
+		int padding;
 	};
 
 	struct TextureTransformData {
@@ -61,23 +64,28 @@ public:
 	void SetRectRange(const Vector2& rectRange) { rectRange_ = rectRange; };
 	// 描画する範囲の設定
 	void SetLeftTop(const Vector2& leftTop) { leftTop_ = leftTop; }
+	// Pivotの位置を変更する
+	void SetAnchorPoint(const Vector2& point) { anchorPoint_ = point; }
 
-	/// <summary>
-	/// pivotの設定
-	/// </summary>
-	/// <param name="pivot">: 0~1の範囲</param>
-	void SetPivot(const Vector2& pivot);
-
-	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
-	const Vector2 GetScale() const { return Vector2(transform_.scale.x, transform_.scale.y); }
-	const float GetRotate() const { return transform_.rotate.z; }
-	const Vector2 GetTextureSize() const { return textureSize_; }
-	
 	void SetCenterPos(const Vector2 pos) { transform_.translate.x = pos.x, transform_.translate.y = pos.y; }
 	void SetScale(const Vector2 scale) { transform_.scale.x = scale.x, transform_.scale.y = scale.y, transform_.scale.z = 1.0f; }
 	void SetRotate(float rotate) { transform_.rotate.z = rotate; }
 
 	void SetColor(const Vector4& color) { materialData_->color = color; };
+	void SetIsFlipX(bool isFlipX) { isFlipX_ = isFlipX; }
+	void SetIsFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
+
+	void SetUvDrawRange(const Vector2& range) { materialData_->uvDrawRange = range; }
+
+	void SetIsDiscard(bool isDiscard) { materialData_->isDiscard = isDiscard; }
+
+	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
+	const Vector2 GetScale() const { return Vector2(transform_.scale.x, transform_.scale.y); }
+	const float GetRotate() const { return transform_.rotate.z; }
+	const Vector2 GetTextureSize() const { return textureSize_; }
+	const bool GetIsFlipX() const { return isFlipX_; }
+	const bool GetIsFlipY() const { return isFlipY_; }
+	const Vector2 GetUvRangeDraw() const { return materialData_->uvDrawRange; }
 
 private:
 
@@ -108,8 +116,11 @@ private:
 	// 左上座標
 	Vector2 leftTop_ = { 0.0f, 0.0f };
 	Vector2 centerPos_; 
+	
+	Vector2 anchorPoint_;
 
-	Vector2 pivot_;
+	bool isFlipX_ = false;	// 左右フリップ
+	bool isFlipY_ = false;	// 上下フリップ
 
 	// Textureのサイズ
 	Vector2 textureSize_;

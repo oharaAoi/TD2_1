@@ -21,8 +21,8 @@ DescriptorHeap::DescriptorHandles DescriptorAllocator::Allocate(ID3D12Descriptor
 
 void DescriptorAllocator::Free(uint32_t index) {
 	freeStack_.push(index);  // フリースタックに戻す
-	/*std::string name = std::to_string(index);
-	Log("pushFreeHeap" + name + "\n");*/
+	std::string name = std::to_string(index);
+	Log("pushFreeHeap" + name + "\n");
 }
 
 DescriptorHeap::DescriptorHandles DescriptorAllocator::GetDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t index) {

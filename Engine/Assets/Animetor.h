@@ -25,6 +25,8 @@ public:
 
 	Skinning* GetSkinning() { return skinning_.get(); }
 
+	const bool GetIsAnimationFinish() const;
+
 private:
 
 	std::unique_ptr<AnimetionClip> animetionClip_;

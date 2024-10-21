@@ -16,25 +16,16 @@ void TestScene::Init() {
 	testObj_->SetObject("test2.fbx");
 	//testObj_->SetAnimater("./Engine/Resources/Develop/", "test2.fbx");
 
-	testObj2_ = std::make_unique<BaseGameObject>();
-	testObj2_->Init();
-	testObj2_->SetObject("walk.gltf");
-	testObj2_->SetAnimater("./Engine/Resources/Animation/", "walk.gltf", true);
-	testObj2_->GetTransform()->SetTranslaion({ 1.0f, 0.0f, 0.0f });
-
-	waterSpace_ = std::make_unique<WaterSpace>();
-	waterSpace_->Init("./Game/Resources/Model/", "waterPlane.obj");
-
 	triangle_ = Engine::CreateTriangle({
 		{-1.0f, 0.0f, 0.0f, 1.0f},
 		{0.0f, 1.0f, 0.0f, 1.0f},
 		{1.0f, 0.0f, 0.0f, 1.0f},
-									   }, "uvChecker.png");
-	
-	// effect -------------------------------------------------------------------
-	trail_ = std::make_unique<Trail>();
-	trail_->Init();
+	}, "uvChecker.png");
 
+	sprite_ = std::make_unique<Sprite>();
+	sprite_ = Engine::CreateSprite("uvChecker.png");
+	sprite_->SetCenterPos({ 300.0f, 300.0f });
+	
 	// manager -------------------------------------------------------------------
 
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -51,10 +42,6 @@ void TestScene::Load() {
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "teapot.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "multiMaterial.obj");
 	ModelManager::LoadModel("./Engine/Resources/Develop/", "Test_World.obj");
-
-	ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "waterPlane.obj");
-	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap3.png");
 	
 	// textureのload
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
@@ -84,14 +71,11 @@ void TestScene::Update() {
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	testObj_->Update();
-	testObj2_->Update();
-	trail_->Update();
-	//trail_->AddTrail(testObj_->GetTransform()->GetTranslation()m);
-	trail_->SetPlayerPosition(testObj_->GetTransform()->GetTranslation());
 
 	triangle_->Update();
 
-	waterSpace_->Update();
+	sprite_->Update();
+
 	
 	// -------------------------------------------------
 	// ↓ Cameraの更新
@@ -123,19 +107,16 @@ void TestScene::Draw() const {
 	
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	
-	testObj_->Draw();
-	testObj2_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	Render::DrawTriangle(triangle_.get());
 
 	Engine::SetPipeline(PipelineType::AddPipeline);
-	trail_->Draw();
-
+	
 	Engine::SetPipeline(PipelineType::PBRPipeline);
-	waterSpace_->Draw();
-
+	
 	Render::SetRenderTarget(Sprite2D_RenderTarget);
 	Engine::SetPipeline(PipelineType::SpritePipeline);
+	sprite_->Draw();
 
 }
 
@@ -156,14 +137,17 @@ void TestScene::ImGuiDraw() {
 		}
 	}
 
-	testObj_->Debug_Gui();
-
-	waterSpace_->Debug_Gui();
-
 	debugCamera_->Debug_Gui();
 
 	if (ImGui::TreeNode("triangle")) {
 		triangle_->Debug_Gui();
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("sprite")) {
+		ImGui::Begin("Sprite");
+		sprite_->Debug_Gui();
+		ImGui::End();
 		ImGui::TreePop();
 	}
 	ImGui::End();

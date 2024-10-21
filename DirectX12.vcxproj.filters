@@ -541,7 +541,7 @@
       <Filter>Game\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Game\Manager\AnimetionEffectManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -743,9 +743,6 @@
     <ClInclude Include="Engine\Assets\RenderTexture.h">
       <Filter>Engine\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Enviroment.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\DirectX\Pipeline\GraphicsPipelines.h">
       <Filter>Engine\DirectX\Pipeline</Filter>
     </ClInclude>
@@ -869,9 +866,6 @@
     <ClInclude Include="Game\Effect\Trail.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectType.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Manager\MeshManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -993,7 +987,13 @@
       <Filter>Game\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Game\Manager\AnimetionEffectManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Enviroment.h">
+      <Filter>Game\Information</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>Game\Information</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
