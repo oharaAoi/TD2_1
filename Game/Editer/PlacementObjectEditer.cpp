@@ -46,6 +46,8 @@ void PlacementObjectEditer::MergeMaps(const std::map<std::string, ObstaclesManag
 			pair.second.loadData_.begin(),
 			pair.second.loadData_.end()
 		);
+
+		groupMap_[pair.first].level = pair.second.level;
 	}
 }
 
@@ -483,6 +485,8 @@ void PlacementObjectEditer::Inport() {
 			break;
 		}
 	}
+
+	editLevel_ = groupMap_[inportFileName_].level;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
