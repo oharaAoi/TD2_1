@@ -19,7 +19,7 @@ void DebugCamera::Init() {
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
 		{0 , 0, 0.0f},
-		{0.0f, 5.0f, -30.0f}
+		{140, 141, -810}
 	};
 
 	// 行列の生成
@@ -33,7 +33,7 @@ void DebugCamera::Init() {
 
 	debugCameraMode_ = true;
 
-	moveBaseSpeed_ = 10.0f;
+	moveBaseSpeed_ = 50.0f;
 	moveSpeed_ = 10.0f;
 	moveQuaternion_ = Quaternion();
 }
