@@ -107,7 +107,7 @@ void Player::Update(){
 		if(preFlying_) {
 			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
-			isFlying_ = false;
+			//isFlying_ = false;//コメントアウト外さない
 			AudioPlayer::SinglShotPlay("inWaterSurface.wav", 0.5f);
 		}
 	}
@@ -263,6 +263,7 @@ void Player::Move(){
 			isCloseWing_ = false;
 			isFacedBird_ = false;
 			dropSpeed_ = 0.0f;
+			//diveTime_ = kDiveTime_;
 
 		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
@@ -287,10 +288,10 @@ void Player::Move(){
 			//transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
 
 			// 水に触れたらダイブのフラグをオンにする
-			if(transform_->GetTranslation().y < 0.0f){
+			if(transform_->GetTranslation().y + dropVec.y < 0.0f){
 				isDiving_ = true;
 				isFalling_ = false;
-				isFlying_ = false;
+				isFlying_ = false;//isFlying_をfalseにするのはここだけ
 				isFacedBird_ = false;
 				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 				// 潜水速度を一定範囲に保つ
@@ -347,7 +348,7 @@ void Player::Move(){
 					isFalling_ = true;
 				}
 			}
-		}
+		} 
 	}
 
 	MoveLimit();
