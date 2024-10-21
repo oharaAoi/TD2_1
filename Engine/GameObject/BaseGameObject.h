@@ -23,6 +23,8 @@ public:
 	virtual void Update();
 	virtual void Draw() const;
 
+	void UpdateMatrix();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG

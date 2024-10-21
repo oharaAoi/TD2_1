@@ -33,3 +33,15 @@ void BaseParticle2D::RandomInit(){
 	particle_->SetTextureSize({ size_,size_ });
 	particle_->Update();
 }
+
+void BaseParticle2D::InitRandomColor(const std::initializer_list<Vector4>& colorList){
+
+	// 色のリストを格納
+	std::vector<Vector4>colors;
+	for(auto& color : colorList){
+		colors.emplace_back(color);
+	}
+
+	// 色を決定
+	color_ = colors[RandomInt(0, (int)colors.size() - 1)];
+}

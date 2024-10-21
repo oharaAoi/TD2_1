@@ -11,6 +11,7 @@ public:
 
 public:
 
+	void UpdateMatrix();
 	void SetTarget(BaseGameObject* target){ pTargetObject_ = target; }
 	void SetSpace(float spaceLength){ spaceLength_ = spaceLength; }
 
@@ -25,5 +26,6 @@ private:
 	float spaceLength_;
 
 	float angle_;
+	Vector3 rotate_;
 	Quaternion newRotate;
 };
