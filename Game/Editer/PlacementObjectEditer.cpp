@@ -470,7 +470,7 @@ void PlacementObjectEditer::Inport() {
 			obj.type_ = PlacementObjType::FISH;
 			break;
 		case PlacementObjType::BIRD:
-			obj.object_.reset(new Rock);
+			obj.object_.reset(new Bird);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj.type_ = PlacementObjType::BIRD;
