@@ -2,6 +2,7 @@
 #include <vector>
 #include "Engine.h"
 #include "Engine/Lib/GameTimer.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 /// <summary>
 /// ゲームの進行している時間を計測するクラス

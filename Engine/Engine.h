@@ -127,7 +127,9 @@ public:
 	// sound系
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
-	static AudioData LoadAudio(const std::string& fileName);
+	static LoadData LoadAudio(const std::string filePath);
+
+	static AudioData LoadAudio(const LoadData& loadAudioData);
 
 	/// <summary>
 	/// 音を鳴らす関数
@@ -165,7 +167,7 @@ public:
 	/// </summary>
 	/// <param name="fileName"></param>
 	/// <param name="volume"></param>
-	static void SingleShotPlay(const std::string& fileName, float volume);
+	static void SingleShotPlay(const LoadData& loadAudioData, float volume);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// 苦肉の策

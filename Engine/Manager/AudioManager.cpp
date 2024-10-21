@@ -2,7 +2,7 @@
 
 
 AudioManager::~AudioManager() {
-	audioNames_.clear();
+	audioLoadData_.clear();
 }
 
 AudioManager* AudioManager::GetInstance() {
@@ -11,23 +11,23 @@ AudioManager* AudioManager::GetInstance() {
 }
 
 void AudioManager::Init() {
-	audioNames_.clear();
+	audioLoadData_.clear();
 }
 
 void AudioManager::AddMap(const std::string& directoryPath, const std::string& fileName) {
 	std::string name = directoryPath + fileName;
-	if (auto it = audioNames_.find(fileName); it != audioNames_.end()) {
+	if (auto it = audioLoadData_.find(fileName); it != audioLoadData_.end()) {
 		return;
 	}
-	audioNames_.try_emplace(fileName, name);
+	audioLoadData_.try_emplace(fileName, Engine::LoadAudio(name));
 }
 
-std::string AudioManager::GetAudioName(const std::string& fileName) {
-	if (auto it = audioNames_.find(fileName); it == audioNames_.end()) {
+LoadData AudioManager::GetAudioData(const std::string& fileName) {
+	if (auto it = audioLoadData_.find(fileName); it == audioLoadData_.end()) {
 		assert(false && "Audio not found!");
 	}
 
-	return audioNames_[fileName];
+	return audioLoadData_[fileName];
 }
 
 void AudioManager::LoadAudio(const std::string& directoryPath, const std::string& fileName) {

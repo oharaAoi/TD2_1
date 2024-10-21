@@ -52,7 +52,7 @@ void Driftwood::OnCollision(Collider* other) {
 
 	//プレイヤーに当たった場合
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
-		//isActive_ = false;
+		isActive_ = false;
 	}
 }
 

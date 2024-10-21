@@ -129,13 +129,12 @@ LoadData Audio::LoadWave(const char* filename) {
 	return loadData;
 }
 
-AudioData Audio::LoadAudio(const char* filename) {
-	LoadData loadData = LoadWave(filename);
+AudioData Audio::LoadAudio(const LoadData& loadAudioData) {
 	// 読み込んだ音声データをreturn
 	AudioData result = {};
-	result.data.wfex = loadData.fmt;
-	result.data.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
-	result.data.bufferSize = loadData.dataSize;
+	result.data.wfex = loadAudioData.fmt;
+	result.data.pBuffer = reinterpret_cast<BYTE*>(loadAudioData.pBuffer);
+	result.data.bufferSize = loadAudioData.dataSize;
 	HRESULT hr = xAudio2_->CreateSourceVoice(&result.pSourceVoice, &result.data.wfex);
 	assert(SUCCEEDED(hr));
 
@@ -230,13 +229,12 @@ void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, boo
 	assert(SUCCEEDED(result));
 }
 
-void Audio::SinglShotPlay(const char* filename, float volume) {
-	LoadData loadData = LoadWave(filename);
+void Audio::SinglShotPlay(const LoadData& loadAudioData, float volume) {
 	// 読み込んだ音声データをreturn
 	AudioData audio = {};
-	audio.data.wfex = loadData.fmt;
-	audio.data.pBuffer = reinterpret_cast<BYTE*>(loadData.pBuffer);
-	audio.data.bufferSize = loadData.dataSize;
+	audio.data.wfex = loadAudioData.fmt;
+	audio.data.pBuffer = reinterpret_cast<BYTE*>(loadAudioData.pBuffer);
+	audio.data.bufferSize = loadAudioData.dataSize;
 	HRESULT hr = xAudio2_->CreateSourceVoice(&audio.pSourceVoice, &audio.data.wfex);
 	assert(SUCCEEDED(hr));
 

@@ -39,7 +39,7 @@ void FlyingGaugeUI::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingGaugeUI::Update(float currentLength) {
-	//CalculationRaito(currentLength);
+	CalculationRaito(currentLength);
 
 	outside_->Update();
 	bar_->Update();

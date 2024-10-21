@@ -343,8 +343,12 @@ void Engine::ResetComputeShader() {
 // ↓　Sound系
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-AudioData Engine::LoadAudio(const std::string& fileName) {
-	return audio_->LoadAudio(fileName.c_str());
+LoadData Engine::LoadAudio(const std::string filePath) {
+	return audio_->LoadWave(filePath.c_str());
+}
+
+AudioData Engine::LoadAudio(const LoadData& loadAudioData) {
+	return audio_->LoadAudio(loadAudioData);
 }
 
 void Engine::PlayAudio(const AudioData& soundData, bool isLoop, float volume, bool checkPlaying) {
@@ -367,8 +371,8 @@ void Engine::SetVolume(const AudioData& soundData, float volume) {
 	audio_->SetVolume(soundData.pSourceVoice, volume);
 }
 
-void Engine::SingleShotPlay(const std::string& fileName, float volume) {
-	audio_->SinglShotPlay(fileName.c_str(), volume);
+void Engine::SingleShotPlay(const LoadData& loadAudioData, float volume) {
+	audio_->SinglShotPlay(loadAudioData, volume);
 }
 
 ID3D12Device* Engine::GetDevice() {

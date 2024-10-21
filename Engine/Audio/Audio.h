@@ -79,7 +79,7 @@ public:
 
 	LoadData LoadWave(const char* filename);
 
-	AudioData LoadAudio(const char* filename);
+	AudioData LoadAudio(const LoadData& loadAudioData);
 
 	/// <summary>
 	/// 音声データの解放
@@ -96,7 +96,7 @@ public:
 
 	void PlayAudio(const AudioData& audioData, bool isLoop, float volume, bool checkPlaying = false);
 
-	void SinglShotPlay(const char* filename, float volume);
+	void SinglShotPlay(const LoadData& loadAudioData, float volume);
 
 	/// <summary>
 	/// サウンドの停止

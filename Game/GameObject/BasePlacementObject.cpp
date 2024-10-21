@@ -50,6 +50,8 @@ void BasePlacementObject::ApplyLoadData(const Vector3& scale, const Quaternion& 
 
 void BasePlacementObject::IndividualFromCommon(const SubAttributeType& subType) {
 	switch (subType) {
+	case SubAttributeType::NONE:
+		break;
 	default:
 		break;
 	}

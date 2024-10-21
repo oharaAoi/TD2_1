@@ -25,7 +25,7 @@ void PlayerSpeedCounter::Init() {
 	currentDigit_ = 3;
 	maxDigit_ = currentDigit_;
 
-	for (int oi = 1; oi <= maxDigit_; ++oi) {
+	for (int oi = 1; oi <= (int)maxDigit_; ++oi) {
 		auto& sprite = UI_speed_.emplace_back(Engine::CreateSprite("number.png"));
 
 		sprite->SetRectRange(numberSpriteSize_);
@@ -117,7 +117,7 @@ void PlayerSpeedCounter::Debug_Gui() {
 		ImGui::DragFloat("needleRotate", &needleAngle, 0.01f);
 		ImGui::DragFloat2("numberOriginPos", &numberOriginPos_.x, 1.0f);
 
-		for (int oi = 0; oi < maxDigit_; ++oi) {
+		for (int oi = 0; oi < (int)maxDigit_; ++oi) {
 			UI_speed_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 1) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
 		}
 
@@ -129,7 +129,7 @@ void PlayerSpeedCounter::Debug_Gui() {
 		if (ImGui::Button("ReAdapt")) {
 			AdaptAdjustmentItem();
 			UI_speed_.clear(); 
-			for (int oi = 1; oi <= maxDigit_; ++oi) {
+			for (int oi = 1; oi <= (int)maxDigit_; ++oi) {
 				auto& sprite = UI_speed_.emplace_back(Engine::CreateSprite("number.png"));
 
 				sprite->SetRectRange(numberSpriteSize_);

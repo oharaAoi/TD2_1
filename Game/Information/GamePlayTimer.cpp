@@ -47,9 +47,19 @@ void GamePlayTimer::Update() {
 		limitTimeUI_[oi]->Update();
 	}
 
+	// タイムアップ10秒前
+	if (static_cast<int>(gameTimer_) == 10) {
+		AudioPlayer::SinglShotPlay("timeLeft_10s.wav", 0.6f);
+	}
+	// タイムアップ60秒前
+	if (static_cast<int>(gameTimer_) == 60) {
+		AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+	}
+
 	// 制限時間を超えたら
 	if (gameTimer_ <= 0.0f) {
 		isFinish_ = true;
+		AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
 	}
 }
 
