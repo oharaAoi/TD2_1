@@ -198,7 +198,7 @@ void PlacementObjectEditer::NewGroup_Config() {
 			newObject.object_.reset(new Rock);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::ROCK;
-			newObject.subType_ = SubAttributeType::NONE;
+			newObject.subType_ = SubAttributeType::SMALL;
 			break;
 		case PlacementObjType::FISH:
 			newObject.object_.reset(new Fish);
@@ -295,6 +295,8 @@ void PlacementObjectEditer::Edit_Config() {
 		ImGui::EndCombo();
 	}
 
+	ImGui::InputText(".json##EditFineName", &inportFileName_[0], sizeof(char) * 64);
+
 	// -------------------------------------------------
 	// ↓ 生成するファイルのレベルを決める
 	// -------------------------------------------------
@@ -322,7 +324,7 @@ void PlacementObjectEditer::Edit_Config() {
 			newObject.object_.reset(new Rock);
 			newObject.object_->Init();
 			newObject.type_ = PlacementObjType::ROCK;
-			newObject.subType_ = SubAttributeType::NONE;
+			newObject.subType_ = SubAttributeType::SMALL;
 			break;
 		case PlacementObjType::FISH:
 			newObject.object_.reset(new Fish);
@@ -372,20 +374,21 @@ void PlacementObjectEditer::Edit_Config() {
 
 			(*it).object_->SetIsLighting(true);
 
+			std::string deleteName = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
+			deleteName = "delete/" + deleteName;
+			if (ImGui::Button(deleteName.c_str())) {
+				it = inport_BasePlacementObj_.erase(it);
+				ImGui::TreePop();
+				continue;
+			}
 			ImGui::TreePop();
 		}
 
 		(*it).object_->GetTransform()->SetTranslaion(translate);
 		(*it).object_->GetTransform()->SetScale(scale);
 
-		std::string deleteName = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
-		deleteName = "delete/" + deleteName;
-		if (ImGui::Button(deleteName.c_str())) {
-			it = inport_BasePlacementObj_.erase(it);
-		} else {
-			++it;
-			++popIndex;
-		}
+		++it;
+		++popIndex;
 	}
 
 	// -------------------------------------------------
@@ -464,24 +467,28 @@ void PlacementObjectEditer::Inport() {
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj.type_ = PlacementObjType::ROCK;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		case PlacementObjType::FISH:
 			obj.object_.reset(new Fish);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos,  objData[oi].subType_);
 			obj.type_ = PlacementObjType::FISH;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		case PlacementObjType::BIRD:
 			obj.object_.reset(new Bird);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj.type_ = PlacementObjType::BIRD;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.object_.reset(new Driftwood);
 			obj.object_->Init();
 			obj.object_->ApplyLoadData(objData[oi].scale_, rotate, createPos,  objData[oi].subType_);
 			obj.type_ = PlacementObjType::DRIFTWOOD;
+			obj.subType_ = objData[oi].subType_;
 			break;
 		}
 	}

@@ -431,11 +431,11 @@ void GameScene::Update() {
 		}
 	}
 
-	if (Input::IsTriggerKey(DIK_R)) {
+	if (Input::IsTriggerKey(DIK_RSHIFT)) {
 		Init();
 	}
 
-	if (Input::IsTriggerKey(DIK_P)) {
+	if (Input::IsTriggerKey(DIK_ESCAPE)) {
 		isGuiDraw_ = !isGuiDraw_;
 	}
 }
