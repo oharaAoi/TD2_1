@@ -74,7 +74,6 @@ private:
 
 	ObstaclesManager* obstaclesManager_ = nullptr;
 
-	const std::string& kDirectoryPath_ = "./Game/Resources/GameData/PlacementObjectData/";
 	std::map<std::string, ObstaclesManager::Group> groupMap_;
 
 	std::vector<std::string> fileNames_;

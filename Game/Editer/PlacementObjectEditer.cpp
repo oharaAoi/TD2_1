@@ -14,9 +14,9 @@ PlacementObjectEditer::~PlacementObjectEditer() {
 
 void PlacementObjectEditer::Init(ObstaclesManager* obstaclesManager) {
 	obstaclesManager_ = obstaclesManager;
-	std::filesystem::path dire(kDirectoryPath_);
-	if (!std::filesystem::exists(kDirectoryPath_)) {
-		std::filesystem::create_directories(kDirectoryPath_);
+	std::filesystem::path dire(obstaclesManager_->GetDirectoryPath());
+	if (!std::filesystem::exists(obstaclesManager_->GetDirectoryPath())) {
+		std::filesystem::create_directories(obstaclesManager_->GetDirectoryPath());
 	}
 
 	LoadAllFile();
@@ -31,7 +31,7 @@ void PlacementObjectEditer::LoadAllFile() {
 	groupMap_.clear();
 
 
-	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
+	for (const auto& entry : std::filesystem::directory_iterator(obstaclesManager_->GetDirectoryPath())) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
 		MergeMaps(obstaclesManager_->LoadFile(fileName));
@@ -399,6 +399,10 @@ void PlacementObjectEditer::Edit_Config() {
 			Save(inportFileName_, inport_BasePlacementObj_, editLevel_);
 		}
 	}
+
+	if (ImGui::Button("Save_Edit")) {
+		inport_BasePlacementObj_.clear();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,7 +443,7 @@ void PlacementObjectEditer::Save(const std::string& fileName,
 	// -------------------------------------------------
 	// ↓ 実際にファイルを保存する
 	// -------------------------------------------------
-	std::string filePath = kDirectoryPath_ + fileName + ".json";
+	std::string filePath = obstaclesManager_->GetDirectoryPath() + fileName + ".json";
 	std::ofstream ofs;
 	// ファイルを書き込みように開く
 	ofs.open(filePath);

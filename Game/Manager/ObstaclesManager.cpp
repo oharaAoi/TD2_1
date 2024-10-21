@@ -146,6 +146,10 @@ void ObstaclesManager::AllFileClear() {
 
 void ObstaclesManager::RandomImport(){
 	// レベルごとでファイル名が保存がされているため、現在のレベルの配列から文字列を取得する
+	if (levelFileName_[importLevel_].size() - 1 <= 0) {
+		return;
+	}
+
 	int fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
 	std::string randomFileName = levelFileName_[importLevel_][fileNum];
 
