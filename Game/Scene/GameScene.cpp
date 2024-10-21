@@ -221,6 +221,8 @@ void GameScene::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
+
 
 	//デバッグ用、モデル確認
 	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");

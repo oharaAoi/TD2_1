@@ -80,6 +80,12 @@ bool BaseGameObject::IsSetAnimetor() {
 	}
 }
 
+void BaseGameObject::SetTexture(const std::string& path) {
+	for (size_t oi = 0; oi < materials.size(); ++oi) {
+		materials[oi]->SetUseTexture(path);
+	}
+}
+
 #ifdef _DEBUG
 void BaseGameObject::Debug_Gui() {
 	transform_->Debug_Gui();

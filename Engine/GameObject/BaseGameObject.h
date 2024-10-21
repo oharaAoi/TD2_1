@@ -42,6 +42,8 @@ public:
 
 	const bool GetIsAnimationFinish() const { return animetor_->GetIsAnimationFinish(); }
 
+	void SetTexture(const std::string& path);
+
 protected:
 
 	Model* model_;

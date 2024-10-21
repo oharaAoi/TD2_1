@@ -60,6 +60,10 @@ void Material::ImGuiDraw() {
 }
 #endif
 
+void Material::SetUseTexture(const std::string& name) {
+	materialsData_.textureFilePath = name;
+}
+
 void Material::SetMaterialData(Model::ModelMaterialData materialData) {
 	materialsData_ = materialData;
 

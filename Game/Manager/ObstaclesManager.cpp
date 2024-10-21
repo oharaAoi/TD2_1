@@ -61,21 +61,33 @@ void ObstaclesManager::Update(){
 		// ↓ playerのbodyの数によって色を変更
 		// -------------------------------------------------
 		/*Collider* obj = dynamic_cast<Collider*>((*it).get());*/
-		(*it)->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		Fish* pFish = dynamic_cast<Fish*>((*it).get());
+		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
 		if ((*it)->GetObjectType() == (int)ObjectType::FISH) {
-			if (pPlayer_->GetBodyCount() < 3) {
-				if ((*it)->GetSubType() == SubAttributeType::SMALL) {
-					(*it)->SetColor({ 2.0f, 0.0f, 0.0f, 1.0f });
-				}
-			} else if(pPlayer_->GetBodyCount() < 6) {
-				if ((*it)->GetSubType() == SubAttributeType::SMALL ||
-					(*it)->GetSubType() == SubAttributeType::MIDIUM) {
-
- 					(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-				}
-			} else if(pPlayer_->GetBodyCount() < 9) {
-				(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+			(*it)->SetTexture("Fish.png");
+			if (pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()) {
+				(*it)->SetTexture("FishCanEat.png");
 			}
+
+
+			//// 体が3以下の時はスモールのみ
+			//if (pPlayer_->GetBodyCount() < 3) {
+			//	if ((*it)->GetSubType() == SubAttributeType::SMALL) {
+			//		(*it)->SetColor({ 2.0f, 0.0f, 0.0f, 1.0f });
+			//	}
+			//} 
+			//
+			//if(pPlayer_->GetBodyCount() < 6) {
+			//	if ((*it)->GetSubType() == SubAttributeType::SMALL ||
+			//		(*it)->GetSubType() == SubAttributeType::MIDIUM) {
+
+ 		//			(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+			//	}
+			//}
+			//
+			//if(pPlayer_->GetBodyCount() < 9) {
+			//	(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+			//}
 		}
 
 		// -------------------------------------------------

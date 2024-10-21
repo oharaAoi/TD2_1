@@ -475,6 +475,7 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat("temporaryAcceleration_", &temporaryAcceleration_, 0.1f);
 	ImGui::DragFloat("baseSpeed_", &baseSpeed_, 0.1f);
 	ImGui::SliderFloat("chargePower_", &chargePower_, 0.0f, 1.0f);
+	ImGui::SliderInt("bodyCount", &bodyCount_, 0.0f, 1.0f);
 	ImGui::DragFloat("lookAtT", &lookAtT_, 0.01f);
 	ImGui::Text("totalSpeedRatio=%f", totalSpeedRatio);
 	ImGui::DragFloat("addPressTime_=%f", &addPressTime_, 0.001f);

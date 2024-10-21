@@ -47,6 +47,7 @@ public:
 
 	Model::ModelMaterialData GetBaseMaterial() { return materialsData_; }
 	const std::string GetUseTexture() const { return materialsData_.textureFilePath; }
+	void SetUseTexture(const std::string& name);
 
 	void SetColor(const Vector4& color) { material_->color = color; }
 
