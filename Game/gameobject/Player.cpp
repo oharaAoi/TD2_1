@@ -248,14 +248,14 @@ void Player::Move(){
 			1.0f
 		);
 
-		//// SPACE押して翼の開閉
-		//if(!isFacedBird_){
-		//	if(Input::IsTriggerKey(DIK_SPACE)) {
-		//		isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
-		//		isFalling_ = true;
-		//		isEnableLaunch_ = false;// 再発射できないようにする
-		//	}
-		//}
+		// SPACE押して翼の開閉
+		if(!isFacedBird_){
+			if(Input::IsTriggerKey(DIK_SPACE)) {
+				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+				isFalling_ = true;
+				isEnableLaunch_ = false;// 再発射できないようにする
+			}
+		}
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
