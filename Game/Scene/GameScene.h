@@ -14,6 +14,7 @@
 #include "Game/Manager/ObstaclesManager.h"
 #include "Engine/Manager/AudioManager.h"
 #include "Game/Effect/ParticleManager.h"
+#include "Game/Manager/AnimetionEffectManager.h"
 
 /*--------- lib ----------*/
 #include "Engine/Math/MyRandom.h"
@@ -42,7 +43,7 @@ enum class GAME_STATE : int32_t{
 	GAME
 };
 
-class GameScene 
+class GameScene
 	: public BaseScene {
 public:
 
@@ -64,10 +65,10 @@ public:
 	void Update_GAME();
 
 	void UpdateColliderList();
-	
+
 public:
-	static float GetGroundDepth(){ return groundDepth_; }
-	static GAME_STATE GetGameState(){ return currentState_; }
+	static float GetGroundDepth() { return groundDepth_; }
+	static GAME_STATE GetGameState() { return currentState_; }
 	void CheckAddSplash();
 
 private:
@@ -86,7 +87,7 @@ private:
 	// ---------- worldobject ---------- //
 	std::unique_ptr<WorldObjects> worldObjects_;
 
-	std::unordered_map<std::string,std::unique_ptr<BaseGameObject>>backgroundObjects_;
+	std::unordered_map<std::string, std::unique_ptr<BaseGameObject>>backgroundObjects_;
 
 	Vector4 editColor_;
 	std::unique_ptr<BaseGameObject>partition_ = nullptr;
@@ -100,6 +101,8 @@ private:
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
 	std::unique_ptr<ParticleManager<Cherry>> cherryEmitter_ = nullptr;
+
+	AnimetionEffectManager* animationEffectManager_;
 
 	// ---------- editor ----------- //
 

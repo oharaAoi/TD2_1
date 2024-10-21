@@ -37,6 +37,7 @@ public:
 public:
 
 	void SetParent(const Matrix4x4& parentMat);
+	void SetParentTranslation(const Vector3& parentTranslation);
 
 	void SetMatrix(const Matrix4x4& mat);
 	void SetScale(const Vector3& scale) { scale_ = scale; }
@@ -48,8 +49,8 @@ public:
 	void SetTranslationZ(float z) { translation_.z = z; }
 
 	const Vector3 GetScale() const { return scale_; }
-	const Vector3 GetTranslation() const { return translation_; }
-	const Quaternion GetQuaternion() const { return rotation_; }
+	const Vector3& GetTranslation() const { return translation_; }
+	const Quaternion& GetQuaternion() const { return rotation_; }
 	const Matrix4x4 GetWorldMatrix() const { return worldMat_; }
 
 private:
@@ -61,6 +62,7 @@ private:
 	Matrix4x4 worldMat_;
 
 	const Matrix4x4* parentMat_ = nullptr;
+	const Vector3* parentTransition_ = nullptr;
 
 	ComPtr<ID3D12Resource> cBuffer_;
 	WorldTransformData* data_;

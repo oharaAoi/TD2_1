@@ -12,6 +12,7 @@
 #include "Game/GameObject/Coin.h"
 #include "Game/Information/StageInformation.h"
 #include "Engine/Math/MyRandom.h"
+#include "Game/GameObject/Player.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -57,7 +58,7 @@ public:
 	~ObstaclesManager();
 
 	void Finalize();
-	void Init();
+	void Init(Player* pPlayer);
 	void Update();
 	void Draw() const;
 
@@ -131,5 +132,8 @@ private:
 
 	std::list<BasePlacementObject*> normalDrawList_;
 	std::list<BasePlacementObject*> animationDrawList_;
+
+	// ポインター
+	Player* pPlayer_;
 };
 

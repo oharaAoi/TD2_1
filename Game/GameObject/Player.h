@@ -9,6 +9,7 @@
 #include "Engine/Audio/AudioPlayer.h"
 #include "Game/Information/FlyingTimer.h"
 #include "Game/GameObject/PlayerWings.h"
+#include "Game/Manager/AnimetionEffectManager.h"
 
 class PlayerAnimator;
 
@@ -67,6 +68,10 @@ public:
 
 	const float GetTotalSpeedRatio() const { return  totalSpeedRatio; }
 	const float GetMaxMoveSpeed() const { return  kMaxMoveSpeed_; }
+
+	const float GetChargePower() const { return chargePower_; }
+
+	const int GetBodyCount() const { return bodyCount_; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -137,6 +142,8 @@ private:
 	// 落下時の重力
 	float gravity_ = -2.0f;
 	float dropSpeed_;
+
+
 
 	// フラグ-------------------------------------------
 

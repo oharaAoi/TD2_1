@@ -27,14 +27,18 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	// ↓ editorの初期化
 	// -------------------------------------------------
+	player_ = std::make_unique<Player>();
+
 	obstaclesManager_ = std::make_unique<ObstaclesManager>();
-	obstaclesManager_->Init();
+	obstaclesManager_->Init(player_.get());
 	if (StageInformation::GetStageNumMax() != 0) {
 		obstaclesManager_->SetObstacles(StageInformation::GetStage());
 	}
 
 	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
 	placementObjectEditor_->Init(obstaclesManager_.get());
+
+	animationEffectManager_ = AnimetionEffectManager::GetInstance();
 
 	// -------------------------------------------------
 	// ↓ cameraの初期化
@@ -45,8 +49,6 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	// ↓ gameObjectの初期化
 	// -------------------------------------------------
-	player_ = std::make_unique<Player>();
-
 	// trail
 	trail_ = std::make_unique<Trail>();
 	trail_->Init();
@@ -230,8 +232,13 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
 
-
+	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect1/", "Effect1.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -262,6 +269,9 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
+
+	AdjustmentItem::GetInstance()->Update();
+
 
 #ifdef _DEBUG
 
@@ -362,6 +372,8 @@ void GameScene::Update() {
 	for (auto& splash : splash_) {
 		splash->Update();
 	}
+
+	animationEffectManager_->Update();
 
 
 #ifdef _DEBUG
@@ -481,7 +493,7 @@ void GameScene::Draw() const {
 	Engine::SetPipeline(PipelineType::AddPipeline);
 	trail_->Draw();
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
-
+	animationEffectManager_->Draw();
 	debugModel_->Draw();
 
 	/////////////////////////////////
@@ -591,8 +603,7 @@ void GameScene::CheckAddSplash() {
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui() {
 	if (isGuiDraw_) {
-		AdjustmentItem::GetInstance()->Update();
-
+	
 		ImGui::Begin("GameScene");
 		ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
 

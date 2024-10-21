@@ -23,6 +23,11 @@ void WorldTransform::Update(const Matrix4x4& mat) {
 	rotation_ = rotation_.Normalize();
 	//Vector3 test = rotation_.ToEulerAngles();
 	moveQuaternion_ = Quaternion();
+
+	if (parentTransition_ != nullptr) {
+		translation_ += {parentTransition_->x, parentTransition_->y, parentTransition_->z};
+	}
+
 	worldMat_ = mat * MakeAffineMatrix(scale_, rotation_, translation_);
 	if (parentMat_ != nullptr) {
 		worldMat_ *= *parentMat_;
@@ -73,6 +78,10 @@ void WorldTransform::Finalize() {
 
 void WorldTransform::SetParent(const Matrix4x4& parentMat) {
 	parentMat_ = &parentMat;
+}
+
+void WorldTransform::SetParentTranslation(const Vector3& parentTranslation) {
+	parentTransition_ = &parentTranslation;
 }
 
 void WorldTransform::SetMatrix(const Matrix4x4& mat) {

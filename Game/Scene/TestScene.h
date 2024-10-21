@@ -51,6 +51,7 @@ private:
 	std::unique_ptr<Triangle> triangle_ = nullptr;
 	
 	// sprite -----------------------------------
+	std::unique_ptr<Sprite> sprite_;
 	
 	// Manager ------------------------------------------
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

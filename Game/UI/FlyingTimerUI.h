@@ -39,6 +39,8 @@ public:
 	/// <param name="array"></param>
 	void CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin);
 
+
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG

@@ -16,6 +16,8 @@ void FlyingGaugeUI::Init() {
 	rank_ = Engine::CreateSprite("Rank.png");
 	icon_ = Engine::CreateSprite("RankIcon.png");
 
+	bar_->SetIsDiscard(false);
+
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "FlyingGaugeUI";
 	// 登録
@@ -82,7 +84,7 @@ void FlyingGaugeUI::CalculationRaito(float currentLength) {
 
 	if (nowMaxRank_ != FlyingRank::Rank_Master) {
 		if (maxLenghtRaito_ < lengthRaito_) {
-			bar_->SetLeftTop({ bar_->GetTextureSize().x - (bar_->GetTextureSize().x * lengthRaito_) ,0.0f });
+			bar_->SetUvDrawRange({ (1.0f * lengthRaito_) ,1.0f });
 			maxLenghtRaito_ = lengthRaito_;
 		}
 
@@ -114,7 +116,7 @@ void FlyingGaugeUI::RankUp() {
 	case FlyingRank::Rank_A:
 		nowMaxRank_ = FlyingRank::Rank_S;
 		rankLenghtMin_ = 0.0f;
-		rankLenghtMax_ = 1000.0f;
+		rankLenghtMax_ = 1500.0f;
 		rank_->SetLeftTop({ 96.0f, 0.0f });
 		break;
 	case FlyingRank::Rank_S:

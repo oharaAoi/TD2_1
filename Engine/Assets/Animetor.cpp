@@ -36,3 +36,7 @@ void Animetor::LoadAnimation(const std::string& directoryPath, const std::string
 	animetionClip_->Update();
 	animetionClip_->ApplyAnimation(skeleton_.get());
 }
+
+const bool Animetor::GetIsAnimationFinish() const {
+	return animetionClip_->GetIsAnimationFinish();
+}

@@ -13,7 +13,7 @@ void ObstaclesManager::Finalize(){
 	obstaclesList_.clear();
 }
 
-void ObstaclesManager::Init(){
+void ObstaclesManager::Init(Player* pPlayer){
 	std::filesystem::path dire(kDirectoryPath_);
 	if(!std::filesystem::exists(kDirectoryPath_)) {
 		std::filesystem::create_directories(kDirectoryPath_);
@@ -34,6 +34,8 @@ void ObstaclesManager::Init(){
 
 	playerDrawLenght_ = 450.0f;
 	importLevel_ = 1;
+
+	pPlayer_ = pPlayer;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,14 +57,43 @@ void ObstaclesManager::Update(){
 			continue;
 		}
 
-		// 更新をする
+		// -------------------------------------------------
+		// ↓ playerのbodyの数によって色を変更
+		// -------------------------------------------------
+		/*Collider* obj = dynamic_cast<Collider*>((*it).get());*/
+		(*it)->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		if ((*it)->GetObjectType() == (int)ObjectType::FISH) {
+			if (pPlayer_->GetBodyCount() < 3) {
+				if ((*it)->GetSubType() == SubAttributeType::SMALL) {
+					(*it)->SetColor({ 2.0f, 0.0f, 0.0f, 1.0f });
+				}
+			} else if(pPlayer_->GetBodyCount() < 6) {
+				if ((*it)->GetSubType() == SubAttributeType::SMALL ||
+					(*it)->GetSubType() == SubAttributeType::MIDIUM) {
+
+ 					(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+				}
+			} else if(pPlayer_->GetBodyCount() < 9) {
+				(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+			}
+		}
+
+		// -------------------------------------------------
+		// ↓ 本更新
+		// -------------------------------------------------
 		(*it)->Update();
+
+		// -------------------------------------------------
+		// ↓ playerとの長さでactiveをoffにする
+		// -------------------------------------------------
 		float length = (((*it)->GetWorldTranslation().x - playerPos_.x));
 		if(length < -60.0f) {
  			(*it)->SetIsActive(false);
 		}
 
-		// 描画のリストにアニメーションがあるかないかで設定をする
+		// -------------------------------------------------
+		// ↓ 描画のリストにアニメーションがあるかないかで描画リストを変える
+		// -------------------------------------------------
 		if ((*it)->IsSetAnimetor()) {
 			animationDrawList_.push_back((*it).get());
 		} else {
