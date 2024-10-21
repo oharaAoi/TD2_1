@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="fileName"></param>
 	/// <returns></returns>
-	LoadData GetAudioData(const std::string& fileName);
+	SoundData GetAudioData(const std::string& fileName);
 
 	/// <summary>
 	/// Audioを読み込み
@@ -40,7 +40,7 @@ public:
 
 private:
 
-	std::map<std::string, const LoadData> audioLoadData_;
+	std::map<std::string, const SoundData> audioLoadData_;
 
 };
 

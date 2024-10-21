@@ -22,7 +22,7 @@ void AudioManager::AddMap(const std::string& directoryPath, const std::string& f
 	audioLoadData_.try_emplace(fileName, Engine::LoadAudio(name));
 }
 
-LoadData AudioManager::GetAudioData(const std::string& fileName) {
+SoundData AudioManager::GetAudioData(const std::string& fileName) {
 	if (auto it = audioLoadData_.find(fileName); it == audioLoadData_.end()) {
 		assert(false && "Audio not found!");
 	}

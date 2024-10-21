@@ -343,11 +343,11 @@ void Engine::ResetComputeShader() {
 // ↓　Sound系
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-LoadData Engine::LoadAudio(const std::string filePath) {
-	return audio_->LoadWave(filePath.c_str());
+SoundData Engine::LoadAudio(const std::string filePath) {
+	return audio_->SoundLoad(filePath.c_str());
 }
 
-AudioData Engine::LoadAudio(const LoadData& loadAudioData) {
+AudioData Engine::LoadAudio(const SoundData& loadAudioData) {
 	return audio_->LoadAudio(loadAudioData);
 }
 
@@ -371,7 +371,7 @@ void Engine::SetVolume(const AudioData& soundData, float volume) {
 	audio_->SetVolume(soundData.pSourceVoice, volume);
 }
 
-void Engine::SingleShotPlay(const LoadData& loadAudioData, float volume) {
+void Engine::SingleShotPlay(const SoundData& loadAudioData, float volume) {
 	audio_->SinglShotPlay(loadAudioData, volume);
 }
 

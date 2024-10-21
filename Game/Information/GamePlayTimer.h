@@ -14,7 +14,7 @@ public:
 	~GamePlayTimer();
 
 	void Init(float limit);
-	void Update();
+	void Update(bool isPlayerFlying);
 	void Draw() const;
 
 	/// <summary>
@@ -50,6 +50,7 @@ private:
 
 	Vector2 numberSpriteSize_ = { 42.0f, 72.0f };
 
-
+	std::unique_ptr<AudioPlayer> timeleft10s_;
+	std::unique_ptr<AudioPlayer> timeleft60s_;
 };
 
