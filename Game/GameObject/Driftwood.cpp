@@ -53,9 +53,6 @@ void Driftwood::OnCollision(Collider* other) {
 	//プレイヤーに当たった場合
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
 		isActive_ = false;
-
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf",
-											  transform_.get(), true, transform_->GetTranslation(), transform_->GetQuaternion(), transform_->GetTranslation());
 	}
 }
 
