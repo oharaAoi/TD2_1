@@ -152,8 +152,8 @@ void GameScene::Init() {
 	//モデル確認用
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("DriftWoodDestroy.gltf");
-	debugModel_->SetAnimater("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", true);
+	debugModel_->SetObject("EatFish.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/EatFish/", "EatFish.gltf", true);
 	debugModel_->SetIsLighting(false);
 }
 
@@ -162,6 +162,9 @@ void GameScene::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Load() {
+	ModelManager::LoadModel("./Game/Resources/Model/EatFish/", "EatFish.gltf");
+
+
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
@@ -582,7 +585,7 @@ void GameScene::Draw() const {
 	trail_->Draw();
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	animationEffectManager_->Draw();
-	//debugModel_->Draw();
+	debugModel_->Draw();
 
 	/////////////////////////////////
 	// 水の表示
