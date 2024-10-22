@@ -34,7 +34,7 @@ public:
 	/// <param name="filePath">: ファイルパス</param>
 	/// <param name="parentWorldTransform">: 親がいるならworldTransformのポインタを渡す</param>
 	static void AddListEffect(const std::string& directoryPath, const std::string& filePath,
-							  const WorldTransform* parentWorldTransform, bool isParent);
+							  const WorldTransform* parentWorldTransform, bool isParent, bool isLighting);
 
 private:
 
