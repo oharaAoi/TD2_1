@@ -265,12 +265,13 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.wav");	// 水面に入った時の音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.wav");	// 水面から出た時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "jumpBird.wav");			// 鳥を踏んでジャンプ			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "speedDown.mp3");// 被弾した時の音
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 }

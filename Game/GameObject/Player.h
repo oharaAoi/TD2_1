@@ -44,6 +44,7 @@ public:
 	void UpdateMatrix();
 
 	void ResultSceneUpdate();
+	void SpeedDown();
 
 private:
 	void Move_TITLE();
