@@ -110,6 +110,7 @@ void Player::Update(){
 	timer_.Update(transform_->GetTranslation().x);
 	totalSpeedRatio = GetMoveSpeed() / kMaxMoveSpeed_;
 
+#ifdef _DEBUG
 	if(Input::IsTriggerKey(DIK_UP)){
 		if(followModels_.size() != 0){
 			AddBody(followModels_.back().get());
@@ -119,6 +120,9 @@ void Player::Update(){
 	} else if(Input::IsTriggerKey(DIK_DOWN)){
 		EraseBody();
 	}
+#endif // _DEBUG
+
+	
 
 	// -------------------------------------------------
 	// ↓ obbの更新
