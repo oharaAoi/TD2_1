@@ -88,8 +88,6 @@ private:
 	// ---------- worldobject ---------- //
 	std::unique_ptr<WorldObjects> worldObjects_;
 
-	std::unordered_map<std::string, std::unique_ptr<BaseGameObject>>backgroundObjects_;
-
 	Vector4 editColor_;
 	std::unique_ptr<BaseGameObject>partition_ = nullptr;
 

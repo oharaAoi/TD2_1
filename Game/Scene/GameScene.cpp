@@ -149,25 +149,7 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
-
-	backgroundObjects_["moai"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["moai"]->Init();
-	backgroundObjects_["moai"]->SetObject("Moai.obj");
-
-	backgroundObjects_["Nico"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["Nico"]->Init();
-	backgroundObjects_["Nico"]->SetObject("Nico.obj");
-
 	//モデル確認用
-	backgroundObjects_["wing"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["wing"]->Init();
-	backgroundObjects_["wing"]->SetObject("Wing.obj");
-	backgroundObjects_["wing"]->SetIsLighting(false);
-
-	backgroundObjects_["UFO"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["UFO"]->Init();
-	backgroundObjects_["UFO"]->SetObject("MountainUFO.obj");
-
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
 	debugModel_->SetObject("DriftWoodDestroy.gltf");
@@ -370,10 +352,6 @@ void GameScene::Update() {
 
 	worldObjects_->LoopStage();
 	worldObjects_->Update(player_->GetWorldTranslation().x);
-
-	for (auto& backgroundObject : backgroundObjects_) {
-		backgroundObject.second->Update();
-	}
 
 	if (currentState_ == GAME_STATE::TITLE) {
 		Vector3 pos = player_->GetWorldTranslation();
@@ -611,9 +589,6 @@ void GameScene::Draw() const {
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for (auto& backgroundObject : backgroundObjects_) {
-		backgroundObject.second->Draw();
-	}
 
 	/////////////////////////////////
 	// 3Dオブジェクトに対してCsを実行する
