@@ -284,14 +284,13 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
-
+	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
-
 
 	if (Input::IsTriggerKey(DIK_SPACE)) {
 		if (currentState_ == GAME_STATE::TITLE) {
 			currentState_ = GAME_STATE::TUTORIAL;
-
+			
 		} else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;
 			tutorialUI_->Init(player_->GetWorldTranslation());
@@ -360,15 +359,22 @@ void GameScene::Update() {
 		partition_->Update();
 	}
 
-	/*------------- manager -------------*/
+	// -------------------------------------------------
+	// ↓ manager
+	// -------------------------------------------------
+
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	
 #ifdef _DEBUG
 	obstaclesManager_->Debug_Gui();
 #endif // 
-	obstaclesManager_->Update();
+	if (currentState_ != GAME_STATE::TUTORIAL) {
+		obstaclesManager_->Update();
+	}
 
-	/*-------------- effect -------------*/
+	// -------------------------------------------------
+	// ↓ effect
+	// -------------------------------------------------
 	trail_->Update();
 	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
@@ -393,6 +399,9 @@ void GameScene::Update() {
 
 	animationEffectManager_->Update();
 
+	// -------------------------------------------------
+	// ↓ Editer
+	// -------------------------------------------------
 
 #ifdef _DEBUG
 	if (isGuiDraw_) {
@@ -421,7 +430,6 @@ void GameScene::Update() {
 	// -------------------------------------------------
 	// ↓ 不要になった要素などの削除
 	// -------------------------------------------------
-
 	splash_.remove_if([](auto& splash) {return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
@@ -582,7 +590,15 @@ void GameScene::Draw() const{
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　チュートリアルの内容を行う
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GameScene::Update_TUTORIAL() {
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Colliderの更新を行う
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::UpdateColliderList() {

@@ -22,6 +22,8 @@ public:
 
 	void LineUpUI();
 
+	void AdaptAdjustment();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
@@ -29,10 +31,11 @@ public:
 private:
 
 	AdjustmentItem* adjust_;
+	std::string groupName_;
 
 	std::unordered_map<std::string, std::unique_ptr<BaseGameObject>> tutorialUI_;
 
-	Vector3 offsetPos = { 0.0f, 0.0f, 0.0f };
-
+	Vector3 offsetPos_ = { 0.0f, 0.0f, 0.0f };
+	float interval_ = 300.0f;
 };
 
