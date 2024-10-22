@@ -137,5 +137,7 @@ private:
 
 	// ポインター
 	Player* pPlayer_;
+
+	float birdPopYRaito_ = 0.7f;
 };
 

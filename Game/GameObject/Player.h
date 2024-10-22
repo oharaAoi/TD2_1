@@ -103,7 +103,7 @@ private:
 	float lookAtT_;
 
 	float addPressTime_= 0.025f;
-	float minAddPress=0.017f;
+	float minAddPress=0.020f;
 	float maxAddPress = 0.035f;
 	float totalSpeedRatio;//現在の速度で、0から最高速度までの割合
 

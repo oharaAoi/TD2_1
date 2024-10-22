@@ -2,7 +2,7 @@
 
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
-GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
+GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
 GAME_STATE GameScene::preState_ = currentState_;
 
 
@@ -25,7 +25,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(60.0f);
+	gamePlayTimer_->Init(180);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -382,9 +382,11 @@ void GameScene::Update() {
 	} else{
 
 		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-			float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
-			bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
-			bubbleEmitter_->Update();
+			if(player_->GetIsFlying() == false){
+				float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
+				bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
+				bubbleEmitter_->Update();
+			}
 		}
 	}
 
@@ -441,12 +443,14 @@ void GameScene::Update() {
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
-	if (player_->GetIsMove()) {
+	if(GetGameState() == GAME_STATE::GAME){
+		if (player_->GetIsMove()) {
 		gamePlayTimer_->Update(player_->GetIsFlying());
 
 		//if (gamePlayTimer_->GetIsFinish()) {
 		//	isPause_ = true;
 		//}
+		}
 	}
 
 	if (Input::IsTriggerKey(DIK_RSHIFT)) {
@@ -563,9 +567,11 @@ void GameScene::Draw() const{
 
 	// フェードの描画
 	if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-		float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
-		fade_->SetColor({1.0f,1.0f,1.0f,t});
-		fade_->Draw();
+		if(player_->GetIsFlying() == false){
+			float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
+			fade_->SetColor({ 1.0f,1.0f,1.0f,t });
+			fade_->Draw();
+		}
 	}
 }
 

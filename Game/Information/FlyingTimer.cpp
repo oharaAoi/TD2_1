@@ -1,5 +1,5 @@
 #include "FlyingTimer.h"
-
+float FlyingTimer::flyingScor = 0.0f;
 FlyingTimer::FlyingTimer() {}
 FlyingTimer::~FlyingTimer() {}
 
@@ -56,6 +56,7 @@ void FlyingTimer::Finish(float posX) {
 	// maxyより大きかったら
 	if (maxFlyingLength_ < currentFlyingLength_) {
 		maxFlyingLength_ = currentFlyingLength_;
+		flyingScor = maxFlyingLength_;
 	}
 	currentFlyingLength_ = 0.0f;
 	isMeasurement_ = false; 
