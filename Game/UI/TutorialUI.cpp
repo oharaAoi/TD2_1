@@ -25,12 +25,12 @@ void TutorialUI::Init() {
 	tutorialUI_.try_emplace("kari", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari"]->Init();
 	tutorialUI_["kari"]->SetObject("UI_Plane.obj");
-	tutorialUI_["kari"]->SetTexture("sky.png");
+	tutorialUI_["kari"]->SetTexture("Tutorial_1.png");
 
 	tutorialUI_.try_emplace("kari2", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari2"]->Init();
 	tutorialUI_["kari2"]->SetObject("UI_Plane.obj");
-	tutorialUI_["kari2"]->SetTexture("sky.png");
+	tutorialUI_["kari2"]->SetTexture("Tutorial_2.png");
 
 	tutorialUI_.try_emplace("kari3", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari3"]->Init();
@@ -39,8 +39,8 @@ void TutorialUI::Init() {
 
 	tutorialUI_.try_emplace("kari4", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari4"]->Init();
-	tutorialUI_["kari4"]->SetObject("UI_Plane.obj");
-	tutorialUI_["kari4"]->SetTexture("sky.png");
+	tutorialUI_["kari4"]->SetObject("TutorialGuide.obj");
+	//tutorialUI_["kari4"]->SetTexture("sky.png");
 
 	tutorialUI_.try_emplace("start", std::make_unique<BaseGameObject>());
 	tutorialUI_["start"]->Init();

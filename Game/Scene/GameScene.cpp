@@ -151,8 +151,8 @@ void GameScene::Init() {
 	//モデル確認用
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("DriftWoodDestroy.gltf");
-	debugModel_->SetAnimater("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", true);
+	debugModel_->SetObject("EatFish.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/EatFish/", "EatFish.gltf", true);
 	debugModel_->SetIsLighting(false);
 
 	
@@ -163,6 +163,9 @@ void GameScene::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Load() {
+	ModelManager::LoadModel("./Game/Resources/Model/EatFish/", "EatFish.gltf");
+
+
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
@@ -195,6 +198,8 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
 
+	ModelManager::LoadModel("./Game/Resources/Model/TutorialGuide/", "TutorialGuide.obj");
+
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
@@ -221,6 +226,8 @@ void GameScene::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
 
@@ -234,6 +241,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/UFOSmoke/", "UFOSmoke.obj");
 
 	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
@@ -582,7 +590,7 @@ void GameScene::Draw() const {
 	trail_->Draw();
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	animationEffectManager_->Draw();
-	//debugModel_->Draw();
+	debugModel_->Draw();
 
 	/////////////////////////////////
 	// 水の表示
