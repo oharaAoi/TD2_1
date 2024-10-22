@@ -258,10 +258,12 @@ void Player::Move(){
 			isCloseWing_ = false;
 			isFacedBird_ = false;
 			dropSpeed_ = 0.0f;
+			collisionAllowableTime_ = 1.0f;
 			//diveTime_ = kDiveTime_;
 
 		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
+			collisionAllowableTime_ -= GameTimer::DeltaTime();
 
 			//////////////////////////////////////////////////////////////////////////////
 			
@@ -639,17 +641,20 @@ void Player::OnCollision(Collider* other){
 			}
 
 		} else{
-			// 正面衝突の場合
-			temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
-			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
-			isFacedBird_ = true;
-			isCloseWing_ = true;
-			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
-												  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
 
-			//ピヨピヨエフェクト
-			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-												  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+			if(collisionAllowableTime_ <= 0.0f){
+				// 正面衝突の場合
+				temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+				isFacedBird_ = true;
+				isCloseWing_ = true;
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
+					nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
+
+				//ピヨピヨエフェクト
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+					transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+			}
 		}
 	}
 

@@ -152,6 +152,9 @@ private:
 	float dontInputPressTime_;
 	float dontInputTime_ =0.6f;
 
+	// 滑空開始直後の猶予時間
+	float collisionAllowableTime_ = 1.0f;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;
