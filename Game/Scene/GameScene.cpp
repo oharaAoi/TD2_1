@@ -302,6 +302,7 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
+
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
 
@@ -466,6 +467,8 @@ void GameScene::Update() {
 		flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 		flyingGaugeUI_->Update(player_->GetFlyingTime());
 		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
+	} else{
+		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(),0.0f,2.0f);
 	}
 
 	if (currentState_ == GAME_STATE::TUTORIAL) {
@@ -525,7 +528,6 @@ void GameScene::Update() {
 	}
 #endif // _DEBUG
 
-	
 
 	if (gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_) {
 		SetNextScene(SceneType::Scene_Result);
@@ -537,6 +539,7 @@ void GameScene::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const {
+
 
 	if(BGM_masterVolumeRate_ > 0.0f){
 		mainBGM_->Play(true, 0.4f, true);
@@ -639,6 +642,10 @@ void GameScene::Draw() const {
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		titleLogo_->Draw();
 		cherryEmitter_->Draw();
+
+		float t = std::clamp(startSceneTime_ / 2.0f, 0.0f, 1.0f);
+		fade_->SetColor({ 1.0f,1.0f,1.0f,t });
+		fade_->Draw();
 	}
 
 	// フェードの描画
@@ -650,6 +657,7 @@ void GameScene::Draw() const {
 		}
 	}
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　チュートリアルの内容を行う
@@ -708,6 +716,8 @@ void GameScene::UpdateColliderList() {
 		}
 	}*/
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　条件を満たしたら水しぶきエフェクトを追加する

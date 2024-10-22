@@ -40,7 +40,7 @@ void Player::Init(){
 	//transform_->SetQuaternion(restPoseRotation_);
 
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
-		transform_->SetTranslaion({ 0.0f,150.0f,0.0f });
+		transform_->SetTranslaion({ 0.0f,emitHeight_,0.0f });
 	}
 
 	obb_.size = { 1.0f, 1.0f, 1.0f };
@@ -94,6 +94,7 @@ void Player::Update(){
 				waterSurfaceCoolTime = 0.25f;
 			}
 		}
+
 	} else {
 		// 着水した瞬間
 		if(preFlying_) {
@@ -185,8 +186,13 @@ void Player::DrawAnimetor() const{
 void Player::Move(){
 
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
-		title_sinfIncrement_ += GameTimer::DeltaTime();
-		pressTime_ = std::sinf(6.28f * title_sinfIncrement_) * 0.2f;
+		pressTime_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
+
+		// クランプ
+		float height = GetWorldTranslation().y;
+		height = std::clamp(height, emitHeight_ - 10.0f, emitHeight_ + 10.0f);
+		transform_->SetTranslationY(height);
+
 		// transformの更新
 		UpdateTransform();
 		MoveLimit();

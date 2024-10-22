@@ -161,6 +161,9 @@ private:
 	const float kAllowableTime = 1.0f;
 	float collisionAllowableTime_ = 1.0f;
 
+	// タイトル時出現高度
+	float emitHeight_ = 100.0f;
+
 	//移動切り替え効果音のクールタイム
 	float seCoolTime;
 
@@ -171,7 +174,7 @@ private:
 
 	bool hitWaterSurface_;
 	bool isMove_ = true;
-	bool isFlying_;
+	bool isFlying_ = true;
 	bool preFlying_;		// 前フレームで飛んでいたか
 	bool isFalling_;		// 下降中かどうか
 	bool isDiving_;			// 飛行後終了して水に入った瞬間を得るフラグ
