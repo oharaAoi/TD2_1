@@ -158,11 +158,14 @@ private:
 	// 滑空開始直後の猶予時間
 	float collisionAllowableTime_ = 1.0f;
 
+	// タイトル時出現高度
+	float emitHeight_ = 100.0f;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;
 	bool isMove_ = true;
-	bool isFlying_;
+	bool isFlying_ = true;
 	bool preFlying_;		// 前フレームで飛んでいたか
 	bool isFalling_;		// 下降中かどうか
 	bool isDiving_;			// 飛行後終了して水に入った瞬間を得るフラグ

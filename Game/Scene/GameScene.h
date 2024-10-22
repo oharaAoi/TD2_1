@@ -64,7 +64,6 @@ public:
 	void Update_TITLE();
 	void Update_TUTORIAL();
 	void Update_GAME();
-
 	void UpdateColliderList();
 
 public:
@@ -95,6 +94,7 @@ private:
 	std::unique_ptr<BaseGameObject>partition_ = nullptr;
 
 	// --------- parameter ----------- //
+	float startSceneTime_ = 2.0f;
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
 	static float groundDepth_;
