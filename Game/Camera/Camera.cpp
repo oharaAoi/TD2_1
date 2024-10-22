@@ -25,15 +25,15 @@ void Camera::Init(){
 
 void Camera::Update(){
 
-	if (isTitleToGameCamera_) {
-		offsetLength_ = std::clamp(offsetLength_, 80.0f, 1000.0f);
-		Vector3 dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + Vector3(adjustX_, 0.0f, 0.0f)) - transform_.translate;
+	//if (isTitleToGameCamera_) {
+	//	offsetLength_ = std::clamp(offsetLength_, 80.0f, 1000.0f);
+	//	Vector3 dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + Vector3(adjustX_, 0.0f, 0.0f)) - transform_.translate;
 
-		// 少し遅らせて追従
-		transform_.translate += dif * 0.04f * GameTimer::TimeRate();
-		BaseCamera::Update();
-		return;
-	}
+	//	// 少し遅らせて追従
+	//	transform_.translate += dif * 0.04f * GameTimer::TimeRate();
+	//	BaseCamera::Update();
+	//	return;
+	//}
 
 	//プレイヤーが水面に出ているかどうかでターゲットを変更
 	if(pPlayer_->GetTransform()->GetTranslation().y < 10.0f){
@@ -109,7 +109,8 @@ void Camera::Update(){
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate += dif* 0.04f * GameTimer::TimeRate();
+		gameCameraPos+= dif * 0.04f * GameTimer::TimeRate();
+		transform_.translate = gameCameraPos;
 	}
 
 	if(followOnly){

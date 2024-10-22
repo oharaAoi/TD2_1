@@ -24,6 +24,9 @@ private:
 
 	Player* pPlayer_ = nullptr;
 	Vector3 offsetVec_;
+	Vector3 kOffsetVec_;
+	Vector3 gameCameraPos;
+
 	float offsetLength_;
 	Vector3 baseRotate = { 0.0f, 0.91f, 0.0f };
 	float velocityRate_;
