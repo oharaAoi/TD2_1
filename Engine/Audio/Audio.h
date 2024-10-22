@@ -136,11 +136,25 @@ public:
 
 	const char* GetFileExtension(const char* filename);
 
+	/// <summary>
+	/// ゲーム全体の音を設定
+	/// </summary>
+	/// <param name="volume"></param>
+	static void SetMasterVolume(float volume) { masterVolume_ = volume; }
+
+	/// <summary>
+	/// ゲーム全体の音を取得
+	/// </summary>
+	/// <returns></returns>
+	static float GetMasterVolume() { return masterVolume_; }
+
 private:
 
 	ComPtr<IXAudio2> xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_;
 
 	std::list<IXAudio2SourceVoice*> playingSourceList_;
+
+	static float masterVolume_;
 };
 

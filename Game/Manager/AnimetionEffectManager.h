@@ -33,9 +33,26 @@ public:
 	/// <param name="directoryPath">: ディレクトリパス</param>
 	/// <param name="filePath">: ファイルパス</param>
 	/// <param name="parentWorldTransform">: 親がいるならworldTransformのポインタを渡す</param>
+	/// <param name="isLighting">: ライティングをするか</param>
+	/// <param name="scale">: scale量</param>
+	/// <param name="rotate">: 回転</param>
+	/// <param name="translation">: 平行移動</param>
 	static void AddListEffect(const std::string& directoryPath, const std::string& filePath,
-							  const WorldTransform* parentWorldTransform, bool isParent, bool isLighting, float upScale = 1.0f);
+							  const WorldTransform* parentWorldTransform,bool isLighting,
+							  const Vector3& scale, const Quaternion& rotate, const Vector3& translation);
 
+	/// <summary>
+	///  Effectを作成してリストに追加
+	/// </summary>
+	/// <param name="directoryPath">: ディレクトリパス</param>
+	/// <param name="filePath">: ファイルパス</param>
+	/// <param name="parentWorldTransform">: 親がいるならworldTransformのポインタを渡す</param>
+	/// <param name="isParent">: 親子関係を結ぶか</param>
+	/// <param name="isLighting">: ライティングをするか</param>
+	/// <param name="scale">: scaleを大きくするか(行わないなら引数なし)</param>
+	/// <param name="rotate">: 回転をかける量(行わないなら引数なし)</param>
+	/// <param name="translation">: 移動させる量(行わないなら引数なし)</param>
+	/// 
 private:
 
 	std::list<EffectData> effectList_;

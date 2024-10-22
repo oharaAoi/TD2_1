@@ -6,7 +6,8 @@ AudioPlayer::AudioPlayer() {
 AudioPlayer::~AudioPlayer() {
 }
 
-void AudioPlayer::Finalize() {
+void AudioPlayer::Finalize() { 
+	Engine::Stop(audio_);
 	audio_.pSourceVoice->DestroyVoice();
 	delete[]audio_.data.pBuffer;
 }
