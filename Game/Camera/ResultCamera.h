@@ -20,6 +20,10 @@ public:
 
 private:
 
-	Vector3 offsetVec_;
-	float offsetLength_;
+	float startWaitTime_ = 1.0f;
+	float startTime_ = 1.0f;
+	float time_;
+
+	Vector3 shake_;
+	float cameraY_Rotate_;
 };

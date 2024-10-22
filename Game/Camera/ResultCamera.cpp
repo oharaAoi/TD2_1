@@ -17,10 +17,17 @@ void ResultCamera::Init(){
 		{-4.32f, 2.56f, -9.63f}
 	};
 
-
 }
 
 void ResultCamera::Update(){
+
+	//if(startWaitTime_ >= 0.0f){
+	//	startWaitTime_ -= GameTimer::DeltaTime();
+	//} else{
+	//
+	//if(time_ +)
+	//}
+
 
 	BaseCamera::Update();
 }

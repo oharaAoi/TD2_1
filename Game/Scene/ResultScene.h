@@ -77,6 +77,7 @@ private:
 	int score_ = 634;
 	SCORE_RANK rank_;
 
+
 private:
 
 	/*----------- effect -----------*/
