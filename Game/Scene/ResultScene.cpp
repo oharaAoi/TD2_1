@@ -17,9 +17,6 @@ void ResultScene::Finalize() {
 
 void ResultScene::Init(){
 
-	// 読み込み
-	Load();
-
 	// スコアの決定
 	if(score_ < (int)SCORE_RANK::B){
 		rank_ = SCORE_RANK::C;

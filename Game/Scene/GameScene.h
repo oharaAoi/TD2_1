@@ -102,6 +102,7 @@ private:
 	float outgameWaitTime_ = 3.0f;
 	bool startSceneChange_;//シーン遷移が始まっているか
 	float BGM_volumeT_ = 1.0f;
+	float BGM_masterVolumeRate_ = 1.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
