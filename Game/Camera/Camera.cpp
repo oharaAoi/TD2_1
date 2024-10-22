@@ -20,10 +20,20 @@ void Camera::Init(){
 
 	offsetVec_ = Vector3(-20.4f, 0.3f, -25.7f).Normalize();
 
-	
+	isTitleToGameCamera_ = false;
 }
 
 void Camera::Update(){
+
+	if (isTitleToGameCamera_) {
+		offsetLength_ = std::clamp(offsetLength_, 80.0f, 1000.0f);
+		Vector3 dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + Vector3(adjustX_, 0.0f, 0.0f)) - transform_.translate;
+
+		// 少し遅らせて追従
+		transform_.translate += dif * 0.04f * GameTimer::TimeRate();
+		BaseCamera::Update();
+		return;
+	}
 
 	//プレイヤーが水面に出ているかどうかでターゲットを変更
 	if(pPlayer_->GetTransform()->GetTranslation().y < 10.0f){
@@ -111,6 +121,13 @@ void Camera::Update(){
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
 		transform_.translate = pPlayer_->GetWorldTranslation() + Vector3(3.0f, 0.0f, -15.0f);
 		transform_.rotate = { 0.0f,0.0f,0.0f };
+	}
+
+	// 前のシーンと違っていたら
+	if (GameScene::GetPreGameState() != GameScene::GetGameState()) {
+		if (GameScene::GetGameState() == GAME_STATE::TUTORIAL) {
+			isTitleToGameCamera_ = true;
+		}
 	}
 
 	BaseCamera::Update();

@@ -32,4 +32,6 @@ private:
 	bool followOnly;
 	float follwOfsetlength=4;
 
+	bool isTitleToGameCamera_;
+
 };

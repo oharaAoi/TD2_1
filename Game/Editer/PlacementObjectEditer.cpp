@@ -355,6 +355,7 @@ void PlacementObjectEditer::Edit_Config() {
 		std::string name = GetObjectString((*it).type_).c_str() + std::to_string(popIndex);
 		Vector3 translate = (*it).object_->GetTransform()->GetTranslation();
 		Vector3 scale = (*it).object_->GetTransform()->GetScale();
+
 		(*it).object_->SetIsLighting(false);
 		if (ImGui::TreeNode(name.c_str())) {
 			if (ImGui::TreeNode("scale")) {
@@ -561,6 +562,10 @@ void PlacementObjectEditer::SubTypeChange(SubAttributeType& subType) {
 	ImGui::SameLine();
 	if (ImGui::RadioButton("LARGE", subType == SubAttributeType::LARGE)) {
 		subType = SubAttributeType::LARGE;
+	}
+
+	if (ImGui::RadioButton("NOTMOVE", subType == SubAttributeType::NOTMOVE)) {
+		subType = SubAttributeType::NOTMOVE;
 	}
 }
 

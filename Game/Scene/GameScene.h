@@ -69,6 +69,7 @@ public:
 public:
 	static float GetGroundDepth() { return groundDepth_; }
 	static GAME_STATE GetGameState() { return currentState_; }
+	static GAME_STATE GetPreGameState() { return preState_; }
 	void CheckAddSplash();
 
 private:
@@ -112,6 +113,7 @@ private:
 
 	std::unique_ptr<GamePlayTimer> gamePlayTimer_;
 	static GAME_STATE currentState_;
+	static GAME_STATE preState_;
 
 	// ---------- UI ---------- //
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
@@ -121,6 +123,9 @@ private:
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
+
+	// ------------ Audio ---------- //
+	std::unique_ptr<AudioPlayer> mainBGM_;
 
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;

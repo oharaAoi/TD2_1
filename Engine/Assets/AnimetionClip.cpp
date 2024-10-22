@@ -13,7 +13,7 @@ void AnimetionClip::Update() {
 	isAnimationFinish_ = false;
 	animationTime_ += GameTimer::DeltaTime();
 	// アニメーションが終了したら
-	if (animationTime_ > animation_.duration) {
+	if (animationTime_ >= animation_.duration) {
 		isAnimationFinish_ = true;
 		animationTime_ = std::fmod(animationTime_, animation_.duration);
 	}

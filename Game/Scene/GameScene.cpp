@@ -2,7 +2,8 @@
 
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
-GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
+GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
+GAME_STATE GameScene::preState_ = currentState_;
 
 
 /*-------------- コンストラクタ・デストラクタ ---------------*/
@@ -108,6 +109,13 @@ void GameScene::Init() {
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
 	camera_->SetPlayerPtr(player_.get());
+
+	// -------------------------------------------------
+	// ↓ Audioの生成
+	// -------------------------------------------------
+
+	mainBGM_ = std::make_unique<AudioPlayer>();
+	mainBGM_->Init("mainBGM_tobenaikoi.wav");
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -249,14 +257,14 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
 	// ○がついていない物はまだ使用していない
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.wav");				// ブースト音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.wav");		// 体の数を減らす		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.wav");				// エサを食べる		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.wav");		// 体の数を増やす			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.wav");	// 水面に入った時の音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.wav");	// 水面から出た時の音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "jumpBird.wav");			// 鳥を踏んでジャンプ			○
@@ -265,6 +273,8 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
+
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -446,6 +456,8 @@ void GameScene::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Draw() const {
+
+	mainBGM_->Play(true, 0.4f, true);
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);

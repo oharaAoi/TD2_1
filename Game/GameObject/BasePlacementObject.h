@@ -17,6 +17,7 @@ enum class SubAttributeType {
 	SMALL,
 	MIDIUM,
 	LARGE,
+	NOTMOVE,
 };
 
 /// <summary>

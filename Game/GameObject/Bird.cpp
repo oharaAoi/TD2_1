@@ -32,7 +32,6 @@ void Bird::Init() {
 //////////////////////////////////////////////////////
 
 void Bird::Update() {
-
 	if(isMove_){
 		float move_t = std::sinf(3.14f * time_);// -1.0 ~ 1.0 になる
 		transform_->SetTranslaion(firstPos_ + (moveDirection_.Normalize() * (moveRadius_ * move_t)));
@@ -75,6 +74,10 @@ void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 void Bird::IndividualFromCommon(const SubAttributeType& subType) {
 	switch (subType) {
 	case SubAttributeType::NONE:
+		isMove_ = true;
+		break;
+	case SubAttributeType::NOTMOVE:
+		isMove_ = false;
 		break;
 	}
 }

@@ -30,6 +30,9 @@ void GamePlayTimer::Init(float limit) {
 	adjustItem_->AddItem(groupName_, "numberInterval", numberInterval_);
 	adjustItem_->AddItem(groupName_, "numberSpriteScale", numberSpriteScale_);
 
+	// 調整項目の適応
+	AdaptAdjustmentItem();
+
 	// -------------------------------------------------
 	// ↓ 制限時間のUIのSpriteを作成する
 	// -------------------------------------------------
@@ -37,7 +40,7 @@ void GamePlayTimer::Init(float limit) {
 	for (int oi = 1; oi <= digit; ++oi) {
 		auto& sprite = limitTimeUI_.emplace_back(Engine::CreateSprite("number.png"));
 		sprite->SetRectRange(numberSpriteSize_);
-		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (numberInterval_ * static_cast<float>(oi)), originPos_.y });
+		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (numberInterval_ * static_cast<float>(oi - 1)), originPos_.y });
 		sprite->SetTextureSize(numberSpriteSize_);
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimeLimit_), oi)));
 		sprite->SetScale(numberSpriteScale_);
@@ -49,9 +52,6 @@ void GamePlayTimer::Init(float limit) {
 
 	timeleft60s_ = std::make_unique<AudioPlayer>();
 	timeleft60s_->Init("timeLeft_60s.wav");
-
-	// 調整項目の適応
-	AdaptAdjustmentItem();
 	
 }
 
