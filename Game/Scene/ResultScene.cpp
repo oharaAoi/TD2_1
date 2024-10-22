@@ -1,5 +1,8 @@
 #include "ResultScene.h"
 
+bool ResultScene::isViewingRanking_ = false;
+
+//-------------------------------------------
 ResultScene::ResultScene(){}
 
 ResultScene::~ResultScene() { Finalize(); }
@@ -104,7 +107,8 @@ void ResultScene::Init(){
 		scoreRankModel_->SetObject("SSS.obj");
 	}
 
-	scoreRankModel_->GetTransform()->SetTranslaion({ -4.2f,1.2f,-5.3f });
+	scoreRankModel_->GetTransform()->SetScale({ 4.6f,4.26f,4.14f });
+	scoreRankModel_->GetTransform()->SetTranslaion({ -3.93f,-2.67f,6.29f });
 	scoreRankModel_->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion({ -0.27f,2.58f,-0.16f }));
 	scoreRankModel_->Update();
 
@@ -127,6 +131,8 @@ void ResultScene::Init(){
 	fade_->Update();
 
 
+	debugScale_ = scoreRankModel_->GetTransform()->GetScale();
+	debugTranslate_ = scoreRankModel_->GetTransform()->GetTranslation();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -240,7 +246,12 @@ void ResultScene::Update(){
 
 	if(!isStartScene_){
 		if(Input::IsTriggerKey(DIK_SPACE)){
-			isEndScene_ = true;
+
+			if(!isViewingRanking_){
+				isViewingRanking_ = true;
+			} else{
+				isEndScene_ = true;
+			}
 		}
 	}
 
@@ -293,9 +304,17 @@ void ResultScene::Debug_Gui(){
 
 	ImGui::Begin("ResultScene");
 
+	ImGui::DragFloat3("Scale", &debugScale_.x, 0.01f);
+	//ImGui::DragFloat3("Rotate", &debugRotate_.x, 0.01f);
+	ImGui::DragFloat3("Translate", &debugTranslate_.x, 0.01f);
+
+
+	scoreRankModel_->GetTransform()->SetTranslaion(debugTranslate_);
+	scoreRankModel_->GetTransform()->SetScale(debugScale_);
+
+
 	ImGui::Checkbox("isDebugCameraActive", &isDebugCameraActive_);
 	ImGui::Text("fade : %f", fade_t_);
-
 
 	if(ImGui::Button("ReTry")) {
 		SetNextScene(SceneType::Scene_Game);

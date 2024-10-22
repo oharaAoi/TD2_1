@@ -62,6 +62,10 @@ private:
 
 	void Fade();
 
+public:
+
+	static bool GetIsViewRanking(){ return isViewingRanking_; }
+
 private:
 
 	/*---------- parameter ----------*/
@@ -73,9 +77,15 @@ private:
 	float fade_t_ = 1.0f;
 	bool isEndScene_ = false;
 	bool isStartScene_ = true;
+	static bool isViewingRanking_;
 
 	int score_ = 634;
 	SCORE_RANK rank_;
+
+	/*---------- debug ----------*/
+	Vector3 debugScale_;
+	Vector3 debugRotate_;
+	Vector3 debugTranslate_;
 
 private:
 

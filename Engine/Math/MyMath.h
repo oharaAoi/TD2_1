@@ -53,3 +53,9 @@ Vector3 ScreenToWorldCoordinate(const Vector2& screenPos, const Matrix4x4& inver
 /// <returns></returns>
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
+/// <summary>
+/// ベジエ曲線を書く
+/// </summary>
+/// <param name="controlPoint">制御点がまとまった配列</param>
+/// <returns></returns>
+Vector3 Bezier(const Vector3& v1, const Vector3& v2, const Vector3& v3, const float& t);

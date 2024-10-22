@@ -5,7 +5,7 @@
 /// <summary>
 /// 3次元ベクトル
 /// </summary>
-struct Vector3 final {
+struct Vector3 final{
 	float x;
 	float y;
 	float z;
@@ -16,18 +16,18 @@ struct Vector3 final {
 	/// </summary>
 	/// <param name="obj"></param>
 	/// <returns></returns>
-	Vector3 operator+(const Vector3& obj) const { return Vector3(x + obj.x, y + obj.y, z + obj.z); }
+	Vector3 operator+(const Vector3& obj) const{ return Vector3(x + obj.x, y + obj.y, z + obj.z); }
 
-	Vector3 operator+(const float& obj) const { return Vector3(x + obj, y + obj, z + obj); }
+	Vector3 operator+(const float& obj) const{ return Vector3(x + obj, y + obj, z + obj); }
 
-	Vector3 operator+=(const Vector3& obj) {
+	Vector3 operator+=(const Vector3& obj){
 		x += obj.x;
 		y += obj.y;
 		z += obj.z;
 		return *this;
 	}
 
-	Vector3 operator+=(const float& obj) {
+	Vector3 operator+=(const float& obj){
 		x += obj;
 		y += obj;
 		z += obj;
@@ -39,18 +39,18 @@ struct Vector3 final {
 	/// </summary>
 	/// <param name="obj"></param>
 	/// <returns></returns>
-	Vector3 operator-(const Vector3& obj) const { return Vector3(x - obj.x, y - obj.y, z - obj.z); }
+	Vector3 operator-(const Vector3& obj) const{ return Vector3(x - obj.x, y - obj.y, z - obj.z); }
 
-	Vector3 operator-(const float& obj) const { return Vector3(x - obj, y - obj, z - obj); }
+	Vector3 operator-(const float& obj) const{ return Vector3(x - obj, y - obj, z - obj); }
 
-	Vector3 operator-=(const Vector3& obj) {
+	Vector3 operator-=(const Vector3& obj){
 		x -= obj.x;
 		y -= obj.y;
 		z -= obj.z;
 		return *this;
 	}
 
-	Vector3 operator-=(const float& obj) {
+	Vector3 operator-=(const float& obj){
 		x -= obj;
 		y -= obj;
 		z -= obj;
@@ -62,26 +62,34 @@ struct Vector3 final {
 	/// </summary>
 	/// <param name="obj"></param>
 	/// <returns></returns>
-	Vector3 operator*(const Vector3& obj) const { return Vector3(x * obj.x, y * obj.y, z * obj.z); }
+	Vector3 operator*(const Vector3& obj) const{ return Vector3(x * obj.x, y * obj.y, z * obj.z); }
 
-	Vector3 operator*(const float& obj) const { return Vector3(x * obj, y * obj, z * obj); }
+	Vector3 operator*(const float& obj) const{ return Vector3(x * obj, y * obj, z * obj); }
 
-	Vector3 operator*=(const Vector3& obj) {
+	Vector3 operator*=(const Vector3& obj){
 		x *= obj.x;
 		y *= obj.y;
 		z *= obj.z;
 		return *this;
 	}
 
-	Vector3 operator*=(const float& obj) {
+	Vector3 operator*=(const float& obj){
 		x *= obj;
 		y *= obj;
 		z *= obj;
 		return *this;
 	}
 
+	Vector3 operator/(const float& obj){
+		return{
+		x / obj,
+		y / obj,
+		z / obj
+		};
+	}
+
 	// Matrix
-	Vector3 operator*(const Matrix4x4& mat) {
+	Vector3 operator*(const Matrix4x4& mat){
 		Vector3 result{};
 
 		result.x = mat.m[0][0] * x + mat.m[1][0] * y + mat.m[2][0] * z + mat.m[3][0];
@@ -94,27 +102,27 @@ struct Vector3 final {
 	// =============================================
 	// 数学用関数
 
-	Vector3 Normalize() const {
+	Vector3 Normalize() const{
 		float length = Length();
-		if (length == 0.0f) {
+		if(length == 0.0f) {
 			return *this;
 		}
 		return Vector3(x / length, y / length, z / length);
 	}
 
-	float Length() const {
+	float Length() const{
 		return std::sqrtf(x * x + y * y + z * z);
 	}
 
-	float Dot(const Vector3& v1) const {
+	float Dot(const Vector3& v1) const{
 		return (this->x * v1.x) + (this->y * v1.y) + (this->z * v1.z);
 	}
 
-	float Dot(const Vector3& v1, const Vector3& v2) const {
+	float Dot(const Vector3& v1, const Vector3& v2) const{
 		return (v2.x * v1.x) + (v2.y * v1.y) + (v2.z * v1.z);
 	}
 
-	Vector3 Cross(const Vector3& v1) const {
+	Vector3 Cross(const Vector3& v1) const{
 		Vector3 result{};
 
 		result.x = this->y * v1.z - this->z * v1.y;
@@ -124,7 +132,7 @@ struct Vector3 final {
 		return result;
 	}
 
-	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
+	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t){
 		Vector3 result{};
 		result.x = std::lerp(start.x, end.x, t);
 		result.y = std::lerp(start.y, end.y, t);
