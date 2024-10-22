@@ -88,9 +88,11 @@ void Player::Update(){
 			isFlying_ = true;
 			isSplash_ = true;
 			isEnableLaunch_ = true;
-			AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
-			AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
-
+			if(waterSurfaceCoolTime <= 0) {
+				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
+				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
+				waterSurfaceCoolTime = 0.25f;
+			}
 		}
 
 	} else {
@@ -99,11 +101,14 @@ void Player::Update(){
 			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
 			//isFlying_ = false;//コメントアウト外さない
-			AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
-			AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
+			if(waterSurfaceCoolTime <= 0) {
+				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
+				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
+				waterSurfaceCoolTime = 0.25f;
+			}
 		}
 	}
-
+	waterSurfaceCoolTime-= GameTimer::DeltaTime();
 	// 体の更新
 	UpdateBody();
 

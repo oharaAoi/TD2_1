@@ -156,7 +156,6 @@ private:
 	float dontInputPressTime_;
 	float dontInputTime_ =0.6f;
 
-	float seCoolTime;
 
 	// 滑空開始直後の猶予時間
 	const float kAllowableTime = 1.0f;
@@ -164,6 +163,12 @@ private:
 
 	// タイトル時出現高度
 	float emitHeight_ = 100.0f;
+
+	//移動切り替え効果音のクールタイム
+	float seCoolTime;
+
+	//着水効果音の猶予時間
+	float waterSurfaceCoolTime;
 
 	// フラグ-------------------------------------------
 

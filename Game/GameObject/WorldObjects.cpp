@@ -52,6 +52,21 @@ void WorldObjects::Init() {
 		cloud_[oi]->SetObject("Cloud.obj");
 		cloud_[oi]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
 		cloud_[oi]->SetIsLighting(false);
+		// moai
+		moai_[oi] = std::make_unique<BaseGameObject>();
+		moai_[oi]->Init();
+		moai_[oi]->SetObject("Moai.obj");
+		moai_[oi]->SetIsLighting(true);
+		// nico
+		nico_[oi] = std::make_unique<BaseGameObject>();
+		nico_[oi]->Init();
+		nico_[oi]->SetObject("Nico.obj");
+		nico_[oi]->SetIsLighting(true);
+		// ufo
+		ufo_[oi] = std::make_unique<BaseGameObject>();
+		ufo_[oi]->Init();
+		ufo_[oi]->SetObject("MountainUFO.obj");
+		ufo_[oi]->SetIsLighting(true);
 
 		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
@@ -62,6 +77,9 @@ void WorldObjects::Init() {
 		trees_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		grass_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		cloud_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		moai_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		nico_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		ufo_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 	}
 }
 
@@ -81,6 +99,9 @@ void WorldObjects::Update(float playerPos) {
 		trees_[oi]		->Update();
 		grass_[oi]		->Update();
 		cloud_[oi]		->Update();
+		moai_[oi]		->Update();
+		nico_[oi]		->Update();
+		ufo_[oi]		->Update();
 	}
 }
 
@@ -98,6 +119,9 @@ void WorldObjects::Draw() const {
 		trees_[oi]->Draw();
 		grass_[oi]->Draw();
 		cloud_[oi]->Draw();
+		moai_[oi]->Draw();
+		nico_[oi]->Draw();
+		ufo_[oi]->Draw();
 	}
 
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
@@ -139,6 +163,7 @@ void WorldObjects::LoopStage() {
 		nowStageIndex_ = !nowStageIndex_;
 	}
 
+	// 8000の物
 	if (playerPos_ > ((StageInformation::stageWidthEvery_ * 2.0f) * (mountainLoopCount_ + 1)) + 400.0f) {
 		++mountainLoopCount_;
 		size_t index = static_cast<size_t>(nowMountainIndex_);
@@ -150,6 +175,9 @@ void WorldObjects::LoopStage() {
 		trees_[index ]->GetTransform()->SetTranslaion(newPos);
 		grass_[index ]->GetTransform()->SetTranslaion(newPos);
 		cloud_[index ]->GetTransform()->SetTranslaion(newPos);
+		moai_[index]->GetTransform()->SetTranslaion(newPos);
+		nico_[index]->GetTransform()->SetTranslaion(newPos);
+		ufo_[index]->GetTransform()->SetTranslaion(newPos);
 
 		nowMountainIndex_ = !nowMountainIndex_;
 	}
