@@ -32,6 +32,14 @@ void AudioPlayer::Stop() {
 	Engine::Stop(audio_);
 }
 
+void AudioPlayer::SetVolume(float volume) {
+	Engine::SetVolume(audio_, volume);
+}
+
+bool AudioPlayer::GetIsPlaying() {
+	return Engine::GetIsPlaying(audio_);
+}
+
 void AudioPlayer::SinglShotPlay(const std::string& filePath, float volume) {
 	Engine::SingleShotPlay(AudioManager::GetInstance()->GetAudioData(filePath), volume);
 }
