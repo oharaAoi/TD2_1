@@ -17,6 +17,8 @@ void ResultScene::Finalize() {
 
 void ResultScene::Init(){
 
+	isViewingRanking_ = false;
+
 	// スコアの決定
 	if(score_ < (int)SCORE_RANK::B){
 		rank_ = SCORE_RANK::C;
