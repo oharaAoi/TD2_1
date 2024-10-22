@@ -380,7 +380,10 @@ void GameScene::Update() {
 
 	/*------------- manager -------------*/
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
-	//obstaclesManager_->Debug_Gui();
+	
+#ifdef _DEBUG
+	obstaclesManager_->Debug_Gui();
+#endif // 
 	obstaclesManager_->Update();
 
 	/*-------------- effect -------------*/
