@@ -26,7 +26,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(20.0f);
+	gamePlayTimer_->Init(999.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -267,7 +267,7 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "AddSpeed.mp3");			// エサを食べた時加速する		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
