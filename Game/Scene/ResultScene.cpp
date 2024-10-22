@@ -120,6 +120,12 @@ void ResultScene::Init(){
 	backgroundSprite_->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	backgroundSprite_->Update();
 
+	fade_ = Engine::CreateSprite("white.png");
+	fade_->SetTextureSize({ kWindowWidth_ + 300.0f,kWindowHeight_ + 300.0f });
+	fade_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
+	fade_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	fade_->Update();
+
 
 }
 
@@ -180,14 +186,14 @@ void ResultScene::Load(){
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
 	// ○がついていない物はまだ使用していない
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.wav");				// ブースト音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.wav");		// 体の数を減らす		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.wav");				// エサを食べる		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.wav");		// 体の数を増やす			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.wav");	// 水面に入った時の音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.wav");	// 水面から出た時の音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "jumpBird.wav");			// 鳥を踏んでジャンプ			○
@@ -196,6 +202,8 @@ void ResultScene::Load(){
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
+
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 }
 
 /////////////////////////////////////////////////////////////////
@@ -230,9 +238,13 @@ void ResultScene::Update(){
 	}
 
 
-	if(Input::IsTriggerKey(DIK_SPACE)){
-		SetNextScene(SceneType::Scene_Game);
+	if(!isStartScene_){
+		if(Input::IsTriggerKey(DIK_SPACE)){
+			isEndScene_ = true;
+		}
 	}
+
+	Fade();
 
 #ifdef _DEBUG
 	Debug_Gui();
@@ -262,11 +274,14 @@ void ResultScene::Draw() const{
 
 	// =======================  sprite ======================= //
 
-	Engine::SetPipeline(PipelineType::SpritePipeline);
+	Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 	backgroundSprite_->Draw(true);
 
 	// ====================== effect ====================== //
 	tickerTapeEmitter_->Draw();
+
+	// =======================  fade ======================= //
+	fade_->Draw();
 }
 
 
@@ -279,7 +294,7 @@ void ResultScene::Debug_Gui(){
 	ImGui::Begin("ResultScene");
 
 	ImGui::Checkbox("isDebugCameraActive", &isDebugCameraActive_);
-
+	ImGui::Text("fade : %f", fade_t_);
 
 
 	if(ImGui::Button("ReTry")) {
@@ -297,3 +312,31 @@ void ResultScene::Debug_Gui(){
 	ImGui::End();
 }
 #endif 
+
+
+void ResultScene::Fade(){
+	
+	if(isStartScene_){
+
+		fade_t_ = std::clamp(fade_t_ - (GameTimer::DeltaTime() / kFadeTime_),0.0f,1.0f);
+
+		if(fade_t_ <= 0.0f){
+			isStartScene_ = false;
+		}
+
+
+	} else{
+		if(isEndScene_){
+
+			fade_t_ = std::clamp(fade_t_ + (GameTimer::DeltaTime() / kFadeTime_), 0.0f, 1.0f);
+
+			if(fade_t_ >= 1.0f){
+				isEndScene_ = false;
+				SetNextScene(SceneType::Scene_Game);
+			}
+		}
+	}
+
+	fade_->SetColor({ 1.0f,1.0f,1.0f,fade_t_ });
+
+}
