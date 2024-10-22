@@ -26,6 +26,7 @@
 #include "Game/Camera/DebugCamera.h"
 #include "Game/Camera/ResultCamera.h"
 #include "Game/Information/FlyingTimer.h"
+#include "Game/Information/Score.h"
 
 /*------ UI ------*/
 
@@ -42,7 +43,7 @@ enum class SCORE_RANK : int32_t{
 };
 
 
-class ResultScene 
+class ResultScene
 	: public BaseScene {
 public:
 
@@ -65,7 +66,7 @@ private:
 
 public:
 
-	static bool GetIsViewRanking(){ return isViewingRanking_; }
+	static bool GetIsViewRanking() { return isViewingRanking_; }
 
 private:
 
@@ -107,5 +108,8 @@ private:
 	std::unique_ptr<Sprite> backgroundSprite_ = nullptr;
 	std::unique_ptr<Sprite> fade_ = nullptr;
 
+	// ---------- Score --------- //
+	std::unique_ptr<Score> scoreData_;
+	float gameScoreArray_[3];
 };
 

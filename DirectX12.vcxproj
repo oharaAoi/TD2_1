@@ -222,6 +222,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\GameObject\WorldWall.cpp" />
     <ClCompile Include="Game\Information\FlyingTimer.cpp" />
     <ClCompile Include="Game\Information\GamePlayTimer.cpp" />
+    <ClCompile Include="Game\Information\Score.cpp" />
     <ClCompile Include="Game\Information\StageInformation.cpp" />
     <ClCompile Include="Game\Manager\AnimetionEffectManager.cpp" />
     <ClCompile Include="Game\Manager\ObstaclesManager.cpp" />
@@ -371,6 +372,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\GameObject\WorldWall.h" />
     <ClInclude Include="Game\Information\FlyingTimer.h" />
     <ClInclude Include="Game\Information\GamePlayTimer.h" />
+    <ClInclude Include="Game\Information\Score.h" />
     <ClInclude Include="Game\Information\StageInformation.h" />
     <ClInclude Include="Game\Manager\AnimetionEffectManager.h" />
     <ClInclude Include="Game\Manager\ObstaclesManager.h" />

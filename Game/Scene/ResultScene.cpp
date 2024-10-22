@@ -34,6 +34,10 @@ void ResultScene::Init(){
 		rank_ = SCORE_RANK::SSS;
 	}
 
+	scoreData_ = std::make_unique<Score>();
+	scoreData_->Init();
+	scoreData_->LoadJsonFile(gameScoreArray_);
+
 	/*--------------- camera ---------------*/
 	camera_ = std::make_unique<ResultCamera>();
 	camera_->Init();
