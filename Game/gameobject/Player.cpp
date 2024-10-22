@@ -239,13 +239,13 @@ void Player::Move(){
 		);
 
 		// SPACE押して翼の開閉
-		if(!isFacedBird_){
-			if(Input::IsTriggerKey(DIK_SPACE)) {
-				isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
-				isFalling_ = true;
-				isEnableLaunch_ = false;// 再発射できないようにする
-			}
-		}
+		//if(!isFacedBird_){
+		//	if(Input::IsTriggerKey(DIK_SPACE)) {
+		//		isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+		//		isFalling_ = true;
+		//		isEnableLaunch_ = false;// 再発射できないようにする
+		//	}
+		//}
 
 		////////////////////////////// 上昇中 /////////////////////////////////
 		if(!isFalling_){
@@ -257,6 +257,29 @@ void Player::Move(){
 
 		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
+
+			//////////////////////////////////////////////////////////////////////////////
+			
+			// ---------------- 滑空状態にするか下降状態にするかを判定するための処理 ----------------------- //
+			// 飛行中は押していると滑空する
+			// pressタイムがプラスの時は上を向いているので受け付けない
+			if (pressTime_ <= 0) {
+				if (Input::IsPressKey(DIK_SPACE)) {
+					// 押している時は滑空する
+					// 下降ベクトル
+					dropSpeed_ = 0.0f;
+					// 羽根が広がっている
+					isCloseWing_ = false;
+					// baseSpeedを上げて下降速度を上げている
+					baseSpeed_ = defaultSpeed * 2.0f;
+					
+				} else {
+					// 離しているので下降する
+					isCloseWing_ = true;
+					baseSpeed_ = defaultSpeed;
+				}
+			}
+			////////////////////////////////////////////////////////////////////////////////
 
 			// 下降ベクトルを格納する変数
 			//Vector3 dropVec{};
@@ -329,7 +352,7 @@ void Player::Move(){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
 						pressTime_ = 0.7f;
-						AudioPlayer::SinglShotPlay("boost.wav", 0.5f);
+						AudioPlayer::SinglShotPlay("boost.mp3", 0.5f);
 					}
 				}
 			} else{
@@ -402,10 +425,10 @@ void Player::UpdateBody(){
 		} else{
 			AddBody(this);
 		}
-		AudioPlayer::SinglShotPlay("incrementBody.wav", 0.5f);
+		AudioPlayer::SinglShotPlay("incrementBody.mp3", 0.5f);
 	} else if(bodyCount < bodyCount_){
 		EraseBody();
-		AudioPlayer::SinglShotPlay("decrementBody.wav", 0.5f);
+		AudioPlayer::SinglShotPlay("decrementBody.mp3", 0.5f);
 	}
 
 	for(auto& body : followModels_){
@@ -532,7 +555,7 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-			AudioPlayer::SinglShotPlay("eat.wav", 0.5f);
+			AudioPlayer::SinglShotPlay("eat.mp3", 0.5f);
 			AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
 
 		} else{// 食べられなかったとき
@@ -572,12 +595,13 @@ void Player::OnCollision(Collider* other){
 
 			// ある程度上から踏みつけないといけない
 			if(dropSpeed_ < gravity_ * 0.25f){//dropSpeed_ < gravity_ * 0.25f//transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f
-				pressTime_ = 1.0f;
-				isFalling_ = false;
-				isCloseWing_ = false;
-				AudioPlayer::SinglShotPlay("jumpBird.wav", 0.5f);
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false);
-
+				if (!isFacedBird_) {
+					pressTime_ = 1.0f;
+					isFalling_ = false;
+					isCloseWing_ = false;
+					AudioPlayer::SinglShotPlay("jumpBird.wav", 0.5f);
+					AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false);
+				}
 			} else{
 				// 正面衝突の場合
 				temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
