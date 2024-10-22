@@ -187,8 +187,8 @@ private:
 	std::unique_ptr<AudioPlayer> hitSe_;
 	std::unique_ptr<AudioPlayer> coinGetSe_;
 
-	
-
+	// タイトル用変数
+	float title_sinfIncrement_;
 
 
 public:// アクセッサ

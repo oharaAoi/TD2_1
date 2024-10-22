@@ -41,8 +41,6 @@ void AdjustmentItem::Update() {
 		LoadAllFile();
 	}
 
-	if (!ImGui::BeginMenuBar()) { return; }
-
 	// ------------------------------------------
 	// ↓ 各グループを処理を行う
 	// ------------------------------------------
@@ -101,7 +99,7 @@ void AdjustmentItem::Update() {
 		ImGui::EndMenu();
 	}
 
-	ImGui::EndMenuBar();
+	
 	ImGui::End();
 #endif // _DEBUG
 }
