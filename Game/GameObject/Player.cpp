@@ -472,7 +472,7 @@ void Player::AddBody(BaseGameObject* pTarget){
 void Player::EraseBody(){
 	if(followModels_.size() > kMinBodyCount_){
 		const auto& popObj = followModels_.back();
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf", nullptr, false,
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf", transform_.get(), false,
 											  {1.0f, 1.0f, 1.0f}, Quaternion(), popObj->GetTransform()->GetTranslation());
 		followModels_.pop_back();
 	}
