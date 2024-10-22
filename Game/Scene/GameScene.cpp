@@ -47,7 +47,6 @@ void GameScene::Init() {
 	placementObjectEditor_->Init(obstaclesManager_.get());
 
 	animationEffectManager_ = AnimetionEffectManager::GetInstance();
-
 	// -------------------------------------------------
 	// ↓ cameraの初期化
 	// -------------------------------------------------
@@ -155,6 +154,8 @@ void GameScene::Init() {
 	debugModel_->SetObject("DriftWoodDestroy.gltf");
 	debugModel_->SetAnimater("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", true);
 	debugModel_->SetIsLighting(false);
+
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

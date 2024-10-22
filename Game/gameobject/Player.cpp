@@ -58,6 +58,7 @@ void Player::Init(){
 	coinGetSe_ = std::make_unique<AudioPlayer>();
 	hitSe_->Init("test.wav");
 	coinGetSe_->Init("kari_coinGet.wav");
+	transform_.get()->SetTranslationX(600);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
