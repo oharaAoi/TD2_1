@@ -25,4 +25,7 @@ void ResultCamera::Update(){
 	BaseCamera::Update();
 }
 
+#ifdef _DEBUG
 void ResultCamera::Debug_Gui(){}
+#endif // _DEBUG
+

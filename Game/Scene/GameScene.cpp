@@ -23,7 +23,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(180.0f);
+	gamePlayTimer_->Init(40.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -295,8 +295,6 @@ void GameScene::Update() {
 	AdjustmentItem::GetInstance()->Update();
 
 
-#ifdef _DEBUG
-
 	if (Input::IsTriggerKey(DIK_SPACE)) {
 		if (currentState_ == GAME_STATE::TITLE) {
 			currentState_ = GAME_STATE::TUTORIAL;
@@ -305,6 +303,8 @@ void GameScene::Update() {
 			currentState_ = GAME_STATE::GAME;
 		}
 	}
+
+#ifdef _DEBUG
 
 #endif // _DEBUG
 
@@ -380,7 +380,7 @@ void GameScene::Update() {
 
 	/*------------- manager -------------*/
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
-	obstaclesManager_->Debug_Gui();
+	//obstaclesManager_->Debug_Gui();
 	obstaclesManager_->Update();
 
 	/*-------------- effect -------------*/
