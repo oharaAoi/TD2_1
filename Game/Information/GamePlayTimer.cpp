@@ -15,7 +15,20 @@ void GamePlayTimer::Init(float limit) {
 	gameTimer_ = limit;
 	gameTimeLimit_ = limit;
 
+	numberInterval_ = 80.0f;
+
 	originPos_ = { 360.0f, 100.0f };
+	numberSpriteScale_ = { 0.8f, 0.8f };
+
+	clock_ = Engine::CreateSprite("timer.png");
+	clock_->SetScale({0.3f, 0.3f});
+
+	adjustItem_ = AdjustmentItem::GetInstance();
+	groupName_ = "GamePlayTimer";
+	adjustItem_->AddItem(groupName_, "clock_position", clock_->GetCenterPos());
+	adjustItem_->AddItem(groupName_, "numberOriginPos", originPos_);
+	adjustItem_->AddItem(groupName_, "numberInterval", numberInterval_);
+	adjustItem_->AddItem(groupName_, "numberSpriteScale", numberSpriteScale_);
 
 	// -------------------------------------------------
 	// ↓ 制限時間のUIのSpriteを作成する
@@ -24,9 +37,10 @@ void GamePlayTimer::Init(float limit) {
 	for (int oi = 1; oi <= digit; ++oi) {
 		auto& sprite = limitTimeUI_.emplace_back(Engine::CreateSprite("number.png"));
 		sprite->SetRectRange(numberSpriteSize_);
-		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (80.0f * static_cast<float>(oi)), originPos_.y });
+		sprite->SetTextureCenterPos(Vector2{ originPos_.x - (numberInterval_ * static_cast<float>(oi)), originPos_.y });
 		sprite->SetTextureSize(numberSpriteSize_);
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimeLimit_), oi)));
+		sprite->SetScale(numberSpriteScale_);
 		sprite->Update();
 	}
 
@@ -36,6 +50,9 @@ void GamePlayTimer::Init(float limit) {
 	timeleft60s_ = std::make_unique<AudioPlayer>();
 	timeleft60s_->Init("timeLeft_60s.wav");
 
+	// 調整項目の適応
+	AdaptAdjustmentItem();
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +60,7 @@ void GamePlayTimer::Init(float limit) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GamePlayTimer::Update(bool isPlayerFlying) {
+	clock_->Update();
 	gameTimer_ -= GameTimer::DeltaTime();
 	if (gameTimer_ < 0.0f) {
 		gameTimer_ = 0.0f;
@@ -85,6 +103,7 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GamePlayTimer::Draw() const {
+	clock_->Draw();
 	for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
 		limitTimeUI_[oi]->Draw();
 	}
@@ -149,6 +168,13 @@ Vector2 GamePlayTimer::CalculationSpriteLT(int value) {
 	}
 }
 
+void GamePlayTimer::AdaptAdjustmentItem() {
+	clock_->SetTextureCenterPos(adjustItem_->GetValue<Vector2>(groupName_, "clock_position"));
+	originPos_ = adjustItem_->GetValue<Vector2>(groupName_, "numberOriginPos");
+	numberInterval_ = adjustItem_->GetValue<float>(groupName_, "numberInterval");
+	numberSpriteScale_ = adjustItem_->GetValue<Vector2>(groupName_, "numberSpriteScale");
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,8 +182,22 @@ Vector2 GamePlayTimer::CalculationSpriteLT(int value) {
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void GamePlayTimer::Debug_Gui() {
-	ImGui::Begin("GamePlayTimer");
-	ImGui::Text("gameTimer_ : %f", gameTimer_);
-	ImGui::End();
+	if (ImGui::TreeNode("GamePlayTimer")) {
+		ImGui::Text("gameTimer_ : %f", gameTimer_);
+		ImGui::DragFloat3("originPos", &originPos_.x, 0.1f);
+		ImGui::DragFloat2("numberSpriteScale", &numberSpriteScale_.x, 0.1f);
+		ImGui::DragFloat("inverval", &numberInterval_, 0.1f);
+		for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
+			limitTimeUI_[oi]->SetTextureCenterPos(Vector2{ originPos_.x - (numberInterval_ * static_cast<float>(oi)), originPos_.y });
+			limitTimeUI_[oi]->SetScale(numberSpriteScale_);
+		}
+		clock_->Debug_Gui();
+
+		if (ImGui::Button("ReAdapt")) {
+			AdaptAdjustmentItem();
+		}
+
+		ImGui::TreePop();
+	}
 }
 #endif

@@ -329,7 +329,7 @@ void Player::Move(){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
 						pressTime_ = 0.7f;
-						AudioPlayer::SinglShotPlay("boost.mp3", 0.5f);
+						AudioPlayer::SinglShotPlay("boost.wav", 0.5f);
 					}
 				}
 			} else{

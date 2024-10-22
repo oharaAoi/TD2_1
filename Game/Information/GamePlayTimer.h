@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Audio/AudioPlayer.h"
+#include "Engine/Utilities/AdjustmentItem.h"
 
 /// <summary>
 /// ゲームの進行している時間を計測するクラス
@@ -32,6 +33,8 @@ public:
 
 	Vector2 CalculationSpriteLT(int value);
 
+	void AdaptAdjustmentItem();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
@@ -39,6 +42,9 @@ public:
 	const bool GetIsFinish() { return isFinish_; }
 
 private:
+	AdjustmentItem* adjustItem_;
+	std::string groupName_;
+
 	// 終了したか
 	bool isFinish_;
 	bool isOverTime_;
@@ -47,10 +53,13 @@ private:
 	float gameTimer_;
 	float gameTimeLimit_;
 
+	std::unique_ptr<Sprite> clock_;
 	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;
 	Vector2 originPos_;
 
 	Vector2 numberSpriteSize_ = { 42.0f, 72.0f };
+	Vector2 numberSpriteScale_;
+	float numberInterval_;
 
 	std::unique_ptr<AudioPlayer> timeleft10s_;
 	std::unique_ptr<AudioPlayer> timeleft60s_;

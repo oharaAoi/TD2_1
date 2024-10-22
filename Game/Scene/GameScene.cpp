@@ -220,6 +220,7 @@ void GameScene::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
 
@@ -248,7 +249,7 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
 	// ○がついていない物はまだ使用していない
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.wav");				// ブースト音		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.wav");		// 体の数を減らす		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.wav");				// エサを食べる		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
@@ -649,6 +650,7 @@ void GameScene::Debug_Gui() {
 		{
 			if (ImGui::TreeNode("UI")) {
 				ImGui::Begin("UI");
+				gamePlayTimer_->Debug_Gui();
 				flyingTimerUI_->Debug_Gui();
 				flyingGaugeUI_->Debug_Gui();
 				playerSpeedCounter_->Debug_Gui();
