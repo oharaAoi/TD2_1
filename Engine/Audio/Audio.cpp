@@ -279,7 +279,7 @@ void Audio::SoundPlayWave(const SoundData& soundData) {
 	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
 
-	if (!IsPlaying(pSourceVoice)) {
+	if (IsPlaying(pSourceVoice)) {
 		return;
 	}
 
@@ -301,7 +301,7 @@ void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, boo
 	HRESULT result = S_FALSE;
 
 	if (checkPlaying) {
-		if (!IsPlaying(audioData.pSourceVoice)) {
+		if (IsPlaying(audioData.pSourceVoice)) {
 			return;
 		}
 	}
@@ -400,7 +400,11 @@ void Audio::SetVolume(IXAudio2SourceVoice* pSourceVoice, float volume) {
 bool Audio::IsPlaying(IXAudio2SourceVoice* pSourceVoice) {
 	XAUDIO2_VOICE_STATE state;
 	pSourceVoice->GetState(&state);
-	return state.BuffersQueued == 0;
+	if (state.BuffersQueued == 1) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 const char* Audio::GetFileExtension(const char* filename) {

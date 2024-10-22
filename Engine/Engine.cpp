@@ -384,6 +384,10 @@ void Engine::SetVolume(const AudioData& soundData, float volume) {
 	audio_->SetVolume(soundData.pSourceVoice, volume);
 }
 
+bool Engine::GetIsPlaying(const AudioData& soundData) {
+	return audio_->IsPlaying(soundData.pSourceVoice);
+}
+
 void Engine::SingleShotPlay(const SoundData& loadAudioData, float volume) {
 	audio_->SinglShotPlay(loadAudioData, volume);
 }
