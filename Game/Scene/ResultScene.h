@@ -60,10 +60,20 @@ public:
 
 private:
 
+	void Fade();
+
+private:
+
 	/*---------- parameter ----------*/
 	Vector3 rotate_;
 	Vector3 translate_;
 	float space_ = 2.0f;
+
+	float kFadeTime_ = 2.0f;
+	float fade_t_ = 1.0f;
+	bool isEndScene_ = false;
+	bool isStartScene_ = true;
+
 	int score_ = 634;
 	SCORE_RANK rank_;
 
@@ -84,6 +94,7 @@ private:
 
 	// ---------- Sprite --------- //
 	std::unique_ptr<Sprite> backgroundSprite_ = nullptr;
+	std::unique_ptr<Sprite> fade_ = nullptr;
 
 };
 

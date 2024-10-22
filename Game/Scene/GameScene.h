@@ -97,6 +97,8 @@ private:
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
 	static float groundDepth_;
+	float fadeWaitTime_ =0.5f;
+	float outgameWaitTime_ = 3.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

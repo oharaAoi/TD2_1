@@ -20,10 +20,12 @@ void GameScene::Finalize() {
 
 void GameScene::Init() {
 
+	currentState_ = GAME_STATE::TITLE;
+
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(400.0f);
+	gamePlayTimer_->Init(60.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -470,6 +472,10 @@ void GameScene::Update() {
 	if (Input::IsTriggerKey(DIK_ESCAPE)) {
 		isGuiDraw_ = !isGuiDraw_;
 	}
+
+	if(gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_){
+		SetNextScene(SceneType::Scene_Result);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -573,8 +579,8 @@ void GameScene::Draw() const{
 
 	// フェードの描画
 	if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-		float t = std::clamp((gamePlayTimer_->GetOutgameTime() - 2.0f) / 6.0f, 0.0f, 1.0f);
-		fade_->SetColor({1.0f,1.0f,1.0f,EaseOutExpo(t)});
+		float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
+		fade_->SetColor({1.0f,1.0f,1.0f,t});
 		fade_->Draw();
 	}
 }
