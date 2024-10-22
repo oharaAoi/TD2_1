@@ -45,5 +45,6 @@ private:
 
 	std::unique_ptr<BaseGameObject> moai_[kStageMax_];
 	std::unique_ptr<BaseGameObject> nico_[kStageMax_];
+	std::unique_ptr<BaseGameObject> ufo_[kStageMax_];
 };
 
