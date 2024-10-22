@@ -3,7 +3,7 @@
 #include <string>
 #include "Pipeline.h"
 
-enum class PipelineType {
+enum class PipelineType{
 	NormalPipeline,
 	AddPipeline,
 	TextureLessPipeline,
@@ -13,9 +13,11 @@ enum class PipelineType {
 	SkinningPipeline,
 	PrimitivePipeline,
 
-	WaterSpacePipeline, 
+	WaterSpacePipeline,
 	WaterLightingPipeline,
-	NotCullingPipeline
+	NotCullingPipeline,
+	AddBlendSpritePipeline,
+	NormalBlendSpritePipeline
 };
 
 class GraphicsPipelines {

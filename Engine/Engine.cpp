@@ -318,6 +318,12 @@ void Engine::SetPipeline(const PipelineType& kind) {
 	case PipelineType::NotCullingPipeline:
 		graphicsPipelines_->SetPipeline(PipelineType::NotCullingPipeline, dxCommands_->GetCommandList());
 		break;
+	case PipelineType::AddBlendSpritePipeline:
+		graphicsPipelines_->SetPipeline(PipelineType::AddBlendSpritePipeline, dxCommands_->GetCommandList());
+		break;
+	case PipelineType::NormalBlendSpritePipeline:
+		graphicsPipelines_->SetPipeline(PipelineType::NormalBlendSpritePipeline, dxCommands_->GetCommandList());
+		break;
 	}
 }
 

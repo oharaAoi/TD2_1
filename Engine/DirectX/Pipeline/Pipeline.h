@@ -22,7 +22,7 @@ public:
 	void Initialize(ID3D12Device* device, DirectXCompiler* dxCompiler, 
 					const Shader::ShaderData& shaderData, const RootSignatureType& rootSignatureType,
 					const std::vector<D3D12_INPUT_ELEMENT_DESC>& desc, const Blend::BlendMode& blendMode,
-					bool isCulling
+					bool isCulling, bool isDepth
 	);
 
 	void Draw(ID3D12GraphicsCommandList* commandList);
@@ -52,12 +52,12 @@ public:
 	/// DepthStencilStateの設定
 	/// </summary>
 	/// <returns></returns>
-	D3D12_DEPTH_STENCIL_DESC SetDepthStencilState();
+	D3D12_DEPTH_STENCIL_DESC SetDepthStencilState(bool isDepth);
 
 	/// <summary>
 	/// PSOの生成
 	/// </summary>
-	void CreatePSO(const Blend::BlendMode& blendMode, bool isCulling);
+	void CreatePSO(const Blend::BlendMode& blendMode, bool isCulling, bool isDepth);
 
 private:
 	// rootSignature

@@ -40,6 +40,8 @@ public:
 #endif
 
 	const bool GetIsFinish() { return isFinish_; }
+	const float GetTimeLinit()const{ return gameTimer_; }
+	const float GetOutgameTime()const{ return outgameTime_; }
 
 private:
 	AdjustmentItem* adjustItem_;
@@ -52,6 +54,7 @@ private:
 	// 時間系
 	float gameTimer_;
 	float gameTimeLimit_;
+	float outgameTime_;
 
 	std::unique_ptr<Sprite> clock_;
 	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;

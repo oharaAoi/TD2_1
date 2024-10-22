@@ -34,7 +34,7 @@
 #include "Game/UI/PlayerSpeedCounter.h"
 /*------ Sprite ------*/
 #include "Game/Effect/Cherry.h"
-
+#include "Game/Effect/Bubble.h"
 
 // ゲームシーン内での状態分けのenum
 enum class GAME_STATE : int32_t{
@@ -102,6 +102,7 @@ private:
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
 	std::unique_ptr<ParticleManager<Cherry>> cherryEmitter_ = nullptr;
+	std::unique_ptr<ParticleManager<Bubble>> bubbleEmitter_ = nullptr;
 
 	AnimetionEffectManager* animationEffectManager_;
 
@@ -123,6 +124,7 @@ private:
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
+	std::unique_ptr<Sprite>fade_ = nullptr;
 
 	// ------------ Audio ---------- //
 	std::unique_ptr<AudioPlayer> mainBGM_;
@@ -130,5 +132,4 @@ private:
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;
 	bool isGuiDraw_ = true;
-
 };
