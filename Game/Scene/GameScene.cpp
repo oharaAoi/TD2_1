@@ -2,7 +2,7 @@
 
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
-GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
+GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
 
 
 /*-------------- コンストラクタ・デストラクタ ---------------*/
@@ -248,7 +248,7 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
 	// ○がついていない物はまだ使用していない
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.wav");				// ブースト音		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.wav");		// 体の数を減らす		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.wav");				// エサを食べる		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○

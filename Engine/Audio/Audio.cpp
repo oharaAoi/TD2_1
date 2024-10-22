@@ -132,19 +132,16 @@ SoundData Audio::LoadWave(const char* filename) {
 SoundData Audio::LoadMP3(const wchar_t* filename) {
 
 	HRESULT hr = MFStartup(MF_VERSION);
-	if (FAILED(hr)) {
+	if(FAILED(hr)) {
 		throw std::runtime_error("Media Foundation initialization failed.");
 	}
-
-	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 
 	IMFSourceReader* pReader = nullptr;
 	IMFMediaType* pOutputType = nullptr;
 
 	// MP3ファイルのSource Readerを作成
 	hr = MFCreateSourceReaderFromURL(filename, nullptr, &pReader);
-	if (FAILED(hr)) {
+	if(FAILED(hr)) {
 		MFShutdown();
 		throw std::runtime_error("Failed to create Source Reader.");
 	}
