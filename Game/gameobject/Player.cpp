@@ -88,7 +88,9 @@ void Player::Update(){
 			isFlying_ = true;
 			isSplash_ = true;
 			isEnableLaunch_ = true;
-			AudioPlayer::SinglShotPlay("outWaterSurface.wav", 0.5f);
+			AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
+			AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
+
 		}
 	} else {
 		// 着水した瞬間
@@ -96,7 +98,8 @@ void Player::Update(){
 			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
 			//isFlying_ = false;//コメントアウト外さない
-			AudioPlayer::SinglShotPlay("inWaterSurface.wav", 0.5f);
+			AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
+			AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
 		}
 	}
 

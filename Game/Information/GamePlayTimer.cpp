@@ -100,6 +100,14 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	if(isFinish_){
 		outgameTime_ += GameTimer::DeltaTime();
 	}
+
+#ifdef _DEBUG
+	if(Input::IsTriggerKey(DIK_0)) 
+	{
+		gameTimer_ = 3;
+	}
+#endif // _DEBUG
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

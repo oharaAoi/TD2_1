@@ -71,6 +71,7 @@ void GameScene::Init() {
 	partition_->SetIsLighting(false);
 	partition_->Update();
 
+	startSceneChange_ = false;
 	// -------------------------------------------------
 	// ↓ managerの初期化
 	// -------------------------------------------------
@@ -273,6 +274,7 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "confusion.mp3");// 被弾した時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Damage.mp3");// 被弾した時の音2
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Bubble.mp3");//　シーン遷移の音
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 }
@@ -377,6 +379,12 @@ void GameScene::Update() {
 
 		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
 			if(player_->GetIsFlying() == false){
+				if(!startSceneChange_)
+				{
+					AudioPlayer::SinglShotPlay("Bubble.mp3", 0.5f);
+
+				}
+				startSceneChange_ = true;
 				float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
 				bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
 				bubbleEmitter_->Update();

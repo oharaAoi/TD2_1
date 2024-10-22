@@ -100,6 +100,7 @@ private:
 	static float groundDepth_;
 	float fadeWaitTime_ =0.5f;
 	float outgameWaitTime_ = 3.0f;
+	bool startSceneChange_;//シーン遷移が始まっているか
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
