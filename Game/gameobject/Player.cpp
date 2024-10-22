@@ -580,25 +580,13 @@ void Player::OnCollision(Collider* other){
 			if(!isDiving_){
 
 				// チャージが減る
-				chargePower_ -= 0.05f;
-				chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
-
-				// 一時減速する
-				temporaryAcceleration_ += decreaseVelocity_;
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
-				//基礎速度の変動
-				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
+				//chargePower_ -= 0.05f;
+				//chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 
 				float scale = (float)pFish->GetFishSize() + 1.0f;
 				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
 													  nullptr, false, Vector3(scale, scale, scale), Quaternion(), GetWorldTranslation());
-				//ピヨピヨエフェクト
-				/*AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-					transform_.get(), true, false, 3);*/
-
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-													  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+				SpeedDown();
 			}
 		}
 	}
@@ -616,68 +604,35 @@ void Player::OnCollision(Collider* other){
 					pressTime_ = 1.0f;
 					isFalling_ = false;
 					isCloseWing_ = false;
-					AudioPlayer::SinglShotPlay("jumpBird.wav", 0.5f);
+					AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.5f);
 					AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false, 
 														  Vector3(1.0f, 1.0f, 1.0f), Quaternion(), transform_->GetTranslation());
 				}
 			} else{
 				// 正面衝突の場合
-				temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				isFacedBird_ = true;
 				isCloseWing_ = true;
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", 
-													  nullptr, false,Vector3(1.0f,1.0f, 1.0f), Quaternion(), GetWorldTranslation());
-			
-				//ピヨピヨエフェクト
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-													  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+				SpeedDown();
 			}
 
 		} else{
 			// 正面衝突の場合
-			temporaryAcceleration_ -= (kMaxMoveSpeed_ - baseSpeed_) * 0.5f;
-			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+			
 			isFacedBird_ = true;
 			isCloseWing_ = true;
-			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
-												  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
-
-			//ピヨピヨエフェクト
-			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-												  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+			SpeedDown();
 		}
 	}
 
 	if (other->GetObjectType() == (int)ObjectType::DRIFTWOOD) {
-		// 一時減速する
-		temporaryAcceleration_ += decreaseVelocity_;
-		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
-		
+
 		pressTime_ *= (-1.0f) * reflection_;
 		dontInputPressTime_ = dontInputTime_;
 
-		//基礎速度の変動
-		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
-											  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
-		//ピヨピヨエフェクト
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-											  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+		SpeedDown();
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
-		// 一時減速する
-		temporaryAcceleration_ += decreaseVelocity_;
-		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
-		//基礎速度の変動
-		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
-											  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
-		//ピヨピヨエフェクト
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-											  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+		SpeedDown();
 	}
 }
 
@@ -697,6 +652,21 @@ void Player::ResultSceneUpdate(){
 
 	UpdateMatrix();
 	UpdateBody();
+}
+
+void Player::SpeedDown()
+{
+	// 一時減速する
+	temporaryAcceleration_ += decreaseVelocity_;
+	temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+	//基礎速度の変動
+	baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+	AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
+	AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
+		nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
+	//ピヨピヨエフェクト
+	AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+		transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
 }
 
 
