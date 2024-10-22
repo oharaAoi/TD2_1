@@ -82,7 +82,7 @@ void ResultScene::Init(){
 	for(int i = 0; i < scoreNumberModels_.size(); i++){
 		scoreNumberModels_[i]->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate_));
 		scoreNumberModels_[i]->GetTransform()->SetTranslaion(
-			translate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rotate_) * space_ * i
+			translate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rotate_) * space_ * static_cast<float>(i)
 		);
 
 		scoreNumberModels_[i]->Update();

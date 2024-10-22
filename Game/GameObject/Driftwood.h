@@ -2,6 +2,7 @@
 #include "Game/GameObject/BasePlacementObject.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/Lib/GameTimer.h"
+#include "Game/Manager/AnimetionEffectManager.h"
 #include "Easing.h"
 
 class Driftwood : public BasePlacementObject {

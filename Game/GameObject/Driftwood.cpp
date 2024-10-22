@@ -18,8 +18,8 @@ void Driftwood::Init() {
 	BaseGameObject::Init();
 	SetObject("Driftwood2.obj");
 
-	radius_ = 9.0f;
-	obb_.size = { radius_ * 3.0f , radius_ , 2.5f };
+	radius_ = 8.0f;
+	obb_.size = { radius_ * 3.5f , radius_ , 2.5f };
 	obb_.center = GetWorldTranslation();
 
 	radius_ = obb_.size.x;
@@ -53,6 +53,8 @@ void Driftwood::OnCollision(Collider* other) {
 	//プレイヤーに当たった場合
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
 		isActive_ = false;
+
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", transform_.get(), false, true);
 	}
 }
 

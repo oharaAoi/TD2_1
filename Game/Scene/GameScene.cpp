@@ -130,24 +130,6 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
-	/*backgroundObjects_["mountain"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["mountain"]->Init();
-	backgroundObjects_["mountain"]->SetObject("Mountain.obj");
-
-
-	backgroundObjects_["tree"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["tree"]->Init();
-	backgroundObjects_["tree"]->SetObject("MountenTree.obj");
-
-	backgroundObjects_["grass"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["grass"]->Init();
-	backgroundObjects_["grass"]->SetObject("MountainGrass.obj");
-
-	backgroundObjects_["cloud"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["cloud"]->Init();
-	backgroundObjects_["cloud"]->SetObject("Cloud.obj");
-	backgroundObjects_["cloud"]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
-	backgroundObjects_["cloud"]->SetIsLighting(false);*/
 
 	backgroundObjects_["moai"] = std::make_unique<BaseGameObject>();
 	backgroundObjects_["moai"]->Init();
@@ -261,6 +243,8 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -536,7 +520,7 @@ void GameScene::Draw() const{
 	trail_->Draw();
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	animationEffectManager_->Draw();
-	debugModel_->Draw();
+	//debugModel_->Draw();
 
 	/////////////////////////////////
 	// 水の表示
