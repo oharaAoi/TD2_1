@@ -6,6 +6,15 @@ Audio::~Audio() {
 	xAudio2_.Reset();
 }
 
+void Audio::Finalize() {
+	for (IXAudio2SourceVoice* sourceVoice : playingSourceList_) {
+		if (sourceVoice) {
+			sourceVoice->DestroyVoice();  // ボイスを解放
+		}
+	}
+	playingSourceList_.clear();
+}
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -31,10 +40,6 @@ void Audio::Update() {
 			++it; // 次のボイスへ
 		}
 	}
-}
-
-void Audio::Finalize() {
-
 }
 
 /// <summary>
@@ -350,6 +355,8 @@ void Audio::SinglShotPlay(const SoundData& loadAudioData, float volume) {
 	assert(SUCCEEDED(hr));
 	hr = audio.pSourceVoice->Start();
 	assert(SUCCEEDED(hr));
+
+	playingSourceList_.push_back(audio.pSourceVoice);
 }
 
 /// <summary>

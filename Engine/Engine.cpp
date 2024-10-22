@@ -80,6 +80,8 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Engine::Finalize() {
+	audio_->Finalize();
+
 	renderTexture_->Finalize();
 
 	computeShader_->Finalize();
