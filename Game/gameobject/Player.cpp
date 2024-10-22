@@ -207,6 +207,15 @@ void Player::Move(){
 				} else {
 					pressTime_ -= addPressTime_ * GameTimer::TimeRate();
 				}
+				seCoolTime -= GameTimer::DeltaTime();
+				if(seCoolTime<=0&&Input::IsTriggerKey(DIK_SPACE)) {
+					AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.5f);
+					seCoolTime = 0.25f;
+				}
+				if(seCoolTime <= 0 && Input::IsReleaseKey(DIK_SPACE)) {
+					AudioPlayer::SinglShotPlay("MoveChangeDown.mp3", 0.5f);
+					seCoolTime = 0.25f;
+				}
 			} else {
 				dontInputPressTime_ -= GameTimer::DeltaTime();
 			}
