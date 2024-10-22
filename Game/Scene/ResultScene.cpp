@@ -166,7 +166,6 @@ void ResultScene::Load(){
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
 	/*----------------- model ----------------*/
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player.fbx");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
