@@ -153,6 +153,8 @@ private:
 	float dontInputPressTime_;
 	float dontInputTime_ =0.6f;
 
+	float seCoolTime;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;

@@ -275,6 +275,8 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "confusion.mp3");// 被弾した時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Damage.mp3");// 被弾した時の音2
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Bubble.mp3");//　シーン遷移の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 }
@@ -459,13 +461,17 @@ void GameScene::Update() {
 		}
 	}
 
-	if (Input::IsTriggerKey(DIK_RSHIFT)) {
+#ifdef _DEBUG
+	if(Input::IsTriggerKey(DIK_RSHIFT)) {
 		Init();
 	}
 
-	if (Input::IsTriggerKey(DIK_ESCAPE)) {
+	if(Input::IsTriggerKey(DIK_ESCAPE)) {
 		isGuiDraw_ = !isGuiDraw_;
 	}
+#endif // _DEBUG
+
+	
 
 	if(gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_){
 		SetNextScene(SceneType::Scene_Result);
