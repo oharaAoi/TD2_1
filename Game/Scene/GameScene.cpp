@@ -26,7 +26,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(180.0f);
+	gamePlayTimer_->Init(20.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -133,6 +133,12 @@ void GameScene::Init() {
 
 	mainBGM_inWater_ = std::make_unique<AudioPlayer>();
 	mainBGM_inWater_->Init("mainBGM_tobenaikoi_in_water.wav");
+
+	windSound_ = std::make_unique<AudioPlayer>();
+	windSound_->Init("brow.mp3");
+
+	swimSound_ = std::make_unique<AudioPlayer>();
+	swimSound_->Init("swim.mp3");
 
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
@@ -277,6 +283,8 @@ void GameScene::Load() {
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "swim.mp3");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -446,6 +454,22 @@ void GameScene::Update() {
 	}
 
 	// -------------------------------------------------
+	// ↓ audioの更新
+	// -------------------------------------------------
+
+	if(player_->GetIsFlying()){
+		BGM_volumeT_ = std::clamp(BGM_volumeT_ + (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
+	} else{
+		BGM_volumeT_ = std::clamp(BGM_volumeT_ - (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
+	}
+
+	// 水に入っているかどうかで音の割合を切り替える
+	mainBGM_->SetVolume(0.4f * BGM_volumeT_);
+	mainBGM_inWater_->SetVolume(0.4f * (1.0f - BGM_volumeT_));
+	windSound_->SetVolume(0.4f * BGM_volumeT_);
+	swimSound_->SetVolume(0.3f * (1.0f - BGM_volumeT_));
+
+	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
@@ -481,7 +505,10 @@ void GameScene::Update() {
 void GameScene::Draw() const{
 
 	mainBGM_->Play(true, 0.4f, true);
-	//mainBGM_inWater_->Play(true, 0.6f, true);
+	mainBGM_inWater_->Play(true, 0.4f, true);
+	windSound_->Play(true, 0.4f, true);
+	swimSound_->Play(true, 0.3f, true);
+
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);

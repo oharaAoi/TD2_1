@@ -98,8 +98,9 @@ private:
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
 	static float groundDepth_;
-	float fadeWaitTime_ =0.5f;
+	float fadeWaitTime_ = 0.5f;
 	float outgameWaitTime_ = 3.0f;
+	float BGM_volumeT_ = 1.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
@@ -133,6 +134,8 @@ private:
 	// ------------ Audio ---------- //
 	std::unique_ptr<AudioPlayer> mainBGM_;
 	std::unique_ptr<AudioPlayer> mainBGM_inWater_;
+	std::unique_ptr<AudioPlayer> windSound_;
+	std::unique_ptr<AudioPlayer> swimSound_;
 
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;
