@@ -29,7 +29,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(20.0f);
+	gamePlayTimer_->Init(180.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
