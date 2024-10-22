@@ -101,6 +101,7 @@ private:
 	float fadeWaitTime_ = 0.5f;
 	float outgameWaitTime_ = 3.0f;
 	float BGM_volumeT_ = 1.0f;
+	float BGM_masterVolumeRate_ = 1.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

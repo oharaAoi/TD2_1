@@ -12,6 +12,9 @@ GameScene::~GameScene() { Finalize(); }
 
 void GameScene::Finalize() {
 	mainBGM_->Finalize();
+	mainBGM_inWater_->Finalize();
+	windSound_->Finalize();
+	swimSound_->Finalize();
 	AnimetionEffectManager::GetInstance()->Finalize();
 }
 
@@ -463,11 +466,22 @@ void GameScene::Update() {
 		BGM_volumeT_ = std::clamp(BGM_volumeT_ - (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
 	}
 
+	// ゲーム終了時にフェードアウトさせるための変数更新
+	float end_t = std::clamp((gamePlayTimer_->GetOutgameTime()) / outgameWaitTime_, 0.0f, 1.0f);
+	BGM_masterVolumeRate_ = 1.0f - end_t;
+
+	if(BGM_masterVolumeRate_ <= 0.0f){
+		mainBGM_->Stop();
+		mainBGM_inWater_->Stop();
+		windSound_->Stop();
+		swimSound_->Stop();
+	}
+
 	// 水に入っているかどうかで音の割合を切り替える
-	mainBGM_->SetVolume(0.4f * BGM_volumeT_);
-	mainBGM_inWater_->SetVolume(0.4f * (1.0f - BGM_volumeT_));
-	windSound_->SetVolume(0.4f * BGM_volumeT_);
-	swimSound_->SetVolume(0.3f * (1.0f - BGM_volumeT_));
+	mainBGM_->SetVolume(0.4f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	mainBGM_inWater_->SetVolume(0.4f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	windSound_->SetVolume(0.4f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	swimSound_->SetVolume(0.3f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -504,11 +518,12 @@ void GameScene::Update() {
 
 void GameScene::Draw() const{
 
-	mainBGM_->Play(true, 0.4f, true);
-	mainBGM_inWater_->Play(true, 0.4f, true);
-	windSound_->Play(true, 0.4f, true);
-	swimSound_->Play(true, 0.3f, true);
-
+	if(BGM_masterVolumeRate_ > 0.0f){
+		mainBGM_->Play(true, 0.4f, true);
+		mainBGM_inWater_->Play(true, 0.4f, true);
+		windSound_->Play(true, 0.4f, true);
+		swimSound_->Play(true, 0.3f, true);
+	}
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);
