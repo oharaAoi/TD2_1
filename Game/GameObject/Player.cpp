@@ -432,7 +432,11 @@ void Player::UpdateBody(){
 		} else{
 			AddBody(this);
 		}
-		AudioPlayer::SinglShotPlay("incrementBody.mp3", 0.1f);
+
+		if(bodyCount_ > kMinBodyCount_){
+			AudioPlayer::SinglShotPlay("incrementBody.mp3", 0.1f);
+		}
+
 	} else if(bodyCount < bodyCount_){
 		EraseBody();
 		AudioPlayer::SinglShotPlay("decrementBody.mp3", 0.1f);

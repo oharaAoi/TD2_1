@@ -131,6 +131,9 @@ void GameScene::Init() {
 	mainBGM_ = std::make_unique<AudioPlayer>();
 	mainBGM_->Init("mainBGM_tobenaikoi.wav");
 
+	mainBGM_inWater_ = std::make_unique<AudioPlayer>();
+	mainBGM_inWater_->Init("mainBGM_tobenaikoi_in_water.wav");
+
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
@@ -273,6 +276,7 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,6 +473,7 @@ void GameScene::Update() {
 void GameScene::Draw() const{
 
 	mainBGM_->Play(true, 0.4f, true);
+	mainBGM_inWater_->Play(true, 0.6f, true);
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);
