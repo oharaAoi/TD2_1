@@ -640,8 +640,6 @@ void Player::OnCollision(Collider* other){
 		} else{
 
 			if(collisionAllowableTime_ <= 0.0f){
-				// 正面衝突の場合
-
 				isFacedBird_ = true;
 				isCloseWing_ = true;
 				SpeedDown();
