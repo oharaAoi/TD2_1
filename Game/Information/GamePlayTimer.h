@@ -37,6 +37,8 @@ public:
 #endif
 
 	const bool GetIsFinish() { return isFinish_; }
+	const float GetTimeLinit()const{ return gameTimer_; }
+	const float GetOutgameTime()const{ return outgameTime_; }
 
 private:
 	// 終了したか
@@ -46,6 +48,7 @@ private:
 	// 時間系
 	float gameTimer_;
 	float gameTimeLimit_;
+	float outgameTime_;
 
 	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;
 	Vector2 originPos_;

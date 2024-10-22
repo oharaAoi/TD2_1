@@ -90,6 +90,11 @@ void GameScene::Init() {
 	cherryEmitter_->SetEmitRange({ kWindowWidth_ * 0.5f,-kWindowHeight_ * 0.2f }, { kWindowWidth_,0.0f });
 	cherryEmitter_->SetEmitCountEvery(2);
 
+	// 終了時泡をだすやつ
+	bubbleEmitter_ = std::make_unique<ParticleManager<Bubble>>();
+	bubbleEmitter_->SetEmitRange({ 0.0f,kWindowHeight_}, { kWindowWidth_,kWindowHeight_ * 2.0f});
+	bubbleEmitter_->SetEmitCountEvery(16);
+
 	// 青空
 	sky_ = Engine::CreateSprite("sky.png");
 	sky_->SetLeftTop({ 0.0f,0.0f });
@@ -101,8 +106,11 @@ void GameScene::Init() {
 	titleLogo_ = Engine::CreateSprite("titleLogo.png");
 	titleLogo_->SetLeftTop({ 0.0f,0.0f });
 	titleLogo_->SetCenterPos({ 640.0f, 360.0f });
-	//titleLogo_->SetTextureSize({ 1280.0f,720.0f });
-	//titleLogo_->SetRectRange({ 1280.0f,720.0f });
+
+	fade_ = Engine::CreateSprite("white.png");
+	fade_->SetLeftTop({ 0.0f,0.0f });
+	fade_->SetCenterPos({ 640.0f, 360.0f });
+	fade_->SetTextureSize({ 2000.0f,2000.0f });
 
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
@@ -206,7 +214,8 @@ void GameScene::Load() {
 	// Texture
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
-
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "softLight.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "bubble.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "cherry.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
@@ -368,7 +377,16 @@ void GameScene::Update() {
 	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
-	cherryEmitter_->Update();
+	if(currentState_ == GAME_STATE::TITLE){
+		cherryEmitter_->Update();
+	} else{
+
+		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
+			float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
+			bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
+			bubbleEmitter_->Update();
+		}
+	}
 
 	CheckAddSplash();
 	for (auto& splash : splash_) {
@@ -426,9 +444,9 @@ void GameScene::Update() {
 	if (player_->GetIsMove()) {
 		gamePlayTimer_->Update(player_->GetIsFlying());
 
-		if (gamePlayTimer_->GetIsFinish()) {
-			isPause_ = true;
-		}
+		//if (gamePlayTimer_->GetIsFinish()) {
+		//	isPause_ = true;
+		//}
 	}
 
 	if (Input::IsTriggerKey(DIK_RSHIFT)) {
@@ -444,7 +462,7 @@ void GameScene::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Draw() const {
+void GameScene::Draw() const{
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);
@@ -465,15 +483,15 @@ void GameScene::Draw() const {
 
 	obstaclesManager_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for (auto& splash : splash_) {
+	for(auto& splash : splash_) {
 		splash->Draw();
 	}
 
 #ifdef _DEBUG
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
-	if (Collider::isColliderBoxDraw_) {
-		if (!isDegugCameraActive_) {
+	if(Collider::isColliderBoxDraw_) {
+		if(!isDegugCameraActive_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
 		} else {
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
@@ -504,7 +522,7 @@ void GameScene::Draw() const {
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for (auto& backgroundObject : backgroundObjects_) {
+	for(auto& backgroundObject : backgroundObjects_) {
 		backgroundObject.second->Draw();
 	}
 
@@ -516,18 +534,32 @@ void GameScene::Draw() const {
 	/////////////////////////////////
 	// スプライトの表示
 	/////////////////////////////////
-	Render::SetRenderTarget(Sprite2D_RenderTarget);
-	Engine::SetPipeline(PipelineType::SpritePipeline);
+	//Render::SetRenderTarget(Sprite2D_RenderTarget);
 
-	if (currentState_ != GAME_STATE::TITLE) {
+
+	if(currentState_ != GAME_STATE::TITLE) {
+
+		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
+			Engine::SetPipeline(PipelineType::AddBlendSpritePipeline);
+			bubbleEmitter_->Draw();
+		}
+		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		gamePlayTimer_->Draw();
 		flyingTimerUI_->Draw();
 		flyingGaugeUI_->Draw();
 		playerSpeedCounter_->Draw();
 
 	} else {
+		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		titleLogo_->Draw();
 		cherryEmitter_->Draw();
+	}
+
+	// フェードの描画
+	if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
+		float t = std::clamp((gamePlayTimer_->GetOutgameTime() - 2.0f) / 6.0f, 0.0f, 1.0f);
+		fade_->SetColor({1.0f,1.0f,1.0f,EaseOutExpo(t)});
+		fade_->Draw();
 	}
 }
 

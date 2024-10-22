@@ -67,7 +67,7 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		// 制限時間を超えたら
 		if (gameTimer_ <= 0.0f) {
 			isFinish_ = true;
-			AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+			//AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
 		}
 	} else { // オーバータイムに入る
 		isOverTime_ = true;
@@ -75,8 +75,12 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		// 今飛んでいなくて前飛んでいたら
 		if (!isPlayerFlying && isPreFlying_) {
 			isFinish_ = true;
-			AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+			//AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
 		}
+	}
+
+	if(isFinish_){
+		outgameTime_ += GameTimer::DeltaTime();
 	}
 }
 

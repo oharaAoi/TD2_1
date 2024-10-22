@@ -26,6 +26,7 @@ public:
 
 	int32_t GetParticleCount(){ return (int32_t)particles_.size(); }
 	void SetInterval(float interval){ interval_ = interval; }
+	float GetInterval()const{return interval_;}
 	void SetEmitRange(const Vector2& LT, const Vector2& RB){
 		emitRangeLT_ = LT;
 		emitRangeRB_ = RB;
