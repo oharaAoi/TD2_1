@@ -25,6 +25,7 @@
 #include "Game/Camera/Camera.h"
 #include "Game/Camera/DebugCamera.h"
 #include "Game/Camera/ResultCamera.h"
+#include "Game/Information/FlyingTimer.h"
 
 /*------ UI ------*/
 
@@ -32,11 +33,11 @@
 
 
 enum class SCORE_RANK : int32_t{
-	SSS = 634,
-	SS = 500,
-	S = 365,
-	A = 200,
-	B = 100,
+	SSS = 5000,
+	SS = 3000,
+	S = 2000,
+	A = 1500,
+	B = 500,
 	C = 0
 };
 
@@ -79,7 +80,7 @@ private:
 	bool isStartScene_ = true;
 	static bool isViewingRanking_;
 
-	int score_ = 634;
+	int score_ = FlyingTimer::flyingScor;
 	SCORE_RANK rank_;
 
 	/*---------- debug ----------*/

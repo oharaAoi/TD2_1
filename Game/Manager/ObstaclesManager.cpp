@@ -19,6 +19,7 @@ void ObstaclesManager::Init(Player* pPlayer){
 		std::filesystem::create_directories(kDirectoryPath_);
 	}
 
+	pPlayer_ = pPlayer;
 	LoadAllFile();
 
 	//RandomAddObject();
@@ -34,8 +35,6 @@ void ObstaclesManager::Init(Player* pPlayer){
 
 	playerDrawLenght_ = 450.0f;
 	importLevel_ = 1;
-
-	pPlayer_ = pPlayer;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,6 +294,10 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 		case PlacementObjType::BIRD:
 			obj.reset(new Bird);
 			obj->Init();
+			// 60.0f以上の高さにいたら少し上げる
+			if(pPlayer_->GetTransform()->GetTranslation().y >= 50.0f){
+				createPos.y += std::abs(pPlayer_->GetTransform()->GetTranslation().y - createPos.y) * birdPopYRaito_;
+			}
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
 			break;
@@ -463,6 +466,8 @@ void ObstaclesManager::Debug_Gui(){
 	ImGui::Begin("ObstaclesManager");
 	ImGui::Text("objectNum: %d", static_cast<int>(obstaclesList_.size()));
 	ImGui::DragFloat("drawLenght : %f", &playerDrawLenght_);
+
+	ImGui::DragFloat("birdPopYRaito", &birdPopYRaito_, 0.1f);
 
 	if(ImGui::Button("Reload")) {
 		LoadAllFile();
