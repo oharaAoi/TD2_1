@@ -625,10 +625,10 @@ void Player::OnCollision(Collider* other){
 	}
 
 	if (other->GetObjectType() == (int)ObjectType::DRIFTWOOD) {
-
 		pressTime_ *= (-1.0f) * reflection_;
 		dontInputPressTime_ = dontInputTime_;
-
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", nullptr, true,
+			Vector3(1,1,1), Quaternion(), other->GetWorldTranslation());
 		SpeedDown();
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
@@ -661,12 +661,15 @@ void Player::SpeedDown()
 	temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 	//基礎速度の変動
 	baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-	AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
+	AudioPlayer::SinglShotPlay("confusion.mp3", 0.5f);
+	AudioPlayer::SinglShotPlay("Damage.mp3", 3.0f);
+
 	AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
 		nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
 	//ピヨピヨエフェクト
 	AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
 		transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
+
 }
 
 
