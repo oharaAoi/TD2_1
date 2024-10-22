@@ -71,6 +71,7 @@ void GameScene::Init() {
 	partition_->SetIsLighting(false);
 	partition_->Update();
 
+	startSceneChange_ = false;
 	// -------------------------------------------------
 	// ↓ managerの初期化
 	// -------------------------------------------------
@@ -272,14 +273,19 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.wav");	// 水面に入った時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.wav");	// 水面から出た時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "jumpBird.wav");			// 鳥を踏んでジャンプ			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.mp3");	// 水面に入った時の音			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.mp3");	// 水面から出た時の音			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "confusion.mp3");// 被弾した時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Damage.mp3");// 被弾した時の音2
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Bubble.mp3");//　シーン遷移の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
@@ -393,6 +399,12 @@ void GameScene::Update() {
 
 		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
 			if(player_->GetIsFlying() == false){
+				if(!startSceneChange_)
+				{
+					AudioPlayer::SinglShotPlay("Bubble.mp3", 0.5f);
+
+				}
+				startSceneChange_ = true;
 				float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
 				bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
 				bubbleEmitter_->Update();
@@ -485,13 +497,17 @@ void GameScene::Update() {
 		}
 	}
 
-	if (Input::IsTriggerKey(DIK_RSHIFT)) {
+#ifdef _DEBUG
+	if(Input::IsTriggerKey(DIK_RSHIFT)) {
 		Init();
 	}
 
-	if (Input::IsTriggerKey(DIK_ESCAPE)) {
+	if(Input::IsTriggerKey(DIK_ESCAPE)) {
 		isGuiDraw_ = !isGuiDraw_;
 	}
+#endif // _DEBUG
+
+	
 
 	if(gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_){
 		SetNextScene(SceneType::Scene_Result);

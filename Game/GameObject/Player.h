@@ -44,6 +44,7 @@ public:
 	void UpdateMatrix();
 
 	void ResultSceneUpdate();
+	void SpeedDown();
 
 private:
 	void Move_TITLE();
@@ -151,6 +152,8 @@ private:
 	// 障害物に当たった後のキーの受付をしない時間
 	float dontInputPressTime_;
 	float dontInputTime_ =0.6f;
+
+	float seCoolTime;
 
 	// 滑空開始直後の猶予時間
 	float collisionAllowableTime_ = 1.0f;

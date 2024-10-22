@@ -19,7 +19,7 @@ void Driftwood::Init() {
 	SetObject("Driftwood2.obj");
 
 	radius_ = 8.0f;
-	obb_.size = { radius_ * 3.5f , radius_ , 2.5f };
+	obb_.size = { radius_ * 3.5f , radius_*0.7f , 2.5f };
 	obb_.center = GetWorldTranslation();
 
 	radius_ = obb_.size.x;

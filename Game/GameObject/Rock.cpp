@@ -19,7 +19,7 @@ void Rock::Init() {
 	SetObject("Rock.obj");
 
 	radius_ = 4.0f;
-	obb_.size = { radius_, radius_ * 2.0f, radius_ };
+	obb_.size = { radius_, radius_ * 3.0f, radius_ };
 	obb_.center = GetWorldTranslation();
 	SetIsLighting(true);
 }
@@ -69,14 +69,14 @@ void Rock::IndividualFromCommon(const SubAttributeType& subType) {
 
 	case SubAttributeType::MIDIUM:
 		radius_ = 15.0f * 1.3f;
-		obb_.size = { (float)RockSize::MIDIUM, (float)RockSize::MIDIUM * 1.3f, (float)RockSize::MIDIUM };
+		obb_.size = { (float)RockSize::MIDIUM, (float)RockSize::MIDIUM * 1.6f, (float)RockSize::MIDIUM };
 		obb_.center = GetWorldTranslation();
 		scale = { 2.5f,2.5f,2.5f };
 		break;
 
 	case SubAttributeType::LARGE:
-		radius_ = 18.0f * 1.3f;
-		obb_.size = { (float)RockSize::LARGE, (float)RockSize::LARGE * 1.3f, (float)RockSize::LARGE };
+		radius_ = (float)RockSize::LARGE * 1.6f;
+		obb_.size = { (float)RockSize::LARGE, (float)RockSize::LARGE * 1.6f, (float)RockSize::LARGE };
 		obb_.center = GetWorldTranslation();
 		scale = { 4,4,4 };
 		break;

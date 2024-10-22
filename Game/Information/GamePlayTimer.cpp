@@ -64,12 +64,19 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	gameTimer_ -= GameTimer::DeltaTime();
 	if (gameTimer_ < 0.0f) {
 		gameTimer_ = 0.0f;
+		for(int oi = 0; oi < limitTimeUI_.size(); ++oi) {
+			limitTimeUI_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimer_), oi + 1)));
+			limitTimeUI_[oi]->Update();
+		}
+	} else
+	{
+		for(int oi = 0; oi < limitTimeUI_.size(); ++oi) {
+			limitTimeUI_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimer_ + 1), oi + 1)));
+			limitTimeUI_[oi]->Update();
+		}
 	}
 
-	for (int oi = 0 ; oi < limitTimeUI_.size(); ++oi) {
-		limitTimeUI_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimer_), oi + 1)));
-		limitTimeUI_[oi]->Update();
-	}
+	
 
 	// タイムアップ10秒前
 	if (static_cast<int>(gameTimer_) == 10) {
@@ -100,6 +107,14 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	if(isFinish_){
 		outgameTime_ += GameTimer::DeltaTime();
 	}
+
+#ifdef _DEBUG
+	if(Input::IsTriggerKey(DIK_0)) 
+	{
+		gameTimer_ = 3;
+	}
+#endif // _DEBUG
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
