@@ -591,11 +591,14 @@ void Player::OnCollision(Collider* other){
 				AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 
 				float scale = (float)pFish->GetFishSize() + 1.0f;
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", 
-													  transform_.get(), false, false, ((float)pFish->GetFishSize() + 1.0f));
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
+													  nullptr, false, Vector3(scale, scale, scale), Quaternion(), GetWorldTranslation());
 				//ピヨピヨエフェクト
+				/*AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+					transform_.get(), true, false, 3);*/
+
 				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-					transform_.get(), true, false, 3);
+													  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
 			}
 		}
 	}
@@ -623,11 +626,12 @@ void Player::OnCollision(Collider* other){
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 				isFacedBird_ = true;
 				isCloseWing_ = true;
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", 
+													  nullptr, false,Vector3(1.0f,1.0f, 1.0f), Quaternion(), GetWorldTranslation());
 			
 				//ピヨピヨエフェクト
 				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-					transform_.get(), true, false, 3);
+													  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
 			}
 
 		} else{
@@ -636,11 +640,12 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
 			isFacedBird_ = true;
 			isCloseWing_ = true;
-			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
+												  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
 
 			//ピヨピヨエフェクト
 			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-				transform_.get(), true, false, 3);
+												  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
 		}
 	}
 
@@ -655,10 +660,11 @@ void Player::OnCollision(Collider* other){
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
+											  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
 		//ピヨピヨエフェクト
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-			transform_.get(), true, false, 3);
+											  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
 		// 一時減速する
@@ -667,10 +673,11 @@ void Player::OnCollision(Collider* other){
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
+											  nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
 		//ピヨピヨエフェクト
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
-			transform_.get(), true, false, 3);
+											  transform_.get(), false, Vector3(3, 3, 3), Quaternion(), GetWorldTranslation());
 	}
 }
 
