@@ -11,6 +11,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { Finalize(); }
 
 void GameScene::Finalize() {
+	mainBGM_->Finalize();
 	AnimetionEffectManager::GetInstance()->Finalize();
 }
 
@@ -87,6 +88,9 @@ void GameScene::Init() {
 
 	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
 	playerSpeedCounter_->Init();
+
+	tutorialUI_ = std::make_unique<TutorialUI>();
+	tutorialUI_->Init(player_->GetWorldTranslation());
 
 	// 桜の花を散らすやつ
 	cherryEmitter_ = std::make_unique<ParticleManager<Cherry>>();
@@ -173,7 +177,6 @@ void GameScene::Load() {
 	//ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood2.obj");
 
-	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
@@ -181,8 +184,8 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
-
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	// UI
+	ModelManager::LoadModel("./Game/Resources/Model/UI_Plane/", "UI_Plane.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
@@ -197,7 +200,6 @@ void GameScene::Load() {
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
@@ -287,6 +289,7 @@ void GameScene::Update() {
 
 		} else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;
+			tutorialUI_->Init(player_->GetWorldTranslation());
 		}
 	}
 
@@ -345,19 +348,7 @@ void GameScene::Update() {
 		backgroundObject.second->Update();
 	}
 
-
 	if (currentState_ == GAME_STATE::TITLE) {
-
-#ifdef _DEBUG
-
-		ImGui::Begin("color");
-		if (ImGui::ColorEdit4("color", &editColor_.x)) {
-			partition_->SetColor(editColor_);
-		};
-		ImGui::End();
-
-#endif // 
-
 		Vector3 pos = player_->GetWorldTranslation();
 		pos.z += 10.0f;
 		partition_->GetTransform()->SetTranslaion(pos);
@@ -435,6 +426,10 @@ void GameScene::Update() {
 		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
 	}
 
+	if (currentState_ == GAME_STATE::TUTORIAL) {
+		tutorialUI_->Update();
+	}
+
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
@@ -479,9 +474,14 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	worldObjects_->Draw();
 
-	//if (currentState_ == GAME_STATE::TITLE) {
-	//	partition_->Draw();
-	//}
+
+	/////////////////////////////////
+	// tutorialUIの描画
+	/////////////////////////////////
+	if (currentState_ == GAME_STATE::TUTORIAL) {
+		Engine::SetPipeline(PipelineType::NormalPipeline);
+		tutorialUI_->Draw();
+	}
 
 	/////////////////////////////////
 	// 線の描画
@@ -647,6 +647,11 @@ void GameScene::Debug_Gui() {
 		ImGui::Begin("GameScene");
 		ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
 
+		// マスター音の追加
+		float volume = Audio::GetMasterVolume();
+		ImGui::DragFloat("masterVolume", &volume, 0.01f);
+		Audio::SetMasterVolume(volume);
+
 		//ImGui::DragFloat3()
 		if (ImGui::Button("NextScene")) {
 			SetNextScene(SceneType::Scene_Result);
@@ -666,12 +671,11 @@ void GameScene::Debug_Gui() {
 			}
 		}
 
-		ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
-		ImGui::SameLine();
-		ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
-
 		ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 
+		//==================================================================================
+		// ↓　Camera
+		//==================================================================================
 		{
 			ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
 			if (ImGui::TreeNode("Camera")) {
@@ -684,6 +688,9 @@ void GameScene::Debug_Gui() {
 			}
 		}
 
+		//==================================================================================
+		// ↓　UI
+		//==================================================================================
 		{
 			if (ImGui::TreeNode("UI")) {
 				ImGui::Begin("UI");
@@ -696,6 +703,9 @@ void GameScene::Debug_Gui() {
 			}
 		}
 
+		//==================================================================================
+		// ↓　Player
+		//==================================================================================
 		{
 			if (ImGui::TreeNode("Player")) {
 				player_->Debug_Gui();
@@ -703,6 +713,19 @@ void GameScene::Debug_Gui() {
 				ImGui::TreePop();
 			}
 		}
+
+		//==================================================================================
+		// ↓　other
+		//==================================================================================
+		{
+			if (currentState_ == GAME_STATE::TUTORIAL) {
+				if (ImGui::TreeNode("Tutorial")) {
+					tutorialUI_->Debug_Gui();
+					ImGui::TreePop();
+				}
+			}
+		}
+
 		ImGui::End();
 	}
 }

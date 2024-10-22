@@ -43,6 +43,8 @@ public: // メンバ関数
 
 	void CreateGameWindow();
 
+	void SetFullScreen(bool fullscreen);
+
 	/// <summary>
 	/// メッセージの処理
 	/// </summary>
@@ -67,6 +69,11 @@ private: // メンバ変数
 	// window関連
 	HWND hwnd_ = nullptr; // ウィンドウハンドル
 	WNDCLASS wc{};
+	RECT windowRect_;
+	UINT windowStyle_ = WS_OVERLAPPEDWINDOW;
 
+	bool isFullscreen_;
+	int32_t windowWidth_;
+	int32_t windowHeight_;
 };
 

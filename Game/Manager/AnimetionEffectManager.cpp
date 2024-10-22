@@ -17,11 +17,6 @@ void AnimetionEffectManager::Init() {
 
 void AnimetionEffectManager::Update() {
 	for (std::list<EffectData>::iterator it = effectList_.begin(); it != effectList_.end();) {
-		if ((*it).effect->GetIsAnimationFinish()) {
-			it = effectList_.erase(it);
-			continue;
-		}
-		
 		if ((*it).pTranslation != nullptr) {
 			(*it).effect->GetTransform()->SetTranslaion(*(*it).pTranslation);
 		}
@@ -31,6 +26,12 @@ void AnimetionEffectManager::Update() {
 		}
 
 		(*it).effect->Update();
+
+		if ((*it).effect->GetIsAnimationFinish()) {
+			it = effectList_.erase(it);
+			continue;
+		}
+
 		++it;
 	}
 }
@@ -42,26 +43,25 @@ void AnimetionEffectManager::Draw() const {
 	}
 }
 
-void AnimetionEffectManager::AddListEffect(const std::string& directoryPath, const std::string& filePath, 
-										   const WorldTransform* parentWorldTransform, bool isParent, bool isLighting, float upScale) {
+void AnimetionEffectManager::AddListEffect(const std::string& directoryPath, const std::string& filePath, const WorldTransform* parentWorldTransform,
+										   bool isLighting, const Vector3& scale, const Quaternion& rotate, const Vector3& translation) {
 
 	auto& newObj = GetInstance()->effectList_.emplace_back();
 	newObj.effect = std::make_unique<BaseGameObject>();
 	newObj.effect->Init();
 	newObj.effect->SetObject(filePath);
 	newObj.effect->SetAnimater(directoryPath, filePath, true);
-
-	newObj.effect->GetTransform()->SetScale({ upScale, upScale, upScale });
-
 	newObj.effect->SetIsLighting(isLighting);
-	if (isParent) {
-		newObj.pTranslation =  &parentWorldTransform->GetTranslation();
+
+	newObj.effect->GetTransform()->SetScale(scale);
+	if (parentWorldTransform != nullptr) {
+		newObj.pTranslation = &parentWorldTransform->GetTranslation();
 		newObj.pQuaternion = &parentWorldTransform->GetQuaternion();
 	} else {
 		newObj.pTranslation = nullptr;
 		newObj.pQuaternion = nullptr;
-		newObj.effect->GetTransform()->SetTranslaion(parentWorldTransform->GetTranslation());
-		newObj.effect->GetTransform()->SetQuaternion(parentWorldTransform->GetQuaternion() * newObj.effect->GetTransform()->GetQuaternion());
+		newObj.effect->GetTransform()->SetTranslaion(translation);
+		newObj.effect->GetTransform()->SetQuaternion(rotate);
 	}
 }
 

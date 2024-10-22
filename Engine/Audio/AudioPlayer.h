@@ -18,6 +18,8 @@ public:
 	/// <param name="volume">: 音量</param>
 	/// <param name="checkPlaying">: プレイ中かの判定を行うかどうか(デフォルトではfalse)</param>
 	void Play(bool isLoop, float volume, bool checkPlaying = false);
+
+	
 	void Pause();
 	void ReStart();
 	void Stop();

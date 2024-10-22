@@ -55,8 +55,22 @@ public:
 
 public:
 
+	/// <summary>
+	/// Textureをセットする
+	/// </summary>
+	/// <param name="fileName">: セットするTexture名</param>
 	void SetTexture(const std::string& fileName);
+
+	/// <summary>
+	/// Textureの中心位置を変える(Screen座標系)
+	/// </summary>
+	/// <param name="centerPos">: position</param>
 	void SetTextureCenterPos(const Vector2& centerPos);
+
+	/// <summary>
+	/// Textureのサイズを再設計する
+	/// </summary>
+	/// <param name="size"></param>
 	void SetTextureSize(const Vector2& size);
 
 	// 描画する範囲の設定
@@ -74,6 +88,10 @@ public:
 	void SetIsFlipX(bool isFlipX) { isFlipX_ = isFlipX; }
 	void SetIsFlipY(bool isFlipY) { isFlipY_ = isFlipY; }
 
+	/// <summary>
+	/// UVを直接する
+	/// </summary>
+	/// <param name="range"></param>
 	void SetUvDrawRange(const Vector2& range) { materialData_->uvDrawRange = range; }
 
 	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
