@@ -67,6 +67,11 @@ void WorldObjects::Init() {
 		ufo_[oi]->Init();
 		ufo_[oi]->SetObject("MountainUFO.obj");
 		ufo_[oi]->SetIsLighting(true);
+		// ufosmoke
+		ufosmoke_[oi] = std::make_unique<BaseGameObject>();
+		ufosmoke_[oi]->Init();
+		ufosmoke_[oi]->SetObject("UFOSmoke.obj");
+		ufosmoke_[oi]->SetIsLighting(true);
 
 		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
@@ -80,6 +85,7 @@ void WorldObjects::Init() {
 		moai_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		nico_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		ufo_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		ufosmoke_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 	}
 }
 
@@ -102,6 +108,7 @@ void WorldObjects::Update(float playerPos) {
 		moai_[oi]		->Update();
 		nico_[oi]		->Update();
 		ufo_[oi]		->Update();
+		ufosmoke_[oi]		->Update();
 	}
 }
 
@@ -118,15 +125,24 @@ void WorldObjects::Draw() const {
 
 		trees_[oi]->Draw();
 		grass_[oi]->Draw();
-		cloud_[oi]->Draw();
+		
 		moai_[oi]->Draw();
 		nico_[oi]->Draw();
 		ufo_[oi]->Draw();
+		ufosmoke_[oi]->Draw();
+			
 	}
-
+	
 	Engine::SetPipeline(PipelineType::WaterLightingPipeline);
 	for (const std::unique_ptr<Ground>& ground : grounds_) {
 		ground->Draw();
+	}
+
+	//半透明なやつ
+	Engine::SetPipeline(PipelineType::NormalPipeline);
+	for(uint32_t oi = 0; oi < kStageMax_; ++oi) {
+				
+		cloud_[oi]->Draw();
 	}
 }
 
@@ -178,6 +194,7 @@ void WorldObjects::LoopStage() {
 		moai_[index]->GetTransform()->SetTranslaion(newPos);
 		nico_[index]->GetTransform()->SetTranslaion(newPos);
 		ufo_[index]->GetTransform()->SetTranslaion(newPos);
+		ufosmoke_[index]->GetTransform()->SetTranslaion(newPos);
 
 		nowMountainIndex_ = !nowMountainIndex_;
 	}
