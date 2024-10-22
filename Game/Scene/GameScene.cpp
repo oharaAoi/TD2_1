@@ -29,7 +29,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(180.0f);
+	gamePlayTimer_->Init(999.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -41,6 +41,7 @@ void GameScene::Init() {
 	if (StageInformation::GetStageNumMax() != 0) {
 		obstaclesManager_->SetObstacles(StageInformation::GetStage());
 	}
+	obstaclesManager_->SetGameScene(this);
 
 	placementObjectEditor_ = std::make_unique<PlacementObjectEditer>();
 	placementObjectEditor_->Init(obstaclesManager_.get());
@@ -93,8 +94,9 @@ void GameScene::Init() {
 	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
 	playerSpeedCounter_->Init();
 
+	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
-	tutorialUI_->Init(player_->GetWorldTranslation());
+	tutorialUI_->Init();
 
 	// 桜の花を散らすやつ
 	cherryEmitter_ = std::make_unique<ParticleManager<Cherry>>();
@@ -103,7 +105,7 @@ void GameScene::Init() {
 
 	// 終了時泡をだすやつ
 	bubbleEmitter_ = std::make_unique<ParticleManager<Bubble>>();
-	bubbleEmitter_->SetEmitRange({ 0.0f,kWindowHeight_}, { kWindowWidth_,kWindowHeight_ * 2.0f});
+	bubbleEmitter_->SetEmitRange({ 0.0f,kWindowHeight_ }, { kWindowWidth_,kWindowHeight_ * 2.0f });
 	bubbleEmitter_->SetEmitCountEvery(16);
 
 	// 青空
@@ -270,7 +272,7 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "AddSpeed.mp3");			// エサを食べた時加速する		○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
@@ -307,11 +309,16 @@ void GameScene::Update() {
 	if (Input::IsTriggerKey(DIK_SPACE)) {
 		if (currentState_ == GAME_STATE::TITLE) {
 			currentState_ = GAME_STATE::TUTORIAL;
-			
-		} else if (currentState_ == GAME_STATE::TUTORIAL) {
+			tutorialUI_->LineUpUI(player_->GetWorldTranslation());
+			obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos());
+			obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos());
+		} /*else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;
-			tutorialUI_->Init(player_->GetWorldTranslation());
-		}
+		}*/
+	}
+
+	if (player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x) {
+		currentState_ = GAME_STATE::GAME;
 	}
 
 #ifdef _DEBUG
@@ -347,7 +354,6 @@ void GameScene::Update() {
 #ifdef _DEBUG
 		Debug_Gui();
 		placementObjectEditor_->Update();
-		obstaclesManager_->Update();
 #endif
 		// stepフラグが立っていたら1フレームだけ進める
 		if (!isStepFrame_) {
@@ -381,13 +387,12 @@ void GameScene::Update() {
 	// -------------------------------------------------
 
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
-	
+
 #ifdef _DEBUG
 	obstaclesManager_->Debug_Gui();
 #endif // 
-	if (currentState_ != GAME_STATE::TUTORIAL) {
-		obstaclesManager_->Update();
-	}
+
+	obstaclesManager_->Update();
 
 	// -------------------------------------------------
 	// ↓ effect
@@ -396,9 +401,9 @@ void GameScene::Update() {
 	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
-	if(currentState_ == GAME_STATE::TITLE){
+	if (currentState_ == GAME_STATE::TITLE) {
 		cherryEmitter_->Update();
-	} else{
+	} else {
 
 		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
 			if(player_->GetIsFlying() == false){
@@ -503,13 +508,13 @@ void GameScene::Update() {
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
-	if(GetGameState() == GAME_STATE::GAME){
+	if (GetGameState() == GAME_STATE::GAME) {
 		if (player_->GetIsMove()) {
-		gamePlayTimer_->Update(player_->GetIsFlying());
+			gamePlayTimer_->Update(player_->GetIsFlying());
 
-		//if (gamePlayTimer_->GetIsFinish()) {
-		//	isPause_ = true;
-		//}
+			//if (gamePlayTimer_->GetIsFinish()) {
+			//	isPause_ = true;
+			//}
 		}
 	}
 
@@ -524,7 +529,7 @@ void GameScene::Update() {
 #endif // _DEBUG
 
 
-	if(gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_){
+	if (gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_) {
 		SetNextScene(SceneType::Scene_Result);
 	}
 }
@@ -533,7 +538,7 @@ void GameScene::Update() {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Draw() const{
+void GameScene::Draw() const {
 
 
 	if(BGM_masterVolumeRate_ > 0.0f){
@@ -567,15 +572,15 @@ void GameScene::Draw() const{
 
 	obstaclesManager_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for(auto& splash : splash_) {
+	for (auto& splash : splash_) {
 		splash->Draw();
 	}
 
 #ifdef _DEBUG
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
-	if(Collider::isColliderBoxDraw_) {
-		if(!isDegugCameraActive_) {
+	if (Collider::isColliderBoxDraw_) {
+		if (!isDegugCameraActive_) {
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
 		} else {
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
@@ -606,7 +611,7 @@ void GameScene::Draw() const{
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for(auto& backgroundObject : backgroundObjects_) {
+	for (auto& backgroundObject : backgroundObjects_) {
 		backgroundObject.second->Draw();
 	}
 
@@ -621,9 +626,9 @@ void GameScene::Draw() const{
 	//Render::SetRenderTarget(Sprite2D_RenderTarget);
 
 
-	if(currentState_ != GAME_STATE::TITLE) {
+	if (currentState_ != GAME_STATE::TITLE) {
 
-		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
+		if (gamePlayTimer_->GetTimeLinit() <= 0.0f) {
 			Engine::SetPipeline(PipelineType::AddBlendSpritePipeline);
 			bubbleEmitter_->Draw();
 		}
@@ -644,8 +649,8 @@ void GameScene::Draw() const{
 	}
 
 	// フェードの描画
-	if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-		if(player_->GetIsFlying() == false){
+	if (gamePlayTimer_->GetTimeLinit() <= 0.0f) {
+		if (player_->GetIsFlying() == false) {
 			float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
 			fade_->SetColor({ 1.0f,1.0f,1.0f,t });
 			fade_->Draw();
@@ -738,7 +743,7 @@ void GameScene::CheckAddSplash() {
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui() {
 	if (isGuiDraw_) {
-	
+
 		ImGui::Begin("GameScene");
 		ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
 

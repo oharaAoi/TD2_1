@@ -4,12 +4,15 @@ AudioPlayer::AudioPlayer() {
 }
 
 AudioPlayer::~AudioPlayer() {
+	Finalize();
 }
 
 void AudioPlayer::Finalize() { 
-	Engine::Stop(audio_);
-	audio_.pSourceVoice->DestroyVoice();
-	delete[]audio_.data.pBuffer;
+	if (audio_.pSourceVoice != nullptr) {
+		Engine::Stop(audio_);
+		audio_.pSourceVoice->DestroyVoice();
+		audio_.pSourceVoice = nullptr;
+	}
 }
 
 void AudioPlayer::Init(const std::string& filePath) {

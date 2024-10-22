@@ -117,6 +117,9 @@ private:
 	const float kMinMoveSpeed_ = 25.0f;
 	const float kMaxMoveSpeed_ = 150.0f;
 
+	const float kMinAcceleration_ = -30;
+	const float kMaxAcceleration_ = 100;
+
 	//基礎速度のパラメーター
 	const float kAddSpeed_ = 10;
 	const float kDecreaseSpeed_ = 20;
@@ -156,6 +159,7 @@ private:
 	float seCoolTime;
 
 	// 滑空開始直後の猶予時間
+	const float kAllowableTime = 1.0f;
 	float collisionAllowableTime_ = 1.0f;
 
 	// タイトル時出現高度
@@ -190,8 +194,8 @@ private:
 	std::unique_ptr<AudioPlayer> hitSe_;
 	std::unique_ptr<AudioPlayer> coinGetSe_;
 
-	
-
+	// タイトル用変数
+	float title_sinfIncrement_;
 
 
 public:// アクセッサ

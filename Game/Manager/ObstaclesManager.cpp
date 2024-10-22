@@ -1,4 +1,5 @@
 #include "ObstaclesManager.h"
+#include "Game/Scene/GameScene.h"
 
 ObstaclesManager::ObstaclesManager(){}
 ObstaclesManager::~ObstaclesManager(){
@@ -24,7 +25,7 @@ void ObstaclesManager::Init(Player* pPlayer){
 
 	//RandomAddObject();
 
-	playerPos_ = { 0.0f, 0.0f,0.0f };
+	/*playerPos_ = { 0.0f, 0.0f,0.0f };
 	prePlayerPos_ = { 0.0f, 0.0f,0.0f };
 
 	playerDrawLenght_ = 250.0f;
@@ -34,7 +35,7 @@ void ObstaclesManager::Init(Player* pPlayer){
 	RandomImport();
 
 	playerDrawLenght_ = 450.0f;
-	importLevel_ = 1;
+	importLevel_ = 1;*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,9 +43,11 @@ void ObstaclesManager::Init(Player* pPlayer){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ObstaclesManager::Update(){
-	if (playerPos_.x - prePlayerPos_.x > 200.0f) {
- 		RandomImport();
-		prePlayerPos_ = playerPos_;
+	if (pGameScene_->GetGameState() == GAME_STATE::GAME) {
+		if (playerPos_.x - prePlayerPos_.x > 200.0f) {
+			RandomImport();
+			prePlayerPos_ = playerPos_;
+		}
 	}
 
 	animationDrawList_.clear();
@@ -67,26 +70,6 @@ void ObstaclesManager::Update(){
 			if (pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()) {
 				(*it)->SetTexture("FishCanEat.png");
 			}
-
-
-			//// 体が3以下の時はスモールのみ
-			//if (pPlayer_->GetBodyCount() < 3) {
-			//	if ((*it)->GetSubType() == SubAttributeType::SMALL) {
-			//		(*it)->SetColor({ 2.0f, 0.0f, 0.0f, 1.0f });
-			//	}
-			//} 
-			//
-			//if(pPlayer_->GetBodyCount() < 6) {
-			//	if ((*it)->GetSubType() == SubAttributeType::SMALL ||
-			//		(*it)->GetSubType() == SubAttributeType::MIDIUM) {
-
- 		//			(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-			//	}
-			//}
-			//
-			//if(pPlayer_->GetBodyCount() < 9) {
-			//	(*it)->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-			//}
 		}
 
 		// -------------------------------------------------
@@ -154,6 +137,40 @@ void ObstaclesManager::RandomImport(){
 
 	Inport(randomFileName, importLevel_);
 	Log("Load : GameData[" + randomFileName + "]\n");
+}
+
+void ObstaclesManager::TutorialImport(const std::string& fileName, const Vector3& pos) {
+	for (size_t oi = 0; oi < groupMap_[0][fileName].loadData_.size(); ++oi) {
+		auto& objData = groupMap_[0][fileName].loadData_;
+		auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
+		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
+		Vector3 createPos = objData[oi].pos_;
+		createPos.x += pos.x;
+
+		switch (objData[oi].type_) {
+		case PlacementObjType::ROCK:
+			obj.reset(new Rock);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+			break;
+		case PlacementObjType::FISH:
+			obj.reset(new Fish);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+			break;
+		case PlacementObjType::BIRD:
+			obj.reset(new Bird);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+			obj->SetObbSize(obj->GetRadius());
+			break;
+		case PlacementObjType::DRIFTWOOD:
+			obj.reset(new Driftwood);
+			obj->Init();
+			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+			break;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

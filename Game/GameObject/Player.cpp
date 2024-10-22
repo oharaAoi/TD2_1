@@ -218,11 +218,11 @@ void Player::Move(){
 				if(seCoolTime<=0&&Input::IsTriggerKey(DIK_SPACE)) {
 					AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.2f);
 					seCoolTime = 0.25f;
-				}
+				}/*
 				if(seCoolTime <= 0 && Input::IsReleaseKey(DIK_SPACE)) {
 					AudioPlayer::SinglShotPlay("MoveChangeDown.mp3", 0.2f);
 					seCoolTime = 0.25f;
-				}
+				}*/
 			} else {
 				dontInputPressTime_ -= GameTimer::DeltaTime();
 			}
@@ -233,7 +233,7 @@ void Player::Move(){
 			} else{
 				temporaryAcceleration_ += (increaseVelocity_ * 0.5f) * GameTimer::DeltaTime();
 			}
-			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 
 
 		} else{// 着水直後
@@ -281,7 +281,7 @@ void Player::Move(){
 			isCloseWing_ = false;
 			isFacedBird_ = false;
 			dropSpeed_ = 0.0f;
-			collisionAllowableTime_ = 1.0f;
+			collisionAllowableTime_ = kAllowableTime;
 			//diveTime_ = kDiveTime_;
 
 		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
@@ -342,7 +342,7 @@ void Player::Move(){
 				// 潜水速度を一定範囲に保つ
 				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
 				baseSpeed_ = kMinBaseSpeed_ + 10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_ + decreaseVelocity_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_ + decreaseVelocity_, kMinAcceleration_, kMaxAcceleration_);
 				diveTime_ = kDiveTime_;
 			}
 		}
@@ -410,7 +410,7 @@ void Player::MoveLimit(){
 		pressTime_ = 0.0f;
 		// 減速させる
 		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.5f * GameTimer::DeltaTime();
-		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 	}
 
 }
@@ -592,12 +592,12 @@ void Player::OnCollision(Collider* other){
 			chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 			// 一時加速する
 			temporaryAcceleration_ += increaseVelocity_;
-			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 			AudioPlayer::SinglShotPlay("eat.mp3", 0.5f);
-			AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
-
+			//AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
+			AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
 			float scale = (float)pFish->GetFishSize() + 2.0f;
 			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/EatEffect/", "EatEffect.gltf",
 												  nullptr, false, Vector3(scale, scale, scale), Quaternion(), transform_->GetTranslation());
@@ -688,7 +688,7 @@ void Player::SpeedDown()
 {
 	// 一時減速する
 	temporaryAcceleration_ += decreaseVelocity_;
-	temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+	temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 	//基礎速度の変動
 	baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 	AudioPlayer::SinglShotPlay("confusion.mp3", 0.5f);

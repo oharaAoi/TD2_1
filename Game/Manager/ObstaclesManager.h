@@ -17,6 +17,8 @@
 
 using json = nlohmann::json;
 
+class GameScene;
+
 /// <summary>
 /// 障害物を管理するクラス
 /// </summary>
@@ -65,6 +67,9 @@ public:
 	void AllFileClear();
 
 	void RandomImport();
+
+	// Tutorialでのファイル読み込み
+	void TutorialImport(const std::string& fileName, const Vector3& pos);
 	
 	// ランダム配置の追加
 	void RandomImportCreate();
@@ -87,7 +92,7 @@ public:
 	std::list<std::unique_ptr<BasePlacementObject>>& GetPlacementObject() { return obstaclesList_; }
 	const float GetUpdateLenght() const { return playerDrawLenght_; }
 
-	const uint32_t GetMaxCoins() const { return coinNum_; }
+	void SetGameScene(GameScene* gameScene) { pGameScene_ = gameScene; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -137,6 +142,7 @@ private:
 
 	// ポインター
 	Player* pPlayer_;
+	GameScene* pGameScene_;
 
 	float birdPopYRaito_ = 0.7f;
 };

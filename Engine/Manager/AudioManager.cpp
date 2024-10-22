@@ -2,6 +2,9 @@
 
 
 AudioManager::~AudioManager() {
+	for (auto& pair : audioLoadData_) {
+		delete[] pair.second.pBuffer; 
+	}
 	audioLoadData_.clear();
 }
 

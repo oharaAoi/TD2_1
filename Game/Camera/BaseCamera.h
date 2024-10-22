@@ -67,9 +67,10 @@ protected:
 
 	float nearClip_;
 	float farClip_;
-
+	float fov_;
 	float nearClip2D_;
 	float farClip2D_;
+
 
 };
 
