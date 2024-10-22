@@ -10,12 +10,17 @@ TutorialUI::~TutorialUI() {
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::Init(const Vector3& playerPos) {
+void TutorialUI::Init() {
+	offsetLnegth_ = 300.0f;	// この距離にするといい感じの距離になる
 	adjust_ = AdjustmentItem::GetInstance();
-
 	groupName_ = "TutorialUI";
 	adjust_->AddItem(groupName_, "offsetPos", offsetPos_);
 	adjust_->AddItem(groupName_, "interval", interval_);
+	adjust_->AddItem(groupName_, "offsetLnegth", offsetLnegth_);
+
+	AdaptAdjustment();
+
+	tutorialUI_.clear();
 
 	tutorialUI_.try_emplace("kari", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari"]->Init();
@@ -37,10 +42,19 @@ void TutorialUI::Init(const Vector3& playerPos) {
 	tutorialUI_["kari4"]->SetObject("UI_Plane.obj");
 	tutorialUI_["kari4"]->SetTexture("sky.png");
 
+	tutorialUI_.try_emplace("start", std::make_unique<BaseGameObject>());
+	tutorialUI_["start"]->Init();
+	tutorialUI_["start"]->SetObject("UI_Plane.obj");
+	tutorialUI_["start"]->SetTexture("sky.png");
+
+	float index = 0;
 	for (auto& ui : tutorialUI_) {
 		Vector3 pos = offsetPos_;
-		pos.x += interval_;
+		pos.x += (interval_ * index)+offsetLnegth_;
 		ui.second->GetTransform()->SetTranslaion(pos);
+		ui.second->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
+
+		index++;
 	}
 }
 
@@ -68,8 +82,23 @@ void TutorialUI::Draw() const {
 // ↓　編集
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::LineUpUI() {
-	tutorialUI_["kari"]->GetTransform()->SetTranslaion(offsetPos_);
+void TutorialUI::LineUpUI(const Vector3& playerPos) {
+	// この処理はプレイヤーが
+	if (!isLineUp_) {
+		float index = 0;
+		for (auto& ui : tutorialUI_) {
+			Vector3 pos = offsetPos_;
+			pos.x += (interval_ * index) + offsetLnegth_ + playerPos.x;
+			ui.second->GetTransform()->SetTranslaion(pos);
+			ui.second->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
+
+			index++;
+		}
+		isLineUp_ = true;
+	} else {
+		return;
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +108,19 @@ void TutorialUI::LineUpUI() {
 void TutorialUI::AdaptAdjustment() {
 	offsetPos_ = adjust_->GetValue<Vector3>(groupName_, "offsetPos");
 	interval_ = adjust_->GetValue<float>(groupName_, "interval");
+	offsetLnegth_ = adjust_->GetValue<float>(groupName_, "offsetLnegth");
+}
+
+Vector3 TutorialUI::GetSessionFishPos() {
+	return tutorialUI_["kari3"]->GetTransform()->GetTranslation();
+}
+
+Vector3 TutorialUI::GetSessionBirdPos() {
+	return tutorialUI_["kari4"]->GetTransform()->GetTranslation();
+}
+
+Vector3 TutorialUI::GetStartPos() {
+	return tutorialUI_["start"]->GetTransform()->GetTranslation();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,12 +133,18 @@ void TutorialUI::Debug_Gui() {
 		ImGui::DragFloat("interval", &interval_, 1.0f);
 		/*tutorialUI_["kari"]->Debug_Gui();*/
 
+		float index = 0;
 		for (auto& ui : tutorialUI_) {
 			Vector3 pos = offsetPos_;
-			pos.x += interval_;
+			pos.x += (interval_ * index) + offsetLnegth_;
 			ui.second->GetTransform()->SetTranslaion(pos);
+			ui.second->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
+
+			index++;
 		}
 		ImGui::TreePop();
 	}
 }
+
+
 #endif

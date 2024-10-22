@@ -173,7 +173,8 @@ void Player::DrawAnimetor() const{
 void Player::Move(){
 
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
-		pressTime_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
+		title_sinfIncrement_ += GameTimer::DeltaTime();
+		pressTime_ = std::sinf(6.28f * title_sinfIncrement_) * 0.2f;
 		// transformの更新
 		UpdateTransform();
 		MoveLimit();
