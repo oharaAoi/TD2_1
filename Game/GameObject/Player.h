@@ -145,7 +145,12 @@ private:
 	float gravity_ = -2.0f;
 	float dropSpeed_;
 
+	// 障害物に当たった時に反射率
+	float reflection_ = 0.8f;
 
+	// 障害物に当たった後のキーの受付をしない時間
+	float dontInputPressTime_;
+	float dontInputTime_ =0.6f;
 
 	// フラグ-------------------------------------------
 

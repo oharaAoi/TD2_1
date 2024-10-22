@@ -191,12 +191,17 @@ void Player::Move(){
 
 			addPressTime_ = std::lerp(maxAddPress, minAddPress, totalSpeedRatio);
 
-			// 押すと上昇、離すと沈む
-			if(Input::IsPressKey(DIK_SPACE)) {
-				pressTime_ += addPressTime_ * GameTimer::TimeRate();
+			// 入力を受け付けない時間がプラスだったら入力しない
+			if (dontInputPressTime_ < 0) {
+				// 押すと上昇、離すと沈む
+				if (Input::IsPressKey(DIK_SPACE)) {
+					pressTime_ += addPressTime_ * GameTimer::TimeRate();
 
+				} else {
+					pressTime_ -= addPressTime_ * GameTimer::TimeRate();
+				}
 			} else {
-				pressTime_ -= addPressTime_ * GameTimer::TimeRate();
+				dontInputPressTime_ -= GameTimer::DeltaTime();
 			}
 
 			// 一時加速、減速を徐々に元に戻す
@@ -505,6 +510,8 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat("addPressTime_=%f", &addPressTime_, 0.001f);
 
 	ImGui::DragFloat("radius", &radius_, 0.1f);
+	ImGui::DragFloat("reflection", &reflection_, 0.1f);
+	ImGui::DragFloat("dontInputTime", &dontInputTime_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
 
 	if(ImGui::Button("ReAdapt")) {
@@ -560,6 +567,9 @@ void Player::OnCollision(Collider* other){
 			AudioPlayer::SinglShotPlay("eat.mp3", 0.5f);
 			AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
 
+			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/EatEffect/", "EatEffect.gltf",
+												  transform_.get(), false, false, ((float)pFish->GetFishSize() + 2.0f));
+
 		} else{// 食べられなかったとき
 
 			if(!isDiving_){
@@ -574,18 +584,11 @@ void Player::OnCollision(Collider* other){
 				//基礎速度の変動
 				baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 				AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
-				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", transform_.get(), false, false);
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", 
+													  transform_.get(), false, false, ((float)pFish->GetFishSize() + 1.0f));
 
 			}
 		}
-	}
-
-	if(other->GetObjectType() == (int)ObjectType::ITEM){
-
-	}
-
-	if(other->GetObjectType() == (int)ObjectType::COIN) {
-		getCoinNum_++;
 	}
 
 	if(other->GetObjectType() == (int)ObjectType::BIRD) {
@@ -627,6 +630,10 @@ void Player::OnCollision(Collider* other){
 		// 一時減速する
 		temporaryAcceleration_ += decreaseVelocity_;
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinMoveSpeed_ - baseSpeed_, kMaxMoveSpeed_ - baseSpeed_ + 20.0f);
+		
+		pressTime_ *= (-1.0f) * reflection_;
+		dontInputPressTime_ = dontInputTime_;
+
 		//基礎速度の変動
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);

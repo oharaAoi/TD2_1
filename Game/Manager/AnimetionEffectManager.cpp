@@ -43,13 +43,16 @@ void AnimetionEffectManager::Draw() const {
 }
 
 void AnimetionEffectManager::AddListEffect(const std::string& directoryPath, const std::string& filePath, 
-										   const WorldTransform* parentWorldTransform, bool isParent, bool isLighting) {
+										   const WorldTransform* parentWorldTransform, bool isParent, bool isLighting, float upScale) {
 
 	auto& newObj = GetInstance()->effectList_.emplace_back();
 	newObj.effect = std::make_unique<BaseGameObject>();
 	newObj.effect->Init();
 	newObj.effect->SetObject(filePath);
 	newObj.effect->SetAnimater(directoryPath, filePath, true);
+
+	newObj.effect->GetTransform()->SetScale({ upScale, upScale, upScale });
+
 	newObj.effect->SetIsLighting(isLighting);
 	if (isParent) {
 		newObj.pTranslation =  &parentWorldTransform->GetTranslation();

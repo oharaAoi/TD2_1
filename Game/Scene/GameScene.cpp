@@ -241,6 +241,8 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
