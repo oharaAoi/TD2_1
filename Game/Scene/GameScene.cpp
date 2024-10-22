@@ -473,7 +473,7 @@ void GameScene::Update() {
 void GameScene::Draw() const{
 
 	mainBGM_->Play(true, 0.4f, true);
-	mainBGM_inWater_->Play(true, 0.6f, true);
+	//mainBGM_inWater_->Play(true, 0.6f, true);
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);
