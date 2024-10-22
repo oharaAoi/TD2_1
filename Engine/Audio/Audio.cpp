@@ -1,5 +1,7 @@
 #include "Audio.h"
 
+float Audio::masterVolume_ = 0.5f;
+
 Audio::~Audio() {
 	xAudio2_.Reset();
 }
@@ -277,7 +279,7 @@ void Audio::SoundPlayWave(const SoundData& soundData) {
 	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
 
-	if (!IsPlaying(pSourceVoice)) {
+	if (IsPlaying(pSourceVoice)) {
 		return;
 	}
 
@@ -291,6 +293,7 @@ void Audio::SoundPlayWave(const SoundData& soundData) {
 
 	// 波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	result = pSourceVoice->SetVolume( masterVolume_);
 	result = pSourceVoice->Start();
 }
 
@@ -298,7 +301,7 @@ void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, boo
 	HRESULT result = S_FALSE;
 
 	if (checkPlaying) {
-		if (!IsPlaying(audioData.pSourceVoice)) {
+		if (IsPlaying(audioData.pSourceVoice)) {
 			return;
 		}
 	}
@@ -318,9 +321,9 @@ void Audio::PlayAudio(const AudioData& audioData, bool isLoop, float volume, boo
 	// 波形データの再生
 	result = audioData.pSourceVoice->SubmitSourceBuffer(&buf);
 	assert(SUCCEEDED(result));
-	result = audioData.pSourceVoice->Start();
+	result = audioData.pSourceVoice->SetVolume(volume * masterVolume_);
 	assert(SUCCEEDED(result));
-	result = audioData.pSourceVoice->SetVolume(volume);
+	result = audioData.pSourceVoice->Start();
 	assert(SUCCEEDED(result));
 }
 
@@ -343,9 +346,9 @@ void Audio::SinglShotPlay(const SoundData& loadAudioData, float volume) {
 	// 波形データの再生
 	hr = audio.pSourceVoice->SubmitSourceBuffer(&buf);
 	assert(SUCCEEDED(hr));
-	hr = audio.pSourceVoice->Start();
+	hr = audio.pSourceVoice->SetVolume(volume * masterVolume_);
 	assert(SUCCEEDED(hr));
-	hr = audio.pSourceVoice->SetVolume(volume);
+	hr = audio.pSourceVoice->Start();
 	assert(SUCCEEDED(hr));
 }
 
@@ -397,7 +400,11 @@ void Audio::SetVolume(IXAudio2SourceVoice* pSourceVoice, float volume) {
 bool Audio::IsPlaying(IXAudio2SourceVoice* pSourceVoice) {
 	XAUDIO2_VOICE_STATE state;
 	pSourceVoice->GetState(&state);
-	return state.BuffersQueued == 0;
+	if (state.BuffersQueued == 1) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 const char* Audio::GetFileExtension(const char* filename) {

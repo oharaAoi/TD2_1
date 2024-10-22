@@ -32,6 +32,8 @@ public:
 	const float GetCurrentLength() const { return currentFlyingLength_; }
 	const float GetMaxLnegth() const { return maxFlyingLength_; }
 
+	static float flyingScor;
+
 private:
 	bool isMeasurement_; // 計測をしているか
 	// 現在の飛んでいる量

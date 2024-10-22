@@ -2,7 +2,7 @@
 
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
-GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
+GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
 GAME_STATE GameScene::preState_ = currentState_;
 
 
@@ -11,6 +11,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { Finalize(); }
 
 void GameScene::Finalize() {
+	mainBGM_->Finalize();
 	AnimetionEffectManager::GetInstance()->Finalize();
 }
 
@@ -25,7 +26,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(60.0f);
+	gamePlayTimer_->Init(20.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -88,6 +89,9 @@ void GameScene::Init() {
 	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
 	playerSpeedCounter_->Init();
 
+	tutorialUI_ = std::make_unique<TutorialUI>();
+	tutorialUI_->Init(player_->GetWorldTranslation());
+
 	// 桜の花を散らすやつ
 	cherryEmitter_ = std::make_unique<ParticleManager<Cherry>>();
 	cherryEmitter_->SetEmitRange({ kWindowWidth_ * 0.5f,-kWindowHeight_ * 0.2f }, { kWindowWidth_,0.0f });
@@ -127,27 +131,18 @@ void GameScene::Init() {
 	mainBGM_ = std::make_unique<AudioPlayer>();
 	mainBGM_->Init("mainBGM_tobenaikoi.wav");
 
+	mainBGM_inWater_ = std::make_unique<AudioPlayer>();
+	mainBGM_inWater_->Init("mainBGM_tobenaikoi_in_water.wav");
+
+	windSound_ = std::make_unique<AudioPlayer>();
+	windSound_->Init("brow.mp3");
+
+	swimSound_ = std::make_unique<AudioPlayer>();
+	swimSound_->Init("swim.mp3");
+
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
-	/*backgroundObjects_["mountain"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["mountain"]->Init();
-	backgroundObjects_["mountain"]->SetObject("Mountain.obj");
-
-
-	backgroundObjects_["tree"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["tree"]->Init();
-	backgroundObjects_["tree"]->SetObject("MountenTree.obj");
-
-	backgroundObjects_["grass"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["grass"]->Init();
-	backgroundObjects_["grass"]->SetObject("MountainGrass.obj");
-
-	backgroundObjects_["cloud"] = std::make_unique<BaseGameObject>();
-	backgroundObjects_["cloud"]->Init();
-	backgroundObjects_["cloud"]->SetObject("Cloud.obj");
-	backgroundObjects_["cloud"]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
-	backgroundObjects_["cloud"]->SetIsLighting(false);*/
 
 	backgroundObjects_["moai"] = std::make_unique<BaseGameObject>();
 	backgroundObjects_["moai"]->Init();
@@ -191,7 +186,6 @@ void GameScene::Load() {
 	//ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood2.obj");
 
-	ModelManager::LoadModel("./Game/Resources/Model/", "Item.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
@@ -199,8 +193,8 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
-
-	ModelManager::LoadModel("./Engine/Resources/Develop/", "skin.obj");
+	// UI
+	ModelManager::LoadModel("./Game/Resources/Model/UI_Plane/", "UI_Plane.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
@@ -215,7 +209,6 @@ void GameScene::Load() {
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/", "waterSpace.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
 
 	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
@@ -261,6 +254,9 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -286,6 +282,9 @@ void GameScene::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "swim.mp3");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,16 +292,16 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
-
+	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
-
 
 	if (Input::IsTriggerKey(DIK_SPACE)) {
 		if (currentState_ == GAME_STATE::TITLE) {
 			currentState_ = GAME_STATE::TUTORIAL;
-
+			
 		} else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;
+			tutorialUI_->Init(player_->GetWorldTranslation());
 		}
 	}
 
@@ -361,34 +360,29 @@ void GameScene::Update() {
 		backgroundObject.second->Update();
 	}
 
-
 	if (currentState_ == GAME_STATE::TITLE) {
-
-#ifdef _DEBUG
-
-		ImGui::Begin("color");
-		if (ImGui::ColorEdit4("color", &editColor_.x)) {
-			partition_->SetColor(editColor_);
-		};
-		ImGui::End();
-
-#endif // 
-
 		Vector3 pos = player_->GetWorldTranslation();
 		pos.z += 10.0f;
 		partition_->GetTransform()->SetTranslaion(pos);
 		partition_->Update();
 	}
 
-	/*------------- manager -------------*/
+	// -------------------------------------------------
+	// ↓ manager
+	// -------------------------------------------------
+
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 	
 #ifdef _DEBUG
 	obstaclesManager_->Debug_Gui();
 #endif // 
-	obstaclesManager_->Update();
+	if (currentState_ != GAME_STATE::TUTORIAL) {
+		obstaclesManager_->Update();
+	}
 
-	/*-------------- effect -------------*/
+	// -------------------------------------------------
+	// ↓ effect
+	// -------------------------------------------------
 	trail_->Update();
 	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
@@ -398,9 +392,11 @@ void GameScene::Update() {
 	} else{
 
 		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-			float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
-			bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
-			bubbleEmitter_->Update();
+			if(player_->GetIsFlying() == false){
+				float t = std::clamp(gamePlayTimer_->GetOutgameTime() / 3.0f, 0.0f, 1.0f);
+				bubbleEmitter_->SetInterval(0.5f - 0.49f * t);
+				bubbleEmitter_->Update();
+			}
 		}
 	}
 
@@ -411,6 +407,9 @@ void GameScene::Update() {
 
 	animationEffectManager_->Update();
 
+	// -------------------------------------------------
+	// ↓ Editer
+	// -------------------------------------------------
 
 #ifdef _DEBUG
 	if (isGuiDraw_) {
@@ -439,7 +438,6 @@ void GameScene::Update() {
 	// -------------------------------------------------
 	// ↓ 不要になった要素などの削除
 	// -------------------------------------------------
-
 	splash_.remove_if([](auto& splash) {return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
@@ -451,18 +449,40 @@ void GameScene::Update() {
 		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
 	}
 
+	if (currentState_ == GAME_STATE::TUTORIAL) {
+		tutorialUI_->Update();
+	}
+
+	// -------------------------------------------------
+	// ↓ audioの更新
+	// -------------------------------------------------
+
+	if(player_->GetIsFlying()){
+		BGM_volumeT_ = std::clamp(BGM_volumeT_ + (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
+	} else{
+		BGM_volumeT_ = std::clamp(BGM_volumeT_ - (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
+	}
+
+	// 水に入っているかどうかで音の割合を切り替える
+	mainBGM_->SetVolume(0.4f * BGM_volumeT_);
+	mainBGM_inWater_->SetVolume(0.4f * (1.0f - BGM_volumeT_));
+	windSound_->SetVolume(0.4f * BGM_volumeT_);
+	swimSound_->SetVolume(0.3f * (1.0f - BGM_volumeT_));
+
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
 	// -------------------------------------------------
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
-	if (player_->GetIsMove()) {
+	if(GetGameState() == GAME_STATE::GAME){
+		if (player_->GetIsMove()) {
 		gamePlayTimer_->Update(player_->GetIsFlying());
 
 		//if (gamePlayTimer_->GetIsFinish()) {
 		//	isPause_ = true;
 		//}
+		}
 	}
 
 	if (Input::IsTriggerKey(DIK_RSHIFT)) {
@@ -485,6 +505,10 @@ void GameScene::Update() {
 void GameScene::Draw() const{
 
 	mainBGM_->Play(true, 0.4f, true);
+	mainBGM_inWater_->Play(true, 0.4f, true);
+	windSound_->Play(true, 0.4f, true);
+	swimSound_->Play(true, 0.3f, true);
+
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
 	sky_->Draw(true);
@@ -495,9 +519,14 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	worldObjects_->Draw();
 
-	//if (currentState_ == GAME_STATE::TITLE) {
-	//	partition_->Draw();
-	//}
+
+	/////////////////////////////////
+	// tutorialUIの描画
+	/////////////////////////////////
+	if (currentState_ == GAME_STATE::TUTORIAL) {
+		Engine::SetPipeline(PipelineType::NormalPipeline);
+		tutorialUI_->Draw();
+	}
 
 	/////////////////////////////////
 	// 線の描画
@@ -536,7 +565,7 @@ void GameScene::Draw() const{
 	trail_->Draw();
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	animationEffectManager_->Draw();
-	debugModel_->Draw();
+	//debugModel_->Draw();
 
 	/////////////////////////////////
 	// 水の表示
@@ -579,14 +608,24 @@ void GameScene::Draw() const{
 
 	// フェードの描画
 	if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-		float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
-		fade_->SetColor({1.0f,1.0f,1.0f,t});
-		fade_->Draw();
+		if(player_->GetIsFlying() == false){
+			float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
+			fade_->SetColor({ 1.0f,1.0f,1.0f,t });
+			fade_->Draw();
+		}
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　チュートリアルの内容を行う
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void GameScene::Update_TUTORIAL() {
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Colliderの更新を行う
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::UpdateColliderList() {
@@ -663,6 +702,11 @@ void GameScene::Debug_Gui() {
 		ImGui::Begin("GameScene");
 		ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
 
+		// マスター音の追加
+		float volume = Audio::GetMasterVolume();
+		ImGui::DragFloat("masterVolume", &volume, 0.01f);
+		Audio::SetMasterVolume(volume);
+
 		//ImGui::DragFloat3()
 		if (ImGui::Button("NextScene")) {
 			SetNextScene(SceneType::Scene_Result);
@@ -682,12 +726,11 @@ void GameScene::Debug_Gui() {
 			}
 		}
 
-		ImGui::Text("GetCoinNum: %d", player_->GetCoinNum());
-		ImGui::SameLine();
-		ImGui::Text(" / %d", obstaclesManager_->GetMaxCoins());
-
 		ImGui::Checkbox("debugColliderDraw", &Collider::isColliderBoxDraw_);
 
+		//==================================================================================
+		// ↓　Camera
+		//==================================================================================
 		{
 			ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
 			if (ImGui::TreeNode("Camera")) {
@@ -700,6 +743,9 @@ void GameScene::Debug_Gui() {
 			}
 		}
 
+		//==================================================================================
+		// ↓　UI
+		//==================================================================================
 		{
 			if (ImGui::TreeNode("UI")) {
 				ImGui::Begin("UI");
@@ -712,6 +758,9 @@ void GameScene::Debug_Gui() {
 			}
 		}
 
+		//==================================================================================
+		// ↓　Player
+		//==================================================================================
 		{
 			if (ImGui::TreeNode("Player")) {
 				player_->Debug_Gui();
@@ -719,6 +768,19 @@ void GameScene::Debug_Gui() {
 				ImGui::TreePop();
 			}
 		}
+
+		//==================================================================================
+		// ↓　other
+		//==================================================================================
+		{
+			if (currentState_ == GAME_STATE::TUTORIAL) {
+				if (ImGui::TreeNode("Tutorial")) {
+					tutorialUI_->Debug_Gui();
+					ImGui::TreePop();
+				}
+			}
+		}
+
 		ImGui::End();
 	}
 }

@@ -92,6 +92,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
+copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dxil.dll"
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\PrimitiveDrawer.cpp" />
@@ -230,6 +235,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\UI\FlyingTimerUI.cpp" />
     <ClCompile Include="Game\UI\PlayerSpeedCounter.cpp" />
     <ClCompile Include="Game\UI\TitleUI.cpp" />
+    <ClCompile Include="Game\UI\TutorialUI.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +383,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\UI\FlyingTimerUI.h" />
     <ClInclude Include="Game\UI\PlayerSpeedCounter.h" />
     <ClInclude Include="Game\UI\TitleUI.h" />
+    <ClInclude Include="Game\UI\TutorialUI.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
   </ItemGroup>

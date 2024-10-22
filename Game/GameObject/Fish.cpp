@@ -69,26 +69,26 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 		break;
 	case SubAttributeType::SMALL:
 		fishSize_ = FISH_SIZE::SMALL;
-		radius_ = 2.6f;
+		radius_ = 2.3f;
 		energy_ = 0.075f;
-		scale = { 1.0f,1.0f,1.0f };
+		scale = { 1.5f,1.5f,1.5f };
 		break;
 	case SubAttributeType::MIDIUM:
 		fishSize_ = FISH_SIZE::MIDIUM;
-		radius_ = 4.0f;
+		radius_ = 3.5f;
 		energy_ = 0.1f;
-		scale = { 2.5f,2.5f,2.5f };
+		scale = { 3.5f,3.5f,3.5f };
 		break;
 	case SubAttributeType::LARGE:
 		fishSize_ = FISH_SIZE::LARGE;
-		radius_ = 6.0f;
+		radius_ = 5;
 		energy_ = 0.2f;
-		scale = { 4,4,4 };
+		scale = { 5,5,5 };
 
 		break;
 	}
-
-	Vector3 newSize = initSize * radius_*2;
+	radius_ *= 2;
+	Vector3 newSize = initSize * radius_;
 	//float size = radius_ * 2.0f;
 	obb_.size = newSize;
 	transform_->SetScale(scale);
@@ -103,7 +103,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 	{
 	case (int)FISH_SIZE::SMALL:
 
-		radius_ = 1.3f;
+		radius_ = 10.0f;
 		energy_ = 0.075f;
 		scale = { 2.0f,2.0f,2.0f };
 		subType_ = SubAttributeType::SMALL;
@@ -111,7 +111,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 
 	case (int)FISH_SIZE::MIDIUM:
 
-		radius_ = 2.0f;
+		radius_ = 10.0f;
 		energy_ = 0.1f;
 		scale = { 3.0f,3.0f,3.0f };
 		subType_ = SubAttributeType::MIDIUM;
@@ -119,7 +119,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 
 	case (int)FISH_SIZE::LARGE:
 
-		radius_ = 3.0f;
+		radius_ = 10.0f;
 		energy_ = 0.2f;
 		scale = { 6.0f,6.0f,6.0f };
 		subType_ = SubAttributeType::LARGE;

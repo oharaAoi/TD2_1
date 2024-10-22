@@ -1,5 +1,8 @@
 #include "ResultScene.h"
 
+bool ResultScene::isViewingRanking_ = false;
+
+//-------------------------------------------
 ResultScene::ResultScene(){}
 
 ResultScene::~ResultScene() { Finalize(); }
@@ -82,7 +85,7 @@ void ResultScene::Init(){
 	for(int i = 0; i < scoreNumberModels_.size(); i++){
 		scoreNumberModels_[i]->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate_));
 		scoreNumberModels_[i]->GetTransform()->SetTranslaion(
-			translate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rotate_) * space_ * i
+			translate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rotate_) * space_ * static_cast<float>(i)
 		);
 
 		scoreNumberModels_[i]->Update();
@@ -104,7 +107,8 @@ void ResultScene::Init(){
 		scoreRankModel_->SetObject("SSS.obj");
 	}
 
-	scoreRankModel_->GetTransform()->SetTranslaion({ -4.2f,1.2f,-5.3f });
+	scoreRankModel_->GetTransform()->SetScale({ 4.6f,4.26f,4.14f });
+	scoreRankModel_->GetTransform()->SetTranslaion({ -3.93f,-2.67f,6.29f });
 	scoreRankModel_->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion({ -0.27f,2.58f,-0.16f }));
 	scoreRankModel_->Update();
 
@@ -127,6 +131,8 @@ void ResultScene::Init(){
 	fade_->Update();
 
 
+	debugScale_ = scoreRankModel_->GetTransform()->GetScale();
+	debugTranslate_ = scoreRankModel_->GetTransform()->GetTranslation();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -202,8 +208,9 @@ void ResultScene::Load(){
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
-
+	
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
 }
 
 /////////////////////////////////////////////////////////////////
@@ -240,7 +247,12 @@ void ResultScene::Update(){
 
 	if(!isStartScene_){
 		if(Input::IsTriggerKey(DIK_SPACE)){
-			isEndScene_ = true;
+
+			if(!isViewingRanking_){
+				isViewingRanking_ = true;
+			} else{
+				isEndScene_ = true;
+			}
 		}
 	}
 
@@ -293,9 +305,17 @@ void ResultScene::Debug_Gui(){
 
 	ImGui::Begin("ResultScene");
 
+	ImGui::DragFloat3("Scale", &debugScale_.x, 0.01f);
+	//ImGui::DragFloat3("Rotate", &debugRotate_.x, 0.01f);
+	ImGui::DragFloat3("Translate", &debugTranslate_.x, 0.01f);
+
+
+	scoreRankModel_->GetTransform()->SetTranslaion(debugTranslate_);
+	scoreRankModel_->GetTransform()->SetScale(debugScale_);
+
+
 	ImGui::Checkbox("isDebugCameraActive", &isDebugCameraActive_);
 	ImGui::Text("fade : %f", fade_t_);
-
 
 	if(ImGui::Button("ReTry")) {
 		SetNextScene(SceneType::Scene_Game);

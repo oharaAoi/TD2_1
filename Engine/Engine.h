@@ -162,6 +162,8 @@ public:
 	/// <param name="volume"></param>
 	static void SetVolume(const AudioData& soundData, float volume);
 
+	static bool GetIsPlaying(const AudioData& soundData);
+
 	/// <summary>
 	/// 一度だけ再生し、他でも鳴って欲しい物
 	/// </summary>

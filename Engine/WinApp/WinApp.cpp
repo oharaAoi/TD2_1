@@ -82,6 +82,47 @@ void WinApp::CreateGameWindow(){
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
+void WinApp::SetFullScreen(bool fullscreen) {
+	if (isFullscreen_ != fullscreen) {
+		if (fullscreen) {
+			// 元の状態を覚えておく
+			GetWindowRect(hwnd_, &windowRect_);
+
+			// 仮想フルスクリーン化
+			SetWindowLong(
+				hwnd_, GWL_STYLE,
+				windowStyle_ &
+				~(WS_CAPTION | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_SYSMENU | WS_THICKFRAME));
+
+			RECT fullscreenRect{ 0 };
+			HMONITOR monitor = MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST);
+			MONITORINFO info;
+			info.cbSize = sizeof(info);
+			GetMonitorInfo(monitor, &info);
+			fullscreenRect.right = info.rcMonitor.right - info.rcMonitor.left;
+			fullscreenRect.bottom = info.rcMonitor.bottom - info.rcMonitor.top;
+
+			SetWindowPos(
+				hwnd_, HWND_TOPMOST, fullscreenRect.left, fullscreenRect.top, fullscreenRect.right,
+				fullscreenRect.bottom, SWP_FRAMECHANGED | SWP_NOACTIVATE);
+			ShowWindow(hwnd_, SW_MAXIMIZE);
+
+		} else {
+			// 通常ウィンドウに戻す
+			SetWindowLong(hwnd_, GWL_STYLE, windowStyle_);
+
+			SetWindowPos(
+				hwnd_, HWND_NOTOPMOST, windowRect_.left, windowRect_.top,
+				windowRect_.right - windowRect_.left, windowRect_.bottom - windowRect_.top,
+				SWP_FRAMECHANGED | SWP_NOACTIVATE);
+
+			ShowWindow(hwnd_, SW_NORMAL);
+		}
+	}
+
+	isFullscreen_ = fullscreen;
+}
+
 //===============================================================================================================
 //	
 //===============================================================================================================

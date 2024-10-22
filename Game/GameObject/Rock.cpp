@@ -61,21 +61,21 @@ void Rock::IndividualFromCommon(const SubAttributeType& subType) {
 	case SubAttributeType::NONE:
 		break;
 	case SubAttributeType::SMALL:
-		radius_ = 10.0f;
+		radius_ = 10.0f * 1.3f;
 		obb_.size = { (float)RockSize::SMALL,(float)RockSize::SMALL * 1.3f,(float)RockSize::SMALL };
 		obb_.center = GetWorldTranslation();
 		scale = { 1.0f,1.0f,1.0f };
 		break;
 
 	case SubAttributeType::MIDIUM:
-		radius_ = 15.0f;
+		radius_ = 15.0f * 1.3f;
 		obb_.size = { (float)RockSize::MIDIUM, (float)RockSize::MIDIUM * 1.3f, (float)RockSize::MIDIUM };
 		obb_.center = GetWorldTranslation();
 		scale = { 2.5f,2.5f,2.5f };
 		break;
 
 	case SubAttributeType::LARGE:
-		radius_ = 18.0f;
+		radius_ = 18.0f * 1.3f;
 		obb_.size = { (float)RockSize::LARGE, (float)RockSize::LARGE * 1.3f, (float)RockSize::LARGE };
 		obb_.center = GetWorldTranslation();
 		scale = { 4,4,4 };

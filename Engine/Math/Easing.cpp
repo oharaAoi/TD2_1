@@ -124,6 +124,11 @@ float EaseOutBack(float t) {
     return 1.0f + c2 * powf(t - 1.0f, 3.0f) + c1 * powf(t - 1.0f, 2.0f);
 }
 
+float EaseOutBack(float t,float overShootRate){
+    const float c2 = overShootRate + 1.0f;
+    return 1.0f + c2 * powf(t - 1.0f, 3.0f) + overShootRate * powf(t - 1.0f, 2.0f);
+}
+
 float EaseInOutBack(float t) {
     const float c1 = 1.70158f;
     const float c3 = c1 * 1.525f;

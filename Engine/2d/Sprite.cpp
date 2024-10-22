@@ -3,6 +3,10 @@
 
 Sprite::Sprite() {}
 Sprite::~Sprite() {
+	vertexData_ = nullptr;
+	indexData_ = nullptr;
+	materialData_ = nullptr;
+	transformData_ = nullptr;
 	vertexBuffer_.Reset();
 	indexBuffer_.Reset();
 	materialBuffer_.Reset();

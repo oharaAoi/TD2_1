@@ -72,3 +72,16 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 
     return result;
 }
+
+/// <summary>
+/// ベジエ曲線を書く
+/// </summary>
+/// <param name="controlPoint">制御点がまとまった配列</param>
+/// <returns></returns>
+Vector3 Bezier(const Vector3& v1, const Vector3& v2, const Vector3& v3, const float& t){
+
+    Vector3 lerpVec[2]{};
+    lerpVec[0] = (v2 - v1).Normalize() * Length(v2 - v1) * t;
+    lerpVec[1] = (v3 - v2).Normalize() * Length(v3 - v2) * t;
+    return (lerpVec[1] - lerpVec[0]).Normalize() * Length(lerpVec[1] - lerpVec[0]) * t;
+}

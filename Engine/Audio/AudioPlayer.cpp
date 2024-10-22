@@ -6,7 +6,8 @@ AudioPlayer::AudioPlayer() {
 AudioPlayer::~AudioPlayer() {
 }
 
-void AudioPlayer::Finalize() {
+void AudioPlayer::Finalize() { 
+	Engine::Stop(audio_);
 	audio_.pSourceVoice->DestroyVoice();
 	delete[]audio_.data.pBuffer;
 }
@@ -29,6 +30,14 @@ void AudioPlayer::ReStart() {
 
 void AudioPlayer::Stop() {
 	Engine::Stop(audio_);
+}
+
+void AudioPlayer::SetVolume(float volume) {
+	Engine::SetVolume(audio_, volume);
+}
+
+bool AudioPlayer::GetIsPlaying() {
+	return Engine::GetIsPlaying(audio_);
 }
 
 void AudioPlayer::SinglShotPlay(const std::string& filePath, float volume) {

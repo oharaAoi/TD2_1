@@ -32,6 +32,7 @@
 #include "Game/UI/FlyingTimerUI.h"
 #include "Game/UI/FlyingGaugeUI.h"
 #include "Game/UI/PlayerSpeedCounter.h"
+#include "Game/UI/TutorialUI.h"
 /*------ Sprite ------*/
 #include "Game/Effect/Cherry.h"
 #include "Game/Effect/Bubble.h"
@@ -97,8 +98,9 @@ private:
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
 	static float groundDepth_;
-	float fadeWaitTime_ =0.5f;
+	float fadeWaitTime_ = 0.5f;
 	float outgameWaitTime_ = 3.0f;
+	float BGM_volumeT_ = 1.0f;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
@@ -122,6 +124,7 @@ private:
 	std::unique_ptr<FlyingTimerUI> flyingTimerUI_ = nullptr;
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 	std::unique_ptr<PlayerSpeedCounter> playerSpeedCounter_ = nullptr;
+	std::unique_ptr<TutorialUI> tutorialUI_ = nullptr;
 
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
@@ -130,6 +133,9 @@ private:
 
 	// ------------ Audio ---------- //
 	std::unique_ptr<AudioPlayer> mainBGM_;
+	std::unique_ptr<AudioPlayer> mainBGM_inWater_;
+	std::unique_ptr<AudioPlayer> windSound_;
+	std::unique_ptr<AudioPlayer> swimSound_;
 
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;

@@ -103,7 +103,7 @@ private:
 	float lookAtT_;
 
 	float addPressTime_= 0.025f;
-	float minAddPress=0.017f;
+	float minAddPress=0.020f;
 	float maxAddPress = 0.035f;
 	float totalSpeedRatio;//現在の速度で、0から最高速度までの割合
 
@@ -145,7 +145,15 @@ private:
 	float gravity_ = -2.0f;
 	float dropSpeed_;
 
+	// 障害物に当たった時に反射率
+	float reflection_ = 0.8f;
 
+	// 障害物に当たった後のキーの受付をしない時間
+	float dontInputPressTime_;
+	float dontInputTime_ =0.6f;
+
+	// 滑空開始直後の猶予時間
+	float collisionAllowableTime_ = 1.0f;
 
 	// フラグ-------------------------------------------
 

@@ -33,6 +33,7 @@ float EaseInOutCirc(float t);
 
 float EaseInBack(float t);
 float EaseOutBack(float t);
+float EaseOutBack(float t, float overShootRate);
 float EaseInOutBack(float t);
 
 float EaseInElastic(float t);

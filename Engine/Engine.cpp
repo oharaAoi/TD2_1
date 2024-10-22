@@ -132,6 +132,13 @@ void Engine::BeginFrame() {
 	Render::Begin();
 	input_->Update();
 
+	if (Input::IsTriggerKey(DIK_L)) {
+		WinApp::GetInstance()->SetFullScreen(true);
+	}
+	if (Input::IsTriggerKey(DIK_K)) {
+		WinApp::GetInstance()->SetFullScreen(false);
+	}
+
 #ifdef _DEBUG
 	DrawImGui();
 #endif
@@ -375,6 +382,10 @@ void Engine::Stop(const AudioData& soundData) {
 
 void Engine::SetVolume(const AudioData& soundData, float volume) {
 	audio_->SetVolume(soundData.pSourceVoice, volume);
+}
+
+bool Engine::GetIsPlaying(const AudioData& soundData) {
+	return audio_->IsPlaying(soundData.pSourceVoice);
 }
 
 void Engine::SingleShotPlay(const SoundData& loadAudioData, float volume) {
