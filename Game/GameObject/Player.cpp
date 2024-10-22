@@ -570,6 +570,8 @@ void Player::OnCollision(Collider* other){
 			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/EatEffect/", "EatEffect.gltf",
 												  transform_.get(), false, false, ((float)pFish->GetFishSize() + 2.0f));
 
+			
+
 		} else{// 食べられなかったとき
 
 			if(!isDiving_){
@@ -586,7 +588,9 @@ void Player::OnCollision(Collider* other){
 				AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf", 
 													  transform_.get(), false, false, ((float)pFish->GetFishSize() + 1.0f));
-
+				//ピヨピヨエフェクト
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+					transform_.get(), true, false, 3);
 			}
 		}
 	}
@@ -614,6 +618,10 @@ void Player::OnCollision(Collider* other){
 				isFacedBird_ = true;
 				isCloseWing_ = true;
 				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+			
+				//ピヨピヨエフェクト
+				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+					transform_.get(), true, false, 3);
 			}
 
 		} else{
@@ -623,6 +631,10 @@ void Player::OnCollision(Collider* other){
 			isFacedBird_ = true;
 			isCloseWing_ = true;
 			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+
+			//ピヨピヨエフェクト
+			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+				transform_.get(), true, false, 3);
 		}
 	}
 
@@ -638,6 +650,9 @@ void Player::OnCollision(Collider* other){
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+		//ピヨピヨエフェクト
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+			transform_.get(), true, false, 3);
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
 		// 一時減速する
@@ -647,6 +662,9 @@ void Player::OnCollision(Collider* other){
 		baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 		AudioPlayer::SinglShotPlay("hitedBird.wav", 0.5f);
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf", transform_.get(), false, false);
+		//ピヨピヨエフェクト
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf",
+			transform_.get(), true, false, 3);
 	}
 }
 

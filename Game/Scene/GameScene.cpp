@@ -245,6 +245,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
