@@ -243,7 +243,7 @@ void ResultScene::Init(){
 			rankingModels_[i][j]->GetTransform()->SetTranslaion(
 				rankingTranslate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rankingRotate_) * space_ * static_cast<float>(j) +
 				Vector3(0.0f, -1.0f, 0.0f) * MakeRotateXYZMatrix(rankingRotate_) * 
-				(i != 3 ? (space_ * 2.0f): (space_ * 2.4f)) * static_cast<float>(i)
+				(i != 3 ? (space_ * 2.0f): (space_ * 2.0f)) * static_cast<float>(i)
 			);
 
 			rankingModels_[i][j]->Update();
