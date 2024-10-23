@@ -4,7 +4,7 @@ bool GamePlayTimer::isFinish_ = false;
 
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
-GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
+GAME_STATE GameScene::currentState_ = GAME_STATE::TITLE;
 GAME_STATE GameScene::preState_ = currentState_;
 
 
