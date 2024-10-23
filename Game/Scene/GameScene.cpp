@@ -370,11 +370,11 @@ void GameScene::Update(){
 
 	playerBodyCountUI_->Update(player_->GetBodyCount());
 
-
+	if (player_->GetIsFlying()) {
 		Vector3 playerScreenPos = Transform({ 0.0f, 0.0f, 0.0f },
 											player_->GetTransform()->GetWorldMatrix() * camera_->GetVpvpMatrix());
 		playerControlUI_->Update({playerScreenPos.x, playerScreenPos.y}, player_->GetIsCloseWing());
-	
+	}
 
 	// -------------------------------------------------
 	// ↓ audioの更新
@@ -536,9 +536,9 @@ void GameScene::Draw() const{
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
 
-	
+		if (player_->GetIsFlying()) {
 			playerControlUI_->Draw();
-		
+		}
 
 
 	} else {
