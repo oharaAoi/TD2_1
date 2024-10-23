@@ -205,6 +205,9 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer.png");
+	//TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
