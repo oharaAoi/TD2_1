@@ -103,7 +103,6 @@ void DescriptorHeap::AddFreeSrvList(int index) {
 
 DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateSRV() {
  	return srvAllocator_->Allocate(srvHeap_.Get());
-	return DescriptorHandles();
 }
 
 DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateRTV() {

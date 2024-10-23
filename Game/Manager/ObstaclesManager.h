@@ -70,7 +70,7 @@ public:
 	void NotMatchRandomImport();//連続で同じパターンにならないように
 
 	// Tutorialでのファイル読み込み
-	void TutorialImport(const std::string& fileName, const Vector3& pos);
+	void TutorialImport(const std::string& fileName, const Vector3& pos,int inportlevel);
 	
 	// ランダム配置の追加
 	void RandomImportCreate();

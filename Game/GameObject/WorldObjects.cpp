@@ -36,16 +36,18 @@ void WorldObjects::Init() {
 		// 山
 		mountains_[oi] = std::make_unique<Mountain>();
 		mountains_[oi]->Init();
+		mountains_[oi]->SetIsLighting(true);
+
 		// 木
 		trees_[oi] = std::make_unique<BaseGameObject>();
 		trees_[oi]->Init();
 		trees_[oi]->SetObject("MountenTree.obj");
-		trees_[oi]->SetIsLighting(true);
+		trees_[oi]->SetIsLighting(false);
 		// 草
 		grass_[oi] = std::make_unique<BaseGameObject>();
 		grass_[oi]->Init();
 		grass_[oi]->SetObject("MountainGrass.obj");
-		grass_[oi]->SetIsLighting(true);
+		grass_[oi]->SetIsLighting(false);
 		//雲
 		cloud_[oi] = std::make_unique<BaseGameObject>();
 		cloud_[oi]->Init();
@@ -56,22 +58,22 @@ void WorldObjects::Init() {
 		moai_[oi] = std::make_unique<BaseGameObject>();
 		moai_[oi]->Init();
 		moai_[oi]->SetObject("Moai.obj");
-		moai_[oi]->SetIsLighting(true);
+		moai_[oi]->SetIsLighting(false);
 		// nico
 		nico_[oi] = std::make_unique<BaseGameObject>();
 		nico_[oi]->Init();
 		nico_[oi]->SetObject("Nico.obj");
-		nico_[oi]->SetIsLighting(true);
+		nico_[oi]->SetIsLighting(false);
 		// ufo
 		ufo_[oi] = std::make_unique<BaseGameObject>();
 		ufo_[oi]->Init();
 		ufo_[oi]->SetObject("MountainUFO.obj");
-		ufo_[oi]->SetIsLighting(true);
+		ufo_[oi]->SetIsLighting(false);
 		// ufosmoke
 		ufosmoke_[oi] = std::make_unique<BaseGameObject>();
 		ufosmoke_[oi]->Init();
 		ufosmoke_[oi]->SetObject("UFOSmoke.obj");
-		ufosmoke_[oi]->SetIsLighting(true);
+		ufosmoke_[oi]->SetIsLighting(false);
 
 		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
