@@ -17,10 +17,10 @@ void PlayerControlUI::Init() {
 void PlayerControlUI::Update(const Vector2& pos, bool isGliding) {
 	if (isGliding) {
 		// 滑空していたら
-		sprite_ui_->SetTexture("UI_fly1.png");
+		sprite_ui_->SetTexture("UI_fly2.png");
 	} else {
 		// 落下状態だったら
-		sprite_ui_->SetTexture("UI_fly2.png");
+		sprite_ui_->SetTexture("UI_fly1.png");
 	}
 
 	sprite_ui_->SetCenterPos(pos + offset_);
