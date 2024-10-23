@@ -31,6 +31,8 @@ private:
 	float offsetZ_ = 2.0f;
 
 	Quaternion moveQuaternion_;
+
+	float time_;
 	
 	float windOpenTime_;
 	float windOpenTimeLimit_;
