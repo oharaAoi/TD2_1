@@ -98,6 +98,9 @@ void GameScene::Init(){
 
 	finishUI_ = std::make_unique<FinishUI>();
 	finishUI_->Init();
+
+	gameStartUI_ = std::make_unique<GameStartUI>();
+	gameStartUI_->Init();
 	
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
@@ -235,6 +238,7 @@ void GameScene::Update(){
 				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);
 				obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
 				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
+				gameStartUI_->SetUI();
 			}
 
 		} /*else if (currentState_ == GAME_STATE::TUTORIAL) {
@@ -420,6 +424,8 @@ void GameScene::Update(){
 
 	guideUI_->Update();
 
+	gameStartUI_->Update();
+
 	// -------------------------------------------------
 	// ↓ スプライト
 	// -------------------------------------------------
@@ -602,6 +608,7 @@ void GameScene::Draw() const{
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
 		finishUI_->Draw();
+		gameStartUI_->Draw();
 		
 		if (player_->GetIsFlying()) {
 			playerControlUI_->Draw();
@@ -647,6 +654,7 @@ void GameScene::Update_TUTORIAL(){
 
 	if(player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x) {
 		currentState_ = GAME_STATE::GAME;
+		gameStartUI_->SetUI();
 	}
 
 	// UIの更新

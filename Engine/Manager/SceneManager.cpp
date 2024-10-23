@@ -221,6 +221,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_arrow.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");

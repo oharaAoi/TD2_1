@@ -37,6 +37,7 @@
 #include "Game/UI/PlayerControlUI.h"
 #include "Game/UI/GuideUI.h"
 #include "Game/UI/FinishUI.h"
+#include "Game/UI/GameStartUI.h"
 
 /*------ Sprite ------*/
 #include "Game/Effect/Cherry.h"
@@ -145,6 +146,7 @@ private:
 	std::unique_ptr<PlayerControlUI> playerControlUI_ = nullptr;
 	std::unique_ptr<GuideUI> guideUI_ = nullptr;
 	std::unique_ptr<FinishUI> finishUI_ = nullptr;
+	std::unique_ptr<GameStartUI> gameStartUI_ = nullptr;
 	
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
