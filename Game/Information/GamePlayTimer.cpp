@@ -48,10 +48,10 @@ void GamePlayTimer::Init(float limit) {
 	}
 
 	timeleft10s_ = std::make_unique<AudioPlayer>();
-	timeleft10s_->Init("timeLeft_10s.wav");
+	timeleft10s_->Init("timeRemaining.mp3");
 
 	timeleft60s_ = std::make_unique<AudioPlayer>();
-	timeleft60s_->Init("timeLeft_60s.wav");
+	timeleft60s_->Init("timeRemaining.mp3");
 	
 }
 
