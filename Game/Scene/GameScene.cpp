@@ -91,6 +91,9 @@ void GameScene::Init(){
 	playerControlUI_ = std::make_unique<PlayerControlUI>();
 	playerControlUI_->Init();
 
+	guideUI_ = std::make_unique<GuideUI>();
+	guideUI_->Init();
+
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
 	tutorialUI_->Init();
