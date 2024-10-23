@@ -8,6 +8,8 @@ void BaseGameObject::Finalize() {
 		animetor_->Finalize();
 	}
 	materials.clear();
+
+
 }
 
 void BaseGameObject::Init() {

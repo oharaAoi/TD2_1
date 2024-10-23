@@ -8,6 +8,7 @@ Skinning::~Skinning() {}
 
 void Skinning::Finalize() {
 	paletteResource_.Reset();
+	influenceResource_.Reset();
 	DescriptorHeap::AddFreeSrvList(paletteSrvHandle_.assignIndex_);
 }
 
