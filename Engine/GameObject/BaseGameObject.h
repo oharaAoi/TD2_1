@@ -46,6 +46,10 @@ public:
 
 	void SetTexture(const std::string& path);
 
+	void SetAnimationControlScrilpt(const bool& isControl) { isAnimationControlScript_ = isControl; }
+
+	Animetor* GetAnimetor() { return animetor_.get(); }
+
 protected:
 
 	Model* model_;
@@ -56,6 +60,7 @@ protected:
 	std::unique_ptr<AnimetionClip> animationClip_;
 
 	bool isAnimation_ = false;
+	bool isAnimationControlScript_;
 
 	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 

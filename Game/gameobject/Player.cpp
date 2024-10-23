@@ -173,14 +173,15 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
-	if(isFlying_) {
-		wings_->Draw();
-	}
+
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
 void Player::DrawAnimetor() const{
 	animetor_->Draw();
+	if (isFlying_) {
+		wings_->Draw();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

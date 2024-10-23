@@ -13,11 +13,14 @@ void BaseGameObject::Finalize() {
 void BaseGameObject::Init() {
 	transform_ = Engine::CreateWorldTransform();
 	animetor_ = nullptr;
+	isAnimationControlScript_ = false;
 }
 
 void BaseGameObject::Update() {
-	if (animetor_ != nullptr) {
-		animetor_->Update();
+	if (!isAnimationControlScript_) {
+		if (animetor_ != nullptr) {
+			animetor_->Update();
+		}
 	}
 
 	if (animationClip_) {

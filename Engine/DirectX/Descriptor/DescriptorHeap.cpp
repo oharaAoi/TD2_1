@@ -1,4 +1,4 @@
-#include "DescriptorHeap.h"
+ #include "DescriptorHeap.h"
 #include "Engine/DirectX/Descriptor/DescriptorAllocator.h"
 
 std::list<int> DescriptorHeap::freeSrvList_;
@@ -102,7 +102,7 @@ void DescriptorHeap::AddFreeSrvList(int index) {
 }
 
 DescriptorHeap::DescriptorHandles DescriptorHeap::AllocateSRV() {
-	return srvAllocator_->Allocate(srvHeap_.Get());
+ 	return srvAllocator_->Allocate(srvHeap_.Get());
 	return DescriptorHandles();
 }
 
