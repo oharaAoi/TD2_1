@@ -199,6 +199,7 @@ private:
 	float curMaxSpeed;//通常時は落下距離、高速飛行時はkBirdJumpMaxRaito_
 	bool isHighSpeedMove;
 	int birdJumpNum_;
+	bool wingOpen;
 
 	// カメラシェイク
 	float cameraShakeRadius_ = 0.2f;

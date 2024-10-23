@@ -19,9 +19,9 @@ void Bird::Init() {
 	BaseGameObject::Init();
 	SetObject("Bird.gltf");
 	SetAnimater("./Game/Resources/Model/Bird/", "Bird.gltf", true);
-	transform_->SetScale({ 3.0f, 3.0f, 3.0f });
-	radius_ = RandomFloat(6.0f, 10.0f);
-	obb_.size = { radius_, radius_, radius_ };
+	transform_->SetScale({ 8, 8, 8 });
+	radius_ = 13;
+	obb_.size = { radius_*0.6f, radius_, radius_ * 0.6f };
 	obb_.center = GetWorldTranslation();
 
 	SetIsLighting(false);
@@ -67,7 +67,7 @@ void Bird::OnCollision(Collider* other) {
 void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 						 const Vector3& pos, const SubAttributeType& subType){
 	BasePlacementObject::ApplyLoadData(scale, rotate, pos, subType);
-	transform_->SetScale({ 3.0f, 3.0f, 3.0f });
+	transform_->SetScale({ 6, 6, 6 });
     	firstPos_ = pos;
 }
 

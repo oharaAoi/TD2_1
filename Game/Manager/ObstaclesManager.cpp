@@ -338,7 +338,7 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 			}
 			createPos.y = std::clamp(createPos.y, 11.0f,999.0f);
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
-			obj->SetObbSize(obj->GetRadius());
+			//obj->SetObbSize(obj->GetRadius());
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.reset(new Driftwood);
