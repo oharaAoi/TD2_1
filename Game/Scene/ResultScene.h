@@ -81,7 +81,7 @@ private:
 	bool isStartScene_ = true;
 	static bool isViewingRanking_;
 
-	int score_ = 80000;//FlyingTimer::flyingScor;
+	int score_ = (int)FlyingTimer::flyingScor;
 	SCORE_RANK rank_;
 
 	Vector4 rankingColors_[3] = {
@@ -106,7 +106,7 @@ private:
 	std::vector<std::unique_ptr<BaseGameObject>>scoreNumberModels_;
 	std::unique_ptr<BaseGameObject>scoreRankModel_ = nullptr;
 
-	// ランキングの文字配列
+	// �����L���O�̕����z��
 	std::vector<std::unique_ptr<BaseGameObject>>rankingModels_[4];
 	Vector3 rankingRotate_ = {-1.46f,0.22f,0.0f};
 	Vector3 rankingTranslate_ = {-25.29f,68.02f,-4.24f};

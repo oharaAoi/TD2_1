@@ -40,7 +40,7 @@ private:
 	uint32_t mountainLoopCount_ = 0;
 	bool nowMountainIndex_ = 0;
 	std::unique_ptr<BaseGameObject> trees_[kStageMax_];
-	std::unique_ptr<BaseGameObject> grass_[kStageMax_];
+	//std::unique_ptr<BaseGameObject> grass_[kStageMax_];
 	std::unique_ptr<BaseGameObject> cloud_[kStageMax_];
 
 	std::unique_ptr<BaseGameObject> moai_[kStageMax_];

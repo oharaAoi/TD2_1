@@ -42,10 +42,10 @@ void WorldObjects::Init() {
 		trees_[oi]->SetObject("MountenTree.obj");
 		trees_[oi]->SetIsLighting(true);
 		// 草
-		grass_[oi] = std::make_unique<BaseGameObject>();
+		/*grass_[oi] = std::make_unique<BaseGameObject>();
 		grass_[oi]->Init();
 		grass_[oi]->SetObject("MountainGrass.obj");
-		grass_[oi]->SetIsLighting(true);
+		grass_[oi]->SetIsLighting(true);*/
 		//雲
 		cloud_[oi] = std::make_unique<BaseGameObject>();
 		cloud_[oi]->Init();
@@ -80,7 +80,7 @@ void WorldObjects::Init() {
 
 		mountains_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		trees_[oi]->GetTransform()->SetTranslaion(newMountainPos);
-		grass_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		//grass_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		cloud_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		moai_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		nico_[oi]->GetTransform()->SetTranslaion(newMountainPos);
@@ -103,7 +103,7 @@ void WorldObjects::Update(float playerPos) {
 		waterSpaces_[oi]->Update();
 		mountains_[oi]	->Update();
 		trees_[oi]		->Update();
-		grass_[oi]		->Update();
+		//grass_[oi]		->Update();
 		cloud_[oi]		->Update();
 		moai_[oi]		->Update();
 		nico_[oi]		->Update();
@@ -124,7 +124,7 @@ void WorldObjects::Draw() const {
 		mountains_[oi]->Draw();
 
 		trees_[oi]->Draw();
-		grass_[oi]->Draw();
+		//grass_[oi]->Draw();
 		
 		moai_[oi]->Draw();
 		nico_[oi]->Draw();
@@ -189,7 +189,7 @@ void WorldObjects::LoopStage() {
 
 		mountains_[index]->GetTransform()->SetTranslaion(newPos);
 		trees_[index ]->GetTransform()->SetTranslaion(newPos);
-		grass_[index ]->GetTransform()->SetTranslaion(newPos);
+	//	grass_[index ]->GetTransform()->SetTranslaion(newPos);
 		cloud_[index ]->GetTransform()->SetTranslaion(newPos);
 		moai_[index]->GetTransform()->SetTranslaion(newPos);
 		nico_[index]->GetTransform()->SetTranslaion(newPos);

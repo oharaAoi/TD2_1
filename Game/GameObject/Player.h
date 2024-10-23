@@ -197,6 +197,8 @@ private:
 	float cameraShakeRadius_ = 0.2f;
 	float cameraShakeTime_ = 0.5f;
 
+	float wingAnimatinoKeyFrame_;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;
