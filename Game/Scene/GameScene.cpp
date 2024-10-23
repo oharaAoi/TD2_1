@@ -411,7 +411,10 @@ void GameScene::Update(){
 		}
 	} else{
 		sky_->SetTexture("sky.png");
-		isStartupScene_ = false;
+
+		if(speedMeterAlpha_ >= 1.0f){
+			isStartupScene_ = false;
+		}
 	}
 
 	// -------------------------------------------------
