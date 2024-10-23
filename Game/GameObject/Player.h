@@ -54,6 +54,13 @@ public:
 		baseSpeed_ = 100;
 		chargePower_ = 0.5f;
 	}
+	void DebugAdvancePos(){
+		transform_.get()->SetTranslaion(transform_.get()->GetTranslation() + Vector3(200, 0, 0));
+	}
+	void DebugResetPos(){
+		transform_.get()->SetTranslaion(Vector3{-10,10,0});
+
+	}
 private:
 	void Move_TITLE();
 	void Move_TUTORIAL();
@@ -171,8 +178,8 @@ private:
 
 	// 滑空開始直後の猶予時間
 	const float kAllowableTime = 1.0f;
-	float collisionAllowableTime_ = 1.0f;
-	float descentRatio = 0.4f;//滑空中は通常の重力をdescentRatio倍する
+	float collisionAllowableTime_ = 2.0f;
+	//float descentRatio = 0.4f;//滑空中は通常の重力をdescentRatio倍する
 
 	// タイトル時出現高度
 	float emitHeight_ = 100.0f;
