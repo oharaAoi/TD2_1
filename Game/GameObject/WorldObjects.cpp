@@ -36,6 +36,8 @@ void WorldObjects::Init() {
 		// 山
 		mountains_[oi] = std::make_unique<Mountain>();
 		mountains_[oi]->Init();
+		mountains_[oi]->SetIsLighting(true);
+
 		// 木
 		trees_[oi] = std::make_unique<BaseGameObject>();
 		trees_[oi]->Init();
