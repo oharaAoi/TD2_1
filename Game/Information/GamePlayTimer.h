@@ -5,6 +5,7 @@
 #include "Engine/Audio/AudioPlayer.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/2d/Sprite.h"
+#include "Engine/Math/Easing.h"
 
 /// <summary>
 /// ゲームの進行している時間を計測するクラス
@@ -35,6 +36,8 @@ public:
 	Vector2 CalculationSpriteLT(int value);
 
 	void AdaptAdjustmentItem();
+
+	void SpriteMove();
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -68,6 +71,17 @@ private:
 	std::unique_ptr<AudioPlayer> timeleft10s_;
 	std::unique_ptr<AudioPlayer> timeleft60s_;
 
+	// 終了前のUI
+	std::unique_ptr<Sprite> timeleftUI_;
 
+	bool isMove_;
+	bool isFadeIn_;
+
+	float time_;
+	float moveTime_;
+
+	Vector2 startPos_;
+	Vector2 endPos_;
+	Vector2 uiPos_;
 };
 

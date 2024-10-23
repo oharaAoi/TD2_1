@@ -113,6 +113,7 @@ private:
 	float level2=350;
 	float level3=550;
 	float speedMeterAlpha_;
+	bool isStartupScene_ = true;
 
 
 	// ---------- manager ---------- //
