@@ -60,6 +60,8 @@ void Player::Init(){
 	coinGetSe_->Init("kari_coinGet.wav");
 	//初期位置をずらす
 	transform_.get()->SetTranslationX(600);
+	isHighSpeedMove = false;
+	maxSpeedTimeCount = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,6 +216,20 @@ void Player::Move(){
 
 	// 移動量を加算
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
+
+	//鳥ジャンプの速度をへらしていく
+	maxSpeedTimeCount -= GameTimer::DeltaTime();
+	if(maxSpeedTimeCount <= 0)
+	{
+		isHighSpeedMove = false;
+	}
+
+	if(maxSpeedTimeCount >= 0){
+		birdJumpRaito_ = std::lerp(1, curMaxSpeed, maxSpeedTimeCount);
+
+	}
+
+
 	velocity_ *= GetMoveSpeed() * birdJumpRaito_ * std::fabsf(GameTimer::DeltaTime());
 
 
@@ -445,9 +461,9 @@ void Player::OnCollision(Collider* other){
 		// fish型に変換
 		Fish* pFish = dynamic_cast<Fish*>(other);
 		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
-
+		bodyCount_;//この数を使う
 		// 魚を食べられたとき
-		if(chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()){
+		if(bodyCount_ >= pFish->GetEatCount()){//chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()
 
 			// チャージを行う
 			chargePower_ += pFish->GetEnergy();
@@ -495,18 +511,22 @@ void Player::OnCollision(Collider* other){
 			if(dropSpeed_ < gravity_ * 0.25f){//dropSpeed_ < gravity_ * 0.25f//transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f
 				if(!isFacedBird_) {
 					// dropSpeedが早ければ早い程早くなる
-					birdJumpRaito_ = std::abs(dropSpeed_);
+					curMaxSpeed = std::abs(dropSpeed_);
+					curMaxSpeed = std::clamp(curMaxSpeed, 1.0f, kBirdJumpMaxRaito_ / 2);//通常時の限界は最高速度の半分
 					//birdJumpRaito_ = plusSpeed / birdJumpRaito_;
 					pressTime_ = 1.0f;
 					birdJumpNum_++;
 					isFalling_ = false;
 					isCloseWing_ = false;
 
-					if (birdJumpNum_ >= 3) {
-						birdJumpRaito_ = kBirdJumpMaxRaito_;
+					if(birdJumpNum_ >= 3) {
+						maxSpeedTimeCount = kMaxSpeedTime;
+						curMaxSpeed = kBirdJumpMaxRaito_;
 						birdJumpNum_ = 0;
+						isHighSpeedMove = true;
 					} else {
-						birdJumpRaito_ = 1.0f;
+						maxSpeedTimeCount = kMaxSpeedTime/2;
+						//birdJumpRaito_ = 1.0f;
 					}
 
 					AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.5f);
@@ -518,14 +538,22 @@ void Player::OnCollision(Collider* other){
 				isFacedBird_ = true;
 				isCloseWing_ = true;
 				SpeedDown();
+				// 一時減速する
+				temporaryAcceleration_ += decreaseVelocity_*2;//多めに減速
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
+				pressTime_ = birdHitAngle;
 			}
 
 		} else{
 
 			if(collisionAllowableTime_ <= 0.0f){
+				// 一時減速する
+				temporaryAcceleration_ += decreaseVelocity_ * 2;//多めに減速
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 				isFacedBird_ = true;
 				isCloseWing_ = true;
 				SpeedDown();
+				pressTime_ = birdHitAngle;
 			}
 		}
 	}
@@ -636,6 +664,7 @@ void Player::MoveWater(){
 	isFalling_ = false;
 
 	birdJumpRaito_ = 1.0f;
+	maxSpeedTimeCount = 0;
 }
 
 void Player::MoveSky(){
@@ -645,94 +674,97 @@ void Player::MoveSky(){
 	// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
-		float moveSpeedRate = GetMoveSpeed() / kMaxMoveSpeed_;
-		pressTime_ = std::clamp(
-			pressTime_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
-			-0.1f * (3.0f - (2.0f * moveSpeedRate)),
-			1.0f
-		);
+	float moveSpeedRate = GetMoveSpeed() / kMaxMoveSpeed_;
+	pressTime_ = std::clamp(
+		pressTime_ - 0.01f * GameTimer::TimeRate() * (3.0f - (2.0f * moveSpeedRate)),
+		-0.1f * (3.0f - (2.0f * moveSpeedRate)),
+		1.0f
+	);
 
-		// SPACE押して翼の開閉
-		//if(!isFacedBird_){
-		//	if(Input::IsTriggerKey(DIK_SPACE)) {
-		//		isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
-		//		isFalling_ = true;
-		//		isEnableLaunch_ = false;// 再発射できないようにする
-		//	}
-		//}
+	// SPACE押して翼の開閉
+	//if(!isFacedBird_){
+	//	if(Input::IsTriggerKey(DIK_SPACE)) {
+	//		isCloseWing_ == false ? isCloseWing_ = true : isCloseWing_ = false;
+	//		isFalling_ = true;
+	//		isEnableLaunch_ = false;// 再発射できないようにする
+	//	}
+	//}
 
-		////////////////////////////// 上昇中 /////////////////////////////////
-		if(!isFalling_){
+	////////////////////////////// 上昇中 /////////////////////////////////
+	if(!isFalling_){
 
-			isCloseWing_ = false;
-			isFacedBird_ = false;
-			dropSpeed_ = 0.0f;
-			collisionAllowableTime_ = kAllowableTime;
-			//diveTime_ = kDiveTime_;
+		isCloseWing_ = false;
+		isFacedBird_ = false;
+		dropSpeed_ = 0.0f;
+		collisionAllowableTime_ = kAllowableTime;
+		//diveTime_ = kDiveTime_;
 
-		} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
+	} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
-			collisionAllowableTime_ -= GameTimer::DeltaTime();
+		collisionAllowableTime_ -= GameTimer::DeltaTime();
 
-			//////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////
 
-			// ---------------- 滑空状態にするか下降状態にするかを判定するための処理 ----------------------- //
-			// 飛行中は押していると滑空する
-			// pressタイムがプラスの時は上を向いているので受け付けない
-			if(pressTime_ <= 0) {
-				if(!isFacedBird_) {
-					if(Input::IsPressKey(DIK_SPACE)) {
-						// 押している時は滑空する
-						// 下降ベクトル
-						dropSpeed_ = 0.0f;
-						// 羽根が広がっている
-						isCloseWing_ = false;
-						// baseSpeedを上げて下降速度を上げている
-						baseSpeed_ = defaultSpeed * 2.0f;
+		// ---------------- 滑空状態にするか下降状態にするかを判定するための処理 ----------------------- //
+		// 飛行中は押していると滑空する
+		// pressタイムがプラスの時は上を向いているので受け付けない
+		if(pressTime_ <= 0) {
+			if(!isFacedBird_) {
+				if(Input::IsPressKey(DIK_SPACE)) {
+					// 押している時は滑空する
+					// 下降ベクトル
+					dropSpeed_ = 0.0f;
+					// 羽根が広がっている
+					isCloseWing_ = false;
+					// baseSpeedを上げて下降速度を上げている
+					baseSpeed_ = defaultSpeed * 2.0f;
 
-					} else {
-						// 離しているので下降する
-						isCloseWing_ = true;
-						baseSpeed_ = defaultSpeed;
-					}
+				} else {
+					// 離しているので下降する
+					isCloseWing_ = true;
+					baseSpeed_ = defaultSpeed;
 				}
 			}
-			////////////////////////////////////////////////////////////////////////////////
-
-			// 下降ベクトルを格納する変数
-			//Vector3 dropVec{};
-			dropVec = { 0,0,0 };
-			if(!isCloseWing_){//////// 翼を広げている際 ////////
-
-				// 下降ベクトル
-				dropSpeed_ = 0.0f;
-
-			} else{//////// 翼を閉じている際 ////////
-
-				pressTime_ *= 0.5f * GameTimer::TimeRate();
-				dropSpeed_ += gravity_ * GameTimer::DeltaTime();
-				dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
-
-			}
-
-			// 座標の更新
-			//transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
-
-			// 水に触れたらダイブのフラグをオンにする
-			if(transform_->GetTranslation().y + dropVec.y < 0.0f){
-				isDiving_ = true;
-				isFalling_ = false;
-				isFlying_ = false;//isFlying_をfalseにするのはここだけ
-				isFacedBird_ = false;
-				divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
-				// 潜水速度を一定範囲に保つ
-				divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
-				baseSpeed_ = kMinBaseSpeed_ + 10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_ + decreaseVelocity_, kMinAcceleration_, kMaxAcceleration_);
-				diveTime_ = kDiveTime_;
-			}
 		}
-	
+		////////////////////////////////////////////////////////////////////////////////
+
+		// 下降ベクトルを格納する変数
+		//Vector3 dropVec{};
+		dropVec = { 0,0,0 };
+		if(!isCloseWing_){//////// 翼を広げている際 ////////
+
+			// 下降ベクトル
+			dropSpeed_ = 0.0f;
+			//dropSpeed_ += gravity_* descentRatio * GameTimer::DeltaTime();
+
+		} else{//////// 翼を閉じている際 ////////
+
+			pressTime_ *= 0.3f * GameTimer::TimeRate();
+			dropSpeed_ += gravity_ * GameTimer::DeltaTime();
+			dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
+
+		}
+
+		// 座標の更新
+		//transform_->SetTranslaion(transform_->GetTranslation() + dropVec);
+
+		// 水に触れたらダイブのフラグをオンにする
+		if(transform_->GetTranslation().y + dropVec.y < 0.0f){
+			isDiving_ = true;
+			isFalling_ = false;
+			isFlying_ = false;//isFlying_をfalseにするのはここだけ
+			isFacedBird_ = false;
+			divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
+			// 潜水速度を一定範囲に保つ
+			divingSpeed_ = std::clamp(divingSpeed_, -1.0f, -0.5f);
+			baseSpeed_ = kMinBaseSpeed_ + 10;//std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+			temporaryAcceleration_ = std::clamp(temporaryAcceleration_ + decreaseVelocity_, kMinAcceleration_, kMaxAcceleration_);
+			diveTime_ = kDiveTime_;
+			birdJumpNum_ = 0;//鳥踏んだカウントをリセット
+			isHighSpeedMove = false;//ハイスピードの状態か否か
+		}
+	}
+
 }
 
 

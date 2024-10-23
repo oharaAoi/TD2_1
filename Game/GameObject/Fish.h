@@ -34,6 +34,8 @@ public:
 	float GetEnergy()const{ return energy_; }
 	const FISH_SIZE& GetFishSize()const{ return fishSize_; }
 	void SetFishSize(const FISH_SIZE& fishSize);
+	const int GetEatCount(){ return eatCount; }
+	void SetEatCount(int value){ eatCount = value; }
 
 	void SetIsAte(bool isAte) { isAte_ = isAte; }
 
@@ -45,4 +47,5 @@ private:
 
 	bool isAte_;
 	bool isPreAte_;
+	int eatCount;//食べるのに必要な胴体の個数
 };
