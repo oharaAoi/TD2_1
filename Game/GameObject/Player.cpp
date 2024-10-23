@@ -545,7 +545,7 @@ void Player::OnCollision(Collider* other){
 
 			if(collisionAllowableTime_ <= 0.0f){
 
-				if(transform_->GetTranslation().x > other->GetWorldTranslation().x - other->GetRadius()){
+				if(transform_->GetTranslation().x > other->GetWorldTranslation().x){
 
 					if(!isFacedBird_) {
 						// dropSpeedが早ければ早い程早くなる
