@@ -37,7 +37,7 @@ void TutorialUI::Init() {
 	tutorialUI_.try_emplace("kari3", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari3"]->Init();
 	tutorialUI_["kari3"]->SetObject("UI_Plane.obj");
-	tutorialUI_["kari3"]->SetTexture("sky.png");
+	tutorialUI_["kari3"]->SetTexture("tutorial_3.png");
 	tutorialUI_["kari3"]->SetIsLighting(false);
 
 	tutorialUI_.try_emplace("kari4", std::make_unique<BaseGameObject>());
@@ -49,7 +49,7 @@ void TutorialUI::Init() {
 	tutorialUI_.try_emplace("start", std::make_unique<BaseGameObject>());
 	tutorialUI_["start"]->Init();
 	tutorialUI_["start"]->SetObject("UI_Plane.obj");
-	tutorialUI_["start"]->SetTexture("sky.png");
+	//tutorialUI_["start"]->SetTexture("UI_none.png");
 	tutorialUI_["start"]->SetIsLighting(false);
 
 	float index = 0;
@@ -61,6 +61,7 @@ void TutorialUI::Init() {
 
 		index++;
 	}
+	tutorialUI_["kari3"]->GetTransform()->SetTranslaion(tutorialUI_["kari3"]->GetTransform()->GetTranslation()+Vector3(100,0,0));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +100,10 @@ void TutorialUI::LineUpUI(const Vector3& playerPos) {
 
 			index++;
 		}
+
 		isLineUp_ = true;
+		tutorialUI_["kari3"]->GetTransform()->SetTranslaion(tutorialUI_["kari3"]->GetTransform()->GetTranslation() + Vector3(100, 0, 0));
+
 	} else {
 		return;
 	}
@@ -139,14 +143,14 @@ void TutorialUI::Debug_Gui() {
 		/*tutorialUI_["kari"]->Debug_Gui();*/
 
 		float index = 0;
-		for (auto& ui : tutorialUI_) {
+		/*for (auto& ui : tutorialUI_) {
 			Vector3 pos = offsetPos_;
 			pos.x += (interval_ * index) + offsetLnegth_;
 			ui.second->GetTransform()->SetTranslaion(pos);
 			ui.second->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
 
 			index++;
-		}
+		}*/
 		ImGui::TreePop();
 	}
 }
