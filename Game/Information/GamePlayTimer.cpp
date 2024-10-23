@@ -15,13 +15,13 @@ void GamePlayTimer::Init(float limit) {
 	gameTimer_ = limit;
 	gameTimeLimit_ = limit;
 
-	numberInterval_ = 80.0f;
+	numberInterval_ = 36.0f;
 
-	originPos_ = { 1200.0f, 100.0f };
+	originPos_ = { 910.0f, 100.0f };
 	numberSpriteScale_ = { 0.8f, 0.8f };
 
 	clock_ = Engine::CreateSprite("timer.png");
-	clock_->SetScale({0.3f, 0.3f});
+	clock_->SetScale({0.58f, 0.44f});
 
 	adjustItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "GamePlayTimer";

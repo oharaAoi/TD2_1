@@ -31,7 +31,7 @@ void GuideUI::Update() {
 
 void GuideUI::Draw() const {
 	for (auto& ui : drawSpriteList_) {
-		ui->Update();
+		ui->Draw();
 	}
 }
 
@@ -44,23 +44,25 @@ void GuideUI::ClearDrawList() {
 }
 
 void GuideUI::SetTitle() {
-	uiMap_.clear();
-	uiMap_.emplace("push_space", Engine::CreateSprite("kari.png"));
-	uiMap_.emplace("game_start", Engine::CreateSprite("kari.png"));
-	uiMap_.emplace("tutorial_start", Engine::CreateSprite("kari.png"));
-
+	drawSpriteList_.clear();
+	
 	uiMap_["push_space"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "title_pushSpace"));
-	uiMap_["game_start"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "game_start"));
-	uiMap_["tutorial_start"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "tutorial_start"));
+	uiMap_["game_start"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "title_gameStart"));
+	uiMap_["tutorial_start"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "title_tutorialStart"));
+
+	drawSpriteList_.push_back(uiMap_["push_space"].get());
+	drawSpriteList_.push_back(uiMap_["game_start"].get());
+	drawSpriteList_.push_back(uiMap_["tutorial_start"].get());
 }
 
 void GuideUI::SetResult() {
-	uiMap_.clear();
-	uiMap_.emplace("push_space", Engine::CreateSprite("kari.png"));
-	uiMap_.emplace("go_title", Engine::CreateSprite("kari.png"));
+	drawSpriteList_.clear();
+	
+	uiMap_["push_space"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "Result_pushSpace"));
+	uiMap_["go_title"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "Result_goTitle"));
 
-	uiMap_["push_space"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "title_pushSpace"));
-	uiMap_["go_title"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "go_title"));
+	drawSpriteList_.push_back(uiMap_["push_space"].get());
+	drawSpriteList_.push_back(uiMap_["go_title"].get());
 }
 
 void GuideUI::SetUIPos(const std::string& addName, const Vector2& pos) {
@@ -72,7 +74,10 @@ void GuideUI::SetUIPos(const std::string& addName, const Vector2& pos) {
 void GuideUI::Debug_Gui() {
 	if (ImGui::TreeNode("GuideUI")) {
 		for (auto& ui : uiMap_) {
-			
+			Vector2 pos = ui.second->GetCenterPos();
+			std::string name = ui.first;
+			ImGui::DragFloat2(name.c_str(), &pos.x, 1.0f);
+			ui.second->SetCenterPos(pos);
 		}
 		ImGui::TreePop();
 	}

@@ -32,6 +32,9 @@ private:
 
 	AdjustmentItem* adjust_;
 	std::unique_ptr<Sprite> maxBody_UI_ = nullptr;
+
+	std::unique_ptr<Sprite> gaugeBack_UI_ = nullptr;
+	std::unique_ptr<Sprite> gaugeFront_UI_ = nullptr;
 	
 	Vector2 uiPos_;
 
@@ -41,6 +44,11 @@ private:
 
 	Vector2 fadeInStartPos_;
 	Vector2 fadeOutPos_;
+
+	Vector2 backPos_UI_;
+	Vector2 frontPos_UI_;
+
+	Vector2 frontSize_UI_;
 
 	// フラグ
 	bool isUiMove_;
