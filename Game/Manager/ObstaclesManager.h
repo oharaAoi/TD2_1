@@ -144,6 +144,6 @@ private:
 	Player* pPlayer_;
 	GameScene* pGameScene_;
 
-	float birdPopYRaito_ = 0.7f;
+	float birdPopYRaito_ = 0.4f;
 };
 

@@ -44,7 +44,14 @@ public:
 	void UpdateMatrix();
 
 	void ResultSceneUpdate();
-
+	void DebugFreeze(){
+		isMove_ = !isMove_
+			;
+	}
+	void DebugBoost(){
+		baseSpeed_ = 100;
+		chargePower_ = 0.5f;
+	}
 private:
 	void Move_TITLE();
 	void Move_TUTORIAL();

@@ -59,6 +59,7 @@ public:
 
 #ifdef _DEBUG
 	void Debug_Gui();
+	
 #endif 
 
 	void Update_TITLE();
