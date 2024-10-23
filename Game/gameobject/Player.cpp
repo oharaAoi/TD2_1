@@ -94,6 +94,7 @@ void Player::Update(){
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
 				waterSurfaceCoolTime = 0.25f;
+				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
 		}
 
@@ -107,6 +108,7 @@ void Player::Update(){
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
 				waterSurfaceCoolTime = 0.25f;
+				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.5f);
 			}
 		}
 	}
@@ -482,6 +484,7 @@ void Player::OnCollision(Collider* other){
 				AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
 					nullptr, false, Vector3(scale, scale, scale), Quaternion(), GetWorldTranslation());
 				SpeedDown();
+				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 			}
 		}
 	}
@@ -520,6 +523,7 @@ void Player::OnCollision(Collider* other){
 				isFacedBird_ = true;
 				isCloseWing_ = true;
 				SpeedDown();
+				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 			}
 
 		} else{
@@ -528,6 +532,7 @@ void Player::OnCollision(Collider* other){
 				isFacedBird_ = true;
 				isCloseWing_ = true;
 				SpeedDown();
+				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 			}
 		}
 	}
@@ -538,9 +543,11 @@ void Player::OnCollision(Collider* other){
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", nullptr, true,
 			Vector3(1, 1, 1), Quaternion(), other->GetWorldTranslation());
 		SpeedDown();
+		Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 
 	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
 		SpeedDown();
+		Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 	}
 }
 

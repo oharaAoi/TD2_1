@@ -1,6 +1,7 @@
 #pragma once
 #include "Game/Camera/BaseCamera.h"
-#include "Game/GameObject/Player.h"
+
+class Player;
 
 class Camera : public BaseCamera {
 public:
@@ -21,8 +22,9 @@ public:
 
 	void SetPlayerPtr(Player* pPlayer){ pPlayer_ = pPlayer; }
 	static void ShakeStart(float shakeTime, float shakeRadius){
-		shakeTime_ = shakeTime;
-		shakeRadius_ = shakeRadius_;
+ 		shakeTime_ = shakeTime;
+		kShakeTime_ = shakeTime_;
+		shakeRadius_ = shakeRadius;
 	}
 
 
@@ -37,10 +39,12 @@ private:
 	float adjustX_;
 	bool followOnly;
 	float follwOfsetlength=4;
+	float baseFov_ = 0.55f;
 
 	Vector3 shakeTranslate_;
 	static float shakeRadius_;
 	static float  shakeTime_;
+	static float  kShakeTime_;
 
 	bool isTitleToGameCamera_;
 

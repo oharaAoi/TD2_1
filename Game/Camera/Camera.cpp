@@ -1,5 +1,11 @@
 #include "Camera.h"
 #include "Game/Scene/GameScene.h"
+#include "Engine/Math/MyRandom.h"
+#include "Game/GameObject/Player.h"
+
+float Camera::shakeRadius_ = 0.0f;
+float Camera::kShakeTime_ = 0.0f;
+float Camera::shakeTime_ = 0.0f;
 
 Camera::Camera(){
 	Init();
@@ -111,7 +117,7 @@ void Camera::Update(){
 		dif = (pPlayer_->GetTransform()->GetTranslation() + offsetVec_ * offsetLength_ + addVec + Vector3(adjustX_,0.0f,0.0f)) - transform_.translate;
 
 		// 少し遅らせて追従
-		transform_.translate += dif* 0.04f * GameTimer::TimeRate();
+		transform_.translate += dif* 0.04f * GameTimer::TimeRate() + shakeTranslate_;
 	}
 
 	if(followOnly){
@@ -132,12 +138,20 @@ void Camera::Update(){
 		}
 	}
 
+	Shake();
+
 	BaseCamera::Update();
 }
 
 
 
-void Camera::Shake(){}
+void Camera::Shake(){
+	
+	float addFov = 0.0f;
+	addFov = RandomFloat(0.0f, shakeRadius_) * std::clamp(shakeTime_ / kShakeTime_, 0.0f, 1.0f);
+	fov_ = baseFov_ + addFov;
+	shakeTime_ -= GameTimer::DeltaTime();
+}
 
 
 

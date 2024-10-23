@@ -102,6 +102,7 @@ private:
 
 	// ----------- object --------- //
 	std::unique_ptr<Player> player_ = nullptr;
+	std::unique_ptr<BaseGameObject> animationPlayer_ = nullptr;
 	std::vector<std::unique_ptr<BaseGameObject>>scoreNumberModels_;
 	std::unique_ptr<BaseGameObject>scoreRankModel_ = nullptr;
 
@@ -118,6 +119,8 @@ private:
 	// ---------- Sprite --------- //
 	std::unique_ptr<Sprite> backgroundSprite_ = nullptr;
 	std::unique_ptr<Sprite> fade_ = nullptr;
+	std::unique_ptr<Sprite> comment_ = nullptr;
+	float commentSpriteAlpha_ = -1.0f;
 
 	// ---------- Score --------- //
 	std::unique_ptr<Score> scoreData_;

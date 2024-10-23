@@ -10,6 +10,8 @@
 #include "Game/Information/FlyingTimer.h"
 #include "Game/GameObject/PlayerWings.h"
 #include "Game/Manager/AnimetionEffectManager.h"
+#include "Game/Camera/Camera.h"
+
 
 class PlayerAnimator;
 
@@ -178,6 +180,10 @@ private:
 	float birdJumpRaito_ = 1.0f;
 	float kBirdJumpMaxRaito_ = 3.0f;
 	int birdJumpNum_;
+
+	// カメラシェイク
+	float cameraShakeRadius_ = 0.2f;
+	float cameraShakeTime_ = 0.5f;
 
 	// フラグ-------------------------------------------
 
