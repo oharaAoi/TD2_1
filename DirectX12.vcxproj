@@ -233,6 +233,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Scene\TestScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\Scene\TutorialScene.cpp" />
+    <ClCompile Include="Game\UI\FinishUI.cpp" />
     <ClCompile Include="Game\UI\FlyingGaugeUI.cpp" />
     <ClCompile Include="Game\UI\FlyingTimerUI.cpp" />
     <ClCompile Include="Game\UI\GuideUI.cpp" />
@@ -386,6 +387,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Scene\ResultScene.h" />
     <ClInclude Include="Game\Scene\TestScene.h" />
     <ClInclude Include="Game\Scene\TutorialScene.h" />
+    <ClInclude Include="Game\UI\FinishUI.h" />
     <ClInclude Include="Game\UI\FlyingGaugeUI.h" />
     <ClInclude Include="Game\UI\FlyingTimerUI.h" />
     <ClInclude Include="Game\UI\GuideUI.h" />

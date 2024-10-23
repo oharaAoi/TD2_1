@@ -1,4 +1,5 @@
 #include "Fish.h"
+#include <Game/Manager/AnimetionEffectManager.h>
 
 //////////////////////////////////////////////////////
 //  コンストラクタ・デストラクタ
@@ -61,6 +62,8 @@ void Fish::OnCollision(Collider* other){
 	//プレイヤーに当たった場合
 	if(other->GetObjectType() == int(ObjectType::PLAYER)){
 		isActive_ = false;
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
+			nullptr, false, transform_.get()->GetScale(), Quaternion(), GetWorldTranslation());
 	}
 }
 

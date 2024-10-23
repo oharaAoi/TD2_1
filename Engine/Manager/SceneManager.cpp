@@ -210,6 +210,10 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "bodyMax.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "finish.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "overTime.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TorsoGaugeFront.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TorsoGaugeBack.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
@@ -250,8 +254,8 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.mp3");	// 水面から出た時の音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeRemaining.mp3");		// タイムアップ10秒前			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeRemaining.mp3");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "confusion.mp3");// 被弾した時の音
@@ -260,6 +264,7 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "WingOpen.mp3");//　空中で上下移動を切り替えた時
+	AudioManager::LoadAudio("./Game/Resources/Audio/SystemSE/", "Finish.mp3");//　空中で上下移動を切り替えた時
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");

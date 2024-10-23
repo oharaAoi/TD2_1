@@ -5,6 +5,7 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Collider/Collider.h"
 #include "Easing.h"
+#include "Game/Manager/AnimetionEffectManager.h"
 
 enum class FISH_SIZE : int32_t{
 	SMALL = 0,

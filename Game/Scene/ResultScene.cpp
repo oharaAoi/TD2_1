@@ -279,6 +279,11 @@ void ResultScene::Init(){
 
 	debugScale_ = scoreRankModel_->GetTransform()->GetScale();
 	debugTranslate_ = scoreRankModel_->GetTransform()->GetTranslation();
+
+	/*---------------- UI ---------------*/
+	guideUI_ = std::make_unique<GuideUI>();
+	guideUI_->Init();
+	guideUI_->SetResult();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -364,6 +369,9 @@ void ResultScene::Load(){
 
 void ResultScene::Update(){
 
+	// 調整項目の更新
+	AdjustmentItem::GetInstance()->Update();
+
 	// ====================== object ====================== //
 
 	player_->ResultSceneUpdate();
@@ -386,6 +394,9 @@ void ResultScene::Update(){
 
 	// ====================== effect ====================== //
 	tickerTapeEmitter_->Update();
+
+	// ====================== effect ====================== //
+	guideUI_->Update();
 
 	//==================== cameraの更新 ====================//
 	if(!isDebugCameraActive_){
@@ -474,6 +485,9 @@ void ResultScene::Draw() const{
 	// ====================== effect ====================== //
 	tickerTapeEmitter_->Draw();
 
+	// ====================== effect ====================== //
+	guideUI_->Draw();
+
 	// =======================  fade ======================= //
 	fade_->Draw();
 }
@@ -510,6 +524,7 @@ void ResultScene::Debug_Gui(){
 		}
 	}
 
+	guideUI_->Debug_Gui();
 
 	ImGui::End();
 }
