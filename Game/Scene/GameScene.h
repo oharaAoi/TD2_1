@@ -115,6 +115,8 @@ private:
 	float speedMeterAlpha_;
 	bool isStartupScene_ = true;
 
+	bool isGameStart_;
+
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

@@ -23,6 +23,8 @@ public:
 	void SetResult();
 	void SetScore();
 
+	void SetArrow(bool isGame);
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG

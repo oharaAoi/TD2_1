@@ -209,14 +209,33 @@ void GameScene::Update(){
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
 
+	if (currentState_ == GAME_STATE::TITLE) {
+		if (Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W)) {
+			isGameStart_ = !isGameStart_;
+		}
+
+		if (Input::IsTriggerKey(DIK_DOWN) || Input::IsTriggerKey(DIK_S)) {
+			isGameStart_ = !isGameStart_;
+		}
+
+		guideUI_->SetArrow(isGameStart_);
+	}
+
 	if(Input::IsTriggerKey(DIK_SPACE)) {
 		if(currentState_ == GAME_STATE::TITLE) {
-			currentState_ = GAME_STATE::TUTORIAL;
-			tutorialUI_->LineUpUI(player_->GetWorldTranslation());
-			obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos(), 0);
-			obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos(), 0);
-			obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
-			obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
+			if (!isGameStart_) {
+				currentState_ = GAME_STATE::TUTORIAL;
+				tutorialUI_->LineUpUI(player_->GetWorldTranslation());
+				obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos(), 0);
+				obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos(), 0);
+				obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
+				obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
+			} else {
+				currentState_ = GAME_STATE::GAME;
+				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);
+				obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
+				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
+			}
 
 		} /*else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;

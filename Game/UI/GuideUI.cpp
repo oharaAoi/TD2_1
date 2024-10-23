@@ -56,10 +56,12 @@ void GuideUI::SetTitle() {
 	uiMap_["push_space"]->SetScale(scale_);
 	uiMap_["game_start"]->SetScale(scale_);
 	uiMap_["tutorial_start"]->SetScale(scale_);
+	uiMap_["arrow"]->SetScale(scale_);
 
 	drawSpriteList_.push_back(uiMap_["push_space"].get());
 	drawSpriteList_.push_back(uiMap_["game_start"].get());
 	drawSpriteList_.push_back(uiMap_["tutorial_start"].get());
+	drawSpriteList_.push_back(uiMap_["arrow"].get());
 }
 
 void GuideUI::SetResult() {
@@ -75,6 +77,19 @@ void GuideUI::SetScore() {
 	uiMap_["go_title"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "Result_goTitle"));
 	uiMap_["go_title"]->SetScale(scale_); uiMap_["go_title"]->SetScale(scale_);
 	drawSpriteList_.push_back(uiMap_["go_title"].get());
+}
+
+void GuideUI::SetArrow(bool isGame) {
+	Vector2 pos;
+	if (isGame) {
+		pos = uiMap_["game_start"]->GetCenterPos();
+		pos.x -= 200.0f;
+		uiMap_["arrow"]->SetCenterPos(pos);
+	} else {
+		pos = uiMap_["tutorial_start"]->GetCenterPos();
+		pos.x -= 200.0f;
+		uiMap_["arrow"]->SetCenterPos(pos);
+	}
 }
 
 void GuideUI::SetUIPos(const std::string& addName, const Vector2& pos) {
