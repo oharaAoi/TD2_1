@@ -267,7 +267,11 @@ void ResultScene::Init(){
 	fade_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	fade_->Update();
 
-	comment_ = Engine::CreateSprite("resultComment.png");
+	if(rank_ == SCORE_RANK::SSS){
+		comment_ = Engine::CreateSprite("resultComment.png");
+	} else{
+		comment_ = Engine::CreateSprite("resultComment2.png");
+	}
 	comment_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
 	comment_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
 	comment_->SetColor({ 1.0f,1.0f,1.0f,0.0f });

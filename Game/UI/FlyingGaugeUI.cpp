@@ -53,7 +53,7 @@ void FlyingGaugeUI::Update(float currentLength){
 #endif // _DEBUG
 
 
-	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, tower_->GetTextureSize().y * height_t));
+	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, (tower_->GetTextureSize().y * 0.5f) * height_t));
 
 	icon_->SetCenterPos(iconBasePos_ + Vector2(0.0f, -kWindowHeight_ * 0.5f * halfHeight_t));
 
@@ -62,7 +62,7 @@ void FlyingGaugeUI::Update(float currentLength){
 		maxHeight_t = height_t;
 		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos());
 	} else{
-		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos() + Vector2(0.0f, -tower_->GetTextureSize().y * (1.0f - height_t)));
+		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos() + Vector2(0.0f, -(tower_->GetTextureSize().y * 0.5f) * (1.0f - height_t)));
 	}
 
 
