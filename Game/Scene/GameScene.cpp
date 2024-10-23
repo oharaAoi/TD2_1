@@ -29,7 +29,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(9.0f);
+	gamePlayTimer_->Init(999.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -151,8 +151,8 @@ void GameScene::Init() {
 	//モデル確認用
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("EatFish.gltf");
-	debugModel_->SetAnimater("./Game/Resources/Model/EatFish/", "EatFish.gltf", true);
+	debugModel_->SetObject("AddSpeedEffect.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf", true);
 	debugModel_->SetIsLighting(false);
 
 	
@@ -253,6 +253,7 @@ void GameScene::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -480,10 +481,10 @@ void GameScene::Update() {
 	}
 
 	// 水に入っているかどうかで音の割合を切り替える
-	mainBGM_->SetVolume(0.4f * BGM_volumeT_ * BGM_masterVolumeRate_);
-	mainBGM_inWater_->SetVolume(0.4f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
-	windSound_->SetVolume(0.4f * BGM_volumeT_ * BGM_masterVolumeRate_);
-	swimSound_->SetVolume(0.3f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	mainBGM_->SetVolume(0.2f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	mainBGM_inWater_->SetVolume(0.2f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	windSound_->SetVolume(0.2f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	swimSound_->SetVolume(0.15f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
