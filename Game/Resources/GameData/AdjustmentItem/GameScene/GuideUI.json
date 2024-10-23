@@ -1,0 +1,24 @@
+{
+    "GuideUI": {
+        "Result_goTitle": [
+            288.0,
+            670.0
+        ],
+        "Result_pushSpace": [
+            109.0,
+            672.0
+        ],
+        "title_gameStart": [
+            680.0,
+            560.0
+        ],
+        "title_pushSpace": [
+            125.0,
+            656.0
+        ],
+        "title_tutorialStart": [
+            680.0,
+            642.0
+        ]
+    }
+}

@@ -89,12 +89,12 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	}
 
 	// タイムアップ10秒前
-	if (gameTimer_ == 10.0f) {
+	if (std::floor(gameTimer_) == 10.0f) {
 		timeleft10s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
 	// タイムアップ60秒前
-	if (gameTimer_ == 60.0f) {
+	if (std::floor(gameTimer_) == 60.0f) {
 		timeleft60s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
