@@ -10,7 +10,7 @@ public:
 
 	void Init();
 	void Update(float current, float max);
-	void Draw() const;
+	void Draw(float alpha);
 
 	/// <summary>
 	/// 桁数を割り出す

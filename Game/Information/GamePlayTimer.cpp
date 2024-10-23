@@ -17,7 +17,7 @@ void GamePlayTimer::Init(float limit) {
 
 	numberInterval_ = 80.0f;
 
-	originPos_ = { 360.0f, 100.0f };
+	originPos_ = { 1200.0f, 100.0f };
 	numberSpriteScale_ = { 0.8f, 0.8f };
 
 	clock_ = Engine::CreateSprite("timer.png");

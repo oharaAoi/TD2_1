@@ -15,7 +15,7 @@ public:
 	~PlayerSpeedCounter();
 
 	void Init();
-	void Update(float speed, float raito);
+	void Update(float speed, float raito, float alpha);
 	void Draw() const;
 
 	/// <summary>
