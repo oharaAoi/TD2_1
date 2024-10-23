@@ -79,7 +79,7 @@ void FlyingGaugeUI::Draw(float alpha){
 	tower_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	tower_->Draw();
 	icon_maxHeight_->SetColor({ 1.0f,1.0f,1.0f,alpha });
-	icon_maxHeight_->Draw();
+	//icon_maxHeight_->Draw();
 	icon_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	icon_->Draw();
 
