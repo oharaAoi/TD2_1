@@ -15,6 +15,8 @@ public:
 	void Update();
 	void Draw() const;
 
+	void SetColor(int birdJumpNum);
+
 private:
 
 	Player* pPlayer_ = nullptr;
@@ -24,6 +26,6 @@ private:
 	float easeT;
 	Vector3 sizeMin = { 0.1f,0.1f,0.1f };
 	Vector3 sizeMax = { 1.0f,1.0f,1.0f };
-
+	Vector4 color_ = { 1.0f , 1.0f, 1.0f ,1.0f };
 };
 

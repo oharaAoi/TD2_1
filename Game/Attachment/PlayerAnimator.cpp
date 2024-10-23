@@ -17,8 +17,7 @@ void PlayerAnimator::Update(){
 
 		if(drawSpeed - pPlayer_->GetMoveSpeed() != 0){
 			easeT = (drawSpeed - pPlayer_->GetMoveSpeed()) / (drawSpeed - pPlayer_->GetMaxMoveSpeed());
-		} else
-		{
+		} else{
 			easeT = 0;
 		}
 		easeT = std::clamp(easeT, 0.0f, 1.0f);
@@ -27,11 +26,23 @@ void PlayerAnimator::Update(){
 		playerHiSpeedEffect_->GetTransform()->SetTranslaion(pPlayer_->GetWorldTranslation());
 		playerHiSpeedEffect_->GetTransform()->SetQuaternion(pPlayer_->GetTransform()->GetQuaternion());
 		playerHiSpeedEffect_->Update();
+
+		playerHiSpeedEffect_->SetColor(color_);
 	}
 }
 
 void PlayerAnimator::Draw() const{
 	if(pPlayer_->GetMoveSpeed() > drawSpeed) {
 		playerHiSpeedEffect_->Draw();
+	}
+}
+
+void PlayerAnimator::SetColor(int birdJumpNum) {
+	if (birdJumpNum == 0) {
+		color_ = { 1.0f , 1.0f, 1.0f, 1.0f };
+	} else if(birdJumpNum == 1) {
+		color_ = { 1.0f , 0.5f, 0.0f, 1.0f };
+	} else if (birdJumpNum == 2) {
+		color_ = { 1.0f , 1.0f, 0.0f, 1.0f };
 	}
 }
