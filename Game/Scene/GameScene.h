@@ -83,8 +83,8 @@ private:
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 	bool isDegugCameraActive_ = false;
 
-	std::string start1 = "test_1_3";
-	std::string start2 = "Test_1_1";
+	std::string start1 = "stage_1_1";
+	std::string start2 = "stage_1_2";
 
 	// ---------- gameobject ---------- //
 	std::unique_ptr<Player> player_ = nullptr;
@@ -109,8 +109,8 @@ private:
 	bool startSceneChange_;//シーン遷移が始まっているか
 	float BGM_volumeT_ = 1.0f;
 	float BGM_masterVolumeRate_ = 1.0f;
-	float level2=200;
-	float level3=500;
+	float level2=300;
+	float level3=600;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
