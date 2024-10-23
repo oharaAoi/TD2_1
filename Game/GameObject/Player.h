@@ -173,6 +173,10 @@ private:
 	//着水効果音の猶予時間
 	float waterSurfaceCoolTime;
 
+	// 落下速度に応じたジャンプ量を調整する変数
+	// 段階のスピードにしている
+	float birdJumpRaito_ = 1.0f;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;

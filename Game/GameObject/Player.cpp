@@ -214,7 +214,7 @@ void Player::Move(){
 
 	// 移動量を加算
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
-	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
+	velocity_ *= GetMoveSpeed() * birdJumpRaito_ * std::fabsf(GameTimer::DeltaTime());
 
 
 	transform_->SetTranslaion(transform_->GetTranslation() + velocity_ + dropVec + diveVec);
@@ -404,6 +404,7 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat("reflection", &reflection_, 0.1f);
 	ImGui::DragFloat("dontInputTime", &dontInputTime_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
+	ImGui::DragFloat("dropSpeed", &dropSpeed_, 0.1f);
 
 	if(ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();
@@ -490,7 +491,10 @@ void Player::OnCollision(Collider* other){
 			// ある程度上から踏みつけないといけない
 			if(dropSpeed_ < gravity_ * 0.25f){//dropSpeed_ < gravity_ * 0.25f//transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f
 				if(!isFacedBird_) {
-					pressTime_ = 1.0f;
+					// dropSpeedが早ければ早い程早くなる
+					birdJumpRaito_ = std::abs(dropSpeed_);
+					//birdJumpRaito_ = plusSpeed / birdJumpRaito_;
+					pressTime_ = 0.8f;
 					isFalling_ = false;
 					isCloseWing_ = false;
 					AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.5f);
@@ -619,7 +623,7 @@ void Player::MoveWater(){
 
 	isFalling_ = false;
 
-
+	birdJumpRaito_ = 1.0f;
 }
 
 void Player::MoveSky(){
@@ -729,7 +733,8 @@ void Player::UpdateTransform(){
 
 	// 移動量を加算
 	velocity_ = Vector3(1.0f, 0.0f, 0.0f) * MakeRotateZMatrix(currentAngle_);
-	velocity_ *= GetMoveSpeed() * std::fabsf(GameTimer::DeltaTime());
+	// 鳥でのジャンプの加速を考慮する(birdJumpRaito_は基本1.0f)
+	velocity_ *= GetMoveSpeed() * birdJumpRaito_ * std::fabsf(GameTimer::DeltaTime());
 	transform_->SetTranslaion(transform_->GetTranslation() + velocity_);
 
 	// プレイヤー上部の水面の座標を取得
