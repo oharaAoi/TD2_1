@@ -113,6 +113,7 @@ private:
 	float level2=200;
 	float level3=500;
 	float speedMeterAlpha_;
+	bool isStartupScene_ = true;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
