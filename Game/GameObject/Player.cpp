@@ -519,6 +519,7 @@ void Player::OnCollision(Collider* other){
 						curMaxSpeed = kBirdJumpMaxRaito_;
 						birdJumpNum_ = 0;
 						isHighSpeedMove = true;
+						AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
 					} else {
 						maxSpeedTimeCount = kMaxSpeedTime/2;
 						//birdJumpRaito_ = 1.0f;
@@ -736,7 +737,7 @@ void Player::MoveSky(){
 			//dropSpeed_ += gravity_* descentRatio * GameTimer::DeltaTime();
 
 			if (wingAnimatinoKeyFrame_ < 1.0f) {
-				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime();
+				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime() * 2;
 			}
 
 		} else{//////// 翼を閉じている際 ////////
@@ -746,7 +747,7 @@ void Player::MoveSky(){
 			dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 
 			if (wingAnimatinoKeyFrame_ > 0.0f) {
-				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime();
+				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime()*2;
 			}
 
 		}

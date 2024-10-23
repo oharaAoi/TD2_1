@@ -34,11 +34,11 @@
 
 
 enum class SCORE_RANK : int32_t{
-	SSS = 5000,
-	SS = 3000,
-	S = 2000,
-	A = 1500,
-	B = 500,
+	SSS = 800,
+	SS = 500,
+	S = 300,
+	A = 150,
+	B = 50,
 	C = 0
 };
 
