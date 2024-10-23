@@ -214,6 +214,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "overTime.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TorsoGaugeFront.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TorsoGaugeBack.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer10.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer60.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");

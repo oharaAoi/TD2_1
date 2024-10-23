@@ -14,6 +14,8 @@ WorldObjects::~WorldObjects() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WorldObjects::Init() {
+	cloudZ = 130.0f;
+
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		Vector3 newPos = StageInformation::worldWallPos_;
 		newPos.x += StageInformation::stageWidthEvery_ * (oi);
@@ -53,6 +55,7 @@ void WorldObjects::Init() {
 		cloud_[oi]->Init();
 		cloud_[oi]->SetObject("Cloud.obj");
 		cloud_[oi]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+		cloud_[oi]->GetTransform()->SetTranslationZ(cloudZ);
 		cloud_[oi]->SetIsLighting(false);
 		// moai
 		moai_[oi] = std::make_unique<BaseGameObject>();
@@ -84,6 +87,7 @@ void WorldObjects::Init() {
 		trees_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		grass_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		cloud_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		cloud_[oi]->GetTransform()->SetTranslationZ(cloudZ);
 		moai_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		nico_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		ufo_[oi]->GetTransform()->SetTranslaion(newMountainPos);
@@ -97,7 +101,6 @@ void WorldObjects::Init() {
 
 void WorldObjects::Update(float playerPos) {
 	playerPos_ = playerPos;
-
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		worldWalls_[oi]	->Update();
 		waterWeeds_[oi]	->Update();
@@ -110,7 +113,7 @@ void WorldObjects::Update(float playerPos) {
 		moai_[oi]		->Update();
 		nico_[oi]		->Update();
 		ufo_[oi]		->Update();
-		ufosmoke_[oi]		->Update();
+		ufosmoke_[oi]	->Update();
 	}
 }
 
@@ -127,7 +130,6 @@ void WorldObjects::Draw() const {
 
 		trees_[oi]->Draw();
 		grass_[oi]->Draw();
-		
 		moai_[oi]->Draw();
 		nico_[oi]->Draw();
 		ufo_[oi]->Draw();
@@ -192,11 +194,12 @@ void WorldObjects::LoopStage() {
 		mountains_[index]->GetTransform()->SetTranslaion(newPos);
 		trees_[index ]->GetTransform()->SetTranslaion(newPos);
 		grass_[index ]->GetTransform()->SetTranslaion(newPos);
-		cloud_[index ]->GetTransform()->SetTranslaion(newPos);
 		moai_[index]->GetTransform()->SetTranslaion(newPos);
 		nico_[index]->GetTransform()->SetTranslaion(newPos);
 		ufo_[index]->GetTransform()->SetTranslaion(newPos);
 		ufosmoke_[index]->GetTransform()->SetTranslaion(newPos);
+		newPos.z = cloudZ;
+		cloud_[index]->GetTransform()->SetTranslaion(newPos);
 
 		nowMountainIndex_ = !nowMountainIndex_;
 	}

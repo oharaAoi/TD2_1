@@ -4,6 +4,7 @@
 #include "Engine/Lib/GameTimer.h"
 #include "Engine/Audio/AudioPlayer.h"
 #include "Engine/Utilities/AdjustmentItem.h"
+#include "Engine/2d/Sprite.h"
 
 /// <summary>
 /// ゲームの進行している時間を計測するクラス
@@ -66,5 +67,7 @@ private:
 
 	std::unique_ptr<AudioPlayer> timeleft10s_;
 	std::unique_ptr<AudioPlayer> timeleft60s_;
+
+
 };
 
