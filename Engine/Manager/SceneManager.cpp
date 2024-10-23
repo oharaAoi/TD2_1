@@ -216,6 +216,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tower.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "blueSky_ORE.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "kari.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tutorial_3.png");
 	
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
 
