@@ -33,6 +33,7 @@
 #include "Game/UI/FlyingGaugeUI.h"
 #include "Game/UI/PlayerSpeedCounter.h"
 #include "Game/UI/TutorialUI.h"
+#include "Game/UI/PlayerBodyCountUI.h"
 /*------ Sprite ------*/
 #include "Game/Effect/Cherry.h"
 #include "Game/Effect/Bubble.h"
@@ -129,6 +130,7 @@ private:
 	std::unique_ptr<FlyingGaugeUI> flyingGaugeUI_ = nullptr;
 	std::unique_ptr<PlayerSpeedCounter> playerSpeedCounter_ = nullptr;
 	std::unique_ptr<TutorialUI> tutorialUI_ = nullptr;
+	std::unique_ptr<PlayerBodyCountUI> playerBodyCountUI_ = nullptr;
 
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;

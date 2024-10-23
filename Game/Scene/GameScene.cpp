@@ -85,6 +85,9 @@ void GameScene::Init(){
 	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
 	playerSpeedCounter_->Init();
 
+	playerBodyCountUI_ = std::make_unique<PlayerBodyCountUI>();
+	playerBodyCountUI_->Init();
+
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
 	tutorialUI_->Init();
@@ -365,6 +368,8 @@ void GameScene::Update(){
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(), 0.0f, 2.0f);
 	}
 
+	playerBodyCountUI_->Update(player_->GetBodyCount());
+
 	// -------------------------------------------------
 	// ↓ audioの更新
 	// -------------------------------------------------
@@ -523,6 +528,7 @@ void GameScene::Draw() const{
 		flyingTimerUI_->Draw();
 		flyingGaugeUI_->Draw();
 		playerSpeedCounter_->Draw();
+		playerBodyCountUI_->Draw();
 
 	} else {
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);

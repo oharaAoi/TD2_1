@@ -71,6 +71,9 @@ void Engine::Initialize(uint32_t backBufferWidth, int32_t backBufferHeight) {
 	imguiManager_->Init(winApp_->GetHwnd(), dxDevice_->GetDevice(), dxCommon_->GetSwapChainBfCount(), descriptorHeap_->GetSRVHeap());
 	EffectSystem::GetInstacne()->EditerInit(renderTarget_.get(), descriptorHeap_.get(), dxCommands_.get(), dxDevice_->GetDevice());
 #endif
+
+	isFullScreen_ = false;
+
 	Log("Engine Initialize compulete!\n");
 }
 
@@ -134,11 +137,9 @@ void Engine::BeginFrame() {
 	Render::Begin();
 	input_->Update();
 
-	if (Input::IsTriggerKey(DIK_L)) {
-		WinApp::GetInstance()->SetFullScreen(true);
-	}
-	if (Input::IsTriggerKey(DIK_K)) {
-		WinApp::GetInstance()->SetFullScreen(false);
+	if (Input::IsTriggerKey(DIK_F11)) {
+		isFullScreen_ = !isFullScreen_;
+		WinApp::GetInstance()->SetFullScreen(isFullScreen_);
 	}
 
 #ifdef _DEBUG

@@ -60,7 +60,7 @@ private:
 	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;
 	Vector2 originPos_;
 
-	Vector2 numberSpriteSize_ = { 42.0f, 72.0f };
+	Vector2 numberSpriteSize_ = { 48.0f, 72.0f };
 	Vector2 numberSpriteScale_;
 	float numberInterval_;
 
