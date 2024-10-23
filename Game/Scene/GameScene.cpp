@@ -299,8 +299,8 @@ void GameScene::Update() {
 		}*/
 	}
 
-	if (player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x) {
-		currentState_ = GAME_STATE::GAME;
+	if (currentState_ == GAME_STATE::TUTORIAL) {
+		Update_TUTORIAL();
 	}
 
 #ifdef _DEBUG
@@ -447,10 +447,6 @@ void GameScene::Update() {
 		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
 	} else{
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(),0.0f,2.0f);
-	}
-
-	if (currentState_ == GAME_STATE::TUTORIAL) {
-		tutorialUI_->Update();
 	}
 
 	// -------------------------------------------------
@@ -639,7 +635,18 @@ void GameScene::Draw() const {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update_TUTORIAL() {
+	
+	if (Input::IsTriggerKey(DIK_Z)) {
+		currentState_ = GAME_STATE::GAME;
+	}
 
+
+	if (player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x) {
+		currentState_ = GAME_STATE::GAME;
+	}
+
+	// UIの更新
+	tutorialUI_->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
