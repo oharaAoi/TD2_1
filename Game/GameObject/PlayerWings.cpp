@@ -22,40 +22,25 @@ void PlayerWings::Init() {
 	rotateAxis_ = { 1.0f, 0.0f, 0.0f };
 }
 
-void PlayerWings::Update(const Vector3& parentPos, const Quaternion& rotate, bool isGliding) {
+void PlayerWings::Update(const Vector3& parentPos, float time) {
 
 	time_ += GameTimer::DeltaTime();
 	time_ = std::fmod(time_, 1.0f);
 
 	for (uint32_t oi = 0; oi < 2; ++oi) {
-
+		// 右か左かを判別する
 		float hugo = 1.0f;
 		if (oi == 1) {
 			hugo *= -1.0f;
 		}
-
-		if (isGliding) {
-			windOpenTime_ += GameTimer::DeltaTime();
-			moveQuaternion_ = Quaternion::Slerp(
-				Quaternion(),
-				Quaternion::AngleAxis((openAngle_ * toRadian) * hugo, rotateAxis_),
-				(windOpenTime_ / windOpenTimeLimit_)
-			);
-			wings_[oi]->GetTransform()->SetQuaternion(moveQuaternion_);
-		} else {
-			/*windOpenTime_ += GameTimer::DeltaTime();
-			moveQuaternion_ = Quaternion::Slerp(
-				Quaternion(),
-				Quaternion::AngleAxis((90.0f * toRadian) * hugo, { 1.0f, 0.0f, 0.0f }),
-				(windOpenTime_ / windOpenTimeLimit_)
-			);
-			wings_[oi]->GetTransform()->SetQuaternion(moveQuaternion_);*/
-		}
-
-		wings_[oi]->GetAnimetor()->SetAnimationTime(time_);
+		// アニメーションのタイムを設定する
+		wings_[oi]->GetAnimetor()->SetAnimationTime(time);
+		// 羽根の座標を求める
 		Vector3 pos = parentPos;
 		pos.z += (offsetZ_ * hugo);
 		wings_[oi]->GetTransform()->SetTranslaion(pos);
+		// 更新処理
+		wings_[oi]->GetAnimetor()->UpdateScript();
 		wings_[oi]->Update();
 	}
 }

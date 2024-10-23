@@ -12,18 +12,12 @@ public:
 	~FlyingTimer();
 
 	void Init();
-	void Update(float posX);
 	void Draw() const;
 
 	/// <summary>
 	/// 計測を行う
 	/// </summary>
-	void Measurement(float posX);
-
-	/// <summary>
-	/// 計測終了
-	/// </summary>
-	void Finish(float posX);
+	void Measurement(float posY);
 
 #ifdef _DEBUG
 	void Debug_Gui();
