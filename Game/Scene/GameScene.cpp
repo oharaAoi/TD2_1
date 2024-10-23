@@ -348,7 +348,7 @@ void GameScene::Update() {
 	if (currentState_ != GAME_STATE::TITLE) {
 		flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 		flyingGaugeUI_->Update(player_->GetFlyingTime());
-		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio());
+		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio(),speedMeterAlpha_);
 	} else{
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(),0.0f,2.0f);
 	}
@@ -359,8 +359,11 @@ void GameScene::Update() {
 
 	if(player_->GetIsFlying()){
 		BGM_volumeT_ = std::clamp(BGM_volumeT_ + (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
+		speedMeterAlpha_ = std::clamp(speedMeterAlpha_ - (0.02f * GameTimer::TimeRate()), 0.0f, 1.0f);
+
 	} else{
 		BGM_volumeT_ = std::clamp(BGM_volumeT_ - (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
+		speedMeterAlpha_ = std::clamp(speedMeterAlpha_ + (0.02f * GameTimer::TimeRate()), 0.0f, 1.0f);
 	}
 
 	// ゲーム終了時にフェードアウトさせるための変数更新
@@ -508,8 +511,8 @@ void GameScene::Draw() const {
 		}
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		gamePlayTimer_->Draw();
-		flyingTimerUI_->Draw();
-		flyingGaugeUI_->Draw();
+		flyingTimerUI_->Draw(1.0f - speedMeterAlpha_);
+		flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
 		playerSpeedCounter_->Draw();
 
 	} else {

@@ -81,7 +81,7 @@ private:
 	bool isStartScene_ = true;
 	static bool isViewingRanking_;
 
-	int score_ = 80000;//FlyingTimer::flyingScor;
+	int score_ = (int)FlyingTimer::flyingScor;
 	SCORE_RANK rank_;
 
 	Vector4 rankingColors_[3] = {

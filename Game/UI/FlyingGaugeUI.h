@@ -20,7 +20,7 @@ public:
 
 	void Init();
 	void Update(float currentLength);
-	void Draw() const;
+	void Draw(float alpha);
 
 	void CalculationRaito(float currentLength);
 
@@ -41,6 +41,7 @@ private:
 	std::unique_ptr<Sprite> bar_;
 	std::unique_ptr<Sprite> rank_;
 	std::unique_ptr<Sprite> icon_;
+	std::unique_ptr<Sprite> tower_;
 
 	FlyingRank nowMaxRank_;
 

@@ -208,7 +208,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
-
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tower.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
 
 	// animationEffect

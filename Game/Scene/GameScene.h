@@ -102,6 +102,7 @@ private:
 	bool startSceneChange_;//シーン遷移が始まっているか
 	float BGM_volumeT_ = 1.0f;
 	float BGM_masterVolumeRate_ = 1.0f;
+	float speedMeterAlpha_;
 
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

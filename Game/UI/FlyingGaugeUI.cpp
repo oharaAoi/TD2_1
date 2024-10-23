@@ -15,6 +15,7 @@ void FlyingGaugeUI::Init() {
 	bar_ = Engine::CreateSprite("RankFront.png");
 	rank_ = Engine::CreateSprite("Rank.png");
 	icon_ = Engine::CreateSprite("RankIcon.png");
+	tower_ = Engine::CreateSprite("tower.png");
 
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "FlyingGaugeUI";
@@ -45,21 +46,28 @@ void FlyingGaugeUI::Update(float currentLength) {
 	bar_->Update();
 	rank_->Update();
 	icon_->Update();
+	tower_->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FlyingGaugeUI::Draw() const {
+void FlyingGaugeUI::Draw(float alpha) {
+	tower_->SetColor({ 1.0f,1.0f,1.0f,alpha });
+	tower_->Draw();
+	outside_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	outside_->Draw();
+	bar_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	bar_->Draw();
 
 	if (static_cast<uint32_t>(nowMaxRank_) >= 1) {
+		rank_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 		rank_->Draw();
 	}
 
 	if (nowMaxRank_ != FlyingRank::Rank_Master) {
+		icon_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 		icon_->Draw();
 	}
 }

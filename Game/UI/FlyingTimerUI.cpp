@@ -84,12 +84,14 @@ void FlyingTimerUI::Update(float current, float max) {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FlyingTimerUI::Draw() const {
+void FlyingTimerUI::Draw(float alpha) {
 	for (int oi = 0; oi < UI_flyingLength_.size(); ++oi) {
+		UI_flyingLength_[oi]->SetColor({ 1.0f,1.0f,1.0f,alpha });
 		UI_flyingLength_[oi]->Draw();
 	}
 
 	for (int oi = 0; oi < UI_flyingMaxLength_.size(); ++oi) {
+		UI_flyingMaxLength_[oi]->SetColor({ 1.0f,1.0f,1.0f,alpha });
 		UI_flyingMaxLength_[oi]->Draw();
 	}
 }
