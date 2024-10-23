@@ -59,6 +59,11 @@ void ResultScene::Init(){
 		Quaternion::AngleAxis(45.0f * toRadian, { 0.0f,0.0f,1.0f })
 	);
 
+	animationPlayer_ = std::make_unique<BaseGameObject>();
+	animationPlayer_->Init();
+	animationPlayer_->SetObject("Player_result.gltf");
+	animationPlayer_->SetAnimater("./Game/Resources/Model/Player_result_2/", "Player_result.gltf", true);
+	animationPlayer_->SetIsLighting(false);
 
 	/*---------------- string --------------*/
 
@@ -249,6 +254,11 @@ void ResultScene::Init(){
 	fade_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	fade_->Update();
 
+	comment_ = Engine::CreateSprite("resultComment.png");
+	comment_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
+	comment_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
+	comment_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	comment_->Update();
 
 	debugScale_ = scoreRankModel_->GetTransform()->GetScale();
 	debugTranslate_ = scoreRankModel_->GetTransform()->GetTranslation();
@@ -287,6 +297,10 @@ void ResultScene::Load(){
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
 	/*----------------- model ----------------*/
+	ModelManager::LoadModel("./Game/Resources/Model/Player_result_2/", "Player_result.gltf");
+
+
+
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
@@ -305,6 +319,7 @@ void ResultScene::Load(){
 
 	/*---------------- texture ---------------*/
 	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "white.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
 
 	// Adio
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -342,6 +357,7 @@ void ResultScene::Update(){
 	// ====================== object ====================== //
 
 	player_->ResultSceneUpdate();
+	animationPlayer_->Update();
 
 	// 文字の更新
 	//for(int i = 0; i < 3; i++){
@@ -387,6 +403,14 @@ void ResultScene::Update(){
 		}
 	}
 
+	if(isViewingRanking_){
+		commentSpriteAlpha_ += GameTimer::DeltaTime() * 0.5f;
+		commentSpriteAlpha_ = std::clamp(commentSpriteAlpha_, 0.0f, 1.0f);
+		comment_->SetColor({ 1.0f,1.0f,1.0f,commentSpriteAlpha_ });
+		comment_->Update();
+	}
+
+
 	Fade();
 
 #ifdef _DEBUG
@@ -408,7 +432,10 @@ void ResultScene::Draw() const{
 	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	player_->Draw();
 
+	Engine::SetPipeline(PipelineType::SkinningPipeline);
+	animationPlayer_->Draw();
 
+	Engine::SetPipeline(PipelineType::NotCullingPipeline);
 	for(auto& num : scoreNumberModels_){
 		num->Draw();
 	}
@@ -441,6 +468,8 @@ void ResultScene::Debug_Gui(){
 
 
 	ImGui::Begin("ResultScene");
+
+	animationPlayer_->Debug_Gui();
 
 	ImGui::DragFloat3("rotate", &rankingRotate_.x, 0.01f);
 	//ImGui::DragFloat3("Rotate", &debugRotate_.x, 0.01f);

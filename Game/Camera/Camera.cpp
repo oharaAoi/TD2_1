@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Game/Scene/GameScene.h"
+#include "Engine/Math/MyRandom.h"
 
 Camera::Camera(){
 	Init();
@@ -137,7 +138,16 @@ void Camera::Update(){
 
 
 
-void Camera::Shake(){}
+void Camera::Shake(){
+	
+	Vector3 rotate = {
+		RandomFloat(-0.08f,0.08f),
+		RandomFloat(-0.08f,0.08f),
+		0.0f
+	};
+
+	//shakeTranslate_ = Vector3(1.0f,0.0f,0.0f) * rotate * shakeRadius_;
+}
 
 
 

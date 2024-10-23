@@ -21,8 +21,8 @@ public:
 
 	void SetPlayerPtr(Player* pPlayer){ pPlayer_ = pPlayer; }
 	static void ShakeStart(float shakeTime, float shakeRadius){
-		shakeTime_ = shakeTime;
-		shakeRadius_ = shakeRadius_;
+		//shakeTime_ = shakeTime;
+		//shakeRadius_ = shakeRadius_;
 	}
 
 
@@ -39,8 +39,8 @@ private:
 	float follwOfsetlength=4;
 
 	Vector3 shakeTranslate_;
-	static float shakeRadius_;
-	static float  shakeTime_;
+	//static float shakeRadius_;
+	//static float  shakeTime_;
 
 	bool isTitleToGameCamera_;
 
