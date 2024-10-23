@@ -9,7 +9,7 @@ PlayerBodyCountUI::~PlayerBodyCountUI() {}
 
 void PlayerBodyCountUI::Init() {
 	uiPos_ = { -200, 250.0f };
-	maxBody_UI_ = Engine::CreateSprite("kari.png");
+	maxBody_UI_ = Engine::CreateSprite("bodyMax.png");
 	maxBody_UI_->SetTextureCenterPos(uiPos_);
 
 	isFadeIn_ = true;
