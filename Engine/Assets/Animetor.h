@@ -20,6 +20,8 @@ public:
 	void Finalize();
 	void Update();
 
+	void UpdateScript();
+
 	void LoadAnimation(const std::string& directoryPath, const std::string& fileName, Model* model);
 
 public:

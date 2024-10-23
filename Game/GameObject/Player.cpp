@@ -62,6 +62,8 @@ void Player::Init(){
 	transform_.get()->SetTranslationX(600);
 	isHighSpeedMove = false;
 	maxSpeedTimeCount = 0;
+
+	wingAnimatinoKeyFrame_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,10 +90,10 @@ void Player::Update(){
 	if(transform_->GetTranslation().y > 0.0f) {
 		// 水から出た瞬間
 		if(!preFlying_) {
-			timer_.Measurement(transform_->GetTranslation().x);
 			isFlying_ = true;
 			isSplash_ = true;
 			isEnableLaunch_ = true;
+			wingAnimatinoKeyFrame_ = 0;
 			if(waterSurfaceCoolTime <= 0) {
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
@@ -102,7 +104,6 @@ void Player::Update(){
 	} else {
 		// 着水した瞬間
 		if(preFlying_) {
-			timer_.Finish(transform_->GetTranslation().x);
 			isSplash_ = true;
 			//isFlying_ = false;//コメントアウト外さない
 			if(waterSurfaceCoolTime <= 0) {
@@ -116,8 +117,6 @@ void Player::Update(){
 	// 体の更新
 	UpdateBody();
 
-
-	timer_.Update(transform_->GetTranslation().x);
 	totalSpeedRatio = GetMoveSpeed() / kMaxMoveSpeed_;
 
 #ifdef _DEBUG
@@ -146,9 +145,9 @@ void Player::Update(){
 	if(isFlying_) {
 		const PlayerBody* topBody = followModels_.begin()->get();
 		if(isFalling_ && isCloseWing_) {
-			wings_->Update(topBody->GetTranslation(), topBody->GetQuaternion(), true);
+			wings_->Update(topBody->GetTranslation(), wingAnimatinoKeyFrame_);
 		} else {
-			wings_->Update(topBody->GetTranslation(), topBody->GetQuaternion(), false);
+			wings_->Update(topBody->GetTranslation(), wingAnimatinoKeyFrame_);
 		}
 	} else {
 		wings_->NotFlying();
@@ -226,8 +225,7 @@ void Player::Move(){
 	}
 
 	if(maxSpeedTimeCount >= 0){
-		birdJumpRaito_ = std::lerp(1, curMaxSpeed, maxSpeedTimeCount);
-
+		birdJumpRaito_ = std::lerp(1.0f, curMaxSpeed, maxSpeedTimeCount);
 	}
 
 
@@ -436,14 +434,6 @@ void Player::Debug_Gui(){
 	} else {
 		ImGui::Text("not Hit");
 	}
-
-	wings_->Debug_Gui();
-
-	/*if (ImGui::TreeNode("FlyingTimer")) {*/
-	timer_.Debug_Gui();
-	/*	ImGui::TreePop();
-	}*/
-
 	ImGui::End();
 }
 
@@ -461,7 +451,6 @@ void Player::OnCollision(Collider* other){
 
 		// fish型に変換
 		Fish* pFish = dynamic_cast<Fish*>(other);
-		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
 		bodyCount_;//この数を使う
 		// 魚を食べられたとき
 		if(bodyCount_ >= pFish->GetEatCount()){//chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()
@@ -693,7 +682,6 @@ void Player::MoveSky(){
 
 	////////////////////////////// 上昇中 /////////////////////////////////
 	if(!isFalling_){
-
 		isCloseWing_ = false;
 		isFacedBird_ = false;
 		dropSpeed_ = 0.0f;
@@ -738,11 +726,19 @@ void Player::MoveSky(){
 			dropSpeed_ = 0.0f;
 			//dropSpeed_ += gravity_* descentRatio * GameTimer::DeltaTime();
 
+			if (wingAnimatinoKeyFrame_ < 1.0f) {
+				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime();
+			}
+
 		} else{//////// 翼を閉じている際 ////////
 
 			pressTime_ *= 0.3f * GameTimer::TimeRate();
 			dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 			dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
+
+			if (wingAnimatinoKeyFrame_ > 0.0f) {
+				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime();
+			}
 
 		}
 
@@ -765,6 +761,8 @@ void Player::MoveSky(){
 			isHighSpeedMove = false;//ハイスピードの状態か否か
 		}
 	}
+
+	timer_.Measurement(transform_->GetTranslation().y);
 
 }
 

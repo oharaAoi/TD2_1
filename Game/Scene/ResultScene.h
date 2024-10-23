@@ -81,7 +81,7 @@ private:
 	bool isStartScene_ = true;
 	static bool isViewingRanking_;
 
-	int score_ = FlyingTimer::flyingScor;
+	int score_ = (int)FlyingTimer::flyingScor;
 	SCORE_RANK rank_;
 
 	/*---------- debug ----------*/

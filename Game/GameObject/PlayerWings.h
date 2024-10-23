@@ -13,7 +13,14 @@ public:
 	~PlayerWings();
 
 	void Init();
-	void Update(const Vector3& parentPos, const Quaternion& rotate, bool isGliding);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="parentPos">親となる位置</param>
+	/// <param name="rotate">回転</param>
+	/// <param name="isGliding">滑空しているか</param>
+	/// <param name="time">: 羽根を開く時間</param>
+	void Update(const Vector3& parentPos, float time);
 	void Draw() const;
 
 #ifdef _DEBUG

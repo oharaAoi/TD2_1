@@ -191,6 +191,8 @@ private:
 	bool isHighSpeedMove;
 	int birdJumpNum_;
 
+	float wingAnimatinoKeyFrame_;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;
