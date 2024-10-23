@@ -411,6 +411,7 @@ void GameScene::Update(){
 		}
 	} else{
 		sky_->SetTexture("sky.png");
+		isStartupScene_ = false;
 	}
 
 	// -------------------------------------------------
@@ -571,8 +572,11 @@ void GameScene::Draw() const{
 		}
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		gamePlayTimer_->Draw();
-		flyingTimerUI_->Draw(1.0f - speedMeterAlpha_);
-		flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
+
+		if(!isStartupScene_){
+			flyingTimerUI_->Draw(1.0f - speedMeterAlpha_);
+			flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
+		}
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
 		finishUI_->Draw();
