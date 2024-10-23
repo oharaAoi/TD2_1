@@ -18,7 +18,7 @@ void Camera::Finalize(){}
 void Camera::Init(){
 	BaseCamera::Init();
 
-	fov_ = 0.55f;
+	fov_ = 0.45f;
 
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
@@ -149,7 +149,7 @@ void Camera::Shake(){
 	
 	float addFov = 0.0f;
 	addFov = RandomFloat(0.0f, shakeRadius_) * std::clamp(shakeTime_ / kShakeTime_, 0.0f, 1.0f);
-	fov_ = baseFov_ + addFov;
+	//fov_ = baseFov_ + addFov;
 	shakeTime_ -= GameTimer::DeltaTime();
 }
 
