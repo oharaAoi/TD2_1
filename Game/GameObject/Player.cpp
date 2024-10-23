@@ -95,8 +95,8 @@ void Player::Update(){
 			isEnableLaunch_ = true;
 			wingAnimatinoKeyFrame_ = 0;
 			if(waterSurfaceCoolTime <= 0) {
-				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
-				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
+				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
+				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.08f);
 				waterSurfaceCoolTime = 0.25f;
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
@@ -108,8 +108,8 @@ void Player::Update(){
 			isSplash_ = true;
 			//isFlying_ = false;//コメントアウト外さない
 			if(waterSurfaceCoolTime <= 0) {
-				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
-				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
+				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
+				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.08f);
 				waterSurfaceCoolTime = 0.25f;
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.5f);
 			}
@@ -519,12 +519,13 @@ void Player::OnCollision(Collider* other){
 						curMaxSpeed = kBirdJumpMaxRaito_;
 						birdJumpNum_ = 0;
 						isHighSpeedMove = true;
+						AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
 					} else {
 						maxSpeedTimeCount = kMaxSpeedTime/2;
 						//birdJumpRaito_ = 1.0f;
 					}
 
-					AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.5f);
+					AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.4f);
 					AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false,
 						Vector3(1.0f, 1.0f, 1.0f), Quaternion(), transform_->GetTranslation());
 				}
@@ -593,8 +594,8 @@ void Player::SpeedDown(){
 	temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 	//基礎速度の変動
 	baseSpeed_ = std::clamp(baseSpeed_ - kDecreaseSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-	AudioPlayer::SinglShotPlay("confusion.mp3", 0.5f);
-	AudioPlayer::SinglShotPlay("Damage.mp3", 3.0f);
+	AudioPlayer::SinglShotPlay("confusion.mp3", 0.3f);
+	AudioPlayer::SinglShotPlay("Damage.mp3", 2.5f);
 
 	AnimetionEffectManager::AddListEffect("./Game/Resources/Model/Effect1/", "Effect1.gltf",
 		nullptr, false, Vector3(1.0f, 1.0f, 1.0f), Quaternion(), GetWorldTranslation());
@@ -622,7 +623,7 @@ void Player::MoveWater(){
 			}
 			seCoolTime -= GameTimer::DeltaTime();
 			if(seCoolTime <= 0 && Input::IsTriggerKey(DIK_SPACE)) {
-				AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.2f);
+				AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.1f);
 				seCoolTime = 0.25f;
 			}/*
 			if(seCoolTime <= 0 && Input::IsReleaseKey(DIK_SPACE)) {
@@ -702,7 +703,9 @@ void Player::MoveSky(){
 		collisionAllowableTime_ -= GameTimer::DeltaTime();
 
 		//////////////////////////////////////////////////////////////////////////////
+		seCoolTime -= GameTimer::DeltaTime();
 
+		
 		// ---------------- 滑空状態にするか下降状態にするかを判定するための処理 ----------------------- //
 		// 飛行中は押していると滑空する
 		// pressタイムがプラスの時は上を向いているので受け付けない
@@ -717,13 +720,21 @@ void Player::MoveSky(){
 					// baseSpeedを上げて下降速度を上げている
 					baseSpeed_ = defaultSpeed * 2.0f;
 
+					
 				} else {
 					// 離しているので下降する
 					isCloseWing_ = true;
 					baseSpeed_ = defaultSpeed;
 				}
+				
 			}
 		}
+		if(wingOpen != isCloseWing_ && !isCloseWing_) {
+			AudioPlayer::SinglShotPlay("WingOpen.mp3", 0.14f);
+			seCoolTime = 0.25f;
+		}
+		wingOpen = isCloseWing_;
+		
 		////////////////////////////////////////////////////////////////////////////////
 
 		// 下降ベクトルを格納する変数
@@ -736,7 +747,7 @@ void Player::MoveSky(){
 			//dropSpeed_ += gravity_* descentRatio * GameTimer::DeltaTime();
 
 			if (wingAnimatinoKeyFrame_ < 1.0f) {
-				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime();
+				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime() * 4;
 			}
 
 		} else{//////// 翼を閉じている際 ////////
@@ -746,7 +757,7 @@ void Player::MoveSky(){
 			dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 
 			if (wingAnimatinoKeyFrame_ > 0.0f) {
-				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime();
+				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime()*2;
 			}
 
 		}

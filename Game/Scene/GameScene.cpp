@@ -26,12 +26,13 @@ void GameScene::Finalize(){
 
 void GameScene::Init(){
 
-	currentState_ = GAME_STATE::GAME;
+	currentState_ = GAME_STATE::TITLE;
 
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(180.0f);
+	gamePlayTimer_->Init(120.0f);
+
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -157,7 +158,7 @@ void GameScene::Init(){
 // ↓　読み込み
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GameScene::Load() {
+void GameScene::Load(){
 
 }
 
@@ -280,6 +281,16 @@ void GameScene::Update(){
 
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 
+	if(player_->GetMaxFlyingTime() > level3){
+		obstaclesManager_->SetLevel(3);
+
+
+	} else if(player_->GetMaxFlyingTime() > level2){
+		obstaclesManager_->SetLevel(2);
+
+	}
+
+
 #ifdef _DEBUG
 	obstaclesManager_->Debug_Gui();
 #endif // 
@@ -306,7 +317,7 @@ void GameScene::Update(){
 			if(isEndAndInWater_){
 				if(!startSceneChange_)
 				{
-					AudioPlayer::SinglShotPlay("Bubble.mp3", 0.5f);
+					AudioPlayer::SinglShotPlay("Bubble.mp3", 0.3f);
 
 				}
 				startSceneChange_ = true;
@@ -392,10 +403,10 @@ void GameScene::Update(){
 	}
 
 	// 水に入っているかどうかで音の割合を切り替える
-	mainBGM_->SetVolume(0.2f * BGM_volumeT_ * BGM_masterVolumeRate_);
-	mainBGM_inWater_->SetVolume(0.2f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
-	windSound_->SetVolume(0.2f * BGM_volumeT_ * BGM_masterVolumeRate_);
-	swimSound_->SetVolume(0.15f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	mainBGM_->SetVolume(0.1f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	mainBGM_inWater_->SetVolume(0.1f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	windSound_->SetVolume(0.1f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	swimSound_->SetVolume(0.07f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する
@@ -437,10 +448,10 @@ void GameScene::Draw() const{
 
 
 	if(BGM_masterVolumeRate_ > 0.0f){
-		mainBGM_->Play(true, 0.2f, true);
-		mainBGM_inWater_->Play(true, 0.2f, true);
-		windSound_->Play(true, 0.2f, true);
-		swimSound_->Play(true, 0.15f, true);
+		mainBGM_->Play(true, 0.1f, true);
+		mainBGM_inWater_->Play(true, 0.1f, true);
+		windSound_->Play(true, 0.1f, true);
+		swimSound_->Play(true, 0.07f, true);
 	}
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
@@ -541,8 +552,8 @@ void GameScene::Draw() const{
 	}
 
 	// フェードの描画
-	if (gamePlayTimer_->GetTimeLinit() <= 0.0f) {
-		if (isEndAndInWater_) {
+	if(gamePlayTimer_->GetTimeLinit() <= 0.0f) {
+		if(isEndAndInWater_) {
 			float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
 			fade_->SetColor({ 1.0f,1.0f,1.0f,t });
 			fade_->Draw();
