@@ -59,3 +59,12 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 /// <param name="controlPoint">制御点がまとまった配列</param>
 /// <returns></returns>
 Vector3 Bezier(const Vector3& v1, const Vector3& v2, const Vector3& v3, const float& t);
+
+
+uint32_t Red(uint32_t color);
+uint32_t Green(uint32_t color);
+uint32_t Blue(uint32_t color);
+uint32_t Alpha(uint32_t color);
+Vector4 FloatColor(uint32_t color);
+uint32_t IntColor(const Vector4& color);
+uint32_t HSV_to_RGB(float h, float s, float v, float alpha);
