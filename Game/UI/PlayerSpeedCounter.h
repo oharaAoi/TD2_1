@@ -58,7 +58,7 @@ private:
 	AdjustmentItem* adjustmentItem_;
 	const std::string groupName_ = "PlayerSpeedCounterUI";
 
-	Vector2 numberSpriteSize_ = { 42.0f, 72.0f };
+	Vector2 numberSpriteSize_ = { 48.0f, 72.0f };
 	Vector2 numberOriginPos_;
 
 	Vector2 timeDrawScale_;

@@ -399,6 +399,7 @@ Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& w
     result.m[0][0] = width / 2.0f;
     result.m[1][1] = -height / 2.0f;
     result.m[2][2] = maxDepth - minDepth;
+
     result.m[3][0] = left + (width / 2.0f);
     result.m[3][1] = top + (height / 2.0f);
     result.m[3][2] = minDepth;

@@ -220,5 +220,7 @@ namespace {
 
 	// オフスクリーンレンダリングで生成したTextureを描画するクラス
 	std::unique_ptr<RenderTexture> renderTexture_ = nullptr;
+
+	bool isFullScreen_;
 }
 

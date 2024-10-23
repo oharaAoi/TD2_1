@@ -30,6 +30,7 @@ void BaseCamera::Init() {
 	cameraMatrix_ = Multiply(Multiply(scaleMat_, rotateMat_), translateMat_);
 	viewMatrix_ = Inverse(cameraMatrix_);
 	projectionMatrix_ = MakePerspectiveFovMatrix(fov_, float(kWindowWidth_) / float(kWindowHeight_), Render::GetNearClip(), Render::GetFarClip());
+	viewportMatrix_ = MakeViewportMatrix(0, 0, kWindowWidth_, kWindowHeight_, 0, 1);
 
 	// sprite描画のためのMatrixの初期化
 	projectionMatrix2D_ = MakeOrthograhicMatrix(0.0f, 0.0f, float(kWindowWidth_), float(kWindowHeight_), Render::GetNearClip2D(), Render::GetFarClip2D());
@@ -48,4 +49,7 @@ void BaseCamera::Update() {
 	// worldの生成
 	cameraMatrix_ =scaleMat_ * rotateMat_ * translateMat_;
 	viewMatrix_ = Inverse(cameraMatrix_);
+
+	Matrix4x4 matViewProjection = viewMatrix_ * projectionMatrix_;
+	vpvpMatrix_ = matViewProjection * viewportMatrix_;
 }

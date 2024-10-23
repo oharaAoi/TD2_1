@@ -48,7 +48,7 @@ public:
 private:
 	std::vector<std::unique_ptr<Sprite>> UI_flyingLength_;
 	std::vector<std::unique_ptr<Sprite>> UI_flyingMaxLength_;
-	Vector2 rangeSize_ = { 42.0f, 72.0f };
+	Vector2 rangeSize_ = { 48.0f, 72.0f };
 
 	float currentLength_;
 	float maxLength_;
