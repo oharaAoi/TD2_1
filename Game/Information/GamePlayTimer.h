@@ -39,7 +39,7 @@ public:
 	void Debug_Gui();
 #endif
 
-	const bool GetIsFinish() { return isFinish_; }
+	static const bool GetIsFinish() { return isFinish_; }
 	const float GetTimeLinit()const{ return gameTimer_; }
 	const float GetOutgameTime()const{ return outgameTime_; }
 
@@ -48,7 +48,7 @@ private:
 	std::string groupName_;
 
 	// 終了したか
-	bool isFinish_;
+	static bool isFinish_;
 	bool isOverTime_;
 	bool isPreFlying_;
 	// 時間系

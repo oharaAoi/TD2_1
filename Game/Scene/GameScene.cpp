@@ -1,5 +1,7 @@
 #include "GameScene.h"
 
+bool GamePlayTimer::isFinish_ = false;
+
 /*---------- static initialize -----------*/
 float GameScene::groundDepth_ = -44.0f;
 GAME_STATE GameScene::currentState_ = GAME_STATE::GAME;
@@ -24,12 +26,12 @@ void GameScene::Finalize() {
 
 void GameScene::Init() {
 
-	currentState_ = GAME_STATE::TITLE;
+	currentState_ = GAME_STATE::GAME;
 
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(999.0f);
+	gamePlayTimer_->Init(180.0f);
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -394,7 +396,12 @@ void GameScene::Update() {
 	} else {
 
 		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
-			if(player_->GetIsFlying() == false){
+
+			if(!player_->GetIsFlying()){
+				isEndAndInWater_ = true;
+			}
+
+			if(isEndAndInWater_){
 				if(!startSceneChange_)
 				{
 					AudioPlayer::SinglShotPlay("Bubble.mp3", 0.5f);
@@ -631,7 +638,7 @@ void GameScene::Draw() const {
 
 	// フェードの描画
 	if (gamePlayTimer_->GetTimeLinit() <= 0.0f) {
-		if (player_->GetIsFlying() == false) {
+		if (isEndAndInWater_) {
 			float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
 			fade_->SetColor({ 1.0f,1.0f,1.0f,t });
 			fade_->Draw();

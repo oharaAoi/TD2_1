@@ -11,6 +11,7 @@ public:
 	void Finalize() override;
 	void Init() override;
 	void Update() override;
+	void Shake();
 
 #ifdef _DEBUG
 	void Debug_Gui() override;
@@ -19,6 +20,11 @@ public:
 public:
 
 	void SetPlayerPtr(Player* pPlayer){ pPlayer_ = pPlayer; }
+	static void ShakeStart(float shakeTime, float shakeRadius){
+		shakeTime_ = shakeTime;
+		shakeRadius_ = shakeRadius_;
+	}
+
 
 private:
 
@@ -31,6 +37,10 @@ private:
 	float adjustX_;
 	bool followOnly;
 	float follwOfsetlength=4;
+
+	Vector3 shakeTranslate_;
+	static float shakeRadius_;
+	static float  shakeTime_;
 
 	bool isTitleToGameCamera_;
 

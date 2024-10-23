@@ -18,7 +18,7 @@ public:
 	void Debug_Gui() override;
 #endif
 
-	void Shake(float interval,float radius,float interpolationTime);
+	void Shake(float radius);
 
 public:
 
@@ -27,7 +27,7 @@ private:
 
 	// ベースのトランスフォーム
 	Vector3 baseRotate_ = { 0.13f, 0.22f, 0.0f };
-	Vector3 baseTranslate_ = { -4.32f, 2.56f, -9.63f };
+	Vector3 baseTranslate_ = { -4.62f, 2.56f, -9.63f };
 
 	// 追加するトランスフォーム
 	Vector3 shakeTranslate_;

@@ -438,6 +438,8 @@ void Player::Debug_Gui(){
 
 void Player::OnCollision(Collider* other){
 
+	if(GamePlayTimer::GetIsFinish()){ return; }
+
 	//障害物に当たった場合
 	if(other->GetObjectType() == (int)ObjectType::FISH){
 

@@ -33,6 +33,7 @@ public:
 	Matrix4x4 GetProjectionMatrix2D() const { return projectionMatrix2D_; }
 
 	Vector3 GetTranslate() const { return transform_.translate; }
+	void SetTranslate(const Vector3& translate){ transform_.translate = translate; }
 	Vector3 GetRotate()const{ return transform_.rotate; }
 	void SetRotate(const Vector3& rotate){ transform_.rotate = rotate; }
 	Vector3 GetWorldTranslate() const {
