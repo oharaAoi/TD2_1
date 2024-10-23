@@ -16,9 +16,11 @@ void FinishUI::Init() {
 	fadeOutPos_ = { 2000, 250.0f };
 	isUiMove_ = false;
 	onlyMove_ = false;
+	isFinish_ = false;
 }
 
 void FinishUI::Update() {
+	if (isFinish_) { return; }
 	if (!isUiMove_) { return; }
 
 	Move();
@@ -45,6 +47,10 @@ void FinishUI::Move() {
 	// 時間を過ぎたら
 	if (time_ >= moveTime_) {
 		time_ = 0.0f;
+
+		if (!isFadeIn_) {
+			isFinish_ = true;
+		}
 		isFadeIn_ = !isFadeIn_;
 	}
 }

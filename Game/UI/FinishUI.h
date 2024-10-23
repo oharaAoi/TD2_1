@@ -42,5 +42,7 @@ private:
 
 	bool onlyMove_;
 
+	bool isFinish_;
+
 };
 
