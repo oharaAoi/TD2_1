@@ -33,8 +33,8 @@ void ResultCamera::Update(){
 
 			if(time_ < startTime_){
 				time_ = std::clamp(time_ + GameTimer::DeltaTime(), 0.0f, startTime_);
-				float ease = EaseOutBack(time_ / startTime_,0.5f);
-				addCameraRotate_.y = 3.14f + -3.14f * ease;
+				float ease = EaseOutBack(time_ / startTime_, 0.5f);
+				addCameraRotate_.y = 3.14f + (-3.14f * ease);
 			}
 		}
 
@@ -47,37 +47,37 @@ void ResultCamera::Update(){
 	}
 
 	// 座標の更新
-	Shake(0.3f, 5.0f,5.0f);
+	Shake(2.0f);
 	transform_.rotate = baseRotate_ + addCameraRotate_ + shakeRotate_;
 	transform_.translate = baseTranslate_ + shakeTranslate_;
 	BaseCamera::Update();
 }
 
 
-void ResultCamera::Shake(float interval, float radius,float interpolationTime){
+void ResultCamera::Shake(float radius){
 
 	static float time = 0.0f;
 	static float lengthEvery = 0.0f;
 	static Vector3 targetPoint{};
-	static Vector3 origin{};
 	static Vector3 startPoint{};
 	static Vector3 prePos{};
 	static Vector3 dif{};
 	static Vector3 interpolationEvery{};
+	float interpolationTime = 3.0;
 
 	// 時間を満たしたら新しいシェイクの目標座標を求める
 	time += GameTimer::DeltaTime();
-	prePos = shakeTranslate_;
+	prePos = shakeRotate_;
 
-	if(time >= interval){
+	if(time >= 0.3f){
 		Vector3 rotate = {
-			RandomFloat(0.0f,6.28f),
-			RandomFloat(0.0f,6.28f),
-			RandomFloat(0.0f,6.28f)
+			RandomFloat(-0.08f,0.08f),
+			RandomFloat(-0.08f,0.08f),
+			0.0f//RandomFloat(-0.18f,0.18f)
 		};
 
-		startPoint = shakeTranslate_;
-		targetPoint = (Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rotate)) * radius;
+		startPoint = shakeRotate_;
+		targetPoint = rotate;
 		if((targetPoint - startPoint).Length() > radius){
 			targetPoint = (targetPoint - startPoint).Normalize() * radius;
 		}
@@ -90,15 +90,13 @@ void ResultCamera::Shake(float interval, float radius,float interpolationTime){
 
 	// シェイクを補間
 	Vector3 interpolation = ((dif * 0.7f) + (interpolationEvery * 0.3f)) * 0.5f;
-	shakeTranslate_ += interpolation * GameTimer::TimeRate();
-
-	if(shakeTranslate_.Length() > radius){
-		shakeTranslate_ = shakeTranslate_.Normalize() * radius;
+	shakeRotate_ += interpolation * GameTimer::TimeRate();
+	if(shakeRotate_.Length() > radius){
+		shakeRotate_ = shakeRotate_.Normalize() * radius;
 	}
 
-
 	// 
-	dif = shakeTranslate_ - prePos;
+	dif = shakeRotate_ - prePos;
 }
 
 

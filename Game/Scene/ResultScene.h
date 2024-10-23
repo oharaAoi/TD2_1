@@ -81,8 +81,14 @@ private:
 	bool isStartScene_ = true;
 	static bool isViewingRanking_;
 
-	int score_ = FlyingTimer::flyingScor;
+	int score_ = 80000;//FlyingTimer::flyingScor;
 	SCORE_RANK rank_;
+
+	Vector4 rankingColors_[3] = {
+		{1.0f,1.0f,0.0f,1.0f},
+		{0.48f,0.639f,0.768f,1.0f},
+		{0.82f,0.57f,0.196f,1.0f}
+	};
 
 	/*---------- debug ----------*/
 	Vector3 debugScale_;
@@ -98,6 +104,11 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 	std::vector<std::unique_ptr<BaseGameObject>>scoreNumberModels_;
 	std::unique_ptr<BaseGameObject>scoreRankModel_ = nullptr;
+
+	// ランキングの文字配列
+	std::vector<std::unique_ptr<BaseGameObject>>rankingModels_[4];
+	Vector3 rankingRotate_ = {-1.46f,0.22f,0.0f};
+	Vector3 rankingTranslate_ = {-25.29f,68.02f,-4.24f};
 
 	// ---------- camera ---------- //
 	bool isDebugCameraActive_;

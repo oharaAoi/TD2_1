@@ -135,6 +135,14 @@ void Camera::Update(){
 	BaseCamera::Update();
 }
 
+
+
+void Camera::Shake(){}
+
+
+
+
+
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void Camera::Debug_Gui(){

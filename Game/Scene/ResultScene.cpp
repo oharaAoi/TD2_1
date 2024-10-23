@@ -5,10 +5,10 @@ bool ResultScene::isViewingRanking_ = false;
 //-------------------------------------------
 ResultScene::ResultScene(){}
 
-ResultScene::~ResultScene() { Finalize(); }
+ResultScene::~ResultScene(){ Finalize(); }
 
-void ResultScene::Finalize() {
-	AnimetionEffectManager::GetInstance()->Finalize(); 
+void ResultScene::Finalize(){
+	AnimetionEffectManager::GetInstance()->Finalize();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -18,6 +18,8 @@ void ResultScene::Finalize() {
 void ResultScene::Init(){
 
 	isViewingRanking_ = false;
+
+
 
 	// スコアの決定
 	if(score_ < (int)SCORE_RANK::B){
@@ -36,6 +38,7 @@ void ResultScene::Init(){
 
 	scoreData_ = std::make_unique<Score>();
 	scoreData_->Init();
+	scoreData_->WriteFile((float)score_);
 	scoreData_->LoadJsonFile(gameScoreArray_);
 
 	/*--------------- camera ---------------*/
@@ -44,6 +47,9 @@ void ResultScene::Init(){
 
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Init();
+	debugCamera_->SetTranslate(camera_->GetTranslate());
+	debugCamera_->SetRotate(camera_->GetRotate());
+	debugCamera_->Update();
 
 	/*---------------- object --------------*/
 	player_ = std::make_unique<Player>();
@@ -55,6 +61,10 @@ void ResultScene::Init(){
 
 
 	/*---------------- string --------------*/
+
+	//////////////////////////////////////////////////
+	//現在のスコア
+	//////////////////////////////////////////////////
 	space_ = 2.7f;
 	auto& m = scoreNumberModels_.emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
 	m->Init();
@@ -62,6 +72,14 @@ void ResultScene::Init(){
 	m->GetTransform()->SetTranslaion({ -6.0f,0.0f,10.0f });
 	m->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
 	m->UpdateMatrix();
+
+	auto& m3 = rankingModels_[3].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+	m3->Init();
+	m3->SetObject("m.obj");
+	m3->GetTransform()->SetTranslaion({ -6.0f,0.0f,10.0f });
+	m3->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+	m3->SetIsLighting(false);
+	m3->UpdateMatrix();
 
 	int digit = 1;
 	while(true){
@@ -80,6 +98,18 @@ void ResultScene::Init(){
 			num->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
 			num->UpdateMatrix();
 
+			auto& num3 = rankingModels_[3].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+			num3->Init();
+			num3->SetObject(std::to_string((score_ / digit) % 10) + ".obj");
+			translate_ = { -5.8f,0.4f,12.5f };
+			num->GetTransform()->SetTranslaion(translate_);
+			rotate_ = { 0.53f,-0.62f,-0.18f };
+			num3->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate_));
+			num3->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+			num3->SetIsLighting(false);
+			num3->UpdateMatrix();
+
+
 			digit *= 10;
 		}
 	}
@@ -93,6 +123,11 @@ void ResultScene::Init(){
 
 		scoreNumberModels_[i]->Update();
 	}
+
+
+	//////////////////////////////////////////////////
+	//スコアランク
+	//////////////////////////////////////////////////
 
 	scoreRankModel_ = std::make_unique<BaseGameObject>();
 	scoreRankModel_->Init();
@@ -115,6 +150,87 @@ void ResultScene::Init(){
 	scoreRankModel_->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion({ -0.27f,2.58f,-0.16f }));
 	scoreRankModel_->Update();
 
+	//////////////////////////////////////////////////
+	//ランキング
+	//////////////////////////////////////////////////
+
+	for(int32_t i = 0; i < 4; i++){
+
+		if(i != 3){
+
+			auto& m2 = rankingModels_[i].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+			m2->Init();
+			m2->SetObject("m.obj");
+			m2->GetTransform()->SetTranslaion({ -6.0f,0.0f,10.0f });
+			m2->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+			m2->SetColor(rankingColors_[i]);
+			m2->UpdateMatrix();
+			rankingModels_[i].back()->SetIsLighting(false);
+
+			int digit2 = 1;
+			while(true){
+
+				if((int)gameScoreArray_[i] / digit2 <= 0){
+
+					rankingModels_[i].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+					rankingModels_[i].back()->Init();
+					rankingModels_[i].back()->SetObject("dot.obj");
+					rankingModels_[i].back()->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+					rankingModels_[i].back()->SetIsLighting(false);
+					rankingModels_[i].back()->SetColor(rankingColors_[i]);
+
+					rankingModels_[i].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+					rankingModels_[i].back()->Init();
+					rankingModels_[i].back()->SetObject(std::to_string(i + 1) + ".obj");
+					rankingModels_[i].back()->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+					rankingModels_[i].back()->SetIsLighting(false);
+					rankingModels_[i].back()->SetColor(rankingColors_[i]);
+
+					std::reverse(rankingModels_[i].begin(), rankingModels_[i].end());
+					break;
+				} else{
+					auto& num = rankingModels_[i].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+					num->Init();
+					num->SetObject(std::to_string(((int)gameScoreArray_[i] / digit2) % 10) + ".obj");
+					num->GetTransform()->SetTranslaion(translate_);
+					num->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rotate_));
+					num->GetTransform()->SetTranslaion({ -6.0f,0.0f,10.0f });
+					num->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+					rankingModels_[i].back()->SetIsLighting(false);
+					num->SetColor(rankingColors_[i]);
+					num->UpdateMatrix();
+
+					digit2 *= 10;
+				}
+			}
+		} else{
+			rankingModels_[3].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+			rankingModels_[3].back()->Init();
+			rankingModels_[3].back()->SetObject("dot.obj");
+			rankingModels_[3].back()->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+			rankingModels_[3].back()->SetIsLighting(false);
+
+			rankingModels_[3].emplace_back(std::make_unique_for_overwrite<BaseGameObject>());
+			rankingModels_[3].back()->Init();
+			rankingModels_[3].back()->SetObject("playerIcon.obj");
+			rankingModels_[3].back()->GetTransform()->SetScale({ 5.0f,5.0f,5.0f });
+			rankingModels_[3].back()->SetIsLighting(false);
+
+			std::reverse(rankingModels_[3].begin(), rankingModels_[3].end());
+		}
+
+		// 文字の更新
+		for(int j = 0; j < rankingModels_[i].size(); j++){
+			rankingModels_[i][j]->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rankingRotate_));
+			rankingModels_[i][j]->GetTransform()->SetTranslaion(
+				rankingTranslate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rankingRotate_) * space_ * static_cast<float>(j) +
+				Vector3(0.0f, -1.0f, 0.0f) * MakeRotateXYZMatrix(rankingRotate_) * 
+				(i != 3 ? (space_ * 2.0f): (space_ * 2.4f)) * static_cast<float>(i)
+			);
+
+			rankingModels_[i][j]->Update();
+		}
+	}
 	/*---------------- effect ---------------*/
 	tickerTapeEmitter_ = std::make_unique<ParticleManager<TickerTape>>();
 	tickerTapeEmitter_->SetEmitRange({ 0.0f,-kWindowHeight_ * 0.2f }, { kWindowWidth_,0.0f });
@@ -163,6 +279,8 @@ void ResultScene::Load(){
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "A.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "B.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "C.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "dot.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "playerIcon.obj");
 
 	/* ---------------- audio ----------------*/
 	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
@@ -210,7 +328,7 @@ void ResultScene::Load(){
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
-	
+
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
 }
@@ -225,7 +343,18 @@ void ResultScene::Update(){
 
 	player_->ResultSceneUpdate();
 
-
+	// 文字の更新
+	//for(int i = 0; i < 3; i++){
+	//	for(int j = 0; j < rankingModels_[i].size(); j++){
+	//		rankingModels_[i][j]->GetTransform()->SetQuaternion(Quaternion::EulerToQuaternion(rankingRotate_));
+	//		rankingModels_[i][j]->GetTransform()->SetTranslaion(
+	//			rankingTranslate_ + Vector3(1.0f, 0.0f, 0.0f) * MakeRotateXYZMatrix(rankingRotate_) * space_ * static_cast<float>(j) +
+	//			Vector3(0.0f, -1.0f, 0.0f) * MakeRotateXYZMatrix(rankingRotate_) * (space_ * 3.0f) * static_cast<float>(i)
+	//		);
+	//
+	//		rankingModels_[i][j]->Update();
+	//	}
+	//}
 
 	scoreRankModel_->Update();
 
@@ -284,6 +413,12 @@ void ResultScene::Draw() const{
 		num->Draw();
 	}
 
+	for(int i = 0; i < 4; i++){
+		for(auto& ranking : rankingModels_[i]){
+			ranking->Draw();
+		}
+	}
+
 	scoreRankModel_->Draw();
 
 	// =======================  sprite ======================= //
@@ -307,9 +442,9 @@ void ResultScene::Debug_Gui(){
 
 	ImGui::Begin("ResultScene");
 
-	ImGui::DragFloat3("Scale", &debugScale_.x, 0.01f);
+	ImGui::DragFloat3("rotate", &rankingRotate_.x, 0.01f);
 	//ImGui::DragFloat3("Rotate", &debugRotate_.x, 0.01f);
-	ImGui::DragFloat3("Translate", &debugTranslate_.x, 0.01f);
+	ImGui::DragFloat3("Translate", &rankingTranslate_.x, 0.01f);
 
 
 	scoreRankModel_->GetTransform()->SetTranslaion(debugTranslate_);
@@ -337,10 +472,10 @@ void ResultScene::Debug_Gui(){
 
 
 void ResultScene::Fade(){
-	
+
 	if(isStartScene_){
 
-		fade_t_ = std::clamp(fade_t_ - (GameTimer::DeltaTime() / kFadeTime_),0.0f,1.0f);
+		fade_t_ = std::clamp(fade_t_ - (GameTimer::DeltaTime() / kFadeTime_), 0.0f, 1.0f);
 
 		if(fade_t_ <= 0.0f){
 			isStartScene_ = false;

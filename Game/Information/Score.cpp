@@ -51,13 +51,13 @@ void Score::WriteFile(float count) {
 	}
 
 	///タイムの比較
-	if (scoreData[hiScore]["score"] > count) {
+	if (scoreData[hiScore]["score"] < count) {
 		scoreData[hiScore]["score"] = count;
 
-	} else if (scoreData[secondScore]["score"] > count) {
+	} else if (scoreData[secondScore]["score"] < count) {
 		scoreData[secondScore]["score"] = count;
 
-	} else if (scoreData[thirdScore]["score"] > count) {
+	} else if (scoreData[thirdScore]["score"] < count) {
 		scoreData[thirdScore]["score"] = count;
 	}
 
