@@ -66,16 +66,6 @@ void GameScene::Init() {
 	worldObjects_ = std::make_unique<WorldObjects>();
 	worldObjects_->Init();
 
-	// 仕切り
-	partition_ = std::make_unique<BaseGameObject>();
-	partition_->Init();
-	partition_->SetObject("Partition.obj");
-	partition_->GetTransform()->SetScale({ 100.0f, 100.0f, 1.0f });
-	partition_->GetTransform()->SetQuaternion(Quaternion::AngleAxis(3.14f, { 0.0f,1.0f,0.0f }));
-	partition_->SetColor({ 0.0f,0.266f,0.349f,0.0f });
-	partition_->SetIsLighting(false);
-	partition_->Update();
-
 	startSceneChange_ = false;
 	// -------------------------------------------------
 	// ↓ managerの初期化
@@ -165,129 +155,7 @@ void GameScene::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Load() {
-	ModelManager::LoadModel("./Game/Resources/Model/EatFish/", "EatFish.gltf");
 
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
-
-	ModelManager::LoadModel("./Game/Resources/Model/Wood/", "Wood.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Grass/", "Grass2.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Partition/", "Partition.obj");
-	//ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood2.obj");
-
-	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
-
-	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
-	// UI
-	ModelManager::LoadModel("./Game/Resources/Model/UI_Plane/", "UI_Plane.obj");
-
-	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Coin/", "Coin.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
-
-	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "staer.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
-
-	ModelManager::LoadModel("./Game/Resources/Model/TutorialGuide/", "TutorialGuide.obj");
-
-	// 仕様上連続して読み込みたい物
-	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
-	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
-
-	ModelManager::LoadModel("./Game/Resources/Model/", "ground.obj");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
-
-	// Texture
-	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
-	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "softLight.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "bubble.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "cherry.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankBack.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankFront.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Rank.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankIcon.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
-
-	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
-
-
-	//デバッグ用、モデル確認
-	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/UFOSmoke/", "UFOSmoke.obj");
-
-	// animationEffect
-	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/Effect1/", "Effect1.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
-
-	// Adio
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
-
-	// ○がついていない物はまだ使用していない
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "AddSpeed.mp3");			// エサを食べた時加速する		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.mp3");	// 水面に入った時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.mp3");	// 水面から出た時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "confusion.mp3");// 被弾した時の音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Damage.mp3");// 被弾した時の音2
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Bubble.mp3");//　シーン遷移の音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
-
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "swim.mp3");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,6 +163,28 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
+#ifdef _DEBUG
+	//プレイヤーの動きを停止
+	if(Input::IsTriggerKey(DIK_1)) {
+
+		player_->DebugFreeze();
+	}
+	//ブースト
+	if(Input::IsTriggerKey(DIK_2)) {
+
+		player_->DebugBoost();
+	}
+	//デバッグカメラをプレイヤーの座標に合わせる
+	if(Input::IsTriggerKey(DIK_3)) {
+
+		debugCamera_->SetPlayerPos(player_.get()->GetWorldTranslation());
+		isDegugCameraActive_ = !isDegugCameraActive_;
+	}
+
+#endif // _DEBUG
+
+	
+
 
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
@@ -367,8 +257,6 @@ void GameScene::Update() {
 	if (currentState_ == GAME_STATE::TITLE) {
 		Vector3 pos = player_->GetWorldTranslation();
 		pos.z += 10.0f;
-		partition_->GetTransform()->SetTranslaion(pos);
-		partition_->Update();
 	}
 
 	// -------------------------------------------------
@@ -532,10 +420,10 @@ void GameScene::Draw() const {
 
 
 	if(BGM_masterVolumeRate_ > 0.0f){
-		mainBGM_->Play(true, 0.4f, true);
-		mainBGM_inWater_->Play(true, 0.4f, true);
-		windSound_->Play(true, 0.4f, true);
-		swimSound_->Play(true, 0.3f, true);
+		mainBGM_->Play(true, 0.2f, true);
+		mainBGM_inWater_->Play(true, 0.2f, true);
+		windSound_->Play(true, 0.2f, true);
+		swimSound_->Play(true, 0.15f, true);
 	}
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);
@@ -546,7 +434,6 @@ void GameScene::Draw() const {
 	// 3Dオブジェクトなどの表示(基本ここ)
 	/////////////////////////////////
 	worldObjects_->Draw();
-
 
 	/////////////////////////////////
 	// tutorialUIの描画

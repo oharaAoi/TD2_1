@@ -67,6 +67,7 @@ public:
 	void AllFileClear();
 
 	void RandomImport();
+	void NotMatchRandomImport();//連続で同じパターンにならないように
 
 	// Tutorialでのファイル読み込み
 	void TutorialImport(const std::string& fileName, const Vector3& pos);
@@ -144,6 +145,7 @@ private:
 	Player* pPlayer_;
 	GameScene* pGameScene_;
 
-	float birdPopYRaito_ = 0.7f;
+	float birdPopYRaito_ = 0.4f;
+	int prePattern;//出た数字を記録しておき、パターンが被らないようにする
 };
 

@@ -46,7 +46,14 @@ public:
 	void UpdateMatrix();
 
 	void ResultSceneUpdate();
-
+	void DebugFreeze(){
+		isMove_ = !isMove_
+			;
+	}
+	void DebugBoost(){
+		baseSpeed_ = 100;
+		chargePower_ = 0.5f;
+	}
 private:
 	void Move_TITLE();
 	void Move_TUTORIAL();
@@ -139,7 +146,7 @@ private:
 	float pressTime_;
 	float currentAngle_;
 	const float kMaxAngle_ = 3.14f * 0.38f;
-
+	float birdHitAngle = -0.8f;//鳥と衝突事のアングル
 	// 食べてチャージして溜める
 	float chargePower_;
 	const float kBodyLaunchSpeed_ = 10.0f;
@@ -165,6 +172,7 @@ private:
 	// 滑空開始直後の猶予時間
 	const float kAllowableTime = 1.0f;
 	float collisionAllowableTime_ = 1.0f;
+	float descentRatio = 0.4f;//滑空中は通常の重力をdescentRatio倍する
 
 	// タイトル時出現高度
 	float emitHeight_ = 100.0f;
@@ -179,6 +187,10 @@ private:
 	// 段階のスピードにしている
 	float birdJumpRaito_ = 1.0f;
 	float kBirdJumpMaxRaito_ = 3.0f;
+	float maxSpeedTimeCount;
+	float kMaxSpeedTime = 2;
+	float curMaxSpeed;//通常時は落下距離、高速飛行時はkBirdJumpMaxRaito_
+	bool isHighSpeedMove;
 	int birdJumpNum_;
 
 	// カメラシェイク

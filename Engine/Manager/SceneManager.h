@@ -23,6 +23,8 @@ public:
 	void Init();
 	void Run();
 
+	void Load();
+
 	void SetChange();
 	void GetScene();
 

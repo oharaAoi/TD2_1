@@ -59,6 +59,7 @@ public:
 
 #ifdef _DEBUG
 	void Debug_Gui();
+	
 #endif 
 
 	void Update_TITLE();
@@ -89,8 +90,7 @@ private:
 	std::unique_ptr<WorldObjects> worldObjects_;
 
 	Vector4 editColor_;
-	std::unique_ptr<BaseGameObject>partition_ = nullptr;
-
+	
 	// --------- parameter ----------- //
 	float startSceneTime_ = 2.0f;
 	float stageWidth_ = 8000.0f;

@@ -14,9 +14,10 @@ void SceneManager::Finalize() {
 void SceneManager::Init() {
 	Engine::Initialize(kWindowWidth_, kWindowHeight_);
 	ModelManager::GetInstance()->Init();
+
+	Load();
 	
 	scene_ = std::make_unique<GameScene>();
-	scene_->Load();
 	scene_->Init();
 
 	effectSystem_ = EffectSystem::GetInstacne();
@@ -113,20 +114,151 @@ void SceneManager::Run() {
 				scene_.reset(new TestScene);
 				break;
 			}
-			scene_->Load();
+	
 			scene_->Init();
 			isSceneChange_ = false;
 		}
 		#endif
-
 	}
 
 	Finalize();
 }
 
+void SceneManager::Load() {
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "white.png");
+
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "0.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "1.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "2.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "3.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "4.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "5.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "6.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "7.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "8.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "9.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "m.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SSS.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SS.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "S.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "A.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "B.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "C.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "dot.obj");
+
+	ModelManager::LoadModel("./Game/Resources/Model/EatFish/", "EatFish.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AnimationWing/", "Wing.gltf");
+
+	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "playerIcon.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Driftwood/", "Driftwood2.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Rock.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Bird/", "Bird.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Waterweed.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Ripple.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "WaterColmn.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/UFOSmoke/", "UFOSmoke.obj");
+	// UI
+	ModelManager::LoadModel("./Game/Resources/Model/UI_Plane/", "UI_Plane.obj");
+
+	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Fish/", "Fish.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/WaterWeed/", "Ground_WaterPlant.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Ground/", "Riverbed.obj");
+
+	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "waterTrail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/TutorialGuide/", "TutorialGuide.obj");
+
+	// 仕様上連続して読み込みたい物
+	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
+	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "WaterLight.png");
+
+	// Texture
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "uvChecker.png");
+	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "sample.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "softLight.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "bubble.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "cherry.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankBack.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankFront.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Rank.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "kari_UI_Rank_master.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankIcon.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMeterBack.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "tani.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "MaterStaple.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Mater.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
+
+	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
+
+	// animationEffect
+	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/Effect1/", "Effect1.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/EatEffect/", "EatEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
+
+	// Adio
+	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
+
+	// ○がついていない物はまだ使用していない
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "AddSpeed.mp3");			// エサを食べた時加速する		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.mp3");	// 水面に入った時の音			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.mp3");	// 水面から出た時の音			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "confusion.mp3");// 被弾した時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Damage.mp3");// 被弾した時の音2
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "Bubble.mp3");//　シーン遷移の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
+
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "swim.mp3");
+}
+
 void SceneManager::SetChange() {
 	GetScene();
-	scene_->Load();
 	scene_->Init();
 }
 

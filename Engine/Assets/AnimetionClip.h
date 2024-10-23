@@ -64,6 +64,9 @@ public:
 	Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, const float& time);
 	Quaternion CalculateQuaternion(const std::vector<KeyframeQuaternion>& keyframes, const float& time);
 
+	float GetAnimationTime() const { return animationTime_; }
+	void SetAnimationTime(float time) { animationTime_ = time; }
+
 public:
 
 	const Matrix4x4 GetMatrix() const { return animationMat_; }

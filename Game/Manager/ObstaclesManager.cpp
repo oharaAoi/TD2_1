@@ -45,7 +45,7 @@ void ObstaclesManager::Init(Player* pPlayer){
 void ObstaclesManager::Update(){
 	if (pGameScene_->GetGameState() == GAME_STATE::GAME) {
 		if (playerPos_.x - prePlayerPos_.x > 200.0f) {
-			RandomImport();
+			NotMatchRandomImport();
 			prePlayerPos_ = playerPos_;
 		}
 	}
@@ -66,7 +66,7 @@ void ObstaclesManager::Update(){
 		Fish* pFish = dynamic_cast<Fish*>((*it).get());
 		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
 		if ((*it)->GetObjectType() == (int)ObjectType::FISH) {
-			if (pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()) {
+			if (pPlayer_->GetBodyCount()>= pFish->GetEatCount()) {//pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()
 				pFish->SetIsAte(true);
 			} else {
 				pFish->SetIsAte(false);
@@ -134,6 +134,27 @@ void ObstaclesManager::RandomImport(){
 	}
 
 	int fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
+	std::string randomFileName = levelFileName_[importLevel_][fileNum];
+
+	Inport(randomFileName, importLevel_);
+	Log("Load : GameData[" + randomFileName + "]\n");
+}
+
+void ObstaclesManager::NotMatchRandomImport(){
+	// レベルごとでファイル名が保存がされているため、現在のレベルの配列から文字列を取得する
+	if(levelFileName_[importLevel_].size() - 1 <= 0) {
+		return;
+	}
+
+	int fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
+	if(fileNum == prePattern){
+		for(int i = 0; i < 5; i++)
+		{
+			if(fileNum != prePattern){ break; }
+			fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
+		}
+	}
+	prePattern = fileNum;
 	std::string randomFileName = levelFileName_[importLevel_][fileNum];
 
 	Inport(randomFileName, importLevel_);
@@ -313,9 +334,10 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 			obj.reset(new Bird);
 			obj->Init();
 			// 60.0f以上の高さにいたら少し上げる
-			if(pPlayer_->GetTransform()->GetTranslation().y >= 50.0f){
+			if(pPlayer_->GetTransform()->GetTranslation().y >= 30.0f){
 				createPos.y += std::abs(pPlayer_->GetTransform()->GetTranslation().y - createPos.y) * birdPopYRaito_;
 			}
+			createPos.y = std::clamp(createPos.y, 11.0f,999.0f);
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
 			break;

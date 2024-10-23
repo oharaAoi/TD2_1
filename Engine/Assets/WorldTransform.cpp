@@ -74,6 +74,7 @@ void WorldTransform::Debug_Quaternion() {
 
 void WorldTransform::Finalize() {
 	cBuffer_.Reset();
+	data_ = nullptr;
 }
 
 void WorldTransform::SetParent(const Matrix4x4& parentMat) {

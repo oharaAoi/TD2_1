@@ -7,7 +7,9 @@ void PlayerWings::Init() {
 	for (uint32_t oi = 0; oi < 2; ++oi) {
 		wings_[oi] = std::make_unique<BaseGameObject>();
 		wings_[oi]->Init();
-		wings_[oi]->SetObject("Wing.obj");
+		wings_[oi]->SetObject("Wing.gltf");
+		wings_[oi]->SetAnimater("./Game/Resources/Model/AnimationWing/", "Wing.gltf", true);
+		wings_[oi]->SetAnimationControlScrilpt(true);
 		wings_[oi]->SetIsLighting(false);
 		if (oi == 0) {
 			wings_[oi]->GetTransform()->SetScale({ 1.0f, 1.0f, -1.0f });
@@ -21,6 +23,10 @@ void PlayerWings::Init() {
 }
 
 void PlayerWings::Update(const Vector3& parentPos, const Quaternion& rotate, bool isGliding) {
+
+	time_ += GameTimer::DeltaTime();
+	time_ = std::fmod(time_, 1.0f);
+
 	for (uint32_t oi = 0; oi < 2; ++oi) {
 
 		float hugo = 1.0f;
@@ -46,6 +52,7 @@ void PlayerWings::Update(const Vector3& parentPos, const Quaternion& rotate, boo
 			wings_[oi]->GetTransform()->SetQuaternion(moveQuaternion_);*/
 		}
 
+		wings_[oi]->GetAnimetor()->SetAnimationTime(time_);
 		Vector3 pos = parentPos;
 		pos.z += (offsetZ_ * hugo);
 		wings_[oi]->GetTransform()->SetTranslaion(pos);

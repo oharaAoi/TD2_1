@@ -28,6 +28,9 @@ public:
 
 	const bool GetIsAnimationFinish() const;
 
+	float GetAnimationTime() const { return animetionClip_->GetAnimationTime(); }
+	void SetAnimationTime(float time) { animetionClip_->SetAnimationTime(time); }
+
 private:
 
 	AnimationManager* manager_;

@@ -271,77 +271,73 @@ void ResultScene::Load(){
 
 
 	// スコア表示用の数字モデル
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "0.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "1.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "2.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "3.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "4.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "5.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "6.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "7.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "8.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "9.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "m.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SSS.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SS.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "S.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "A.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "B.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "C.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "dot.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "playerIcon.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "0.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "1.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "2.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "3.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "4.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "5.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "6.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "7.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "8.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "9.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "m.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SSS.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "SS.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "S.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "A.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "B.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "C.obj");
 
-	/* ---------------- audio ----------------*/
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
+	///* ---------------- audio ----------------*/
+	//AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
+	//AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
-	/*----------------- model ----------------*/
-	//ModelManager::LoadModel("./Game/Resources/Model/Player_result/", "Player_result.fbx");
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	///*----------------- model ----------------*/
+	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Torso.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Tail.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
+	//ModelManager::LoadModel("./Game/Resources/Model/Wing/", "Wing.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
 
-	/*------------- animation ---------------*/
-	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/Effect1/", "Effect1.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
-	ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
+	///*------------- animation ---------------*/
+	//ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
+	//ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");
+	//ModelManager::LoadModel("./Game/Resources/Model/Effect1/", "Effect1.gltf");
+	//ModelManager::LoadModel("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf");
+	//ModelManager::LoadModel("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf");
+	//ModelManager::LoadModel("./Game/Resources/Model/AddTorso/", "AddTorso.gltf");
 
 
-	/*---------------- texture ---------------*/
-	TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "white.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
+	///*---------------- texture ---------------*/
+	//TextureManager::LoadTextureFile("./Engine/Resources/Develop/", "white.png");
 
-	// Adio
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
+	//// Adio
+	//AudioManager::LoadAudio("./Game/Resources/Audio/", "test.wav");
+	//AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");
+	//AudioManager::LoadAudio("./Game/Resources/Audio/", "kari_coinGet.wav");
 
-	// ○がついていない物はまだ使用していない
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.mp3");	// 水面に入った時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.mp3");	// 水面から出た時の音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
-	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
-
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
+	//// ○がついていない物はまだ使用していない
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "boost.mp3");				// ブースト音		○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "decrementBody.mp3");		// 体の数を減らす		○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eat.mp3");				// エサを食べる		○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "eatAccel.wav");			// エサを食べた時加速する		○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "gameFinish.wav");		// gameFinish音
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "goalTarget.wav");		// 目標の距離を達成した音
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "hitedBird.wav");			// 鳥に当たった時の音		○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "incrementBody.mp3");		// 体の数を増やす			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "inWaterSurface.mp3");	// 水面に入った時の音			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "outWaterSurface.mp3");	// 水面から出た時の音			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "BirdJump_3.mp3");			// 鳥を踏んでジャンプ			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "overTime.wav");			// オーバータイムの音
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_10s.wav");		// タイムアップ10秒前			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeLeft_60s.wav");		// タイムアップ60秒前			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUp.wav");			// タイムアップの音			○
+	//AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "updateFlyingLength.wav");// 飛行距離を伸ばした時の音
+	//
+	//AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
+	//AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
 }
 
 /////////////////////////////////////////////////////////////////
