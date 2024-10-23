@@ -58,8 +58,8 @@ void GuideUI::SetTitle() {
 void GuideUI::SetResult() {
 	drawSpriteList_.clear();
 	
-	uiMap_["push_space"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "title_pushSpace"));
-	uiMap_["go_title"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "go_title"));
+	uiMap_["push_space"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "Result_pushSpace"));
+	uiMap_["go_title"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "Result_goTitle"));
 
 	drawSpriteList_.push_back(uiMap_["push_space"].get());
 	drawSpriteList_.push_back(uiMap_["go_title"].get());

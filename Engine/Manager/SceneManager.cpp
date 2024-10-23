@@ -210,6 +210,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_fly2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "bodyMax.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "finish.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "overTime.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
@@ -259,6 +261,7 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "WingOpen.mp3");//　空中で上下移動を切り替えた時
+	AudioManager::LoadAudio("./Game/Resources/Audio/SystemSE/", "Finish.mp3");//　空中で上下移動を切り替えた時
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");

@@ -14,7 +14,7 @@ void PlayerBodyCountUI::Init() {
 
 	isFadeIn_ = true;
 	time_ = 0.0f;
-	moveTime_ = 2.0f;
+	moveTime_ = 1.0f;
 
 	fadeInStartPos_ = { -200, 250.0f };
 	fadeOutPos_ = { 1500, 250.0f };

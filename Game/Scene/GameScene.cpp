@@ -96,6 +96,9 @@ void GameScene::Init(){
 	guideUI_->Init();
 	guideUI_->SetTitle();
 
+	finishUI_ = std::make_unique<FinishUI>();
+	finishUI_->Init();
+	
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
 	tutorialUI_->Init();
@@ -316,6 +319,9 @@ void GameScene::Update(){
 
 			if(!player_->GetIsFlying()){
 				isEndAndInWater_ = true;
+				finishUI_->SetUI(false);
+			} else {
+				finishUI_->SetUI(true);
 			}
 
 			if(isEndAndInWater_){
@@ -384,6 +390,8 @@ void GameScene::Update(){
 	}
 
 	playerBodyCountUI_->Update(player_->GetBodyCount());
+
+	finishUI_->Update();
 
 	if (player_->GetIsFlying()) {
 		Vector3 playerScreenPos = Transform({ 0.0f, 0.0f, 0.0f },
@@ -565,6 +573,7 @@ void GameScene::Draw() const{
 		flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
+		finishUI_->Draw();
 		
 		if (player_->GetIsFlying()) {
 			playerControlUI_->Draw();
