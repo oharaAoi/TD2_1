@@ -91,8 +91,8 @@ void Player::Update(){
 			isSplash_ = true;
 			isEnableLaunch_ = true;
 			if(waterSurfaceCoolTime <= 0) {
-				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
-				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
+				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
+				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
 				waterSurfaceCoolTime = 0.25f;
 			}
 		}
@@ -104,8 +104,8 @@ void Player::Update(){
 			isSplash_ = true;
 			//isFlying_ = false;//コメントアウト外さない
 			if(waterSurfaceCoolTime <= 0) {
-				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.5f);
-				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.5f);
+				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.15f);
+				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.15f);
 				waterSurfaceCoolTime = 0.25f;
 			}
 		}
@@ -455,13 +455,15 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
-			AudioPlayer::SinglShotPlay("eat.mp3", 0.5f);
+			AudioPlayer::SinglShotPlay("eat.mp3", 0.15f);
 			//AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
-			AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
+			AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.1f);
 			float scale = (float)pFish->GetFishSize() + 2.0f;
 			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/EatEffect/", "EatEffect.gltf",
 				nullptr, false, Vector3(scale, scale, scale), Quaternion(), transform_->GetTranslation());
 
+			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf",
+				transform_.get(), false, Vector3(1, 1, 1), Quaternion(), Vector3());
 
 
 		} else{// 食べられなかったとき
