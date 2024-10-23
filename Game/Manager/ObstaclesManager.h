@@ -135,7 +135,7 @@ private:
 	Vector3 playerPos_;
 	Vector3 prePlayerPos_;
 	// 描画をする距離(この距離以上離れているオブジェクトは描画しない)
-	float playerDrawLenght_ = 560.0f;
+	float playerDrawLenght_ = 760.0f;
 
 	// coinの数
 	uint32_t coinNum_ = 0;

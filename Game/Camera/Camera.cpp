@@ -18,7 +18,7 @@ void Camera::Finalize(){}
 void Camera::Init(){
 	BaseCamera::Init();
 
-	fov_ = 0.45f;
+	fov_ = 0.55f;
 
 	transform_ = {
 		{1.0f, 1.0f, 1.0f},
