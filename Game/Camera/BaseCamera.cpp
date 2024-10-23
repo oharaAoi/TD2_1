@@ -17,7 +17,7 @@ void BaseCamera::Init() {
 
 	nearClip_ = 1.0f;
 	farClip_ = 10000.0f;
-	fov_ = 0.550f;
+	fov_ = 0.450f;
 	nearClip2D_ = 0.0f;
 	farClip2D_ = 100.0f;
 

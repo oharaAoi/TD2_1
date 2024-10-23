@@ -44,14 +44,17 @@ public:
 	void UpdateMatrix();
 
 	void ResultSceneUpdate();
-	void SpeedDown();
 
 private:
 	void Move_TITLE();
 	void Move_TUTORIAL();
 	void Move_GAME();
 	void UpdateTransform();
-;	void Rounding(Vector3 &velocity);
+	void Rounding(Vector3 &velocity);
+	void SpeedDown();
+	void MoveWater();
+	void MoveSky();
+
 
 public:
 
