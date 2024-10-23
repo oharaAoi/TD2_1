@@ -66,9 +66,10 @@ void ObstaclesManager::Update(){
 		Fish* pFish = dynamic_cast<Fish*>((*it).get());
 		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
 		if ((*it)->GetObjectType() == (int)ObjectType::FISH) {
-			(*it)->SetTexture("Fish.png");
 			if (pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()) {
-				(*it)->SetTexture("FishCanEat.png");
+				pFish->SetIsAte(true);
+			} else {
+				pFish->SetIsAte(false);
 			}
 		}
 

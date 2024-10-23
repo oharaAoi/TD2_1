@@ -183,6 +183,8 @@ private:
 	// 落下速度に応じたジャンプ量を調整する変数
 	// 段階のスピードにしている
 	float birdJumpRaito_ = 1.0f;
+	float kBirdJumpMaxRaito_ = 3.0f;
+	int birdJumpNum_;
 
 	// フラグ-------------------------------------------
 

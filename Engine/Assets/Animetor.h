@@ -2,6 +2,7 @@
 #include <memory>
 #include "Engine.h"
 #include "Engine/Lib/GameTimer.h"
+#include "Game/Manager/AnimationManager.h"
 
 class AnimetionClip;
 class Skeleton;
@@ -28,6 +29,8 @@ public:
 	const bool GetIsAnimationFinish() const;
 
 private:
+
+	AnimationManager* manager_;
 
 	std::unique_ptr<AnimetionClip> animetionClip_;
 	std::unique_ptr<Skeleton> skeleton_ = nullptr;
