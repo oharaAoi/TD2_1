@@ -814,6 +814,8 @@ void Player::MoveSky(){
 		}
 	}
 
+	animetor_->SetColor(birdJumpNum_);
+
 	timer_.Measurement(transform_->GetTranslation().y);
 
 }
