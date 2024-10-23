@@ -44,11 +44,14 @@ void FlyingGaugeUI::Update(float currentLength){
 	// スカイツリーの高さを更新する
 	height_t = std::clamp((currentLength - halfWindowHeight_) / skytreeHeight_, 0.0f, 1000.0f);
 	halfHeight_t = std::clamp(currentLength / halfWindowHeight_, 0.0f, 1.0f);
+#ifdef _DEBUG
 
 	ImGui::Begin("t");
 	ImGui::Text("max %f", maxHeight_t);
 	ImGui::Text("cur %f", height_t);
 	ImGui::End();
+#endif // _DEBUG
+
 
 	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, tower_->GetTextureSize().y * height_t));
 
