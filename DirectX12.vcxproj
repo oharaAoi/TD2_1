@@ -235,7 +235,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Scene\TutorialScene.cpp" />
     <ClCompile Include="Game\UI\FlyingGaugeUI.cpp" />
     <ClCompile Include="Game\UI\FlyingTimerUI.cpp" />
+    <ClCompile Include="Game\UI\GuideUI.cpp" />
     <ClCompile Include="Game\UI\PlayerBodyCountUI.cpp" />
+    <ClCompile Include="Game\UI\PlayerControlUI.cpp" />
     <ClCompile Include="Game\UI\PlayerSpeedCounter.cpp" />
     <ClCompile Include="Game\UI\TitleUI.cpp" />
     <ClCompile Include="Game\UI\TutorialUI.cpp" />
@@ -386,7 +388,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Scene\TutorialScene.h" />
     <ClInclude Include="Game\UI\FlyingGaugeUI.h" />
     <ClInclude Include="Game\UI\FlyingTimerUI.h" />
+    <ClInclude Include="Game\UI\GuideUI.h" />
     <ClInclude Include="Game\UI\PlayerBodyCountUI.h" />
+    <ClInclude Include="Game\UI\PlayerControlUI.h" />
     <ClInclude Include="Game\UI\PlayerSpeedCounter.h" />
     <ClInclude Include="Game\UI\TitleUI.h" />
     <ClInclude Include="Game\UI\TutorialUI.h" />

@@ -89,6 +89,12 @@ void GameScene::Init(){
 	playerBodyCountUI_ = std::make_unique<PlayerBodyCountUI>();
 	playerBodyCountUI_->Init();
 
+	playerControlUI_ = std::make_unique<PlayerControlUI>();
+	playerControlUI_->Init();
+
+	guideUI_ = std::make_unique<GuideUI>();
+	guideUI_->Init();
+
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
 	tutorialUI_->Init();
@@ -195,9 +201,6 @@ void GameScene::Update(){
 		player_->DebugResetPos();
 	}
 #endif // _DEBUG
-
-
-
 
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
@@ -381,6 +384,12 @@ void GameScene::Update(){
 
 	playerBodyCountUI_->Update(player_->GetBodyCount());
 
+	if (player_->GetIsFlying()) {
+		Vector3 playerScreenPos = Transform({ 0.0f, 0.0f, 0.0f },
+											player_->GetTransform()->GetWorldMatrix() * camera_->GetVpvpMatrix());
+		playerControlUI_->Update({playerScreenPos.x, playerScreenPos.y}, player_->GetIsCloseWing());
+	}
+
 	// -------------------------------------------------
 	// ↓ audioの更新
 	// -------------------------------------------------
@@ -540,6 +549,11 @@ void GameScene::Draw() const{
 		flyingGaugeUI_->Draw();
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
+
+		if (player_->GetIsFlying()) {
+			playerControlUI_->Draw();
+		}
+
 
 	} else {
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
@@ -716,6 +730,7 @@ void GameScene::Debug_Gui(){
 				flyingTimerUI_->Debug_Gui();
 				flyingGaugeUI_->Debug_Gui();
 				playerSpeedCounter_->Debug_Gui();
+				playerControlUI_->Debug_Gui();
 				ImGui::End();
 				ImGui::TreePop();
 			}
