@@ -27,11 +27,15 @@ public:
 
 	void IndividualFromCommon(const SubAttributeType& subType = SubAttributeType::NONE) override;
 
+	void Change();
+
 public:
 
 	float GetEnergy()const{ return energy_; }
 	const FISH_SIZE& GetFishSize()const{ return fishSize_; }
 	void SetFishSize(const FISH_SIZE& fishSize);
+
+	void SetIsAte(bool isAte) { isAte_ = isAte; }
 
 private:
 
@@ -39,4 +43,6 @@ private:
 	FISH_SIZE fishSize_;
 	Vector3 initSize = { 1,1,1 };
 
+	bool isAte_;
+	bool isPreAte_;
 };

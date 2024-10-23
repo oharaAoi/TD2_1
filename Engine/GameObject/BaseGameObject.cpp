@@ -8,8 +8,6 @@ void BaseGameObject::Finalize() {
 		animetor_->Finalize();
 	}
 	materials.clear();
-
-
 }
 
 void BaseGameObject::Init() {
@@ -59,6 +57,7 @@ void BaseGameObject::UpdateMatrix(){
 }
 
 void BaseGameObject::SetObject(const std::string& objName) {
+	model_ = nullptr;
 	model_ = ModelManager::GetModel(objName);
 	materials.clear();
 	for (uint32_t oi = 0; oi < model_->GetMaterialsSize(); ++oi) {
@@ -69,10 +68,10 @@ void BaseGameObject::SetObject(const std::string& objName) {
 
 void BaseGameObject::SetAnimater(const std::string& directoryPath, const std::string& objName, bool isSkinning) {
 	if (isSkinning) {
-		animetor_ = std::make_unique<Animetor>();
+		animetor_.reset(new Animetor);
 		animetor_->LoadAnimation(directoryPath, objName, model_);
 	} else {
-		animationClip_ = std::make_unique<AnimetionClip>();
+		animationClip_.reset(new AnimetionClip);
 		animationClip_->LoadAnimation(directoryPath, objName, model_->GetRootNodeName());
 	}
 }
