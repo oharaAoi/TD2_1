@@ -548,10 +548,10 @@ void GameScene::Draw() const {
 
 
 	if(BGM_masterVolumeRate_ > 0.0f){
-		mainBGM_->Play(true, 0.4f, true);
-		mainBGM_inWater_->Play(true, 0.4f, true);
-		windSound_->Play(true, 0.4f, true);
-		swimSound_->Play(true, 0.3f, true);
+		mainBGM_->Play(true, 0.2f, true);
+		mainBGM_inWater_->Play(true, 0.2f, true);
+		windSound_->Play(true, 0.2f, true);
+		swimSound_->Play(true, 0.15f, true);
 	}
 
 	Engine::SetPipeline(PipelineType::SpritePipeline);

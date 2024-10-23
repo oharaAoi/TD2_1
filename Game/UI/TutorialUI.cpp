@@ -26,26 +26,31 @@ void TutorialUI::Init() {
 	tutorialUI_["kari"]->Init();
 	tutorialUI_["kari"]->SetObject("UI_Plane.obj");
 	tutorialUI_["kari"]->SetTexture("Tutorial_1.png");
+	tutorialUI_["kari"]->SetIsLighting(false);
 
 	tutorialUI_.try_emplace("kari2", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari2"]->Init();
 	tutorialUI_["kari2"]->SetObject("UI_Plane.obj");
 	tutorialUI_["kari2"]->SetTexture("Tutorial_2.png");
+	tutorialUI_["kari2"]->SetIsLighting(false);
 
 	tutorialUI_.try_emplace("kari3", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari3"]->Init();
 	tutorialUI_["kari3"]->SetObject("UI_Plane.obj");
 	tutorialUI_["kari3"]->SetTexture("sky.png");
+	tutorialUI_["kari3"]->SetIsLighting(false);
 
 	tutorialUI_.try_emplace("kari4", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari4"]->Init();
 	tutorialUI_["kari4"]->SetObject("TutorialGuide.obj");
 	//tutorialUI_["kari4"]->SetTexture("sky.png");
+	tutorialUI_["kari4"]->SetIsLighting(false);
 
 	tutorialUI_.try_emplace("start", std::make_unique<BaseGameObject>());
 	tutorialUI_["start"]->Init();
 	tutorialUI_["start"]->SetObject("UI_Plane.obj");
 	tutorialUI_["start"]->SetTexture("sky.png");
+	tutorialUI_["start"]->SetIsLighting(false);
 
 	float index = 0;
 	for (auto& ui : tutorialUI_) {
