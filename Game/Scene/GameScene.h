@@ -79,6 +79,9 @@ private:
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 	bool isDegugCameraActive_ = false;
 
+	std::string start1 = "test_1_3";
+	std::string start2 = "Test_1_1";
+
 	// ---------- gameobject ---------- //
 	std::unique_ptr<Player> player_ = nullptr;
 

@@ -161,9 +161,9 @@ void ObstaclesManager::NotMatchRandomImport(){
 	Log("Load : GameData[" + randomFileName + "]\n");
 }
 
-void ObstaclesManager::TutorialImport(const std::string& fileName, const Vector3& pos) {
-	for (size_t oi = 0; oi < groupMap_[0][fileName].loadData_.size(); ++oi) {
-		auto& objData = groupMap_[0][fileName].loadData_;
+void ObstaclesManager::TutorialImport(const std::string& fileName, const Vector3& pos, int inportlevel) {
+	for (size_t oi = 0; oi < groupMap_[inportlevel][fileName].loadData_.size(); ++oi) {
+		auto& objData = groupMap_[inportlevel][fileName].loadData_;
 		auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
