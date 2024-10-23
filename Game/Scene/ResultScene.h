@@ -70,6 +70,8 @@ public:
 
 private:
 
+	std::unique_ptr<AudioPlayer> clearBGM_;
+
 	/*---------- parameter ----------*/
 	Vector3 rotate_;
 	Vector3 translate_;
@@ -125,5 +127,6 @@ private:
 	// ---------- Score --------- //
 	std::unique_ptr<Score> scoreData_;
 	float gameScoreArray_[3];
+	float color_h_ = 0.0f;
 };
 

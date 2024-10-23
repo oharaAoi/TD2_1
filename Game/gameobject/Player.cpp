@@ -544,14 +544,46 @@ void Player::OnCollision(Collider* other){
 		} else{
 
 			if(collisionAllowableTime_ <= 0.0f){
-				// 一時減速する
-				temporaryAcceleration_ += decreaseVelocity_ * 2;//多めに減速
-				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
-				isFacedBird_ = true;
-				isCloseWing_ = true;
-				SpeedDown();
-				pressTime_ = birdHitAngle;
-				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
+
+				if(transform_->GetTranslation().x > other->GetWorldTranslation().x - other->GetRadius()){
+
+					if(!isFacedBird_) {
+						// dropSpeedが早ければ早い程早くなる
+						curMaxSpeed = std::abs(dropSpeed_);
+						curMaxSpeed = std::clamp(curMaxSpeed, 1.0f, kBirdJumpMaxRaito_ / 2);//通常時の限界は最高速度の半分
+						//birdJumpRaito_ = plusSpeed / birdJumpRaito_;
+						pressTime_ = 1.0f;
+						birdJumpNum_++;
+						isFalling_ = false;
+						isCloseWing_ = false;
+
+						if(birdJumpNum_ >= 3) {
+							maxSpeedTimeCount = kMaxSpeedTime;
+							curMaxSpeed = kBirdJumpMaxRaito_;
+							birdJumpNum_ = 0;
+							isHighSpeedMove = true;
+							AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
+						} else {
+							maxSpeedTimeCount = kMaxSpeedTime / 2;
+							//birdJumpRaito_ = 1.0f;
+						}
+
+						AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.4f);
+						AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false,
+							Vector3(1.0f, 1.0f, 1.0f), Quaternion(), transform_->GetTranslation());
+					}
+
+				} else{
+
+					// 一時減速する
+					temporaryAcceleration_ += decreaseVelocity_ * 2;//多めに減速
+					temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
+					isFacedBird_ = true;
+					isCloseWing_ = true;
+					SpeedDown();
+					pressTime_ = birdHitAngle;
+					Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
+				}
 			}
 		}
 	}

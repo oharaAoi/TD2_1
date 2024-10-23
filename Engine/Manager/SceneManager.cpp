@@ -264,6 +264,7 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "swim.mp3");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "clearBGM.wav");
 }
 
 void SceneManager::SetChange() {

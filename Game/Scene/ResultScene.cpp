@@ -64,6 +64,14 @@ void ResultScene::Init(){
 	//animationPlayer_->SetObject("Player_result.fbx");
 	//animationPlayer_->SetAnimater("./Game/Resources/Model/Player_result_2/", "Player_result.fbx", true);
 
+
+
+	/*------------ audio -------------*/
+
+	clearBGM_ = std::make_unique<AudioPlayer>();
+	clearBGM_->Init("clearBGM.wav");
+	clearBGM_->Play(true, 0.1f, true);
+
 	/*---------------- string --------------*/
 
 	//////////////////////////////////////////////////
@@ -137,16 +145,22 @@ void ResultScene::Init(){
 	scoreRankModel_->Init();
 	if(rank_ == SCORE_RANK::C){
 		scoreRankModel_->SetObject("C.obj");
+		scoreRankModel_->SetColor({0.0f,0.2f,1.0f,1.0f });
 	} else if(rank_ == SCORE_RANK::B){
 		scoreRankModel_->SetObject("B.obj");
+		scoreRankModel_->SetColor({ 0.26f,1.0f,0.0f,1.0f });
 	} else if(rank_ == SCORE_RANK::A){
-		scoreRankModel_->SetObject("B.obj");
+		scoreRankModel_->SetObject("A.obj");
+		scoreRankModel_->SetColor({ 1.0f,0.1f,0.0f,1.0f });
 	} else if(rank_ == SCORE_RANK::S){
 		scoreRankModel_->SetObject("S.obj");
+		scoreRankModel_->SetColor({ 1.0f,0.5f,0.0f,1.0f });
 	} else if(rank_ == SCORE_RANK::SS){
 		scoreRankModel_->SetObject("SS.obj");
+		scoreRankModel_->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 	} else if(rank_ == SCORE_RANK::SSS){
 		scoreRankModel_->SetObject("SSS.obj");
+		scoreRankModel_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 
 	scoreRankModel_->GetTransform()->SetScale({ 4.6f,4.26f,4.14f });
@@ -403,6 +417,13 @@ void ResultScene::Update(){
 	}
 
 
+	if(rank_ == SCORE_RANK::SSS){
+		color_h_ += GameTimer::DeltaTime() * 0.5f;
+		color_h_ > 1.0f ? color_h_ = 0.0f : color_h_;
+		scoreRankModel_->SetColor(FloatColor(HSV_to_RGB(color_h_, 1.0f, 1.0f, 1.0f)));
+	}
+
+
 	Fade();
 
 #ifdef _DEBUG
@@ -505,9 +526,11 @@ void ResultScene::Fade(){
 	} else{
 		if(isEndScene_){
 
+			clearBGM_->SetVolume(0.08f * (1.0f - fade_t_));
 			fade_t_ = std::clamp(fade_t_ + (GameTimer::DeltaTime() / kFadeTime_), 0.0f, 1.0f);
 
 			if(fade_t_ >= 1.0f){
+				clearBGM_->Stop();
 				isEndScene_ = false;
 				SetNextScene(SceneType::Scene_Game);
 			}

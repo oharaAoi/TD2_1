@@ -395,7 +395,9 @@ void GameScene::Update(){
 	// -------------------------------------------------
 
 	if(player_->GetIsFlying()){
-		sky_->SetTexture("blueSky_ORE.png");
+		if(currentState_ != GAME_STATE::TITLE){
+			sky_->SetTexture("blueSky_ORE.png");
+		}
 	} else{
 		sky_->SetTexture("sky.png");
 	}
