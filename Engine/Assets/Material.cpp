@@ -9,6 +9,7 @@ Material::~Material() {
 
 void Material::Finalize() {
 	materialBuffer_.Reset();
+	material_ = nullptr;
 }
 
 void Material::Init(ID3D12Device* device) {

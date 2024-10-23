@@ -33,11 +33,15 @@ void Fish::Init(){
 //////////////////////////////////////////////////////
 
 void Fish::Update(){
+	Change();
+
 	IndividualFromCommon(subType_);
 	transform_->SetQuaternion(Quaternion::AngleAxis((-90.0f * toRadian), Vector3{ 0.0, 1.0f, 0.0f }));
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
 	BaseGameObject::Update();
+
+	isPreAte_ = isAte_;
 }
 
 //////////////////////////////////////////////////////
@@ -92,6 +96,20 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 	//float size = radius_ * 2.0f;
 	obb_.size = newSize;
 	transform_->SetScale(scale);
+}
+
+void Fish::Change() {
+	if ((isPreAte_ == false) && (isAte_ == true)) {
+		// 食べられる
+		SetObject("EatFish.gltf");
+		SetAnimater("./Game/Resources/Model/EatFish/", "EatFish.gltf", true);
+		SetIsLighting(false);
+	} else if ((isPreAte_ == true) && (isAte_ == false)) {
+		// 食べられない
+		SetObject("Fish.gltf");
+		SetAnimater("./Game/Resources/Model/Fish/", "Fish.gltf", true);
+		SetIsLighting(false);
+	}
 }
 
 void Fish::SetFishSize(const FISH_SIZE& fishSize){

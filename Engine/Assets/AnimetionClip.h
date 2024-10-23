@@ -9,6 +9,8 @@
 #include "Engine/Math/Quaternion.h"
 #include "Engine/Assets/Skeleton.h"
 
+class AnimationManager;
+
 /// <summary>
 /// Animationに関するクラス
 /// </summary>
@@ -53,6 +55,8 @@ public:
 	void Update();
 
 	void LoadAnimation(const std::string directoryPath, const std::string& animationFile, const std::string& name);
+	void LoadGetAnimation(const std::string& animationFile);
+
 
 	void ApplyAnimation(Skeleton& skelton);
 	void ApplyAnimation(Skeleton* skelton);
@@ -67,6 +71,8 @@ public:
 	const bool GetIsAnimationFinish() const { return isAnimationFinish_; }
 
 private:
+
+	AnimationManager* manager_;
 
 	std::vector<Animation> animations_;
 	Animation animation_;

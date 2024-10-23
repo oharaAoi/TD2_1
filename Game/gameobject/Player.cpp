@@ -405,6 +405,7 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat("dontInputTime", &dontInputTime_, 0.1f);
 	ImGui::DragFloat("currentAngle_", &currentAngle_, 0.1f);
 	ImGui::DragFloat("dropSpeed", &dropSpeed_, 0.1f);
+	ImGui::DragFloat("kBirdJumpMaxRaito", &kBirdJumpMaxRaito_, 0.1f);
 
 	if(ImGui::Button("ReAdapt")) {
 		AdaptAdjustmentItem();
@@ -498,9 +499,18 @@ void Player::OnCollision(Collider* other){
 					// dropSpeedが早ければ早い程早くなる
 					birdJumpRaito_ = std::abs(dropSpeed_);
 					//birdJumpRaito_ = plusSpeed / birdJumpRaito_;
-					pressTime_ = 0.8f;
+					pressTime_ = 1.0f;
+					birdJumpNum_++;
 					isFalling_ = false;
 					isCloseWing_ = false;
+
+					if (birdJumpNum_ >= 3) {
+						birdJumpRaito_ = kBirdJumpMaxRaito_;
+						birdJumpNum_ = 0;
+					} else {
+						birdJumpRaito_ = 1.0f;
+					}
+
 					AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.5f);
 					AnimetionEffectManager::AddListEffect("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf", transform_.get(), false,
 						Vector3(1.0f, 1.0f, 1.0f), Quaternion(), transform_->GetTranslation());
