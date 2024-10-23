@@ -1,4 +1,5 @@
 #include "Bird.h"
+#include <Game/Manager/AnimetionEffectManager.h>
 
 
 //////////////////////////////////////////////////////
@@ -61,6 +62,8 @@ void Bird::OnCollision(Collider* other) {
 	if (other->GetObjectType() == int(ObjectType::PLAYER)) {
 		isHitPlayer_ = true;
 		isActive_ = false;
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
+			nullptr, false, transform_.get()->GetScale()*0.5f, Quaternion(), GetWorldTranslation());
 	}
 }
 
