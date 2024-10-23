@@ -11,7 +11,7 @@ FlyingTimerUI::~FlyingTimerUI() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlyingTimerUI::Init() {
-	currentPos_ = {800.0f, 100.0f};
+	currentPos_ = {720.0f, 100.0f};
 	maxPos_ = { 800.0f, 200.0f };
 
 	// -------------------------------------------------
@@ -23,7 +23,8 @@ void FlyingTimerUI::Init() {
 		sprite->SetRectRange(rangeSize_);
 		sprite->SetTextureSize(rangeSize_);
 		sprite->SetTextureCenterPos(currentPos_);
-		
+		sprite->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+
 		sprite->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
 		sprite->Update();
 	}
@@ -74,24 +75,26 @@ void FlyingTimerUI::Update(float current, float max) {
 		UI_flyingLength_[oi]->Update();
 	}
 
-	for (int oi = 0; oi < UI_flyingMaxLength_.size(); ++oi) {
-		UI_flyingMaxLength_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(maxLength_, oi + 1)));
-		UI_flyingMaxLength_[oi]->Update();
-	}
+	//for (int oi = 0; oi < UI_flyingMaxLength_.size(); ++oi) {
+	//	UI_flyingMaxLength_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(maxLength_, oi + 1)));
+	//	UI_flyingMaxLength_[oi]->Update();
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FlyingTimerUI::Draw() const {
+void FlyingTimerUI::Draw(float alpha) {
 	for (int oi = 0; oi < UI_flyingLength_.size(); ++oi) {
+		UI_flyingLength_[oi]->SetColor({ 1.0f,1.0f,1.0f,alpha * 0.5f });
 		UI_flyingLength_[oi]->Draw();
 	}
 
-	for (int oi = 0; oi < UI_flyingMaxLength_.size(); ++oi) {
-		UI_flyingMaxLength_[oi]->Draw();
-	}
+	//for (int oi = 0; oi < UI_flyingMaxLength_.size(); ++oi) {
+	//	UI_flyingMaxLength_[oi]->SetColor({ 1.0f,1.0f,1.0f,alpha });
+	//	UI_flyingMaxLength_[oi]->Draw();
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
