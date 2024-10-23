@@ -5,7 +5,7 @@
 
 const float kDebugCameraMoveSpeed_ = 0.05f;
 
-class DebugCamera : public BaseCamera {
+class DebugCamera : public BaseCamera{
 public:
 
 	DebugCamera();
@@ -29,6 +29,12 @@ public:
 	/// </summary>
 	void RotateMove();
 
+	void SetPlayerPos(Vector3 pos){
+		transform_.translate.x = pos.x;
+		transform_.translate.y = pos.y;
+	}
+
+
 private:
 
 	Quaternion quaternion_;
@@ -46,10 +52,10 @@ private:
 	Vector3 moveDirection_;
 	Vector2 preMousePos_;
 
-	float yaw_ = 0.0f; 
+	float yaw_ = 0.0f;
 	float pitch_ = 0.0f;
 	float sensitivity_ = 0.05f; // 回転感度
-	
+
 	bool isMove = false;
 
 	Quaternion qYaw;

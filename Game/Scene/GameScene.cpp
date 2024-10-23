@@ -294,6 +294,28 @@ void GameScene::Load() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::Update() {
+#ifdef _DEBUG
+	//プレイヤーの動きを停止
+	if(Input::IsTriggerKey(DIK_1)) {
+
+		player_->DebugFreeze();
+	}
+	//ブースト
+	if(Input::IsTriggerKey(DIK_2)) {
+
+		player_->DebugBoost();
+	}
+	//デバッグカメラをプレイヤーの座標に合わせる
+	if(Input::IsTriggerKey(DIK_3)) {
+
+		debugCamera_->SetPlayerPos(player_.get()->GetWorldTranslation());
+		isDegugCameraActive_ = !isDegugCameraActive_;
+	}
+
+#endif // _DEBUG
+
+	
+
 
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();

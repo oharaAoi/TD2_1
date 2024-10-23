@@ -312,9 +312,10 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 			obj.reset(new Bird);
 			obj->Init();
 			// 60.0f以上の高さにいたら少し上げる
-			if(pPlayer_->GetTransform()->GetTranslation().y >= 50.0f){
+			if(pPlayer_->GetTransform()->GetTranslation().y >= 30.0f){
 				createPos.y += std::abs(pPlayer_->GetTransform()->GetTranslation().y - createPos.y) * birdPopYRaito_;
 			}
+			createPos.y = std::clamp(createPos.y, 11.0f,999.0f);
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
 			break;
