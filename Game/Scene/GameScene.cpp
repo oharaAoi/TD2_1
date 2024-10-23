@@ -757,6 +757,7 @@ void GameScene::Debug_Gui(){
 				flyingGaugeUI_->Debug_Gui();
 				playerSpeedCounter_->Debug_Gui();
 				playerControlUI_->Debug_Gui();
+				playerBodyCountUI_->Debug_Gui();
 				guideUI_->Debug_Gui();
 				ImGui::End();
 				ImGui::TreePop();
