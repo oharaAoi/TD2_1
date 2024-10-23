@@ -10,6 +10,8 @@
 #include "Game/Information/FlyingTimer.h"
 #include "Game/GameObject/PlayerWings.h"
 #include "Game/Manager/AnimetionEffectManager.h"
+#include "Game/Camera/Camera.h"
+
 
 class PlayerAnimator;
 
@@ -176,6 +178,10 @@ private:
 	// 落下速度に応じたジャンプ量を調整する変数
 	// 段階のスピードにしている
 	float birdJumpRaito_ = 1.0f;
+
+	// カメラシェイク
+	float cameraShakeRadius_ = 0.2f;
+	float cameraShakeTime_ = 0.5f;
 
 	// フラグ-------------------------------------------
 

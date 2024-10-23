@@ -120,7 +120,7 @@ private:
 	std::unique_ptr<Sprite> backgroundSprite_ = nullptr;
 	std::unique_ptr<Sprite> fade_ = nullptr;
 	std::unique_ptr<Sprite> comment_ = nullptr;
-	float commentSpriteAlpha_ = 0.0f;
+	float commentSpriteAlpha_ = -1.0f;
 
 	// ---------- Score --------- //
 	std::unique_ptr<Score> scoreData_;

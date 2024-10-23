@@ -37,6 +37,9 @@ void BaseCamera::Init() {
 }
 
 void BaseCamera::Update() {
+
+	projectionMatrix_ = MakePerspectiveFovMatrix(fov_, float(kWindowWidth_) / float(kWindowHeight_), Render::GetNearClip(), Render::GetFarClip());
+
 	// 行列の生成
 	scaleMat_ = MakeScaleMatrix(transform_.scale);
 	rotateMat_ = MakeRotateXYZMatrix(transform_.rotate);
