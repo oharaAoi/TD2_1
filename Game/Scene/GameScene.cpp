@@ -331,7 +331,7 @@ void GameScene::Update(){
 	// ↓ effect
 	// -------------------------------------------------
 	trail_->Update();
-	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetSlerpRotate(), player_->GetIsFlying());
+	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetTransform()->GetQuaternion(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
 	if(currentState_ == GAME_STATE::TITLE) {
