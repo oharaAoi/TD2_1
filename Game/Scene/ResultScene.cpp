@@ -418,6 +418,7 @@ void ResultScene::Update(){
 
 			if(!isViewingRanking_){
 				isViewingRanking_ = true;
+				guideUI_->SetScore();
 			} else{
 				isEndScene_ = true;
 			}

@@ -21,6 +21,7 @@ public:
 
 	void SetTitle();
 	void SetResult();
+	void SetScore();
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -35,6 +36,8 @@ private:
 
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> uiMap_;
 	std::list<Sprite*> drawSpriteList_;
+
+	Vector2 scale_;
 
 };
 

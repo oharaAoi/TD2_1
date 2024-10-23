@@ -216,6 +216,11 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TorsoGaugeBack.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer10.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer60.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_Titlle.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_space.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_arrow.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
