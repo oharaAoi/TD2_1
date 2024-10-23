@@ -51,6 +51,7 @@ void TutorialUI::Init() {
 	tutorialUI_["start"]->SetObject("UI_Plane.obj");
 	//tutorialUI_["start"]->SetTexture("UI_none.png");
 	tutorialUI_["start"]->SetIsLighting(false);
+	tutorialUI_["start"]->SetColor({ 0.0, 0.0,0.0,0.0f });
 
 	float index = 0;
 	for (auto& ui : tutorialUI_) {
@@ -107,7 +108,7 @@ void TutorialUI::LineUpUI(const Vector3& playerPos) {
 	} else {
 		return;
 	}
-
+	tutorialUI_["start"]->GetTransform()->SetQuaternion(Quaternion::AngleAxis((-180.0f * toRadian), Vector3{ 0,1,0 }));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
