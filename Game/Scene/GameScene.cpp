@@ -94,6 +94,7 @@ void GameScene::Init(){
 
 	guideUI_ = std::make_unique<GuideUI>();
 	guideUI_->Init();
+	guideUI_->SetTitle();
 
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
@@ -390,6 +391,8 @@ void GameScene::Update(){
 		playerControlUI_->Update({playerScreenPos.x, playerScreenPos.y}, player_->GetIsCloseWing());
 	}
 
+	guideUI_->Update();
+
 	// -------------------------------------------------
 	// ↓ スプライト
 	// -------------------------------------------------
@@ -562,7 +565,7 @@ void GameScene::Draw() const{
 		flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
-
+		
 		if (player_->GetIsFlying()) {
 			playerControlUI_->Draw();
 		}
@@ -572,6 +575,7 @@ void GameScene::Draw() const{
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		titleLogo_->Draw();
 		cherryEmitter_->Draw();
+		guideUI_->Draw();
 
 		float t = std::clamp(startSceneTime_ / 2.0f, 0.0f, 1.0f);
 		fade_->SetColor({ 1.0f,1.0f,1.0f,t });
@@ -744,6 +748,7 @@ void GameScene::Debug_Gui(){
 				flyingGaugeUI_->Debug_Gui();
 				playerSpeedCounter_->Debug_Gui();
 				playerControlUI_->Debug_Gui();
+				guideUI_->Debug_Gui();
 				ImGui::End();
 				ImGui::TreePop();
 			}

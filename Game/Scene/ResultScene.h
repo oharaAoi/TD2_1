@@ -29,6 +29,7 @@
 #include "Game/Information/Score.h"
 
 /*------ UI ------*/
+#include "Game/UI/GuideUI.h"
 
 /*------ Sprite ------*/
 
@@ -125,5 +126,8 @@ private:
 	// ---------- Score --------- //
 	std::unique_ptr<Score> scoreData_;
 	float gameScoreArray_[3];
+
+	// ---------- UI --------- //
+	std::unique_ptr<GuideUI> guideUI_;
 };
 
