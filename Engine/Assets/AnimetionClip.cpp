@@ -1,6 +1,8 @@
 #include "AnimetionClip.h"
+#include "Game/Manager/AnimationManager.h"
 
 AnimetionClip::AnimetionClip() {
+	manager_ = AnimationManager::GetInstance();
 }
 
 AnimetionClip ::~AnimetionClip() {
@@ -34,6 +36,8 @@ void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::st
 	std::string filePath = directoryPath + animationFile;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
 	assert(scene->mNumAnimations != 0);		// アニメーションがない
+	
+	Log("Start LoadAnimation[" + animationFile + "]\n");
 
 	for (uint32_t animationIndex = 0; animationIndex < scene->mNumAnimations; ++animationIndex) {
 		aiAnimation* animationAssimp = scene->mAnimations[animationIndex];
@@ -84,6 +88,14 @@ void AnimetionClip::LoadAnimation(const std::string directoryPath, const std::st
 		/*animations_.push_back(animation);*/
 	}
 	rootName_ = name;
+
+	Log("End LoadAnimation[" + animationFile + "]\n");
+
+	manager_->AddMap(animation_, animationFile);
+}
+
+void AnimetionClip::LoadGetAnimation(const std::string& animationFile) {
+	animation_ = manager_->GetAnimation(animationFile);
 }
 
 void AnimetionClip::ApplyAnimation(Skeleton& skelton) {
@@ -94,7 +106,6 @@ void AnimetionClip::ApplyAnimation(Skeleton& skelton) {
 			joint.transform.rotate = CalculateQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
 			joint.transform.scale = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
 		}
-
 	}
 }
 
