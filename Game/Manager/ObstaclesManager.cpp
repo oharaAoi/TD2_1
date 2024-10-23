@@ -64,7 +64,6 @@ void ObstaclesManager::Update(){
 		// -------------------------------------------------
 		/*Collider* obj = dynamic_cast<Collider*>((*it).get());*/
 		Fish* pFish = dynamic_cast<Fish*>((*it).get());
-		float fishSizeDivision = 1.0f / (float)FISH_SIZE::kFishSizeCount;
 		if ((*it)->GetObjectType() == (int)ObjectType::FISH) {
 			if (pPlayer_->GetBodyCount()>= pFish->GetEatCount()) {//pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()
 				pFish->SetIsAte(true);

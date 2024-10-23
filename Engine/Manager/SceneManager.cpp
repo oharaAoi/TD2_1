@@ -162,7 +162,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/", "Splash.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Mountain/", "Mountain.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountenTree/", "MountenTree.obj");
-	ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
+	//ModelManager::LoadModel("./Game/Resources/Model/MountainGrass/", "MountainGrass.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Cloud/", "Cloud.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Moai/", "Moai.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
