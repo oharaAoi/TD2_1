@@ -21,7 +21,7 @@ void GamePlayTimer::Init(float limit) {
 	numberSpriteScale_ = { 0.8f, 0.8f };
 
 	clock_ = Engine::CreateSprite("timer.png");
-	clock_->SetScale({0.58f, 0.44f});
+	clock_->SetScale({0.35f, 0.35f});
 
 	adjustItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "GamePlayTimer";
@@ -52,6 +52,18 @@ void GamePlayTimer::Init(float limit) {
 
 	timeleft60s_ = std::make_unique<AudioPlayer>();
 	timeleft60s_->Init("timeRemaining.mp3");
+
+
+	isMove_ = false;
+	isFadeIn_ = true;
+
+	startPos_ = {-600.0f, 250.0f };
+	endPos_ = { 2000.0f, 250.0f };
+	time_ = 0;
+	moveTime_ = 1.5f;
+	timeleftUI_ = Engine::CreateSprite("timer60.png");
+
+	timeleftUI_->SetCenterPos(startPos_);
 	
 }
 
@@ -76,15 +88,15 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		}
 	}
 
-	
-
 	// タイムアップ10秒前
-	if (static_cast<int>(gameTimer_) == 10) {
+	if (gameTimer_ == 10.0f) {
 		timeleft10s_->Play(false, 0.5f, true);
+		isMove_ = true;
 	}
 	// タイムアップ60秒前
-	if (static_cast<int>(gameTimer_) == 60) {
+	if (gameTimer_ == 60.0f) {
 		timeleft60s_->Play(false, 0.5f, true);
+		isMove_ = true;
 	}
 
 	// Playerが飛んでいたら
@@ -108,6 +120,12 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		outgameTime_ += GameTimer::DeltaTime();
 	}
 
+	if (isMove_) {
+		SpriteMove();
+		timeleftUI_->SetCenterPos(uiPos_);
+		timeleftUI_->Update();
+	}
+
 #ifdef _DEBUG
 	if(Input::IsTriggerKey(DIK_0)) 
 	{
@@ -126,6 +144,8 @@ void GamePlayTimer::Draw() const {
 	for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
 		limitTimeUI_[oi]->Draw();
 	}
+
+	timeleftUI_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,6 +212,31 @@ void GamePlayTimer::AdaptAdjustmentItem() {
 	originPos_ = adjustItem_->GetValue<Vector2>(groupName_, "numberOriginPos");
 	numberInterval_ = adjustItem_->GetValue<float>(groupName_, "numberInterval");
 	numberSpriteScale_ = adjustItem_->GetValue<Vector2>(groupName_, "numberSpriteScale");
+}
+
+void GamePlayTimer::SpriteMove() {
+	// fadeがtrueだったら画面外から画面ないへ
+	time_ += GameTimer::DeltaTime();
+	float t = time_ / moveTime_;
+	if (isFadeIn_) {
+		uiPos_ = Vector2::Lerp(startPos_, Vector2(640, startPos_.y), EaseOutElastic(t));
+	} else {
+		uiPos_ = Vector2::Lerp(Vector2(640, startPos_.y), endPos_, EaseInOutBack(t));
+	}
+
+	// 時間を過ぎたら
+	if (time_ >= moveTime_) {
+		time_ = 0.0f;
+
+		if (!isFadeIn_) {
+			isMove_ = false;
+			time_ = 0.0f;
+			timeleftUI_->SetTexture("timer10.png");
+		}
+
+		isFadeIn_ = !isFadeIn_;
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
