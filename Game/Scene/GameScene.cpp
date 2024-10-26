@@ -143,10 +143,10 @@ void GameScene::Init(){
 	// -------------------------------------------------
 
 	mainBGM_ = std::make_unique<AudioPlayer>();
-	mainBGM_->Init("mainBGM_tobenaikoi.wav");
+	mainBGM_->Init("mainBGM_tobenaikoi.mp3");
 
 	mainBGM_inWater_ = std::make_unique<AudioPlayer>();
-	mainBGM_inWater_->Init("mainBGM_tobenaikoi_in_water.wav");
+	mainBGM_inWater_->Init("mainBGM_tobenaikoi_in_water.mp3");
 
 	windSound_ = std::make_unique<AudioPlayer>();
 	windSound_->Init("brow.mp3");

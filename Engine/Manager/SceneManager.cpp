@@ -275,11 +275,11 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/SystemSE/", "Finish.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "test.wav");//被弾時の音
 
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.wav");
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.mp3");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "swim.mp3");
-	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "clearBGM.wav");
+	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "clearBGM.mp3");
 }
 
 void SceneManager::SetChange() {
