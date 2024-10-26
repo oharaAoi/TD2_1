@@ -64,6 +64,12 @@ void Player::Init(){
 	maxSpeedTimeCount = 0;
 
 	wingAnimatinoKeyFrame_ = 0;
+	heightMeterObj_ = std::make_unique<BaseGameObject>();
+	heightMeterObj_->Init();
+	heightMeterObj_->SetObject("HeightMeter.obj");
+	heightMeterObj_->SetIsLighting(false);
+	heightMeterObj_->GetTransform()->SetScale({ 0.1f,1,1 });
+	heightMeterObj_->SetColor({ 1,1,1,0.6f });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +161,10 @@ void Player::Update(){
 		wings_->NotFlying();
 	}
 
+	//高さメーターの更新
+	heightMeterObj_->GetTransform()->SetTranslationX(transform_->GetTranslation().x);
+	heightMeterObj_->Update();
+
 	BaseGameObject::Update();
 
 	// -------------------------------------------------
@@ -174,7 +184,6 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
-
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 

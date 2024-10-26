@@ -61,6 +61,9 @@ public:
 		transform_.get()->SetTranslaion(Vector3{-10,10,0});
 
 	}
+	void DrawHeightMeter(){
+		heightMeterObj_->Draw();
+	}
 private:
 	void Move_TITLE();
 	void Move_TUTORIAL();
@@ -114,6 +117,7 @@ private:
 	const int kMinBodyCount_ = 2;
 	const int kMaxBodyCount_ = 8;
 	int bodyCount_ = 0;
+	std::unique_ptr<BaseGameObject> heightMeterObj_;
 
 	// パラメータ---------------------------------------
 

@@ -168,6 +168,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Nico/", "Nico.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MountainUFO/", "MountainUFO.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/UFOSmoke/", "UFOSmoke.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/HeightMeter/", "HeightMeter.obj");
 	// UI
 	ModelManager::LoadModel("./Game/Resources/Model/UI_Plane/", "UI_Plane.obj");
 
