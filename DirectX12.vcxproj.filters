@@ -477,9 +477,6 @@
     <ClCompile Include="Game\UI\FlyingTimerUI.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\TutorialScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameObject\Bird.cpp">
       <Filter>Game\GameObject\Placement</Filter>
     </ClCompile>
@@ -513,15 +510,6 @@
     <ClCompile Include="Game\Effect\EmissionEffect.cpp">
       <Filter>Game\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Effect\ParticleManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Effect\Cherry.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Effect\BaseParticle2D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Manager\AudioManager.cpp">
       <Filter>Engine\Manager</Filter>
     </ClCompile>
@@ -543,38 +531,50 @@
     <ClCompile Include="Game\Manager\AnimetionEffectManager.cpp">
       <Filter>Game\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Camera\ResultCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Effect\TickerTape.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Effect\Bubble.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\TutorialUI.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Information\Score.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Manager\AnimationManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\PlayerBodyCountUI.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\PlayerControlUI.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Game\UI\FinishUI.cpp">
+      <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\GuideUI.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\FinishUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\GameStartUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TutorialUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayerBodyCountUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\PlayerControlUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Information\Score.cpp">
+      <Filter>Game\Information</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\Bubble.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\Cherry.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\BaseParticle2D.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\ParticleManager.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\TickerTape.cpp">
+      <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Manager\AnimationManager.cpp">
+      <Filter>Game\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TutorialScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\ResultCamera.cpp">
+      <Filter>Game\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -956,9 +956,6 @@
     <ClInclude Include="Game\UI\FlyingTimerUI.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene\TutorialScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameObject\Bird.h">
       <Filter>Game\GameObject\Placement</Filter>
     </ClInclude>
@@ -992,15 +989,6 @@
     <ClInclude Include="Game\Effect\EmissionEffect.h">
       <Filter>Game\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Effect\ParticleManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\Cherry.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\BaseParticle2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Manager\AudioManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
@@ -1028,38 +1016,50 @@
     <ClInclude Include="ObjectType.h">
       <Filter>Game\Information</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Camera\ResultCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\TickerTape.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\Bubble.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Game\UI\FinishUI.h">
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\TutorialUI.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Information\Score.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Manager\AnimationManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\PlayerBodyCountUI.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\PlayerControlUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\GuideUI.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\FinishUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\GameStartUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayerBodyCountUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\PlayerControlUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Information\Score.h">
+      <Filter>Game\Information</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\Bubble.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\Cherry.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\BaseParticle2D.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\ParticleManager.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\TickerTape.h">
+      <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Manager\AnimationManager.h">
+      <Filter>Game\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\TutorialScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\ResultCamera.h">
+      <Filter>Game\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

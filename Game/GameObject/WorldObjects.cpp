@@ -16,6 +16,12 @@ WorldObjects::~WorldObjects() {
 void WorldObjects::Init() {
 	cloudZ = 130.0f;
 
+	stageLoopCount_ = 0;
+	nowStageIndex_ = 0;
+
+	mountainLoopCount_ = 0;
+	nowMountainIndex_ = 0;
+
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		Vector3 newPos = StageInformation::worldWallPos_;
 		newPos.x += StageInformation::stageWidthEvery_ * (oi);
@@ -93,6 +99,8 @@ void WorldObjects::Init() {
 		ufo_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		ufosmoke_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 	}
+	stageLoopCount_ = 0;
+	mountainLoopCount_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

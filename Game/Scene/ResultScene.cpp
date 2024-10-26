@@ -69,7 +69,7 @@ void ResultScene::Init(){
 	/*------------ audio -------------*/
 
 	clearBGM_ = std::make_unique<AudioPlayer>();
-	clearBGM_->Init("clearBGM.wav");
+	clearBGM_->Init("clearBGM.mp3");
 	clearBGM_->Play(true, 0.1f, true);
 
 	/*---------------- string --------------*/
