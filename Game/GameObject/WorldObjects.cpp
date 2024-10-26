@@ -93,6 +93,8 @@ void WorldObjects::Init() {
 		ufo_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		ufosmoke_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 	}
+	stageLoopCount_ = 0;
+	mountainLoopCount_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

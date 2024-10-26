@@ -24,27 +24,6 @@
         "BIRD_1": {
             "objType": 2,
             "position": [
-                163.0,
-                305.20001220703125,
-                0.0
-            ],
-            "radius": 13.0,
-            "rotate": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scale": [
-                6.0,
-                6.0,
-                6.0
-            ],
-            "subType": 0
-        },
-        "BIRD_2": {
-            "objType": 2,
-            "position": [
                 188.0,
                 22.799999237060547,
                 0.0
@@ -63,28 +42,7 @@
             ],
             "subType": 0
         },
-        "BIRD_3": {
-            "objType": 2,
-            "position": [
-                23.700000762939453,
-                206.3000030517578,
-                0.0
-            ],
-            "radius": 13.0,
-            "rotate": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scale": [
-                6.0,
-                6.0,
-                6.0
-            ],
-            "subType": 0
-        },
-        "DRIFTWOOD_4": {
+        "DRIFTWOOD_2": {
             "objType": 4,
             "position": [
                 141.3000030517578,
@@ -105,7 +63,7 @@
             ],
             "subType": 0
         },
-        "FISH_5": {
+        "FISH_3": {
             "objType": 1,
             "position": [
                 108.69999694824219,
@@ -126,7 +84,7 @@
             ],
             "subType": 1
         },
-        "FISH_6": {
+        "FISH_4": {
             "objType": 1,
             "position": [
                 180.3000030517578,
@@ -147,7 +105,7 @@
             ],
             "subType": 3
         },
-        "FISH_7": {
+        "FISH_5": {
             "objType": 1,
             "position": [
                 29.200000762939453,
@@ -168,7 +126,7 @@
             ],
             "subType": 1
         },
-        "FISH_8": {
+        "FISH_6": {
             "objType": 1,
             "position": [
                 66.80000305175781,
@@ -189,7 +147,7 @@
             ],
             "subType": 1
         },
-        "FISH_9": {
+        "FISH_7": {
             "objType": 1,
             "position": [
                 141.0,
