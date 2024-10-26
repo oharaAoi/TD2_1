@@ -149,5 +149,7 @@ private:
 
 	float birdPopYRaito_ = 0.4f;
 	int prePattern;//出た数字を記録しておき、パターンが被らないようにする
+
+	float birdAdjustmentHeight = 0;//鳥の高さを補完開始する高さ
 };
 
