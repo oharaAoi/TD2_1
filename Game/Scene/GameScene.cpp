@@ -275,7 +275,7 @@ void GameScene::Update(){
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
 	if(Input::IsTriggerKey(DIK_ESCAPE)) {
-		isPause_ = true;
+		SetNextScene(SceneType::Scene_Game);
 	}
 	if(isPause_) {
 		isStepFrame_ = false;
