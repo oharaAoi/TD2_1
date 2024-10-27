@@ -15,7 +15,7 @@ public:
 	void Draw();
 
 public:
-	static void SetJumpData(float speed,int32_t bodyCount,BaseGameObject* parentObject);
+	static void SetJumpData(float speed,int32_t bodyCount, WorldTransform* parentWT);
 
 private:
 	bool isUIvisible_;

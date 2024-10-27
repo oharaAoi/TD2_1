@@ -229,6 +229,7 @@ private:
 	// データ格納変数　----------------------------------
 
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;// プレイヤーの上部の水面の座標
+	std::unique_ptr<WorldTransform> jumpUI_transform_;// プレイヤーの上部の水面の座標
 	float swimmigDepth_;	// プレイヤーがどれだけ潜っているか
 	uint32_t getCoinNum_ = 0;// コインを何枚取得したか
 	Vector3 prePos_;

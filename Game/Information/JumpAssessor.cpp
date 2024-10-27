@@ -11,12 +11,12 @@ void JumpAssessor::Draw(){
 	if(!isUIvisible_){ return; }
 }
 
-void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,BaseGameObject* parentObject){
+void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* parentWT){
 
 	if(speed >= 150.0f && bodyCount == 8){// prefect
 		AnimetionEffectManager::AddListEffect(
 			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
-			parentObject->GetTransform(),
+			parentWT,
 			false, 
 			Vector3(1, 1, 1),Quaternion(), Vector3()
 		);
@@ -24,7 +24,7 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,BaseGameObject* pa
 	} else if(speed >= 120.0f or bodyCount >= 6){// good
 		AnimetionEffectManager::AddListEffect(
 			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
-			parentObject->GetTransform(),
+			parentWT,
 			false,
 			Vector3(1, 1, 1), Quaternion(), Vector3()
 		);
@@ -32,9 +32,9 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,BaseGameObject* pa
 	} else if(speed >= 70.0f or bodyCount >= 4){// nice
 		AnimetionEffectManager::AddListEffect(
 			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
-			parentObject->GetTransform(),
+			parentWT,
 			false,
-			Vector3(1, 1, 1), Quaternion(), Vector3()
+			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
 		);
 	
 	} else{

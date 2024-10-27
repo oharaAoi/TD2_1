@@ -19,6 +19,7 @@ void Player::Init(){
 	BaseGameObject::Init();
 	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
+	jumpUI_transform_ = Engine::CreateWorldTransform();
 	SetIsLighting(false);
 
 	animetor_ = std::make_unique<PlayerAnimator>();
@@ -114,7 +115,7 @@ void Player::Update(){
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
 
-			JumpAssessor::SetJumpData(GetMoveSpeed(), bodyCount_, this);
+			JumpAssessor::SetJumpData(GetMoveSpeed(), bodyCount_, jumpUI_transform_.get());
 		}
 
 	} else {
@@ -273,6 +274,13 @@ void Player::Move(){
 	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
 	aboveWaterSurfacePos->Update();
 
+	jumpUI_transform_->SetTranslaion({
+		transform_->GetTranslation().x - 5.0f,
+		transform_->GetTranslation().y + 5.0f,
+		transform_->GetTranslation().z - 10.0f
+	});
+	jumpUI_transform_->Update();
+
 	// 下降フラグの更新
 	if(isFlying_){
 		if(!isFalling_){
@@ -297,6 +305,9 @@ void Player::Move(){
 	}
 
 	MoveLimit();
+
+
+
 }
 
 
