@@ -252,6 +252,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf");
 
 	// Adio
 	//AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");
