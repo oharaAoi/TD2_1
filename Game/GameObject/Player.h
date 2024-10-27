@@ -63,6 +63,7 @@ public:
 	}
 	void DrawHeightMeter(){
 		heightMeterObj_->Draw();
+		MaxHeightMeter_->Draw();
 	}
 private:
 	void Move_TITLE();
@@ -118,6 +119,7 @@ private:
 	const int kMaxBodyCount_ = 8;
 	int bodyCount_ = 0;
 	std::unique_ptr<BaseGameObject> heightMeterObj_;
+	std::unique_ptr<BaseGameObject> MaxHeightMeter_;
 
 	// パラメータ---------------------------------------
 

@@ -181,6 +181,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/Trail/", "skyTrail.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/Effect/", "HighSpeedEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/TutorialGuide/", "TutorialGuide.obj");
+	ModelManager::LoadModel("./Game/Resources/Model/MaxHeight/", "MaxHeight.obj");
 
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");

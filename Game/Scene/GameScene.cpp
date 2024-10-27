@@ -588,7 +588,9 @@ void GameScene::Draw() const{
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	player_->DrawHeightMeter();
+	if(currentState_ == GAME_STATE::GAME) {
+		player_->DrawHeightMeter();
+	}
 	/////////////////////////////////
 	// 3Dオブジェクトに対してCsを実行する
 	/////////////////////////////////
