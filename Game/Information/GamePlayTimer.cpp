@@ -21,7 +21,7 @@ void GamePlayTimer::Init(float limit) {
 	numberSpriteScale_ = { 0.8f, 0.8f };
 
 	clock_ = Engine::CreateSprite("timer.png");
-	clock_->SetScale({0.35f, 0.35f});
+	clock_->SetScale({ 0.35f, 0.35f });
 
 	adjustItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "GamePlayTimer";
@@ -71,14 +71,16 @@ void GamePlayTimer::Init(float limit) {
 	isMove_ = false;
 	isFadeIn_ = true;
 
-	startPos_ = {-600.0f, 250.0f };
+	isOverTime_ = false;
+
+	startPos_ = { -600.0f, 250.0f };
 	endPos_ = { 2000.0f, 250.0f };
 	time_ = 0;
 	moveTime_ = 1.5f;
 	timeleftUI_ = Engine::CreateSprite("timer60.png");
 
 	timeleftUI_->SetCenterPos(startPos_);
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,13 +92,12 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	gameTimer_ -= GameTimer::DeltaTime();
 	if (gameTimer_ < 0.0f) {
 		gameTimer_ = 0.0f;
-		for(int oi = 0; oi < limitTimeUI_.size(); ++oi) {
+		for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
 			limitTimeUI_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimer_), oi + 1)));
 			limitTimeUI_[oi]->Update();
 		}
-	} else
-	{
-		for(int oi = 0; oi < limitTimeUI_.size(); ++oi) {
+	} else {
+		for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
 			limitTimeUI_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<int>(gameTimer_ + 1), oi + 1)));
 			limitTimeUI_[oi]->Update();
 		}
@@ -115,24 +116,26 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		isMove_ = true;
 	}
 
-	// Playerが飛んでいたら
-	if (!isPlayerFlying) {
-		// 制限時間を超えたら
-		if (gameTimer_ <= 0.0f) {
-			isFinish_ = true;
-			//AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
-		}
-	} else { // オーバータイムに入る
-		isOverTime_ = true;
+	if (gameTimer_ <= 0.0f) {
+		// Playerが飛んでいたら
+		if (!isPlayerFlying) {
+			// 制限時間を超えたら
 
-		// 今飛んでいなくて前飛んでいたら
-		if (!isPlayerFlying && isPreFlying_) {
 			isFinish_ = true;
 			//AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+
+		} else { // オーバータイムに入る
+			isOverTime_ = true;
+
+			// 今飛んでいなくて前飛んでいたら
+			if (!isPlayerFlying && isPreFlying_) {
+				isFinish_ = true;
+				//AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
+			}
 		}
 	}
 
-	if(isFinish_){
+	if (isFinish_) {
 		outgameTime_ += GameTimer::DeltaTime();
 	}
 
@@ -149,8 +152,7 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	}
 
 #ifdef _DEBUG
-	if(Input::IsTriggerKey(DIK_0)) 
-	{
+	if (Input::IsTriggerKey(DIK_0)) {
 		gameTimer_ = 3;
 	}
 #endif // _DEBUG
