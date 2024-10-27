@@ -39,6 +39,10 @@ public:
 
 	void SpriteMove();
 
+	void AddTime(float time);
+
+	void AddClockMove();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
@@ -68,6 +72,19 @@ private:
 	Vector2 numberSpriteScale_;
 	float numberInterval_;
 
+	// タイムを追加した際のUI
+	std::unique_ptr<Sprite> addTimeSprite_;
+	bool isAddTime_;
+
+	float addClockMoveCount_;
+	float addClockMoveTime_;
+	bool isAppearance_;
+
+	Vector2 addTimeEndPos_;
+	Vector4 addClockColor_;
+	float alpa_;
+
+	// 残り時間のUI
 	std::unique_ptr<AudioPlayer> timeleft10s_;
 	std::unique_ptr<AudioPlayer> timeleft60s_;
 

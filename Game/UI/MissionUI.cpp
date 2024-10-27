@@ -10,7 +10,9 @@ MissionUI::~MissionUI() {
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MissionUI::Init() {
+void MissionUI::Init(GamePlayTimer* pGamePlayTimer) {
+	pGamePlayTimer_ = pGamePlayTimer;
+
 	topStartPos_ = { -400.0f, 200.0f };
 	topEndPos_ = { 150.0f, 200.0f };
 
@@ -83,12 +85,19 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 	// -------------------------------------------------
 	if (isSpeesAppearanceFinish_) {
 		if (playerSpeed >= (float)nowSpeedMission_) {
+			// タイムを増やす
+			if (!isSpeedCheck_) {
+				pGamePlayTimer_->AddTime(10.0f);
+			}
 			isSpeedCheck_ = true;
 		}
 	}
 
 	if (isHeightAppearanceFinish_) {
 		if (playerPosY >= (float)nowHeightMission_) {
+			if (!isHeightCheck_) {
+				pGamePlayTimer_->AddTime(10.0f);
+			}
 			isHeightCheck_ = true;
 		}
 	}
@@ -126,7 +135,9 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 				HeightCheck();
 			}
 		} else {
-			HeightMissionDisappear();
+			if (!(nowHeightMission_ == HeightMission::Mission_Finish)) {
+				HeightMissionDisappear();
+			}
 		}
 	}
 
@@ -162,6 +173,10 @@ void MissionUI::Start() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MissionUI::SpeedMissionAppearance() {
+	if (isSpeesAppearanceFinish_) {
+		return;
+	}
+
 	appearanceSpeedCount_ += GameTimer::DeltaTime();
 	float t = appearanceSpeedCount_ / appearanceTime_;
 
@@ -176,6 +191,10 @@ void MissionUI::SpeedMissionAppearance() {
 }
 
 void MissionUI::HeightMissionAppearance() {
+	if (isHeightAppearanceFinish_) {
+		return;
+	}
+
 	appearanceHeightCount_ += GameTimer::DeltaTime();
 	float t = appearanceHeightCount_ / appearanceTime_;
 
@@ -188,7 +207,10 @@ void MissionUI::HeightMissionAppearance() {
 	heightMission_->SetCenterPos(heightPos);
 
 	if (appearanceHeightCount_ > appearanceTime_) {
-		isHeightAppearance_ = false;
+		if (!(nowHeightMission_ == HeightMission::Mission_Finish)) {
+			isHeightAppearance_ = false;
+		}
+
 		isHeightAppearanceFinish_ = true;
 		appearanceHeightCount_ = 0.0f;
 	}
@@ -221,6 +243,7 @@ void MissionUI::SpeedMissionDisappear() {
 }
 
 void MissionUI::HeightMissionDisappear() {
+	
 	if (disappearHeightCount_ > disappearTime_) {
 		HeightMissionChange();
 		disappearHeightCount_ = 0.0f;
@@ -330,6 +353,7 @@ void MissionUI::HeightMissionChange() {
 		break;
 	case HeightMission::Mission_500:
 		nowHeightMission_ = HeightMission::Mission_Finish;
+		heightMission_->SetScale({0.5f, 0.5f});
 		isHeightAppearance_ = false;
 		break;
 	}

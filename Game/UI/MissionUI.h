@@ -4,6 +4,7 @@
 #include "Engine/Engine.h"
 #include "Engine/2d/Sprite.h"
 #include "Engine/Math/Easing.h"
+#include "Game/Information/GamePlayTimer.h"
 
 enum class SpeedMission : uint32_t {
 	Mission_100 = 100,
@@ -12,8 +13,8 @@ enum class SpeedMission : uint32_t {
 };
 
 enum class HeightMission : uint32_t {
-	Mission_300 = 300,
-	Mission_500 = 500,
+	Mission_300 = 200,
+	Mission_500 = 400,
 	Mission_Finish = 99999,
 };
 
@@ -26,7 +27,7 @@ public:
 	MissionUI();
 	~MissionUI();
 
-	void Init();
+	void Init(GamePlayTimer* pGamePlayTimer);
 	void Update(float playerSpeed, float playerPosY);
 	void Draw() const;
 
@@ -69,6 +70,8 @@ public:
 #endif // _DEBUG
 
 private:
+
+	GamePlayTimer* pGamePlayTimer_;
 
 	std::unique_ptr<Sprite> speedMission_;
 	std::unique_ptr<Sprite> heightMission_;

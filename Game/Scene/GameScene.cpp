@@ -103,7 +103,7 @@ void GameScene::Init(){
 	gameStartUI_->Init();
 
 	missionUI_ = std::make_unique<MissionUI>();
-	missionUI_->Init();
+	missionUI_->Init(gamePlayTimer_.get());
 	
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
