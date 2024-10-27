@@ -229,11 +229,21 @@ private:
 	// データ格納変数　----------------------------------
 
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;// プレイヤーの上部の水面の座標
-	std::unique_ptr<WorldTransform> jumpUI_transform_;// プレイヤーの上部の水面の座標
+	std::unique_ptr<WorldTransform> jumpUI_transform_;
+	Vector3 jumpUI_Scale_Offset_;
+	Vector3 jumpUI_Translate_Offset_;
+	float jumpUI_Rotate_Offset_;
+
 	float swimmigDepth_;	// プレイヤーがどれだけ潜っているか
 	uint32_t getCoinNum_ = 0;// コインを何枚取得したか
 	Vector3 prePos_;
 	float divingSpeed_;// 着水時の下へのスピード
+
+#ifdef _DEBUG
+	std::unique_ptr<BaseGameObject>debugJumpUI_;
+#endif // _DEBUG
+
+
 
 	// 飛距離計測用　----------------------------------
 	FlyingTimer timer_;

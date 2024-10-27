@@ -16,6 +16,15 @@ void Player::Init(){
 
 	typeID_ = (int)ObjectType::PLAYER;
 
+
+#ifdef _DEBUG
+	debugJumpUI_ = std::make_unique<BaseGameObject>();
+	debugJumpUI_->Init();
+	debugJumpUI_->GetTransform()->SetParent(jumpUI_transform_->GetWorldMatrix());
+#endif // _DEBUG
+
+
+
 	BaseGameObject::Init();
 	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
@@ -274,11 +283,22 @@ void Player::Move(){
 	aboveWaterSurfacePos->SetTranslaion({ transform_->GetTranslation().x, 10.0f,0.0f });
 	aboveWaterSurfacePos->Update();
 
+
+	// ジャンプUIのトランスフォーム決定
 	jumpUI_transform_->SetTranslaion({
-		transform_->GetTranslation().x - 5.0f,
-		transform_->GetTranslation().y + 5.0f,
-		transform_->GetTranslation().z - 10.0f
+		transform_->GetTranslation().x + jumpUI_Translate_Offset_.x,
+		transform_->GetTranslation().y + jumpUI_Translate_Offset_.x,
+		transform_->GetTranslation().z + jumpUI_Translate_Offset_.x
 	});
+
+	jumpUI_transform_->SetScale({
+		transform_->GetScale().x + jumpUI_Translate_Offset_.x,
+		transform_->GetScale().y + jumpUI_Translate_Offset_.x,
+		transform_->GetScale().z + jumpUI_Translate_Offset_.x
+	});
+
+	jumpUI_transform_->SetQuaternion(Quaternion::AngleAxis(jumpUI_Rotate_Offset_, {0.0f,1.0f,0.0f}));
+
 	jumpUI_transform_->Update();
 
 	// 下降フラグの更新
@@ -435,6 +455,16 @@ void Player::Rounding(Vector3& velocity){
 
 #ifdef _DEBUG
 void Player::Debug_Gui(){
+
+#ifdef _DEBUG
+
+	ImGui::Begin("jumpUI");
+	ImGui::DragFloat3("scale", &jumpUI_Scale_Offset_.x, 0.005f);
+	ImGui::DragFloat("rotate", &jumpUI_Rotate_Offset_, 0.005f);
+	ImGui::DragFloat3("translate", &jumpUI_Translate_Offset_.x, 0.005f);
+	ImGui::End();
+
+#endif // _DEBUG
 
 
 	ImGui::Begin("Player");

@@ -34,7 +34,7 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
 			parentWT,
 			false,
-			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
+			Vector3(1, 1, 1), Quaternion(), Vector3()
 		);
 	
 	} else{
