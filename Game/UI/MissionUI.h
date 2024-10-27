@@ -6,13 +6,13 @@
 #include "Engine/Math/Easing.h"
 
 enum class SpeedMission : uint32_t {
-	Mission_100 = 100,
+	Mission_100 = 80,
 	Mission_150 = 150,
 	Mission_Finish,
 };
 
 enum class HeightMission : uint32_t {
-	Mission_300 = 300,
+	Mission_300 = 150,
 	Mission_500 = 500,
 	Mission_Finish = 99999,
 };

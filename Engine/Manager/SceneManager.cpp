@@ -279,6 +279,7 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeUp.mp3");//　水中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "MoveChangeDown.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "WingOpen.mp3");//　空中で上下移動を切り替えた時
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "missionClear.mp3");//　ミッションクリア時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/SystemSE/", "Finish.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "test.wav");//被弾時の音
 
