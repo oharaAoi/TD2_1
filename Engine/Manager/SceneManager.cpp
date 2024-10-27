@@ -229,6 +229,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "hightMission.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClear.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionComplete.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClearAddTime.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
