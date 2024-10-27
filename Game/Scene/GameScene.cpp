@@ -242,6 +242,7 @@ void GameScene::Update(){
 				obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
 				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
 				gameStartUI_->SetUI();
+				missionUI_->Start();
 			}
 
 		} /*else if (currentState_ == GAME_STATE::TUTORIAL) {
@@ -429,7 +430,9 @@ void GameScene::Update(){
 
 	gameStartUI_->Update();
 
-	missionUI_->Update(player_->GetMoveSpeed(), player_->GetWorldTranslation().y);
+	if (currentState_ == GAME_STATE::GAME) {
+		missionUI_->Update(player_->GetMoveSpeed(), player_->GetWorldTranslation().y);
+	}
 
 	// -------------------------------------------------
 	// ↓ スプライト
@@ -661,6 +664,7 @@ void GameScene::Update_TUTORIAL(){
 	if(player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x) {
 		currentState_ = GAME_STATE::GAME;
 		gameStartUI_->SetUI();
+		missionUI_->Start();
 	}
 
 	// UIの更新

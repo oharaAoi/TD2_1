@@ -30,6 +30,8 @@ public:
 	void Update(float playerSpeed, float playerPosY);
 	void Draw() const;
 
+	void Start();
+
 	/// <summary>
 	/// Missionを画面からfadeInさせる
 	/// </summary>
