@@ -223,6 +223,12 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_arrow.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "mission1_hight.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "mission2_speed.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "hightMission.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClear.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionComplete.png");
+
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
