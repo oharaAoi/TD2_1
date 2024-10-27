@@ -104,11 +104,13 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 
 	// タイムアップ10秒前
 	if (std::floor(gameTimer_) == 10.0f) {
+		timeleftUI_->SetTexture("timer10.png");
 		timeleft10s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
 	// タイムアップ60秒前
 	if (std::floor(gameTimer_) == 60.0f) {
+		timeleftUI_->SetTexture("timer60.png");
 		timeleft60s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
@@ -255,7 +257,6 @@ void GamePlayTimer::SpriteMove() {
 		if (!isFadeIn_) {
 			isMove_ = false;
 			time_ = 0.0f;
-			timeleftUI_->SetTexture("timer10.png");
 		}
 
 		isFadeIn_ = !isFadeIn_;
@@ -263,6 +264,10 @@ void GamePlayTimer::SpriteMove() {
 }
 
 void GamePlayTimer::AddTime(float time) {
+	if (isOverTime_) {
+		return;
+	}
+
 	gameTimer_ += time;
 	isAddTime_ = true;
 

@@ -99,6 +99,8 @@ public:
 
 	const int GetBodyCount() const { return bodyCount_; }
 
+	const bool GetIsJet() const { return isjet_; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG
@@ -225,6 +227,7 @@ private:
 	bool isSplash_;			// 水しぶき発生フラグ
 	bool isFacedBird_;		// 鳥に正面衝突したかどうか
 	bool isEnableLaunch_;	// 胴体で再発射可能かどうか
+	bool isjet_;			// 胴体発射したか
 
 	// データ格納変数　----------------------------------
 

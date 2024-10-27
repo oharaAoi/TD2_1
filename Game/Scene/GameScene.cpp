@@ -416,6 +416,10 @@ void GameScene::Update(){
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(), 0.0f, 2.0f);
 	}
 
+	if (player_->GetIsJet()) {
+		playerBodyCountUI_->EmiteEffect();
+	}
+
 	playerBodyCountUI_->Update(player_->GetBodyCount());
 
 	finishUI_->Update();

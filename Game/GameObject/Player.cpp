@@ -18,6 +18,7 @@ void Player::Init(){
 
 
 #ifdef _DEBUG
+	jumpUI_transform_ = Engine::CreateWorldTransform();
 	debugJumpUI_ = std::make_unique<BaseGameObject>();
 	debugJumpUI_->Init();
 	debugJumpUI_->SetObject("evaluationNice.obj");
@@ -28,7 +29,6 @@ void Player::Init(){
 	BaseGameObject::Init();
 	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
-	jumpUI_transform_ = Engine::CreateWorldTransform();
 	SetIsLighting(false);
 
 	animetor_ = std::make_unique<PlayerAnimator>();
@@ -94,10 +94,10 @@ void Player::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Update(){
-
 	// 毎フレームの初期化・保存
 	isSplash_ = false;
 	preFlying_ = isFlying_;
+	isjet_ = false;
 
 	// 移動
 	if(isMove_) {
@@ -235,7 +235,6 @@ void Player::DrawAnimetor() const{
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Player::Move(){
-
 	if(GameScene::GetGameState() == GAME_STATE::TITLE){
 		pressTime_ = std::sinf(6.28f * GameTimer::TotalTime()) * 0.2f;
 
@@ -447,6 +446,8 @@ void Player::EraseBody(){
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/JumpEffect/", "JumpEffect.gltf", transform_.get(), false,
 			{ 1.0f, 1.0f, 1.0f }, Quaternion(), popObj->GetTransform()->GetTranslation());
 		followModels_.pop_back();
+
+		isjet_ = true;
 	}
 
 	followModels_.back()->SetObject("Player_Tail.obj");

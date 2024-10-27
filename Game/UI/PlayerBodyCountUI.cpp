@@ -27,6 +27,8 @@ void PlayerBodyCountUI::Init() {
 
 	fadeInStartPos_ = { -200, 250.0f };
 	fadeOutPos_ = { 1500, 250.0f };
+
+	effectMoveTime_ = 1.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,6 +53,30 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	gaugeFront_UI_->Update();
 
 	preCount_ = playerBodyCount;
+
+	// -------------------------------------------------
+	// ↓ effectを更新する
+	// -------------------------------------------------
+	for (std::list<EffectData>::iterator it = effectList_.begin(); it != effectList_.end();) {
+		(*it).moveTime_ += GameTimer::DeltaTime();
+		float t = (*it).moveTime_ / effectMoveTime_;
+
+		if ((*it).moveTime_ > effectMoveTime_) {
+			it = effectList_.erase(it);
+			continue;
+		}
+
+		(*it).effectSprite_->SetScale(Vector2::Lerp({ 0.0f, 0.0f }, { 2.0f, 2.0f }, (t)));
+		(*it).alpha_ = std::lerp(1.0f, 0.0f, EaseOutCubic(t));
+
+		(*it).color_ = { 1.0f, 1.0f, 1.0f, (*it).alpha_ };
+
+		(*it).effectSprite_->SetColor((*it).color_);
+
+		(*it).effectSprite_->Update();
+
+		++it;
+	}
 	
 	if (!isUiMove_) { return; }
 
@@ -58,6 +84,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 
 	maxBody_UI_->SetTextureCenterPos(uiPos_);
 	maxBody_UI_->Update();
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,8 +92,18 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::Draw() const {
+
+	// -------------------------------------------------
+	// ↓ effectを描画する
+	// -------------------------------------------------
+	for (std::list<EffectData>::const_iterator it = effectList_.begin(); it != effectList_.end();) {
+		(*it).effectSprite_->Draw();
+		++it;
+	}
+
 	gaugeBack_UI_->Draw();
 	gaugeFront_UI_->Draw();
+
 	if (!isUiMove_) { return; }
 	maxBody_UI_->Draw();
 }
@@ -91,6 +128,15 @@ void PlayerBodyCountUI::Move() {
 
 		isFadeIn_ = !isFadeIn_;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Effectを出現させる
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PlayerBodyCountUI::EmiteEffect() {
+	auto& effect = effectList_.emplace_back(EffectData());
+	effect.effectSprite_->SetCenterPos(backPos_UI_);
 }
 
 #ifdef _DEBUG

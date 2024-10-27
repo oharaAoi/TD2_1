@@ -1,15 +1,33 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <list>
 #include "Engine/Engine.h"
 #include "Engine/2d/Sprite.h"
 #include "Engine/Utilities/AdjustmentItem.h"
 #include "Engine/Math/Easing.h"
+#include "Engine/Math/Vector4.h"
 
 /// <summary>
 /// Playerの体の数を数える
 /// </summary>
 class PlayerBodyCountUI {
+public:
+
+	struct EffectData {
+		std::unique_ptr<Sprite> effectSprite_;
+		float moveTime_;
+		Vector4 color_;
+		float alpha_;
+
+		EffectData() {
+			effectSprite_ = Engine::CreateSprite("UIeffect.png");
+			moveTime_ = 0.0f;
+			color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			alpha_ = 1.0f;
+		}
+	};
+
 public:
 
 	PlayerBodyCountUI();
@@ -21,6 +39,7 @@ public:
 
 	void Move();
 
+	void EmiteEffect();
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -55,5 +74,13 @@ private:
 	bool isFadeIn_;
 
 	int preCount_;
+
+	// -------------------------------------------------
+	// ↓ UIEffect用
+	// -------------------------------------------------
+
+	std::list<EffectData> effectList_;
+	float effectMoveTime_;
+
 };
 
