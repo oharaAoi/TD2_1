@@ -70,6 +70,13 @@ void Player::Init(){
 	heightMeterObj_->SetIsLighting(false);
 	heightMeterObj_->GetTransform()->SetScale({ 0.1f,1,1 });
 	heightMeterObj_->SetColor({ 1,1,1,0.6f });
+
+	MaxHeightMeter_ = std::make_unique<BaseGameObject>();
+	MaxHeightMeter_->Init();
+	MaxHeightMeter_->SetObject("MaxHeight.obj");
+	MaxHeightMeter_->SetIsLighting(false);
+	MaxHeightMeter_->GetTransform()->SetScale({ 0.1f,1,1 });
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +172,11 @@ void Player::Update(){
 	heightMeterObj_->GetTransform()->SetTranslationX(transform_->GetTranslation().x);
 	heightMeterObj_->Update();
 
+	if(MaxHeightMeter_->GetTransform()->GetTranslation().y <= transform_->GetTranslation().y){
+		MaxHeightMeter_->GetTransform()->SetTranslationY(transform_->GetTranslation().y);
+	}
+	MaxHeightMeter_->GetTransform()->SetTranslationX(transform_->GetTranslation().x);
+	MaxHeightMeter_->Update();
 	BaseGameObject::Update();
 
 	// -------------------------------------------------

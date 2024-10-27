@@ -592,8 +592,7 @@ void GameScene::Draw() const{
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-
-	if(currentState_ != GAME_STATE::TITLE){
+	if(currentState_ == GAME_STATE::GAME) {
 		player_->DrawHeightMeter();
 	}
 	/////////////////////////////////
