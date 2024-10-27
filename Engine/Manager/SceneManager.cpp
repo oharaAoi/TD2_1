@@ -223,12 +223,15 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_arrow.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "mission1_hight.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "mission2_speed.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "hightMission.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClear.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png")
+		;
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_2.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionHeight_1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionHeight_2.png");
+
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionComplete.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClear.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClearAddTime.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
@@ -285,7 +288,7 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "missionClear.mp3");//　ミッションクリア時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/SystemSE/", "Finish.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "test.wav");//被弾時の音
-
+	
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "brow.mp3");

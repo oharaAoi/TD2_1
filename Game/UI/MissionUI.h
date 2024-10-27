@@ -5,16 +5,17 @@
 #include "Engine/2d/Sprite.h"
 #include "Engine/Math/Easing.h"
 #include "Game/Information/GamePlayTimer.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 enum class SpeedMission : uint32_t {
-	Mission_100 = 80,
+	Mission_80 = 80,
 	Mission_150 = 150,
 	Mission_Finish,
 };
 
 enum class HeightMission : uint32_t {
-	Mission_300 = 200,
-	Mission_500 = 400,
+	Mission_150 = 150,
+	Mission_500 = 500,
 	Mission_Finish = 99999,
 };
 

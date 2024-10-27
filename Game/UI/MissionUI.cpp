@@ -43,8 +43,8 @@ void MissionUI::Init(GamePlayTimer* pGamePlayTimer) {
 	isSpeedCheck_ = false;
 	isHeightCheck_ = false;
 
-	nowSpeedMission_ = SpeedMission::Mission_100;
-	nowHeightMission_ = HeightMission::Mission_300;
+	nowSpeedMission_ = SpeedMission::Mission_80;
+	nowHeightMission_ = HeightMission::Mission_150;
 
 	// -------------------------------------------------
 	// ↓ Spriteの作成、初期化
@@ -52,8 +52,8 @@ void MissionUI::Init(GamePlayTimer* pGamePlayTimer) {
 	speedCheck_ = Engine::CreateSprite("missionClear.png");
 	heightCheck_ = Engine::CreateSprite("missionClear.png");
 
-	speedMission_ = Engine::CreateSprite("mission2_speed.png");
-	heightMission_ = Engine::CreateSprite("mission1_hight.png");
+	speedMission_ = Engine::CreateSprite("missionSpeed_1.png");
+	heightMission_ = Engine::CreateSprite("missionHeight_1.png");
 
 	speedMission_->SetScale({ 0.6f, 0.6f });
 	heightMission_->SetScale({ 0.6f, 0.6f });
@@ -88,6 +88,7 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 			// タイムを増やす
 			if (!isSpeedCheck_) {
 				pGamePlayTimer_->AddTime(10.0f);
+				AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 			}
 			isSpeedCheck_ = true;
 		}
@@ -97,6 +98,7 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 		if (playerPosY >= (float)nowHeightMission_) {
 			if (!isHeightCheck_) {
 				pGamePlayTimer_->AddTime(10.0f);
+				AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 			}
 			isHeightCheck_ = true;
 		}
@@ -328,8 +330,9 @@ void MissionUI::SpeedMissionChange() {
 
 	// textureを変える
 	switch (nowSpeedMission_) {
-	case SpeedMission::Mission_100:
+	case SpeedMission::Mission_80:
 		nowSpeedMission_ = SpeedMission::Mission_150;
+		speedMission_->SetTexture("missionSpeed_2.png");
 		break;
 	case SpeedMission::Mission_150:
 		nowSpeedMission_ = SpeedMission::Mission_Finish;
@@ -348,8 +351,9 @@ void MissionUI::HeightMissionChange() {
 
 	// textureを変える
 	switch (nowHeightMission_) {
-	case HeightMission::Mission_300:
+	case HeightMission::Mission_150:
 		nowHeightMission_ = HeightMission::Mission_500;
+		heightMission_->SetTexture("missionHeight_2.png");
 		break;
 	case HeightMission::Mission_500:
 		nowHeightMission_ = HeightMission::Mission_Finish;
