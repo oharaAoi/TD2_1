@@ -113,6 +113,8 @@ void Player::Update(){
 				waterSurfaceCoolTime = 0.25f;
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
+
+			JumpAssessor::SetJumpData(GetMoveSpeed(), bodyCount_, this);
 		}
 
 	} else {
