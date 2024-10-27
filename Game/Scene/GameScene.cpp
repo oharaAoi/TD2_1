@@ -101,6 +101,9 @@ void GameScene::Init(){
 
 	gameStartUI_ = std::make_unique<GameStartUI>();
 	gameStartUI_->Init();
+
+	missionUI_ = std::make_unique<MissionUI>();
+	missionUI_->Init();
 	
 	// チュートリアル
 	tutorialUI_ = std::make_unique<TutorialUI>();
@@ -426,6 +429,8 @@ void GameScene::Update(){
 
 	gameStartUI_->Update();
 
+	missionUI_->Update(player_->GetMoveSpeed(), player_->GetWorldTranslation().y);
+
 	// -------------------------------------------------
 	// ↓ スプライト
 	// -------------------------------------------------
@@ -607,6 +612,7 @@ void GameScene::Draw() const{
 		}
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
+		missionUI_->Draw();
 		finishUI_->Draw();
 		gameStartUI_->Draw();
 		
@@ -795,6 +801,7 @@ void GameScene::Debug_Gui(){
 				playerControlUI_->Debug_Gui();
 				playerBodyCountUI_->Debug_Gui();
 				guideUI_->Debug_Gui();
+				missionUI_->Debug_Gui();
 				ImGui::End();
 				ImGui::TreePop();
 			}
