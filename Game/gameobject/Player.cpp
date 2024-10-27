@@ -18,6 +18,7 @@ void Player::Init(){
 
 
 #ifdef _DEBUG
+	jumpUI_transform_ = Engine::CreateWorldTransform();
 	debugJumpUI_ = std::make_unique<BaseGameObject>();
 	debugJumpUI_->Init();
 	debugJumpUI_->GetTransform()->SetParent(jumpUI_transform_->GetWorldMatrix());
@@ -28,7 +29,6 @@ void Player::Init(){
 	BaseGameObject::Init();
 	SetObject("Player_Head.obj");
 	aboveWaterSurfacePos = Engine::CreateWorldTransform();
-	jumpUI_transform_ = Engine::CreateWorldTransform();
 	SetIsLighting(false);
 
 	animetor_ = std::make_unique<PlayerAnimator>();

@@ -106,7 +106,8 @@ void ObstaclesManager::Draw() const {
 	Engine::SetPipeline(PipelineType::NormalPipeline);
 	for (std::list<BasePlacementObject*>::const_iterator it = normalDrawList_.begin(); it != normalDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
-		if (length < playerDrawLenght_) {
+		// 描画範囲を伸ばすための500プラスデス
+		if (length < playerDrawLenght_ + 500.0f) {
 			(*it)->Draw();
 		}
 		++it;
@@ -115,7 +116,8 @@ void ObstaclesManager::Draw() const {
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	for (std::list<BasePlacementObject*>::const_iterator it = animationDrawList_.begin(); it != animationDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
-		if(length < playerDrawLenght_) {
+		// 描画範囲を伸ばすための500プラスデス
+		if(length < playerDrawLenght_ + 500.0f) {
 			(*it)->Draw();
 		}
 		++it;
