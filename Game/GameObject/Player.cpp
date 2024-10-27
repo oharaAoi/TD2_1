@@ -20,7 +20,7 @@ void Player::Init(){
 #ifdef _DEBUG
 	debugJumpUI_ = std::make_unique<BaseGameObject>();
 	debugJumpUI_->Init();
-	debugJumpUI_->GetTransform()->SetParent(jumpUI_transform_->GetWorldMatrix());
+	debugJumpUI_->SetObject("evaluationNice.obj");
 #endif // _DEBUG
 
 
@@ -156,6 +156,10 @@ void Player::Update(){
 	} else if(Input::IsTriggerKey(DIK_DOWN)){
 		EraseBody();
 	}
+
+	debugJumpUI_->GetTransform()->SetParent(jumpUI_transform_->GetWorldMatrix());
+	debugJumpUI_->Update();
+
 #endif // _DEBUG
 
 
@@ -208,6 +212,14 @@ void Player::Draw() const{
 	for(auto& body : followModels_){
 		body->Draw();
 	}
+
+
+#ifdef _DEBUG
+	if(isDebugUI_Visible_){
+		debugJumpUI_->Draw();
+	}
+#endif // _DEBUG
+
 	//Render::DrawAnimationModels(model_, animetor_->GetSkinnings(), transform_.get(), materials);
 }
 
@@ -287,14 +299,14 @@ void Player::Move(){
 	// ジャンプUIのトランスフォーム決定
 	jumpUI_transform_->SetTranslaion({
 		transform_->GetTranslation().x + jumpUI_Translate_Offset_.x,
-		transform_->GetTranslation().y + jumpUI_Translate_Offset_.x,
-		transform_->GetTranslation().z + jumpUI_Translate_Offset_.x
+		transform_->GetTranslation().y + jumpUI_Translate_Offset_.y,
+		transform_->GetTranslation().z + jumpUI_Translate_Offset_.z
 	});
 
 	jumpUI_transform_->SetScale({
-		transform_->GetScale().x + jumpUI_Translate_Offset_.x,
-		transform_->GetScale().y + jumpUI_Translate_Offset_.x,
-		transform_->GetScale().z + jumpUI_Translate_Offset_.x
+		transform_->GetScale().x + jumpUI_Scale_Offset_,
+		transform_->GetScale().y + jumpUI_Scale_Offset_,
+		transform_->GetScale().z + jumpUI_Scale_Offset_
 	});
 
 	jumpUI_transform_->SetQuaternion(Quaternion::AngleAxis(jumpUI_Rotate_Offset_, {0.0f,1.0f,0.0f}));
@@ -459,9 +471,10 @@ void Player::Debug_Gui(){
 #ifdef _DEBUG
 
 	ImGui::Begin("jumpUI");
-	ImGui::DragFloat3("scale", &jumpUI_Scale_Offset_.x, 0.005f);
+	ImGui::Checkbox("isDegugUI_visible", &isDebugUI_Visible_);
+	ImGui::DragFloat("scale", &jumpUI_Scale_Offset_, 0.005f);
 	ImGui::DragFloat("rotate", &jumpUI_Rotate_Offset_, 0.005f);
-	ImGui::DragFloat3("translate", &jumpUI_Translate_Offset_.x, 0.005f);
+	ImGui::DragFloat3("translate", &jumpUI_Translate_Offset_.x, 0.025f);
 	ImGui::End();
 
 #endif // _DEBUG

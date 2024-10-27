@@ -15,7 +15,7 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 
 	if(speed >= 150.0f && bodyCount == 8){// prefect
 		AnimetionEffectManager::AddListEffect(
-			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
+			"./Game/Resources/Model/evaluationPERFECT/", "evaluationPERFECT.gltf",
 			parentWT,
 			false, 
 			Vector3(1, 1, 1),Quaternion(), Vector3()

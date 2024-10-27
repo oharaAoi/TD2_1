@@ -170,6 +170,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/UFOSmoke/", "UFOSmoke.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/HeightMeter/", "HeightMeter.obj");
 	// UI
+	ModelManager::LoadModel("./Game/Resources/Model/evaluationNice/", "evaluationNice.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/UI_Plane/", "UI_Plane.obj");
 
 	ModelManager::LoadModel("./Game/Resources/Model/WorldWall/", "WorldWall.obj");
@@ -257,6 +258,8 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/evaluationPERFECT/", "evaluationPERFECT.gltf");
+
 
 	// Adio
 	//AudioManager::LoadAudio("./Game/Resources/Audio/", "kari.wav");

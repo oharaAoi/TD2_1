@@ -230,9 +230,10 @@ private:
 
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;// プレイヤーの上部の水面の座標
 	std::unique_ptr<WorldTransform> jumpUI_transform_;
-	Vector3 jumpUI_Scale_Offset_;
 	Vector3 jumpUI_Translate_Offset_;
+	float jumpUI_Scale_Offset_;
 	float jumpUI_Rotate_Offset_;
+	bool isDebugUI_Visible_ = true;
 
 	float swimmigDepth_;	// プレイヤーがどれだけ潜っているか
 	uint32_t getCoinNum_ = 0;// コインを何枚取得したか
