@@ -577,7 +577,11 @@ void GameScene::Draw() const{
 	// Effectの描画
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::AddPipeline);
-	trail_->Draw();
+
+	if(currentState_ != GAME_STATE::TITLE){
+		trail_->Draw();
+	}
+
 	Engine::SetPipeline(PipelineType::SkinningPipeline);
 	animationEffectManager_->Draw();
 	debugModel_->Draw();
@@ -588,7 +592,10 @@ void GameScene::Draw() const{
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	player_->DrawHeightMeter();
+
+	if(currentState_ != GAME_STATE::TITLE){
+		player_->DrawHeightMeter();
+	}
 	/////////////////////////////////
 	// 3Dオブジェクトに対してCsを実行する
 	/////////////////////////////////
