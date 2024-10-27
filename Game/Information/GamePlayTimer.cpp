@@ -53,6 +53,20 @@ void GamePlayTimer::Init(float limit) {
 	timeleft60s_ = std::make_unique<AudioPlayer>();
 	timeleft60s_->Init("timeRemaining.mp3");
 
+	// -------------------------------------------------
+	// ↓ 時間を足すUIのSpriteを作成する
+	// -------------------------------------------------
+	addTimeSprite_ = Engine::CreateSprite("missionClearAddTime.png");
+	addTimeSprite_->SetCenterPos(clock_->GetCenterPos());
+	addTimeSprite_->SetScale({ 0.5f, 0.5f });
+	isAddTime_ = false;
+	addClockMoveCount_ = 0.0f;
+	addClockMoveTime_ = 1.0f;
+
+	addTimeEndPos_ = clock_->GetCenterPos();
+	addTimeEndPos_.x += -100.0f;
+	addClockColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
+	alpa_ = 0.0f;
 
 	isMove_ = false;
 	isFadeIn_ = true;
@@ -126,6 +140,12 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		timeleftUI_->Update();
 	}
 
+	if (isAddTime_) {
+		AddClockMove();
+		addTimeSprite_->SetColor(addClockColor_);
+		addTimeSprite_->Update();
+	}
+
 #ifdef _DEBUG
 	if(Input::IsTriggerKey(DIK_0)) 
 	{
@@ -143,6 +163,10 @@ void GamePlayTimer::Draw() const {
 	clock_->Draw();
 	for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
 		limitTimeUI_[oi]->Draw();
+	}
+
+	if (isAddTime_) {
+		addTimeSprite_->Draw();
 	}
 
 	timeleftUI_->Draw();
@@ -236,7 +260,45 @@ void GamePlayTimer::SpriteMove() {
 
 		isFadeIn_ = !isFadeIn_;
 	}
+}
 
+void GamePlayTimer::AddTime(float time) {
+	gameTimer_ += time;
+	isAddTime_ = true;
+
+	isAppearance_ = true;
+	addClockMoveCount_ = 0.0f;
+}
+
+void GamePlayTimer::AddClockMove() {
+	addClockMoveCount_ += GameTimer::DeltaTime();
+	float t = addClockMoveCount_ / addClockMoveTime_;
+
+	if (isAppearance_) {
+		Vector2 pos = addTimeSprite_->GetCenterPos();
+		pos = Vector2::Lerp(clock_->GetCenterPos(), addTimeEndPos_, EaseOutExpo(t));
+		addTimeSprite_->SetCenterPos(pos);
+
+		alpa_ = std::lerp(0.0f, 1.0f, EaseOutExpo(t));
+	} else {
+		Vector2 pos = addTimeSprite_->GetCenterPos();
+		pos = Vector2::Lerp(addTimeEndPos_, clock_->GetCenterPos(), EaseInQuart(t));
+		addTimeSprite_->SetCenterPos(pos);
+
+		alpa_ = std::lerp(1.0f, 0.0f, EaseInQuart(t));
+	}
+
+	addClockColor_.w = alpa_;
+
+	if (addClockMoveCount_ > addClockMoveTime_) {
+		addClockMoveCount_ = 0;
+
+		if (!isAppearance_) {
+			isAddTime_ = false;
+		}
+
+		isAppearance_ = !isAppearance_;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,6 +318,10 @@ void GamePlayTimer::Debug_Gui() {
 			limitTimeUI_[oi]->SetScale(numberSpriteScale_);
 		}
 		clock_->Debug_Gui();
+
+		if (ImGui::Button("AddTime")) {
+			AddTime(10.0f);
+		}
 
 		if (ImGui::Button("ReAdapt")) {
 			AdaptAdjustmentItem();
