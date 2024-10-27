@@ -17,12 +17,12 @@ void Player::Init(){
 	typeID_ = (int)ObjectType::PLAYER;
 
 
-#ifdef _DEBUG
+
 	jumpUI_transform_ = Engine::CreateWorldTransform();
 	debugJumpUI_ = std::make_unique<BaseGameObject>();
 	debugJumpUI_->Init();
 	debugJumpUI_->SetObject("evaluationNice.obj");
-#endif // _DEBUG
+
 
 
 
@@ -87,6 +87,9 @@ void Player::Init(){
 	MaxHeightMeter_->SetIsLighting(false);
 	MaxHeightMeter_->GetTransform()->SetScale({ 0.1f,1,1 });
 
+	jumpUI_Scale_Offset_ = -0.5f;
+	jumpUI_Rotate_Offset_ = 0.665f;
+	jumpUI_Translate_Offset_ = { 65,-11.5f,17 };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

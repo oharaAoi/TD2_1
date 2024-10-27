@@ -18,15 +18,15 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 			"./Game/Resources/Model/evaluationPERFECT/", "evaluationPERFECT.gltf",
 			parentWT,
 			false, 
-			Vector3(1, 1, 1),Quaternion(), Vector3()
+			Vector3(0.5f, 0.5f, 0.5f),Quaternion(), Vector3()
 		);
 
 	} else if(speed >= 120.0f or bodyCount >= 6){// good
 		AnimetionEffectManager::AddListEffect(
-			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
+			"./Game/Resources/Model/evaluationGood/", "evaluationGood.gltf",
 			parentWT,
 			false,
-			Vector3(1, 1, 1), Quaternion(), Vector3()
+			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
 		);
 	
 	} else if(speed >= 70.0f or bodyCount >= 4){// nice

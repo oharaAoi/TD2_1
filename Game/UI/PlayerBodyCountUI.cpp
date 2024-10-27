@@ -28,7 +28,7 @@ void PlayerBodyCountUI::Init() {
 	fadeInStartPos_ = { -200, 250.0f };
 	fadeOutPos_ = { 1500, 250.0f };
 
-	effectMoveTime_ = 1.0f;
+	effectMoveTime_ = 0.6f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,8 +66,8 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 			continue;
 		}
 
-		(*it).effectSprite_->SetScale(Vector2::Lerp({ 0.0f, 0.0f }, { 2.0f, 2.0f }, (t)));
-		(*it).alpha_ = std::lerp(1.0f, 0.0f, EaseOutCubic(t));
+		(*it).effectSprite_->SetScale(Vector2::Lerp({ 0.0f, 0.0f }, { 1.5f, 1.5f }, EaseOutExpo(t)));
+		(*it).alpha_ = std::lerp(1.0f, 0.0f, (t));
 
 		(*it).color_ = { 1.0f, 1.0f, 1.0f, (*it).alpha_ };
 

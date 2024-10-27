@@ -259,6 +259,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/SlowEffect/", "SlowEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AddSpeedEffect/", "AddSpeedEffect.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/evaluationGood/", "evaluationGood.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/evaluationPERFECT/", "evaluationPERFECT.gltf");
 
 

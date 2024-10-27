@@ -243,9 +243,9 @@ private:
 	Vector3 prePos_;
 	float divingSpeed_;// 着水時の下へのスピード
 
-#ifdef _DEBUG
+
 	std::unique_ptr<BaseGameObject>debugJumpUI_;
-#endif // _DEBUG
+
 
 
 
