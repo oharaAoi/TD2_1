@@ -11,7 +11,7 @@
 #include "Game/GameObject/PlayerWings.h"
 #include "Game/Manager/AnimetionEffectManager.h"
 #include "Game/Camera/Camera.h"
-
+#include "Game/Information/JumpAssessor.h"
 
 class PlayerAnimator;
 

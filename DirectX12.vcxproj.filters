@@ -579,6 +579,9 @@
     <ClCompile Include="Game\UI\MissionUI.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Information\JumpAssessor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\WinApp\WinApp.h">
@@ -1066,6 +1069,9 @@
     </ClInclude>
     <ClInclude Include="Game\UI\MissionUI.h">
       <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Information\JumpAssessor.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

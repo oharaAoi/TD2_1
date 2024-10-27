@@ -409,8 +409,8 @@ void GameScene::Update(){
 	// ↓ UIの更新
 	// -------------------------------------------------
 	if(currentState_ != GAME_STATE::TITLE) {
-		flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
-		flyingGaugeUI_->Update(player_->GetFlyingTime());
+		//flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
+		//flyingGaugeUI_->Update(player_->GetFlyingTime());
 		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio(),speedMeterAlpha_);
 	} else{
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(), 0.0f, 2.0f);
@@ -615,10 +615,10 @@ void GameScene::Draw() const{
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		gamePlayTimer_->Draw();
 
-		if(!isStartupScene_){
-			flyingTimerUI_->Draw(1.0f - speedMeterAlpha_);
-			flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
-		}
+		//if(!isStartupScene_){
+		//	flyingTimerUI_->Draw(1.0f - speedMeterAlpha_);
+		//	flyingGaugeUI_->Draw(1.0f - speedMeterAlpha_);
+		//}
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
 		missionUI_->Draw();
