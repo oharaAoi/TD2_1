@@ -13,7 +13,7 @@ void PlayerBodyCountUI::Init() {
 	
 	frontSize_UI_ = { 0.0f, 1.0f };
 
-	tailUIPos_ = { 100.0f, 100.0f };
+	tailUIPos_ = { 52, 100.0f };
 
 	maxBody_UI_ = Engine::CreateSprite("bodyMax.png");
 	maxBody_UI_->SetTextureCenterPos(uiPos_);
@@ -25,6 +25,7 @@ void PlayerBodyCountUI::Init() {
 
 	head_UI_ = Engine::CreateSprite("KoiGeuge_Head.png");
 	tail_UI_ = Engine::CreateSprite("KoiGeuge_Tail.png");
+	headUIPos_.x = 5;
 	head_UI_->SetCenterPos(headUIPos_);
 	tail_UI_->SetCenterPos(tailUIPos_);
 
@@ -37,7 +38,7 @@ void PlayerBodyCountUI::Init() {
 
 	effectMoveTime_ = 0.6f;
 
-	interval_bodyUI_ = 60.0f;
+	interval_bodyUI_ = 51;
 
 	// -------------------------------------------------
 	// ↓ Effectの初期化
@@ -47,14 +48,14 @@ void PlayerBodyCountUI::Init() {
 
 	dropVelocity_ = {0.0f, 0.0f};
 	dropStartVelocity_ = {-2.0f, 1.0f};
-	dropEndVelocity_ = {-0.5f, 2.0f};
+	dropEndVelocity_ = {-0.5f, 14.0f};
 
 	dropBodyColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	dropDownCount_ = 0.0f;
-	dropDownTime_ = 0.6f;
+	dropDownTime_ = 0.9f;
 
-	dropRotate_ = 6.0f;
+	dropRotate_ = 375.0f;
 
 	isDrop_ = false;
 }
@@ -100,7 +101,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	uint32_t index = 1;
 	for (std::list<std::unique_ptr<Sprite>>::iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
 		(*it)->SetCenterPos({
-		tailUIPos_.x + (interval_bodyUI_ * index),
+		tailUIPos_.x + (interval_bodyUI_ * index) + 5,
 		tailUIPos_.y
 						  });
 		(*it)->Update();
@@ -122,13 +123,14 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 			continue;
 		}
 
-		(*it).effectSprite_->SetScale(Vector2::Lerp({ 0.0f, 0.0f }, { 1.5f, 1.5f }, EaseOutExpo(t)));
+		(*it).effectSprite_->SetScale(Vector2::Lerp({ 0.0f, 0.0f }, { 0.5f, 0.5f }, EaseOutExpo(t)));
 		(*it).alpha_ = std::lerp(1.0f, 0.0f, (t));
 
 		(*it).color_ = { 1.0f, 1.0f, 1.0f, (*it).alpha_ };
 
 		(*it).effectSprite_->SetColor((*it).color_);
-
+	
+		(*it).effectSprite_->SetCenterPos(headUIPos_);
 		(*it).effectSprite_->Update();
 
 		++it;
@@ -225,7 +227,7 @@ void PlayerBodyCountUI::AddBody() {
 
 	// 頭も同時に移動させておく
 	headUIPos_ = add->GetCenterPos();
-	headUIPos_.x += interval_bodyUI_;
+	headUIPos_.x += interval_bodyUI_ + 10;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,8 +242,8 @@ void PlayerBodyCountUI::ReleseBody() {
 	body_UI_List_.pop_back();
 
 	const auto& end = body_UI_List_.back();
-	headUIPos_ = end->GetCenterPos();
-	headUIPos_.x += interval_bodyUI_;
+	headUIPos_ = end->GetCenterPos() ;
+	headUIPos_.x += interval_bodyUI_ + 5;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +261,7 @@ void PlayerBodyCountUI::DropBody() {
 
 	// 回転をさせる
 	float rotate = bodyReleseEffect_->GetRotate();
-	rotate -= dropRotate_ * toRadian;
+	rotate -= dropRotate_ * toRadian*GameTimer::DeltaTime();
 	bodyReleseEffect_->SetRotate(rotate);
 
 	dropVelocity_ = Vector2::Lerp(dropStartVelocity_, dropEndVelocity_, EaseOutCubic(t));
