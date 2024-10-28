@@ -1,12 +1,12 @@
 {
     "GamePlayTimer": {
         "clock_position": [
-            900.0,
+            1170.0,
             90.0
         ],
         "numberInterval": 23.0,
         "numberOriginPos": [
-            922.0,
+            1190.0,
             90.0
         ],
         "numberSpriteScale": [
