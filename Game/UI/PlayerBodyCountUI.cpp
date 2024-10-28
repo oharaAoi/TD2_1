@@ -9,9 +9,11 @@ PlayerBodyCountUI::~PlayerBodyCountUI() {}
 
 void PlayerBodyCountUI::Init() {
 	uiPos_ = { -200, 250.0f };
-	backPos_UI_ = { 1100, 110.0f };
+	backPos_UI_ = { 165, 90.0f };
 	
 	frontSize_UI_ = { 0.0f, 1.0f };
+
+	tailUIPos_ = { 100.0f, 100.0f };
 
 	maxBody_UI_ = Engine::CreateSprite("bodyMax.png");
 	maxBody_UI_->SetTextureCenterPos(uiPos_);
@@ -21,6 +23,11 @@ void PlayerBodyCountUI::Init() {
 	gaugeBack_UI_->SetTextureCenterPos(backPos_UI_);
 	gaugeFront_UI_->SetTextureCenterPos(backPos_UI_);
 
+	head_UI_ = Engine::CreateSprite("KoiGeuge_Head.png");
+	tail_UI_ = Engine::CreateSprite("KoiGeuge_Tail.png");
+	head_UI_->SetCenterPos(headUIPos_);
+	tail_UI_->SetCenterPos(tailUIPos_);
+
 	isFadeIn_ = true;
 	time_ = 0.0f;
 	moveTime_ = 1.0f;
@@ -29,6 +36,27 @@ void PlayerBodyCountUI::Init() {
 	fadeOutPos_ = { 1500, 250.0f };
 
 	effectMoveTime_ = 0.6f;
+
+	interval_bodyUI_ = 60.0f;
+
+	// -------------------------------------------------
+	// ↓ Effectの初期化
+	// -------------------------------------------------
+
+	bodyReleseEffect_ = Engine::CreateSprite("KoiGeuge_Torso.png");
+
+	dropVelocity_ = {0.0f, 0.0f};
+	dropStartVelocity_ = {-2.0f, 1.0f};
+	dropEndVelocity_ = {-0.5f, 2.0f};
+
+	dropBodyColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
+
+	dropDownCount_ = 0.0f;
+	dropDownTime_ = 0.6f;
+
+	dropRotate_ = 6.0f;
+
+	isDrop_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +71,17 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 		}
 	}
 
+	if (preCount_ != playerBodyCount) {
+		if (playerBodyCount > 1) {
+			// 前フレームより少なかったら追加されている
+			if (preCount_ < playerBodyCount) {
+				AddBody();
+			} else {
+				ReleseBody();
+			}
+		}
+	}
+
 	float raito = playerBodyCount / 8.0f;
 	frontSize_UI_.x = raito;
 	gaugeFront_UI_->SetUvDrawRange(frontSize_UI_);
@@ -51,6 +90,23 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 
 	gaugeBack_UI_->Update();
 	gaugeFront_UI_->Update();
+
+	head_UI_->SetTextureCenterPos(headUIPos_);
+	tail_UI_->SetTextureCenterPos(tailUIPos_);
+
+	head_UI_->Update();
+	tail_UI_->Update();
+
+	uint32_t index = 1;
+	for (std::list<std::unique_ptr<Sprite>>::iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
+		(*it)->SetCenterPos({
+		tailUIPos_.x + (interval_bodyUI_ * index),
+		tailUIPos_.y
+						  });
+		(*it)->Update();
+		++it;
+		++index;
+	}
 
 	preCount_ = playerBodyCount;
 
@@ -77,6 +133,11 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 
 		++it;
 	}
+
+	if (isDrop_) {
+		DropBody();
+		bodyReleseEffect_->Update();
+	}
 	
 	if (!isUiMove_) { return; }
 
@@ -101,8 +162,20 @@ void PlayerBodyCountUI::Draw() const {
 		++it;
 	}
 
-	gaugeBack_UI_->Draw();
-	gaugeFront_UI_->Draw();
+	/*gaugeBack_UI_->Draw();
+	gaugeFront_UI_->Draw();*/
+
+	head_UI_->Draw();
+	tail_UI_->Draw();
+
+	for (std::list<std::unique_ptr<Sprite>>::const_iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
+		(*it)->Draw();
+		++it;
+	}
+
+	if (isDrop_) {
+		bodyReleseEffect_->Draw();
+	}
 
 	if (!isUiMove_) { return; }
 	maxBody_UI_->Draw();
@@ -139,10 +212,91 @@ void PlayerBodyCountUI::EmiteEffect() {
 	effect.effectSprite_->SetCenterPos(backPos_UI_);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　胴体のリストを追加
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PlayerBodyCountUI::AddBody() {
+	auto& add = body_UI_List_.emplace_back(Engine::CreateSprite("KoiGeuge_Torso.png"));
+	add->SetCenterPos({
+		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size())),
+		tailUIPos_.y
+	});
+
+	// 頭も同時に移動させておく
+	headUIPos_ = add->GetCenterPos();
+	headUIPos_.x += interval_bodyUI_;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　胴体のリストを追加
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PlayerBodyCountUI::ReleseBody() {
+	Vector2 pos = body_UI_List_.back()->GetCenterPos();
+	SetDrop(pos);
+
+	// リストに最後に追加された要素を削除する
+	body_UI_List_.pop_back();
+
+	const auto& end = body_UI_List_.back();
+	headUIPos_ = end->GetCenterPos();
+	headUIPos_.x += interval_bodyUI_;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　胴体が落ちる演出
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PlayerBodyCountUI::DropBody() {
+	dropDownCount_ += GameTimer::DeltaTime();
+	float t = dropDownCount_ / dropDownTime_;
+
+	// 座標を移動させる
+	Vector2 pos = bodyReleseEffect_->GetCenterPos();
+	pos += dropVelocity_;
+	bodyReleseEffect_->SetCenterPos(pos);
+
+	// 回転をさせる
+	float rotate = bodyReleseEffect_->GetRotate();
+	rotate -= dropRotate_ * toRadian;
+	bodyReleseEffect_->SetRotate(rotate);
+
+	dropVelocity_ = Vector2::Lerp(dropStartVelocity_, dropEndVelocity_, EaseOutCubic(t));
+
+	// 色を変える
+	dropBodyAlpa_ = std::lerp(1.0f, 0.0f, EaseInQuint(t));
+	dropBodyColor_.w = dropBodyAlpa_;
+	bodyReleseEffect_->SetColor(dropBodyColor_);
+
+	// 時間がたったら落ちるのをやめる
+	if (dropDownCount_ > dropDownTime_) {
+		isDrop_ = false;
+	}
+}
+
+void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
+	bodyReleseEffect_->SetCenterPos(pos);
+	dropDownCount_ = 0.0f;
+	isDrop_ = true;
+}
+
 #ifdef _DEBUG
 void PlayerBodyCountUI::Debug_Gui() {
 	if (ImGui::TreeNode("playerBodyUI")) {
 		ImGui::DragFloat3("backPos_UI", &backPos_UI_.x, 1.0f);
+		ImGui::Spacing();
+		ImGui::DragFloat3("dropStartVelocity", &dropStartVelocity_.x, 0.1f);
+		ImGui::DragFloat3("dropEndVelocity", &dropEndVelocity_.x, 0.1f);
+		ImGui::DragFloat("dropRotate", &dropRotate_, 1.0f, 0.0f, 360.0f);
+		ImGui::DragFloat("interval_bodyUI", &interval_bodyUI_, 1.0f, 0.0f, 360.0f);
+		ImGui::Spacing();
+		ImGui::DragFloat2("headPos", &headUIPos_.x, 1.0f);
+		ImGui::DragFloat2("tailPos", &tailUIPos_.x, 1.0f);
+
+		if (ImGui::Button("isDrop")) {
+			SetDrop(backPos_UI_);
+		}
 		ImGui::TreePop();
 	}
 }

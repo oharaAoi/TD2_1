@@ -41,6 +41,27 @@ public:
 
 	void EmiteEffect();
 
+	/// <summary>
+	/// 胴体を追加
+	/// </summary>
+	void AddBody();
+
+	/// <summary>
+	/// 胴体を削除
+	/// </summary>
+	void ReleseBody();
+
+	/// <summary>
+	/// 胴体が落ちる演出
+	/// </summary>
+	void DropBody();
+
+	/// <summary>
+	/// 胴体の位置を設定する
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetDrop(const Vector2& pos);
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
@@ -54,6 +75,13 @@ private:
 
 	std::unique_ptr<Sprite> gaugeBack_UI_ = nullptr;
 	std::unique_ptr<Sprite> gaugeFront_UI_ = nullptr;
+
+	std::unique_ptr<Sprite> head_UI_ = nullptr;
+	std::unique_ptr<Sprite> tail_UI_ = nullptr;
+
+	std::list<std::unique_ptr<Sprite>> body_UI_List_;
+
+	float interval_bodyUI_;
 	
 	Vector2 uiPos_;
 
@@ -69,6 +97,9 @@ private:
 
 	Vector2 frontSize_UI_;
 
+	Vector2 headUIPos_;
+	Vector2 tailUIPos_;
+
 	// フラグ
 	bool isUiMove_;
 	bool isFadeIn_;
@@ -82,5 +113,19 @@ private:
 	std::list<EffectData> effectList_;
 	float effectMoveTime_;
 
+	std::unique_ptr<Sprite> bodyReleseEffect_;
+	Vector2 dropVelocity_;
+	Vector2 dropStartVelocity_;
+	Vector2 dropEndVelocity_;
+
+	Vector4 dropBodyColor_;
+	float dropBodyAlpa_;
+
+	float dropDownCount_;
+	float dropDownTime_;
+
+	float dropRotate_;
+
+	bool isDrop_;
 };
 
