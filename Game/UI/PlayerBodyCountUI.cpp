@@ -98,14 +98,20 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	head_UI_->Update();
 	tail_UI_->Update();
 
+	// -------------------------------------------------
+	// ↓ bodyUIの更新を行う
+	// -------------------------------------------------
 	for (std::list<BodyUIData>::iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
-		// タイムが1以下だったら
-		if ((*it).time_ < 1.0f) {
+		// タイムが0.5f以下だったら
+		if ((*it).time_ < 0.5f) {
 			(*it).time_ += GameTimer::DeltaTime();
-			float t = (*it).time_ / 1.0f;
+			float t = (*it).time_ / 0.5f;
 
-			Vector2 scale = (*it).sprite_->GetScale();
-			scale = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutBounce(t));
+			Vector2 scale;
+			scale = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutBack(t));
+			scale.x = std::clamp(scale.x, 0.0f, 1.4f);
+			scale.y = std::clamp(scale.y, 0.0f, 1.4f);
+			(*it).sprite_->SetScale(scale);
 		}
 		
 		(*it).sprite_->Update();
@@ -224,9 +230,11 @@ void PlayerBodyCountUI::EmiteEffect() {
 void PlayerBodyCountUI::AddBody() {
 	auto& add = body_UI_List_.emplace_back(BodyUIData());
 	add.sprite_->SetCenterPos({
-		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size())),
+		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size()) + 9),
 		tailUIPos_.y
 	});
+
+	add.time_ = 0.0f;
 
 	// 頭も同時に移動させておく
 	headUIPos_ = add.sprite_->GetCenterPos();

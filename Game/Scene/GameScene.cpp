@@ -420,7 +420,9 @@ void GameScene::Update(){
 		playerBodyCountUI_->EmiteEffect();
 	}
 
-	playerBodyCountUI_->Update(player_->GetBodyCount());
+	if (currentState_ != GAME_STATE::TITLE) {
+		playerBodyCountUI_->Update(player_->GetBodyCount());
+	}
 
 	finishUI_->Update();
 
