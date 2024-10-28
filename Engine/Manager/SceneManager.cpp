@@ -294,6 +294,9 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "missionClear.mp3");//　ミッションクリア時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/SystemSE/", "Finish.mp3");//　空中で上下移動を切り替えた時
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "test.wav");//被弾時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "NiceSE.mp3");//Nice音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "GoodSE.mp3");//Good音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "ParfectSE.mp3");//Parfect音
 	
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.mp3");

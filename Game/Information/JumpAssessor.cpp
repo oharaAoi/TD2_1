@@ -20,6 +20,8 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 			false, 
 			Vector3(0.5f, 0.5f, 0.5f),Quaternion(), Vector3()
 		);
+		AudioPlayer::SinglShotPlay("ParfectSE.mp3", 0.3f);
+
 
 	} else if(speed >= 120.0f or bodyCount >= 6){// good
 		AnimetionEffectManager::AddListEffect(
@@ -28,6 +30,8 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 			false,
 			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
 		);
+		AudioPlayer::SinglShotPlay("GoodSE.mp3", 0.2f);
+
 	
 	} else if(speed >= 70.0f or bodyCount >= 4){// nice
 		AnimetionEffectManager::AddListEffect(
@@ -36,7 +40,8 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 			false,
 			Vector3(1, 1, 1), Quaternion(), Vector3()
 		);
-	
+		AudioPlayer::SinglShotPlay("NiceSE.mp3", 0.15f);
+
 	} else{
 
 	}

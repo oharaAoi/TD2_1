@@ -3,6 +3,7 @@
 #include <memory>
 #include "Engine/GameObject/BaseGameObject.h"
 #include "Game/Manager/AnimetionEffectManager.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 // ジャンプの評価を行うクラス
 class JumpAssessor{
