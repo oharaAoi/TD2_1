@@ -41,12 +41,19 @@ private:
 
 	std::unordered_map<std::string, std::unique_ptr<BaseGameObject>> tutorialUI_;
 
+	std::unique_ptr<BaseGameObject> jumpTutorialUI_;
+	Vector3 jumpTutorialPos_;
+	Vector3 jumpTutorialOffsetPos_ = { 0.0f, 0.0f, 0.0f };
+
 	Vector3 offsetPos_ = { 0.0f, 0.0f, 0.0f };
 	float interval_ = 500.0f;
 
 	Vector3 playerPos_;
 	float offsetLnegth_;
 
-	bool isLineUp_;;
+	bool isLineUp_;
+
+	Vector3 scaleUp_;
+	float scaleUpStrength_;
 };
 

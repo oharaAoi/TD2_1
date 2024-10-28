@@ -11,6 +11,14 @@ TutorialUI::~TutorialUI() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TutorialUI::Init() {
+
+	// このスケールで全体のUIのスケールを統一する
+	scaleUpStrength_ = 1.2f;
+	scaleUp_ = { scaleUpStrength_, scaleUpStrength_, scaleUpStrength_ };
+
+	// この位置を調整することで鳥を踏むUIを移動できる
+	jumpTutorialOffsetPos_ = { 40.0f, 85.0f, 0.0f };
+
 	offsetLnegth_ = 300.0f;	// この距離にするといい感じの距離になる
 	adjust_ = AdjustmentItem::GetInstance();
 	groupName_ = "TutorialUI";
@@ -53,10 +61,20 @@ void TutorialUI::Init() {
 	tutorialUI_["start"]->SetIsLighting(false);
 	tutorialUI_["start"]->SetColor({ 0.0, 0.0,0.0,0.0f });
 
+	// これがjumpUIのオブジェクト
+	jumpTutorialUI_ = std::make_unique<BaseGameObject>();
+	jumpTutorialUI_->Init();
+	jumpTutorialUI_->SetObject("UI_Plane.obj");
+	jumpTutorialUI_->SetIsLighting(false);
+	jumpTutorialUI_->SetTexture("Tutorial_4.png");
+	jumpTutorialUI_->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
+
+	jumpTutorialPos_ = tutorialUI_["kari4"]->GetTransform()->GetTranslation();
+
 	float index = 0;
 	for (auto& ui : tutorialUI_) {
 		Vector3 pos = offsetPos_;
-		pos.x += (interval_ * index)+offsetLnegth_;
+		pos.x += (interval_ * index) + offsetLnegth_;
 		ui.second->GetTransform()->SetTranslaion(pos);
 		ui.second->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
 
@@ -70,7 +88,15 @@ void TutorialUI::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TutorialUI::Update() {
+	scaleUp_ = { scaleUpStrength_, scaleUpStrength_, scaleUpStrength_ };
+
+	jumpTutorialPos_ = tutorialUI_["kari4"]->GetTransform()->GetTranslation() + jumpTutorialOffsetPos_;
+	jumpTutorialUI_->GetTransform()->SetTranslaion(jumpTutorialPos_);
+	jumpTutorialUI_->GetTransform()->SetScale(scaleUp_);
+	jumpTutorialUI_->Update();
+	
 	for (auto& ui : tutorialUI_) {
+		ui.second->GetTransform()->SetScale(scaleUp_);
 		ui.second->Update();
 	}
 }
@@ -80,6 +106,7 @@ void TutorialUI::Update() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TutorialUI::Draw() const {
+	jumpTutorialUI_->Draw();
 	for (const auto& ui : tutorialUI_) {
 		ui.second->Draw();
 	}
@@ -139,11 +166,12 @@ Vector3 TutorialUI::GetStartPos() {
 #ifdef _DEBUG
 void TutorialUI::Debug_Gui() {
 	if (ImGui::TreeNode("TutorialUI")) {
+		ImGui::DragFloat3("jumpTutorialOffsetPos", &jumpTutorialOffsetPos_.x, 0.1f);
 		ImGui::DragFloat3("offsetPos", &offsetPos_.x, 0.1f);
 		ImGui::DragFloat("interval", &interval_, 1.0f);
-		/*tutorialUI_["kari"]->Debug_Gui();*/
-
-		float index = 0;
+		ImGui::DragFloat("scaleUpStrength", &scaleUpStrength_, 1.0f);
+		
+		jumpTutorialUI_->Debug_Gui();
 		/*for (auto& ui : tutorialUI_) {
 			Vector3 pos = offsetPos_;
 			pos.x += (interval_ * index) + offsetLnegth_;
