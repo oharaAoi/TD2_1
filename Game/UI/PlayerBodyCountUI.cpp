@@ -230,7 +230,7 @@ void PlayerBodyCountUI::EmiteEffect() {
 void PlayerBodyCountUI::AddBody() {
 	auto& add = body_UI_List_.emplace_back(BodyUIData());
 	add.sprite_->SetCenterPos({
-		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size()) + 9),
+		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size()) + 6),
 		tailUIPos_.y
 	});
 
@@ -238,7 +238,7 @@ void PlayerBodyCountUI::AddBody() {
 
 	// 頭も同時に移動させておく
 	headUIPos_ = add.sprite_->GetCenterPos();
-	headUIPos_.x += interval_bodyUI_ + 10;
+	headUIPos_.x += interval_bodyUI_ + 5;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
