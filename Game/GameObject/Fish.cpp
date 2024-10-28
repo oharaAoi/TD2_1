@@ -109,6 +109,9 @@ void Fish::Change() {
 		SetObject("EatFish.gltf");
 		SetAnimater("./Game/Resources/Model/EatFish/", "EatFish.gltf", true);
 		SetIsLighting(false);
+		float scale = (float)this->GetFishSize() + 2.0f;
+		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishWeakening/", "FishWeakening.gltf",
+			nullptr, false, Vector3(scale, scale, scale), Quaternion(), transform_->GetTranslation());
 	} else if ((isPreAte_ == true) && (isAte_ == false)) {
 		// 食べられない
 		SetObject("Fish.gltf");

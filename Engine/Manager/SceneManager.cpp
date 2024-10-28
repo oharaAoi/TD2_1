@@ -261,6 +261,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/evaluationGood/", "evaluationGood.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/evaluationPERFECT/", "evaluationPERFECT.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/FishWeakening/", "FishWeakening.gltf");
 
 
 	// Adio

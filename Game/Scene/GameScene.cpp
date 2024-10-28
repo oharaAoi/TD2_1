@@ -163,8 +163,8 @@ void GameScene::Init(){
 	//モデル確認用
 	debugModel_ = std::make_unique<BaseGameObject>();
 	debugModel_->Init();
-	debugModel_->SetObject("evaluationNice.gltf");
-	debugModel_->SetAnimater("./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf", true);
+	debugModel_->SetObject("FishWeakening.gltf");
+	debugModel_->SetAnimater("./Game/Resources/Model/FishWeakening/", "FishWeakening.gltf", true);
 	debugModel_->SetIsLighting(false);
 
 
