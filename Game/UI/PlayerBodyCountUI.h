@@ -28,6 +28,16 @@ public:
 		}
 	};
 
+	struct BodyUIData {
+		std::unique_ptr<Sprite> sprite_;
+		float time_;
+
+		BodyUIData() {
+			sprite_ = Engine::CreateSprite("KoiGeuge_Torso.png");
+			time_ = 0.0f;
+		}
+	};
+
 public:
 
 	PlayerBodyCountUI();
@@ -79,7 +89,7 @@ private:
 	std::unique_ptr<Sprite> head_UI_ = nullptr;
 	std::unique_ptr<Sprite> tail_UI_ = nullptr;
 
-	std::list<std::unique_ptr<Sprite>> body_UI_List_;
+	std::list<BodyUIData> body_UI_List_;
 
 	float interval_bodyUI_;
 	

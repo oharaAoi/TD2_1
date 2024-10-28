@@ -98,15 +98,18 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	head_UI_->Update();
 	tail_UI_->Update();
 
-	uint32_t index = 1;
-	for (std::list<std::unique_ptr<Sprite>>::iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
-		(*it)->SetCenterPos({
-		tailUIPos_.x + (interval_bodyUI_ * index) + 5,
-		tailUIPos_.y
-						  });
-		(*it)->Update();
+	for (std::list<BodyUIData>::iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
+		// タイムが1以下だったら
+		if ((*it).time_ < 1.0f) {
+			(*it).time_ += GameTimer::DeltaTime();
+			float t = (*it).time_ / 1.0f;
+
+			Vector2 scale = (*it).sprite_->GetScale();
+			scale = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutBounce(t));
+		}
+		
+		(*it).sprite_->Update();
 		++it;
-		++index;
 	}
 
 	preCount_ = playerBodyCount;
@@ -170,8 +173,8 @@ void PlayerBodyCountUI::Draw() const {
 	head_UI_->Draw();
 	tail_UI_->Draw();
 
-	for (std::list<std::unique_ptr<Sprite>>::const_iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
-		(*it)->Draw();
+	for (std::list<BodyUIData>::const_iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
+		(*it).sprite_->Draw();
 		++it;
 	}
 
@@ -219,14 +222,14 @@ void PlayerBodyCountUI::EmiteEffect() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::AddBody() {
-	auto& add = body_UI_List_.emplace_back(Engine::CreateSprite("KoiGeuge_Torso.png"));
-	add->SetCenterPos({
+	auto& add = body_UI_List_.emplace_back(BodyUIData());
+	add.sprite_->SetCenterPos({
 		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size())),
 		tailUIPos_.y
 	});
 
 	// 頭も同時に移動させておく
-	headUIPos_ = add->GetCenterPos();
+	headUIPos_ = add.sprite_->GetCenterPos();
 	headUIPos_.x += interval_bodyUI_ + 10;
 }
 
@@ -235,14 +238,14 @@ void PlayerBodyCountUI::AddBody() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::ReleseBody() {
-	Vector2 pos = body_UI_List_.back()->GetCenterPos();
+	Vector2 pos = body_UI_List_.back().sprite_->GetCenterPos();
 	SetDrop(pos);
 
 	// リストに最後に追加された要素を削除する
 	body_UI_List_.pop_back();
 
 	const auto& end = body_UI_List_.back();
-	headUIPos_ = end->GetCenterPos() ;
+	headUIPos_ = end.sprite_->GetCenterPos() ;
 	headUIPos_.x += interval_bodyUI_ + 5;
 }
 
