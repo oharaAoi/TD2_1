@@ -21,7 +21,7 @@ void WorldObjects::Init() {
 
 	mountainLoopCount_ = 0;
 	nowMountainIndex_ = 0;
-
+	time = 0;
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		Vector3 newPos = StageInformation::worldWallPos_;
 		newPos.x += StageInformation::stageWidthEvery_ * (oi);
@@ -172,7 +172,8 @@ void WorldObjects::DrawWater() const {
 
 void WorldObjects::LoopStage() {
 	// playerが一定間隔進んだら新しいステージを生成する
-	if (playerPos_ < 3000.0f) {
+	if (time < 5) {
+		time += GameTimer::DeltaTime();
 		return;
 	}
 

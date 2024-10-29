@@ -49,5 +49,6 @@ private:
 	std::unique_ptr<BaseGameObject> ufosmoke_[kStageMax_];
 
 	float cloudZ;
+	float time;
 };
 
