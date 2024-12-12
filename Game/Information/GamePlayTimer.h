@@ -98,6 +98,7 @@ private:
 	float addClockMoveTime_;
 	bool isAppearance_;
 
+	Vector2 addTimeStartPos_;
 	Vector2 addTimeEndPos_;
 	Vector4 addClockColor_;
 	float alpa_;
@@ -114,6 +115,8 @@ private:
 
 	float time_;
 	float moveTime_;
+
+	float addTimeOffsetX_;
 
 	Vector2 startPos_;
 	Vector2 endPos_;

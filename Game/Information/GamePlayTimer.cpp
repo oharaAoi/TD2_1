@@ -46,6 +46,8 @@ void GamePlayTimer::Init(float limit) {
 	adjustItem_->AddItem(groupName_, "timeGaugeOutSidePos", timeGaugeOutSide_->GetCenterPos());
 	adjustItem_->AddItem(groupName_, "numberOriginPos", originPos_);
 	adjustItem_->AddItem(groupName_, "timeGaugeBarOffset", timeGaugeBarOffset_);
+	adjustItem_->AddItem(groupName_, "addTimeOffsetX", addTimeOffsetX_);
+	adjustItem_->AddItem(groupName_, "addTimeStartPos", addTimeStartPos_);
 	/*adjustItem_->AddItem(groupName_, "numberInterval", numberInterval_);
 	adjustItem_->AddItem(groupName_, "numberSpriteScale", numberSpriteScale_);*/
 
@@ -62,8 +64,8 @@ void GamePlayTimer::Init(float limit) {
 	addClockMoveCount_ = 0.0f;
 	addClockMoveTime_ = 1.0f;
 
-	addTimeEndPos_ = timeGauge_->GetCenterPos();
-	addTimeEndPos_.x += -100.0f;
+	addTimeEndPos_ = timeGaugeOutSide_->GetCenterPos();
+	addTimeEndPos_.x += addTimeOffsetX_;
 	addClockColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	alpa_ = 0.0f;
 
@@ -200,14 +202,10 @@ void GamePlayTimer::Draw() const {
 			bigNumberUI_->Draw();
 		}
 	}
-	/*clock_->Draw();
-	for (int oi = 0; oi < limitTimeUI_.size(); ++oi) {
-		limitTimeUI_[oi]->Draw();
-	}
-
+	
 	if (isAddTime_) {
 		addTimeSprite_->Draw();
-	}*/
+	}
 
 	timeleftUI_->Draw();
 }
@@ -247,6 +245,8 @@ void GamePlayTimer::BigNumberScalUp() {
 void GamePlayTimer::AdaptAdjustmentItem() {
 	originPos_ = adjustItem_->GetValue<Vector2>(groupName_, "numberOriginPos");
 	timeGaugeBarOffset_ = adjustItem_->GetValue<Vector2>(groupName_, "timeGaugeBarOffset");
+	addTimeOffsetX_ = adjustItem_->GetValue<float>(groupName_, "addTimeOffsetX");
+	addTimeStartPos_ = adjustItem_->GetValue<Vector2>(groupName_, "addTimeStartPos");
 	timeGaugeOutSide_->SetCenterPos(adjustItem_->GetValue<Vector2>(groupName_, "timeGaugeOutSidePos"));
 	//timeGauge_->SetTextureCenterPos(adjustItem_->GetValue<Vector2>(groupName_, "clock_position"));
 	//numberInterval_ = adjustItem_->GetValue<float>(groupName_, "numberInterval");
@@ -306,13 +306,13 @@ void GamePlayTimer::AddClockMove() {
 
 	if (isAppearance_) {
 		Vector2 pos = addTimeSprite_->GetCenterPos();
-		pos = Vector2::Lerp(timeGauge_->GetCenterPos(), addTimeEndPos_, EaseOutExpo(t));
+		pos = Vector2::Lerp(addTimeStartPos_, addTimeEndPos_, EaseOutExpo(t));
 		addTimeSprite_->SetCenterPos(pos);
 
 		alpa_ = std::lerp(0.0f, 1.0f, EaseOutExpo(t));
 	} else {
 		Vector2 pos = addTimeSprite_->GetCenterPos();
-		pos = Vector2::Lerp(addTimeEndPos_, timeGauge_->GetCenterPos(), EaseInQuart(t));
+		pos = Vector2::Lerp(addTimeEndPos_, addTimeStartPos_, EaseInQuart(t));
 		addTimeSprite_->SetCenterPos(pos);
 
 		alpa_ = std::lerp(1.0f, 0.0f, EaseInQuart(t));
@@ -342,7 +342,9 @@ void GamePlayTimer::Debug_Gui() {
 		ImGui::Text("gameTimer_ : %f", gameTimer_);
 		ImGui::SliderFloat("gameTimer", &gameTimer_, 0.0f, gameTimeLimit_);
 		ImGui::DragFloat3("originPos", &originPos_.x, 0.1f);
-		ImGui::DragFloat3("timeGaugeBarOffset", &timeGaugeBarOffset_.x, 0.1f);
+		ImGui::DragFloat2("timeGaugeBarOffset", &timeGaugeBarOffset_.x, 0.1f);
+		ImGui::DragFloat2("addTimeStartPos", &addTimeStartPos_.x, 0.1f);
+		ImGui::DragFloat("addTimeOffsetX", &addTimeOffsetX_, 0.1f);
 		/*ImGui::DragFloat2("numberSpriteScale", &numberSpriteScale_.x, 0.1f);
 		ImGui::DragFloat("inverval", &numberInterval_, 0.1f);
 		*/
@@ -362,6 +364,9 @@ void GamePlayTimer::Debug_Gui() {
 		if (ImGui::Button("ReAdapt")) {
 			AdaptAdjustmentItem();
 		}
+
+		addTimeEndPos_ = timeGaugeOutSide_->GetCenterPos();
+		addTimeEndPos_.x += addTimeOffsetX_;
 
 		ImGui::TreePop();
 	}
