@@ -26,22 +26,40 @@ public:
 	void Measurement();
 
 	/// <summary>
+	/// TimeUpの文字のscaleを大きくする
+	/// </summary>
+	void BigNumberScalUp();
+
+	/// <summary>
+	/// 調整項目の適応
+	/// </summary>
+	void AdaptAdjustmentItem();
+
+	/// <summary>
+	/// 残り時間通知Textureの移動
+	/// </summary>
+	void SpriteMove();
+
+	/// <summary>
+	/// 時間の追加
+	/// </summary>
+	/// <param name="time"></param>
+	void AddTime(float time);
+
+	/// <summary>
+	/// 時間追加の際の時計の移動
+	/// </summary>
+	void AddClockMove();
+
+	/// <summary>
 	/// 桁数を割り出す
 	/// </summary>
 	/// <returns></returns>
-	int DegitCount(float value);
+	/*int DegitCount(float value);
 
 	int IntegerCount(int value, int n);
 
-	Vector2 CalculationSpriteLT(int value);
-
-	void AdaptAdjustmentItem();
-
-	void SpriteMove();
-
-	void AddTime(float time);
-
-	void AddClockMove();
+	Vector2 CalculationSpriteLT(int value);*/
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -64,13 +82,10 @@ private:
 	float gameTimeLimit_;
 	float outgameTime_;
 
-	std::unique_ptr<Sprite> clock_;
-	std::vector<std::unique_ptr<Sprite>> limitTimeUI_;
+	/*std::unique_ptr<Sprite> clock_;*/
+	std::unique_ptr<Sprite> timeGauge_;
+	std::unique_ptr<Sprite> bigNumberUI_;
 	Vector2 originPos_;
-
-	Vector2 numberSpriteSize_ = { 48.0f, 72.0f };
-	Vector2 numberSpriteScale_;
-	float numberInterval_;
 
 	// タイムを追加した際のUI
 	std::unique_ptr<Sprite> addTimeSprite_;
@@ -100,5 +115,19 @@ private:
 	Vector2 startPos_;
 	Vector2 endPos_;
 	Vector2 uiPos_;
+
+	// ------------------- scaleUp用の変数 ------------------- //
+
+	Vector2 bigNumberScale_;
+	float scaleUpTime_;
+	float scaleUpTimeLimit_ = 0.4f;
+	
+	float bigNumberAlpha_;
+
+	float slopeAngle_ = 10.0f;
 };
 
+
+/*Vector2 numberSpriteSize_ = { 48.0f, 72.0f };
+	Vector2 numberSpriteScale_;
+	float numberInterval_;*/
