@@ -84,8 +84,11 @@ private:
 
 	/*std::unique_ptr<Sprite> clock_;*/
 	std::unique_ptr<Sprite> timeGauge_;
+	std::unique_ptr<Sprite> timeGaugeOutSide_;
 	std::unique_ptr<Sprite> bigNumberUI_;
 	Vector2 originPos_;
+
+	Vector2 timeGaugeBarOffset_;
 
 	// タイムを追加した際のUI
 	std::unique_ptr<Sprite> addTimeSprite_;

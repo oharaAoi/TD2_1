@@ -20,21 +20,11 @@ void GamePlayTimer::Init(float limit) {
 
 	originPos_ = { 640.0f, 60.0f };
 	//numberSpriteScale_ = { 0.8f, 0.8f };
-	
-	adjustItem_ = AdjustmentItem::GetInstance();
-	groupName_ = "GamePlayTimer";
-	adjustItem_->AddItem(groupName_, "clock_position", originPos_);
-	adjustItem_->AddItem(groupName_, "numberOriginPos", originPos_);
-	/*adjustItem_->AddItem(groupName_, "numberInterval", numberInterval_);
-	adjustItem_->AddItem(groupName_, "numberSpriteScale", numberSpriteScale_);*/
-
-	// 調整項目の適応
-	AdaptAdjustmentItem();
 
 	// gauge
-	timeGauge_ = Engine::CreateSprite("TestTimeGauge.png");
-	timeGauge_->SetScale({ 1.0f, 1.0f });
-
+	timeGauge_ = Engine::CreateSprite("TimeGaugeBar.png");
+	timeGaugeOutSide_ = Engine::CreateSprite("TimeGauge2.png");
+	
 	// timeUpCount
 	bigNumberUI_ = Engine::CreateSprite("BigNumber5.png");
 	bigNumberUI_->SetTextureCenterPos({ 640.0f, 360.0f });
@@ -47,6 +37,20 @@ void GamePlayTimer::Init(float limit) {
 	timeleft60s_->Init("timeRemaining.mp3");
 
 	timeleftUI_ = Engine::CreateSprite("timer60.png");
+
+	// -------------------------------------------------
+	// ↓ 調整項目
+	// -------------------------------------------------
+	adjustItem_ = AdjustmentItem::GetInstance();
+	groupName_ = "GamePlayTimer";
+	adjustItem_->AddItem(groupName_, "timeGaugeOutSidePos", timeGaugeOutSide_->GetCenterPos());
+	adjustItem_->AddItem(groupName_, "numberOriginPos", originPos_);
+	adjustItem_->AddItem(groupName_, "timeGaugeBarOffset", timeGaugeBarOffset_);
+	/*adjustItem_->AddItem(groupName_, "numberInterval", numberInterval_);
+	adjustItem_->AddItem(groupName_, "numberSpriteScale", numberSpriteScale_);*/
+
+	// 適応
+	AdaptAdjustmentItem();
 
 	// -------------------------------------------------
 	// ↓ 時間を足すUIのSpriteを作成する
@@ -93,8 +97,12 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	float raito = gameTimer_ / gameTimeLimit_;
 	
 	// 時間のゲージを変更する
-	timeGauge_->Update();
+	timeGaugeOutSide_->Update();
+
+	timeGauge_->SetCenterPos(timeGaugeOutSide_->GetCenterPos() + timeGaugeBarOffset_);
 	timeGauge_->SetUvDrawRange(Vector2(1.0f - raito, 1.0f));
+
+	timeGauge_->Update();
 
 	// 5秒前になったら大きな時間を表示する
 	if (gameTimer_ <= 5.0f) {
@@ -119,6 +127,8 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 		BigNumberScalUp();
 
 		bigNumberUI_->Update();
+	} else {
+		scaleUpTime_ = 0.0f;
 	}
 
 	// タイムアップ10秒前
@@ -183,6 +193,8 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 
 void GamePlayTimer::Draw() const {
 	timeGauge_->Draw();
+	timeGaugeOutSide_->Draw();
+
 	if (!isOverTime_ && !isFinish_) {
 		if (gameTimer_ <= 5.0f) {
 			bigNumberUI_->Draw();
@@ -233,8 +245,10 @@ void GamePlayTimer::BigNumberScalUp() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GamePlayTimer::AdaptAdjustmentItem() {
-	//timeGauge_->SetTextureCenterPos(adjustItem_->GetValue<Vector2>(groupName_, "clock_position"));
 	originPos_ = adjustItem_->GetValue<Vector2>(groupName_, "numberOriginPos");
+	timeGaugeBarOffset_ = adjustItem_->GetValue<Vector2>(groupName_, "timeGaugeBarOffset");
+	timeGaugeOutSide_->SetCenterPos(adjustItem_->GetValue<Vector2>(groupName_, "timeGaugeOutSidePos"));
+	//timeGauge_->SetTextureCenterPos(adjustItem_->GetValue<Vector2>(groupName_, "clock_position"));
 	//numberInterval_ = adjustItem_->GetValue<float>(groupName_, "numberInterval");
 	//numberSpriteScale_ = adjustItem_->GetValue<Vector2>(groupName_, "numberSpriteScale");
 }
@@ -328,10 +342,18 @@ void GamePlayTimer::Debug_Gui() {
 		ImGui::Text("gameTimer_ : %f", gameTimer_);
 		ImGui::SliderFloat("gameTimer", &gameTimer_, 0.0f, gameTimeLimit_);
 		ImGui::DragFloat3("originPos", &originPos_.x, 0.1f);
+		ImGui::DragFloat3("timeGaugeBarOffset", &timeGaugeBarOffset_.x, 0.1f);
 		/*ImGui::DragFloat2("numberSpriteScale", &numberSpriteScale_.x, 0.1f);
 		ImGui::DragFloat("inverval", &numberInterval_, 0.1f);
 		*/
-		timeGauge_->Debug_Gui();
+		if (ImGui::TreeNode("timeGauge")) {
+			timeGauge_->Debug_Gui();
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("timeGaugeOutSide")) {
+			timeGaugeOutSide_->Debug_Gui();
+			ImGui::TreePop();
+		}
 
 		if (ImGui::Button("AddTime")) {
 			AddTime(10.0f);

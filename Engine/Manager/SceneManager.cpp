@@ -242,7 +242,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Tail.png");
 
 	// time
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TestTimeGauge.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGauge2.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGaugeBar.png");
 	// limitTime
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber2.png");
