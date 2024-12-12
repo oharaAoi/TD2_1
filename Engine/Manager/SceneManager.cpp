@@ -241,6 +241,15 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Torso.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Tail.png");
 
+	// time
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TestTimeGauge.png");
+	// limitTime
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber1.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber2.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber3.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber4.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber5.png");
+
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
