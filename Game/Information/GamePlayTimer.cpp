@@ -102,7 +102,7 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	timeGaugeOutSide_->Update();
 
 	timeGauge_->SetCenterPos(timeGaugeOutSide_->GetCenterPos() + timeGaugeBarOffset_);
-	timeGauge_->SetUvDrawRange(Vector2(1.0f - raito, 1.0f));
+	timeGauge_->SetUvDrawRange(Vector2(raito, 1.0f));
 
 	timeGauge_->Update();
 
