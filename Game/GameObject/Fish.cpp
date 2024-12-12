@@ -84,16 +84,16 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 	case SubAttributeType::MIDIUM:
 		fishSize_ = FISH_SIZE::MIDIUM;
 		radius_ = 3.5f;
-		energy_ = 0.1f;
+		energy_ = 0.075f;
 		scale = { 3.5f,3.5f,3.5f };
-		eatCount = 4;
+		eatCount = 0;
 		break;
 	case SubAttributeType::LARGE:
 		fishSize_ = FISH_SIZE::LARGE;
 		radius_ = 5;
-		energy_ = 0.2f;
+		energy_ = 0.075f;
 		scale = { 5,5,5 };
-		eatCount = 8;
+		eatCount = 0;
 		break;
 	}
 	radius_ *= 2;
@@ -138,7 +138,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 	case (int)FISH_SIZE::MIDIUM:
 
 		radius_ = 10.0f;
-		energy_ = 0.1f;
+		energy_ = 0.075f;
 		scale = { 3.0f,3.0f,3.0f };
 		subType_ = SubAttributeType::MIDIUM;
 		break;
@@ -146,7 +146,7 @@ void Fish::SetFishSize(const FISH_SIZE& fishSize){
 	case (int)FISH_SIZE::LARGE:
 
 		radius_ = 10.0f;
-		energy_ = 0.2f;
+		energy_ = 0.075f;
 		scale = { 6.0f,6.0f,6.0f };
 		subType_ = SubAttributeType::LARGE;
 		break;
