@@ -225,6 +225,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_arrow.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "SpaceButton.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Tutorial_4.png");
 
@@ -313,6 +314,7 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "NiceSE.mp3");//Nice音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "GoodSE.mp3");//Good音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "ParfectSE.mp3");//Parfect音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUpCount.mp3");//timeUpCount音
 	
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.mp3");

@@ -22,5 +22,7 @@ private:
 	std::unique_ptr<Sprite> sprite_ui_;
 	Vector2 offset_;
 	Vector2 scale_;
+
+	//std::unique_ptr<Sprite> sprite_ui_;
 };
 

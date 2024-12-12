@@ -108,6 +108,9 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 
 	// 5秒前になったら大きな時間を表示する
 	if (gameTimer_ <= 5.0f) {
+		if (scaleUpTime_ == 0.0f) {
+			AudioPlayer::SinglShotPlay("timeUpCount.mp3", 0.6f);
+		}
 		scaleUpTime_ += GameTimer::DeltaTime();
 		if (gameTimer_ <= 1.0f) {
 			bigNumberUI_->SetTexture("BigNumber1.png");
@@ -229,12 +232,16 @@ void GamePlayTimer::BigNumberScalUp() {
 		bigNumberScale_ = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutExpo(t));
 		bigNumberUI_->SetScale(bigNumberScale_);
 		bigNumberAlpha_ = 0.5f;
+
 	} else {
 		float t = (scaleUpTime_ - scaleUpTimeLimit_) / (1.0f - scaleUpTimeLimit_);
 		bigNumberAlpha_ = std::lerp(0.5f, 0.0f, EaseInOutCubic(t));
 	}
 
-	scaleUpTime_ = std::fmod(scaleUpTime_, 1.0f);
+	if (scaleUpTime_ >= 1.0f) {
+		scaleUpTime_ = 0.0f;
+	}
+	
 	bigNumberUI_->SetColor(Vector4(1.0f, 1.0f, 1.0f, bigNumberAlpha_));
 }
 
