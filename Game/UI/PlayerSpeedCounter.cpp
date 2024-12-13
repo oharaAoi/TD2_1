@@ -62,7 +62,7 @@ void PlayerSpeedCounter::Init(){
 // ↓　
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlayerSpeedCounter::Update(float speed, float raito, float alpha){
+void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPlayerFlying){
 
 	backSprite_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	taniSprite_->SetColor({ 1.0f,1.0f,1.0f,alpha });
@@ -74,10 +74,12 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha){
 	needleSprite_->SetRotate(std::lerp(0.0f, needleAngleMax_, easeRatio));
 	needleSprite_->Update();
 
-	if (speed == 150.0f) {
-		if (preSpeed_ != 150.0f) {
-			isUiMove_ = true;
-			isFinish_ = false;
+	if (!isPlayerFlying) {
+		if (speed == 150.0f) {
+			if (preSpeed_ != 150.0f) {
+				isUiMove_ = true;
+				isFinish_ = false;
+			}
 		}
 	}
 

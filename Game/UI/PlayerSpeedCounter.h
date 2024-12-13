@@ -15,7 +15,7 @@ public:
 	~PlayerSpeedCounter();
 
 	void Init();
-	void Update(float speed, float raito, float alpha);
+	void Update(float speed, float raito, float alpha, bool isPlayerFlying);
 	void Draw() const;
 
 	void SpeedMaxUpdate();

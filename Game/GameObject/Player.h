@@ -229,6 +229,8 @@ private:
 	bool isEnableLaunch_;	// 胴体で再発射可能かどうか
 	bool isjet_;			// 胴体発射したか
 
+	bool isFirstIsSplash_ = false;	// 一番最初に着水したかどうか 
+
 	// データ格納変数　----------------------------------
 
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;// プレイヤーの上部の水面の座標

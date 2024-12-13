@@ -239,7 +239,10 @@ void GameScene::Update(){
 
 	if(Input::IsTriggerKey(DIK_SPACE)) {
 		if(currentState_ == GAME_STATE::TITLE) {
-			fadePanel_->SetFadeOut(0.6f);
+			if (fadePanel_->GetDoNoting()) {
+				fadePanel_->SetFadeOut(0.6f);
+				Input::SetNotAccepted(true);
+			}
 		} /*else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;
 		}*/
@@ -442,7 +445,7 @@ void GameScene::Update(){
 	if(currentState_ != GAME_STATE::TITLE) {
 		//flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 		//flyingGaugeUI_->Update(player_->GetFlyingTime());
-		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio(),speedMeterAlpha_);
+		playerSpeedCounter_->Update(player_->GetMoveSpeed(), player_->GetTotalSpeedRatio(),speedMeterAlpha_, player_->GetIsFlying());
 	} else{
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(), 0.0f, 2.0f);
 	}
