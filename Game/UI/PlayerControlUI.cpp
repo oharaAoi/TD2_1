@@ -12,6 +12,10 @@ void PlayerControlUI::Init() {
 
 	sprite_ui_ = Engine::CreateSprite("UI_fly1.png");
 	sprite_ui_->SetScale(scale_);
+
+	spaceButton_ = Engine::CreateSprite("SpaceButton.png");
+	spaceButton_->SetScale({0.4f, 0.4f});
+	spaceButton_->SetCenterPos({380.0f, 640.0f});
 }
 
 void PlayerControlUI::Update(const Vector2& pos, bool isGliding) {
@@ -27,10 +31,15 @@ void PlayerControlUI::Update(const Vector2& pos, bool isGliding) {
 	sprite_ui_->SetScale(scale_);
 
 	sprite_ui_->Update();
+
+	spaceButton_->Update();
 }
 
-void PlayerControlUI::Draw() const {
-	sprite_ui_->Draw();
+void PlayerControlUI::Draw(bool isPlayerFlying) const {
+	if (isPlayerFlying) {
+		sprite_ui_->Draw();
+	}
+	spaceButton_->Draw();
 }
 
 #ifdef _DEBUG
@@ -38,7 +47,16 @@ void PlayerControlUI::Debug_Gui() {
 	if (ImGui::TreeNode("PlayerControl")) {
 		ImGui::DragFloat3("offset", &offset_.x, 1.0f);
 		ImGui::DragFloat3("scale", &scale_.x, 1.0f);
-		sprite_ui_->Debug_Gui();
+		if (ImGui::TreeNode("flyingOrFall")) {
+			sprite_ui_->Debug_Gui();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("SpaceButton")) {
+			spaceButton_->Debug_Gui();
+			ImGui::TreePop();
+		}
+		
 		ImGui::TreePop();
 	}
 }

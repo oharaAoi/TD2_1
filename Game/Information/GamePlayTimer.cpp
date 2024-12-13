@@ -108,9 +108,13 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 
 	// 5秒前になったら大きな時間を表示する
 	if (gameTimer_ <= 5.0f) {
-		if (scaleUpTime_ == 0.0f) {
-			AudioPlayer::SinglShotPlay("timeUpCount.mp3", 0.6f);
+
+		if (!isOverTime_ && !isFinish_) {
+			if (scaleUpTime_ == 0.0f) {
+				AudioPlayer::SinglShotPlay("timeUpCount.mp3", 0.6f);
+			}
 		}
+
 		scaleUpTime_ += GameTimer::DeltaTime();
 		if (gameTimer_ <= 1.0f) {
 			bigNumberUI_->SetTexture("BigNumber1.png");

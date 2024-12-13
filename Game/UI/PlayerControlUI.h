@@ -11,7 +11,7 @@ public:
 
 	void Init();
 	void Update(const Vector2& pos, bool isGliding);
-	void Draw() const;
+	void Draw(bool isPlayerFlying) const;
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -23,6 +23,6 @@ private:
 	Vector2 offset_;
 	Vector2 scale_;
 
-	//std::unique_ptr<Sprite> sprite_ui_;
+	std::unique_ptr<Sprite> spaceButton_;
 };
 

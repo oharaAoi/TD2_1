@@ -631,9 +631,7 @@ void GameScene::Draw() const{
 		finishUI_->Draw();
 		gameStartUI_->Draw();
 		
-		if (player_->GetIsFlying()) {
-			playerControlUI_->Draw();
-		}
+		playerControlUI_->Draw(player_->GetIsFlying());
 
 
 	} else {
