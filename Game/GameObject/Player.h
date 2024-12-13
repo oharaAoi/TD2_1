@@ -65,10 +65,11 @@ public:
 		heightMeterObj_->Draw();
 		MaxHeightMeter_->Draw();
 	}
+
+	// Max時のカットイン演出
+	void DrawCutIn();
+
 private:
-	void Move_TITLE();
-	void Move_TUTORIAL();
-	void Move_GAME();
 	void UpdateTransform();
 	void Rounding(Vector3 &velocity);
 	void SpeedDown();
@@ -245,8 +246,13 @@ private:
 
 
 	std::unique_ptr<BaseGameObject>debugJumpUI_;
-
-
+	
+	// カットイン関連
+	bool isCutIn_ = false;
+	bool autoFlying_ = false;
+	const float kCutInTime_ = 1.5f;
+	float cutInTime_ = kCutInTime_;
+	std::unique_ptr<Sprite> cutInSprite_;
 
 
 	// 飛距離計測用　----------------------------------

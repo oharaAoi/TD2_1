@@ -627,6 +627,7 @@ void GameScene::Draw() const{
 		//}
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
+		player_->DrawCutIn();
 		missionUI_->Draw();
 		finishUI_->Draw();
 		gameStartUI_->Draw();

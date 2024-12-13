@@ -90,6 +90,12 @@ void Player::Init(){
 	jumpUI_Scale_Offset_ = -0.5f;
 	jumpUI_Rotate_Offset_ = 0.665f;
 	jumpUI_Translate_Offset_ = { 65,-11.5f,17 };
+
+
+	// カットインスプライト
+	cutInSprite_ = Engine::CreateSprite("CutIn.png");
+	cutInSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	cutInSprite_->SetCenterPos({ 640.0f,360.0f });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -548,6 +554,13 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+			// ボディーとスピードが最大だったらカットインフラグをオンにする
+			if(baseSpeed_ == kMaxBaseSpeed_){
+				if(bodyCount_ == kMaxBodyCount_){
+					isCutIn_ = true;
+				}
+			}
+
 			AudioPlayer::SinglShotPlay("eat.mp3", 0.15f);
 			//AudioPlayer::SinglShotPlay("eatAccel.wav", 0.5f);
 			AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.1f);
@@ -685,10 +698,27 @@ void Player::OnCollision(Collider* other){
 
 
 
+// Max時のカットイン演出
+void Player::DrawCutIn(){
 
-void Player::Move_TITLE(){}
-void Player::Move_TUTORIAL(){}
-void Player::Move_GAME(){}
+	cutInSprite_->Draw();
+
+	if(isCutIn_){
+
+		// 媒介変数計算
+		float t = cutInTime_ / kCutInTime_;
+
+		// 時間の更新
+		cutInTime_ -= GameTimer::DeltaTime();
+
+		// カットイン終了時処理
+		if(cutInTime_ <= 0.0f){
+			isCutIn_ = false;
+			autoFlying_ = true;
+			cutInTime_ = kCutInTime_;
+		}
+	}
+}
 
 
 

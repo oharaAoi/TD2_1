@@ -242,6 +242,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Torso.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Tail.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "CutIn.png");
+
 	// time
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGauge2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGaugeBar.png");
