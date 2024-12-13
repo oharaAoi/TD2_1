@@ -103,6 +103,10 @@ public:
 
 	const bool GetIsJet() const { return isjet_; }
 
+	const bool GetIsFacedBird() const { return isFacedBird_; }
+	const bool GetIsEnableLaunch() const { return isEnableLaunch_; }
+	const bool GetIsCutIn() const { return isCutIn_; }
+
 	void SetGamePlayTimer(GamePlayTimer* gamePlayTimer) { gamePlayTimer_ = gamePlayTimer; }
 
 #ifdef _DEBUG

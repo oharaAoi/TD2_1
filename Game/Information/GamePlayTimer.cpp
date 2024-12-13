@@ -309,6 +309,11 @@ void GamePlayTimer::AddTime(float time) {
 	}
 		
 	gameTimer_ += time;
+
+	if (gameTimer_ > gameTimeLimit_) {
+		gameTimeLimit_ = gameTimer_;
+	}
+
 	isAddTime_ = true;
 
 	isAppearance_ = true;
