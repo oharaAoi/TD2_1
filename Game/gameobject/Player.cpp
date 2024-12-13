@@ -155,7 +155,7 @@ void Player::Update(){
 			}
 		}
 
-		if (Input::GetNotAccepted()) {
+		if(Input::GetNotAccepted()) {
 			Input::SetNotAccepted(false);
 		}
 	}
@@ -458,6 +458,14 @@ void Player::AddBody(BaseGameObject* pTarget){
 	body->Update();
 
 	bodyCount_++;
+	if(baseSpeed_ + temporaryAcceleration_ >= 150.0f && bodyCount_ >= kMaxBodyCount_){
+		if(!isCutIn_ && !autoFlying_){
+			isCutIn_ = true;
+			gamePlayTimer_->AddTime(5.0f);
+			AudioPlayer::SinglShotPlay("CutIn1.mp3", 0.15f);
+			AudioPlayer::SinglShotPlay("CutIn2.mp3", 0.15f);
+		}
+	}
 }
 
 // 最後尾を削除
@@ -567,14 +575,12 @@ void Player::OnCollision(Collider* other){
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 			// ボディーとスピードが最大だったらカットインフラグをオンにする
-			if(baseSpeed_ + temporaryAcceleration_ >= 150.0f){
-				if(bodyCount_ == kMaxBodyCount_){
-					if(!isCutIn_ && !autoFlying_){
- 						isCutIn_ = true;
-						gamePlayTimer_->AddTime(5.0f);
-						AudioPlayer::SinglShotPlay("CutIn1.mp3", 0.15f);
-						AudioPlayer::SinglShotPlay("CutIn2.mp3", 0.15f);
-					}
+			if(baseSpeed_ + temporaryAcceleration_ >= 150.0f && bodyCount_ >= kMaxBodyCount_){
+				if(!isCutIn_ && !autoFlying_){
+					isCutIn_ = true;
+					gamePlayTimer_->AddTime(5.0f);
+					AudioPlayer::SinglShotPlay("CutIn1.mp3", 0.15f);
+					AudioPlayer::SinglShotPlay("CutIn2.mp3", 0.15f);
 				}
 			}
 
