@@ -43,7 +43,7 @@ void PlayerControlUI::Update(const Vector2& pos, bool isGliding) {
 
 void PlayerControlUI::Draw(bool isPlayerFlying) const {
 	if (isPlayerFlying) {
-		sprite_ui_->Draw();
+		//sprite_ui_->Draw();
 	}
 	spaceButton_->Draw();
 }
