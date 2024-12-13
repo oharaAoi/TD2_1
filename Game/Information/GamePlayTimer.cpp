@@ -165,6 +165,7 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 
 		} else { // オーバータイムに入る
 			isOverTime_ = true;
+			timeGaugeOutSide_->SetTexture("TimeGauge_OverTime.png");
 
 			// 今飛んでいなくて前飛んでいたら
 			if (!isPlayerFlying && isPreFlying_) {

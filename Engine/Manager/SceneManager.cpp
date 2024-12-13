@@ -256,6 +256,7 @@ void SceneManager::Load() {
 	// time
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGauge2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGaugeBar.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGauge_OverTime.png");
 	// limitTime
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "BigNumber2.png");
