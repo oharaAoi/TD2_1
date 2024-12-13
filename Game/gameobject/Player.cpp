@@ -572,7 +572,9 @@ void Player::OnCollision(Collider* other){
 			// ボディーとスピードが最大だったらカットインフラグをオンにする
 			if(baseSpeed_ == kMaxBaseSpeed_){
 				if(bodyCount_ == kMaxBodyCount_){
-					isCutIn_ = true;
+					if(!isCutIn_){
+						isCutIn_ = true;
+					}
 				}
 			}
 
