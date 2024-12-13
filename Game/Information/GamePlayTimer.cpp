@@ -302,6 +302,12 @@ void GamePlayTimer::AddTime(float time) {
 		return;
 	}
 
+	if (time == 5.0f) {
+		addTimeSprite_->SetTexture("missionClearAddTime_5.png");
+	} else {
+		addTimeSprite_->SetTexture("missionClearAddTime.png");
+	}
+		
 	gameTimer_ += time;
 	isAddTime_ = true;
 

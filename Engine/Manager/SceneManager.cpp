@@ -238,6 +238,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionComplete.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClear.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClearAddTime.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionClearAddTime_5.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Head.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Torso.png");
