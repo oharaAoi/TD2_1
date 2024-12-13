@@ -84,6 +84,12 @@ void WorldObjects::Init() {
 		ufosmoke_[oi]->SetObject("UFOSmoke.obj");
 		ufosmoke_[oi]->SetIsLighting(false);
 
+		//head
+		head[oi] = std::make_unique<BaseGameObject>();
+		head[oi]->Init();
+		head[oi]->SetObject("MountainHead.obj");
+		head[oi]->SetIsLighting(false);
+
 		worldWalls_[oi]->GetTransform()->SetTranslaion(newPos);
 		waterWeeds_[oi]->GetTransform()->SetTranslaion(newPos);
 		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(newPos.x, StageInformation::groundDepth_, 0.0f));
@@ -98,6 +104,7 @@ void WorldObjects::Init() {
 		nico_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		ufo_[oi]->GetTransform()->SetTranslaion(newMountainPos);
 		ufosmoke_[oi]->GetTransform()->SetTranslaion(newMountainPos);
+		head[oi]->GetTransform()->SetTranslaion(newMountainPos);
 	}
 	stageLoopCount_ = 0;
 	mountainLoopCount_ = 0;
@@ -122,6 +129,7 @@ void WorldObjects::Update(float playerPos) {
 		nico_[oi]		->Update();
 		ufo_[oi]		->Update();
 		ufosmoke_[oi]	->Update();
+		head[oi]	->Update();
 	}
 }
 
@@ -142,6 +150,7 @@ void WorldObjects::Draw() const {
 		nico_[oi]->Draw();
 		ufo_[oi]->Draw();
 		ufosmoke_[oi]->Draw();
+		head[oi]->Draw();
 			
 	}
 	
@@ -207,6 +216,7 @@ void WorldObjects::LoopStage() {
 		nico_[index]->GetTransform()->SetTranslaion(newPos);
 		ufo_[index]->GetTransform()->SetTranslaion(newPos);
 		ufosmoke_[index]->GetTransform()->SetTranslaion(newPos);
+		head[index]->GetTransform()->SetTranslaion(newPos);
 		newPos.z = cloudZ;
 		cloud_[index]->GetTransform()->SetTranslaion(newPos);
 
