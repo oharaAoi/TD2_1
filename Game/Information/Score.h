@@ -24,6 +24,8 @@ private:
 
 	std::string filePath;
 
+	std::vector<float> topScores_;
+
 	std::string hiScore;
 	std::string secondScore;
 	std::string thirdScore;

@@ -19,18 +19,8 @@ void Score::Init() {
 		inputFile >> scoreData;
 		inputFile.close();
 	} else {
-		if (!scoreData.contains(hiScore)) {
-			scoreData[hiScore] = { {"score", 0} };
-		}
-
-		if (!scoreData.contains(secondScore)) {
-			scoreData[secondScore] = { {"score", 0} };
-		}
-
-		if (!scoreData.contains(thirdScore)) {
-			scoreData[thirdScore] = { {"score", 0} };
-		}
-
+		std::string id = "score1";
+		
 		std::ofstream outputFile(kFilePath_ + fileName_);
 		if (outputFile.is_open()) {
 			outputFile << std::setw(4) << scoreData << std::endl;
@@ -50,16 +40,9 @@ void Score::WriteFile(float count) {
 		inputFile.close();
 	}
 
-	///タイムの比較
-	if (scoreData[hiScore]["score"] < count) {
-		scoreData[hiScore]["score"] = count;
-
-	} else if (scoreData[secondScore]["score"] < count) {
-		scoreData[secondScore]["score"] = count;
-
-	} else if (scoreData[thirdScore]["score"] < count) {
-		scoreData[thirdScore]["score"] = count;
-	}
+	std::string name = "score";
+	std::string id = name + std::to_string(scoreData.size() + 1);
+	scoreData[id] = count;
 
 	// ファイルに更新されたJSONデータを書き込む
 	std::ofstream outputFile(kFilePath_ + fileName_);
@@ -80,7 +63,29 @@ void Score::LoadJsonFile(float* time) {
 		inputFile.close();
 	}
 
-	time[0] = scoreData[hiScore]["score"];
-	time[1] = scoreData[secondScore]["score"];
-	time[2] = scoreData[thirdScore]["score"];
+	std::vector<float> scores;
+	for (uint32_t oi = 0; oi < scoreData.size(); ++oi) {
+		std::string name = "score";
+		std::string id = name + std::to_string(oi + 1);
+		scores.push_back(scoreData[id]);
+	}
+
+	// 降順にソート
+	std::sort(scores.begin(), scores.end(), [](float a, float b) {
+		return a > b; // 大きい順
+			  });
+
+	// 上位3つを取得
+	topScores_.clear();
+	size_t topCount = std::min(size_t(3), scores.size());
+	std::vector<float> topScores(scores.begin(), scores.begin() + topCount);
+	topScores_ = std::move(topScores);
+
+	for (uint32_t oi = 0; oi < 3; ++oi) {
+		if (topScores_.size() <= oi) {
+			time[oi] = 0;
+		} else {
+			time[oi] = topScores_[oi];
+		}
+	}
 }

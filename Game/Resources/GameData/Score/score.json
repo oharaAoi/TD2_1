@@ -1,11 +1,4 @@
 {
-    "hiScore": {
-        "score": 80000.0
-    },
-    "secondScore": {
-        "score": 80000.0
-    },
-    "thirdScore": {
-        "score": 80000.0
-    }
+    "score1": 109.0,
+    "score2": 472.0
 }

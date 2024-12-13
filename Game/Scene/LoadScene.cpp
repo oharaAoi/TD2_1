@@ -90,6 +90,7 @@ void LoadScene::Update() {
 
 	// 動いているかつsceneが終わって入なかったら
 	if (isMove_ && !isLoadFinish_) {
+		
 		CarpIconMove();
 	}
 
