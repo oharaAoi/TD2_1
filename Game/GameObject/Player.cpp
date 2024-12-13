@@ -571,6 +571,8 @@ void Player::OnCollision(Collider* other){
 				if(bodyCount_ == kMaxBodyCount_){
 					if(!isCutIn_ && !autoFlying_){
 						isCutIn_ = true;
+						AudioPlayer::SinglShotPlay("CutIn1.mp3", 0.15f);
+						AudioPlayer::SinglShotPlay("CutIn2.mp3", 0.15f);
 					}
 				}
 			}
