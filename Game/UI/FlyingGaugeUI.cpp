@@ -19,7 +19,6 @@ void FlyingGaugeUI::Init(){
 	tower_ = Engine::CreateSprite("tower.png");
 	tower_->SetCenterPos(skytreeBasePos_);
 
-
 	adjustmentItem_ = AdjustmentItem::GetInstance();
 	groupName_ = "FlyingGaugeUI";
 
@@ -38,12 +37,14 @@ void FlyingGaugeUI::Init(){
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FlyingGaugeUI::Update(float currentLength){
-	CalculationRaito(currentLength);
+void FlyingGaugeUI::Update(float currentHeight){
+
+	CalculationRaito(currentHeight);
 
 	// スカイツリーの高さを更新する
-	height_t = std::clamp((currentLength - halfWindowHeight_) / skytreeHeight_, 0.0f, 1000.0f);
-	halfHeight_t = std::clamp(currentLength / halfWindowHeight_, 0.0f, 1.0f);
+	height_t[0] = currentHeight / 317.0f;
+	height_t[1] = std::clamp(height_t[0], 0.0f, 1.0f);
+
 #ifdef _DEBUG
 
 	ImGui::Begin("t");
@@ -53,16 +54,15 @@ void FlyingGaugeUI::Update(float currentLength){
 #endif // _DEBUG
 
 
-	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, (tower_->GetTextureSize().y * 0.5f) * height_t));
-
-	icon_->SetCenterPos(iconBasePos_ + Vector2(0.0f, -kWindowHeight_ * 0.5f * halfHeight_t));
+	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, kWindowHeight_ * 0.4f * (height_t[0] - height_t[1])));
+	icon_->SetCenterPos(iconBasePos_ + Vector2(0.0f, -kWindowHeight_ * 0.4f * height_t[1]));
 
 	// 最高高度更新
-	if(maxHeight_t <= height_t){
-		maxHeight_t = height_t;
+	if(maxHeight_t <= height_t[0]){
+		maxHeight_t = height_t[0];
 		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos());
 	} else{
-		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos() + Vector2(0.0f, -(tower_->GetTextureSize().y * 0.5f) * (1.0f - height_t)));
+		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos() + Vector2(0.0f, -kWindowHeight_ * 0.4f * (maxHeight_t - height_t[0])));
 	}
 
 
@@ -79,7 +79,7 @@ void FlyingGaugeUI::Draw(float alpha){
 	tower_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	tower_->Draw();
 	icon_maxHeight_->SetColor({ 1.0f,1.0f,1.0f,alpha });
-	//icon_maxHeight_->Draw();
+	icon_maxHeight_->Draw();
 	icon_->SetColor({ 1.0f,1.0f,1.0f,alpha });
 	icon_->Draw();
 
