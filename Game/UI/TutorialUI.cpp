@@ -45,7 +45,7 @@ void TutorialUI::Init() {
 	tutorialUI_.try_emplace("kari3", std::make_unique<BaseGameObject>());
 	tutorialUI_["kari3"]->Init();
 	tutorialUI_["kari3"]->SetObject("UI_Plane.obj");
-	tutorialUI_["kari3"]->SetTexture("tutorial_3.png");
+	tutorialUI_["kari3"]->SetTexture("Tutorial_4.png");
 	tutorialUI_["kari3"]->SetIsLighting(false);
 
 	tutorialUI_.try_emplace("kari4", std::make_unique<BaseGameObject>());
@@ -66,7 +66,7 @@ void TutorialUI::Init() {
 	jumpTutorialUI_->Init();
 	jumpTutorialUI_->SetObject("UI_Plane.obj");
 	jumpTutorialUI_->SetIsLighting(false);
-	jumpTutorialUI_->SetTexture("Tutorial_4.png");
+	jumpTutorialUI_->SetTexture("Tutorial_3.png");
 	jumpTutorialUI_->GetTransform()->SetQuaternion(Quaternion::AngleAxis(180.0f * toRadian, { 0.0f, 1.0f, 0.0f }));
 
 	jumpTutorialPos_ = tutorialUI_["kari4"]->GetTransform()->GetTranslation();
