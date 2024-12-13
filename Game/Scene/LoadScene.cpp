@@ -1,6 +1,8 @@
 #include "LoadScene.h"
-#include "Engine/Engine.h"
 #include "Engine/Utilities/AdjustmentItem.h"
+#include "Engine/Audio/AudioPlayer.h"
+#include "Engine/Math/MyRandom.h"
+#include "Engine/Math/Easing.h"
 
 LoadScene::LoadScene() {}
 LoadScene::~LoadScene() {}
@@ -35,6 +37,7 @@ void LoadScene::Init() {
 		birdIcon_[oi] = Engine::CreateSprite("birdIcon.png");
 		birdIcon_[oi]->SetCenterPos(birdIconPos_[oi]);
 	}
+	
 	// パネル
 	fadePanel_ = std::make_unique<FadePanel>();
 	fadePanel_->Init();
@@ -47,10 +50,11 @@ void LoadScene::Init() {
 	// ↓ Parameterの初期化
 	// -------------------------------------------------
 	firstCarpIconPos_ = carpIconPos_;
-	birdIconPos_[3] = { 1280.0f, -30.0f };
+	preCarpIconPos_ = carpIconPos_;
+	birdIconPos_[3] = { 1280.0f, -50.0f };
 
 	moveTime_ = 0.0f;
-	moveLimit_ = 1.0f;
+	moveLimit_ = 0.7f;
 
 	movePosY_ = 0.0f;
 	moveTheta_ = 0.0f;			// sin波
@@ -58,8 +62,10 @@ void LoadScene::Init() {
 
 	moveIndex_ = 0;				// 移動するindex
 
-	isMove_ = false;
+	isMove_ = true;
 	isLoadFinish_ = false;
+
+	effectMoveTime_ = 0.5f;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,19 +76,42 @@ void LoadScene::Update() {
 	if (isLoadFinish_) {
 		return;
 	}
-
+	// panelの更新
 	fadePanel_->Update();
 
+	// fadeが完了していたら
 	if (fadePanel_->GetIsFinished()) {
 		isMove_ = true;
-		if (carpIconPos_.y <= -20.0f) {
+		if (carpIconPos_.y <= -30.0f) {
 			isLoadFinish_ = true;
 			return;
 		}
 	}
 
+	// 動いているかつsceneが終わって入なかったら
 	if (isMove_ && !isLoadFinish_) {
 		CarpIconMove();
+	}
+
+	// -------------------------------------------------
+	// ↓ effectを更新する
+	// -------------------------------------------------
+	for (std::list<EffectData>::iterator it = birdJumpEffectList_.begin(); it != birdJumpEffectList_.end();) {
+		(*it).moveTime_ += GameTimer::DeltaTime();
+		float t = (*it).moveTime_ / effectMoveTime_;
+
+		if ((*it).moveTime_ > effectMoveTime_) {
+			it = birdJumpEffectList_.erase(it);
+			continue;
+		}
+
+		(*it).effectSprite_->SetScale(Vector2::Lerp({ 0.0f, 0.0f }, { 0.5f, 0.5f }, EaseOutExpo(t)));
+		(*it).alpha_ = std::lerp(1.0f, 0.0f, (t));
+		(*it).color_ = { 1.0f, 1.0f, 1.0f, (*it).alpha_ };
+		(*it).effectSprite_->SetColor((*it).color_);
+		(*it).effectSprite_->Update();
+
+		++it;
 	}
 
 	background_->Update();
@@ -91,8 +120,11 @@ void LoadScene::Update() {
 		birdIcon_[oi]->SetCenterPos(birdIconPos_[oi]);
 		birdIcon_[oi]->Update();
 	}
+	
 	carpIcon_->SetCenterPos(carpIconPos_);
 	carpIcon_->Update();
+
+	preCarpIconPos_ = carpIconPos_;
 
 #ifdef _DEBUG
 	Debug_Gui();
@@ -108,6 +140,11 @@ void LoadScene::Draw() const {
 
 	for (uint32_t oi = 0; oi < 3; ++oi) {
 		birdIcon_[oi]->Draw();
+	}
+
+	for (std::list<EffectData>::const_iterator it = birdJumpEffectList_.begin(); it != birdJumpEffectList_.end();) {
+		(*it).effectSprite_->Draw();
+		++it;
 	}
 
 	carpIcon_->Draw();
@@ -145,9 +182,17 @@ void LoadScene::CarpIconMove() {
 		moveAmplitude_ += 60.0f;
 		moveIndex_++;
 		moveTime_ = 0.0f;
+
+		EmiteEffect();
+
+		if (moveIndex_ == 3) {
+			AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
+		} else {
+			AudioPlayer::SinglShotPlay("BirdJump_3.mp3", 0.4f);
+		}
 	}
 
-	if (carpIconPos_.y <= -20.0f) {
+	if (carpIconPos_.y <= -30.0f) {
 		if (moveIndex_ >= 3) {
 			if (isMove_) {
 				isMove_ = false;
@@ -156,25 +201,42 @@ void LoadScene::CarpIconMove() {
 		}
 	}
 
-	/*if (moveIndex_ >= 4) {
-		isMove_ = false;
-		fadePanel_->SetFadeOut(0.5f);
-	}*/
+	// 鯉の角度を求める
+	Vector2 diffCarpPos = (carpIconPos_ - preCarpIconPos_);
+	float angle = std::atan2f(diffCarpPos.y, diffCarpPos.x);
+	carpIcon_->SetRotate(angle);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　Effectの追加を行う
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void LoadScene::EmiteEffect() {
+	auto& effect = birdJumpEffectList_.emplace_back(EffectData());
+	effect.effectSprite_->SetCenterPos(birdIconPos_[moveIndex_ - 1]);
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　編集処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _DEBUG
-
 void LoadScene::Debug_Gui() {
 	ImGui::Begin("loadScene");
 	ImGui::DragFloat2("carpIconPos", &carpIconPos_.x, 2.0f);
 	ImGui::DragFloat2("birdIconPos0", &birdIconPos_[0].x, 2.0f);
 	ImGui::DragFloat2("birdIconPos1", &birdIconPos_[1].x, 2.0f);
 	ImGui::DragFloat2("birdIconPos2", &birdIconPos_[2].x, 2.0f);
-	fadePanel_->Debug_Gui();
+	if (ImGui::TreeNode("fade")) {
+		fadePanel_->Debug_Gui();
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("backGround")) {
+		background_->Debug_Gui();
+		ImGui::TreePop();
+	}
 
 	if (ImGui::Button("Reset")) {
 		AdjustmentItem* adjustItem = AdjustmentItem::GetInstance();
