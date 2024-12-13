@@ -174,6 +174,8 @@ void GameScene::Init() {
 	// -------------------------------------------------
 	player_->SetGamePlayTimer(gamePlayTimer_.get());
 
+	playerControlUI_->SetPlayer(player_.get());
+
 	// -------------------------------------------------
 	// ↓ 背景のモデルの生成
 	// -------------------------------------------------
@@ -287,6 +289,7 @@ void GameScene::Update() {
 					obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos(), 0);
 					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
 					obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(450, 0, 0), 1);
 				} else {
 					currentState_ = GAME_STATE::GAME;
 					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);

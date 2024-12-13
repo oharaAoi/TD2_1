@@ -348,7 +348,7 @@ void Player::Move(){
 					}
 				}
 			} else{
-
+				isEnableLaunch_ = false;
 				if(currentAngle_ <= 0.1f){
 					isFalling_ = true;
 				}

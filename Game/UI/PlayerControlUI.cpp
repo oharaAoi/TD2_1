@@ -45,7 +45,10 @@ void PlayerControlUI::Draw(bool isPlayerFlying) const {
 	if (isPlayerFlying) {
 		//sprite_ui_->Draw();
 	}
-	spaceButton_->Draw();
+
+	if (!pPlayer_->GetIsEnableLaunch() && !pPlayer_->GetIsFacedBird() && !pPlayer_->GetIsCutIn()) {
+		spaceButton_->Draw();
+	}
 }
 
 #ifdef _DEBUG
