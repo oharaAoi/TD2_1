@@ -445,6 +445,15 @@ void GameScene::Update(){
 				rankUpParticleEmitter_->SetActiveTime(3.0f);
 				rankUpParticleEmitter_->SetEmitTextureName(rankTextureNames[rankCount_]);
 
+				if(rankCount_ == 0 or rankCount_ == 1){
+					AudioPlayer::SinglShotPlay("appraisal.mp3", 0.3f);
+				} else if(rankCount_ == 2){
+					AudioPlayer::SinglShotPlay("appraisal_SS.mp3", 0.2f);
+				} else if(rankCount_ == 3){
+					AudioPlayer::SinglShotPlay("appraisal_SSS.mp3", 0.2f);
+				}
+
+
 				if(borders_.size() == 0) {
 					break;
 				}

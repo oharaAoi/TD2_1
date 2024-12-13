@@ -296,8 +296,7 @@ void Player::Move(){
 	}
 
 
-	velocity_ *= GetMoveSpeed() * birdJumpRaito_ * std::fabsf(GameTimer::DeltaTime());
-
+	velocity_ *= GetMoveSpeed() * fabsf(birdJumpRaito_ * GameTimer::DeltaTime());
 
 	transform_->SetTranslaion(transform_->GetTranslation() + velocity_ + dropVec + diveVec);
 

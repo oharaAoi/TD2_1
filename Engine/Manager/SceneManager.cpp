@@ -333,6 +333,9 @@ void SceneManager::Load() {
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "timeUpCount.mp3");//timeUpCount音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "CutIn1.mp3");//カットインの時の音
 	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "CutIn2.mp3");//カットインの時の音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "appraisal.mp3");//ランクアップ音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "appraisal_SS.mp3");//ランクアップ音
+	AudioManager::LoadAudio("./Game/Resources/Audio/GameSE/", "appraisal_SSS.mp3");//ランクアップ音
 
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi.mp3");
 	AudioManager::LoadAudio("./Game/Resources/Audio/BGM/", "mainBGM_tobenaikoi_in_water.mp3");
