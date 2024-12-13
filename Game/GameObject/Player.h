@@ -12,6 +12,7 @@
 #include "Game/Manager/AnimetionEffectManager.h"
 #include "Game/Camera/Camera.h"
 #include "Game/Information/JumpAssessor.h"
+#include "Game/Information/GamePlayTimer.h"
 
 class PlayerAnimator;
 
@@ -102,6 +103,8 @@ public:
 
 	const bool GetIsJet() const { return isjet_; }
 
+	void SetGamePlayTimer(GamePlayTimer* gamePlayTimer) { gamePlayTimer_ = gamePlayTimer; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG
@@ -113,6 +116,8 @@ private:
 
 	AdjustmentItem* adjustmentItem_;
 	std::unique_ptr<PlayerAnimator> animetor_;
+
+	GamePlayTimer* gamePlayTimer_ = nullptr;
 
 	// 付属モデル---------------------------------------
 
