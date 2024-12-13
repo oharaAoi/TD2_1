@@ -234,7 +234,7 @@ void Player::Draw() const{
 
 void Player::DrawAnimetor() const{
 	animetor_->Draw();
-	if (isFlying_) {
+	if(isFlying_) {
 		wings_->Draw();
 	}
 }
@@ -309,15 +309,15 @@ void Player::Move(){
 		transform_->GetTranslation().x + jumpUI_Translate_Offset_.x,
 		transform_->GetTranslation().y + jumpUI_Translate_Offset_.y,
 		transform_->GetTranslation().z + jumpUI_Translate_Offset_.z
-	});
+		});
 
 	jumpUI_transform_->SetScale({
 		transform_->GetScale().x + jumpUI_Scale_Offset_,
 		transform_->GetScale().y + jumpUI_Scale_Offset_,
 		transform_->GetScale().z + jumpUI_Scale_Offset_
-	});
+		});
 
-	jumpUI_transform_->SetQuaternion(Quaternion::AngleAxis(jumpUI_Rotate_Offset_, {0.0f,1.0f,0.0f}));
+	jumpUI_transform_->SetQuaternion(Quaternion::AngleAxis(jumpUI_Rotate_Offset_, { 0.0f,1.0f,0.0f }));
 
 	jumpUI_transform_->Update();
 
@@ -615,7 +615,7 @@ void Player::OnCollision(Collider* other){
 						isHighSpeedMove = true;
 						AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
 					} else {
-						maxSpeedTimeCount = kMaxSpeedTime/2;
+						maxSpeedTimeCount = kMaxSpeedTime / 2;
 						//birdJumpRaito_ = 1.0f;
 					}
 
@@ -629,7 +629,7 @@ void Player::OnCollision(Collider* other){
 				isCloseWing_ = true;
 				SpeedDown();
 				// 一時減速する
-				temporaryAcceleration_ += decreaseVelocity_*2;//多めに減速
+				temporaryAcceleration_ += decreaseVelocity_ * 2;//多めに減速
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 				pressTime_ = birdHitAngle;
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
@@ -701,23 +701,47 @@ void Player::OnCollision(Collider* other){
 // Max時のカットイン演出
 void Player::DrawCutIn(){
 
+	// 媒介変数計算
+	float t = std::clamp((cutInTime_ - kCutInTime_ * 0.8f) / (kCutInTime_ - kCutInTime_ * 0.8f),0.0f,1.0f);
+	float t2 = (std::clamp(cutInTime_, 0.0f, kCutInTime_ * 0.3f)) / (kCutInTime_ * 0.3f);
+
+	// 時間の更新
+	cutInTime_ -= GameTimer::DeltaTime();
+
+	// カットイン終了時処理
+	if(cutInTime_ <= 0.0f){
+		//isCutIn_ = false;
+		//autoFlying_ = true;
+		cutInTime_ = kCutInTime_;
+	}
+
+	// 拡縮と回転
+	float ease = EaseOutBack(/*EaseOutExpo*/((1.0f - t)));
+	ease = ease * ease * ease;
+	cutInSprite_->SetScale({ 1.0f,ease });
+	cutInSprite_->SetRotate(-6.28f + 6.28f * EaseOutExpo(/*EaseOutExpo*/((1.0f - t))));
+	//cutInSprite_->SetCenterPos({ 640.0f,360.0f + 720.0f * ease });
+
+	if(t2 < 1.0f){
+		float ease2 = EaseOutExpo(1.0f - t2);
+		//cutInSprite_->SetCenterPos({ 640.0f,360.0f + -720.0f * ease2 });
+		cutInSprite_->SetScale({ 1.0f,1.0f - ease2 });
+	}
+
 	cutInSprite_->Draw();
 
-	if(isCutIn_){
 
-		// 媒介変数計算
-		float t = cutInTime_ / kCutInTime_;
 
-		// 時間の更新
-		cutInTime_ -= GameTimer::DeltaTime();
-
-		// カットイン終了時処理
-		if(cutInTime_ <= 0.0f){
-			isCutIn_ = false;
-			autoFlying_ = true;
-			cutInTime_ = kCutInTime_;
-		}
-	}
+	//if(isCutIn_){
+	//
+	//
+	//	// カットイン終了時処理
+	//	if(cutInTime_ <= 0.0f){
+	//		isCutIn_ = false;
+	//		autoFlying_ = true;
+	//		cutInTime_ = kCutInTime_;
+	//	}
+	//}
 }
 
 
@@ -848,7 +872,7 @@ void Player::MoveSky(){
 		//////////////////////////////////////////////////////////////////////////////
 		seCoolTime -= GameTimer::DeltaTime();
 
-		
+
 		// ---------------- 滑空状態にするか下降状態にするかを判定するための処理 ----------------------- //
 		// 飛行中は押していると滑空する
 		// pressタイムがプラスの時は上を向いているので受け付けない
@@ -863,13 +887,13 @@ void Player::MoveSky(){
 					// baseSpeedを上げて下降速度を上げている
 					baseSpeed_ = defaultSpeed * 2.0f;
 
-					
+
 				} else {
 					// 離しているので下降する
 					isCloseWing_ = true;
 					baseSpeed_ = defaultSpeed;
 				}
-				
+
 			}
 		}
 		if(wingOpen != isCloseWing_ && !isCloseWing_) {
@@ -877,7 +901,7 @@ void Player::MoveSky(){
 			seCoolTime = 0.25f;
 		}
 		wingOpen = isCloseWing_;
-		
+
 		////////////////////////////////////////////////////////////////////////////////
 
 		// 下降ベクトルを格納する変数
@@ -889,7 +913,7 @@ void Player::MoveSky(){
 			dropSpeed_ = 0.0f;
 			//dropSpeed_ += gravity_* descentRatio * GameTimer::DeltaTime();
 
-			if (wingAnimatinoKeyFrame_ < 1.0f) {
+			if(wingAnimatinoKeyFrame_ < 1.0f) {
 				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime() * 4;
 			}
 
@@ -899,8 +923,8 @@ void Player::MoveSky(){
 			dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 			dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 
-			if (wingAnimatinoKeyFrame_ > 0.0f) {
-				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime()*2;
+			if(wingAnimatinoKeyFrame_ > 0.0f) {
+				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime() * 2;
 			}
 
 		}
