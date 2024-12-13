@@ -227,7 +227,6 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_arrow.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "SpaceButton.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Tutorial_4.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMax.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_1.png");
@@ -265,12 +264,13 @@ void SceneManager::Load() {
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_2.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_3.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_4.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tower.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "blueSky_ORE.png");
 	//TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "kari.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tutorial_3.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "UIeffect.png");
 	
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");

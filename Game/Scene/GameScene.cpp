@@ -31,7 +31,7 @@ void GameScene::Init() {
 	AdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(30.0f);
+	gamePlayTimer_->Init(50.0f);
 
 	isGameStart_ = true;
 	notControlTime_ = 0.0f;
