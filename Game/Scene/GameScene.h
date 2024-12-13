@@ -39,14 +39,18 @@
 #include "Game/UI/FinishUI.h"
 #include "Game/UI/GameStartUI.h"
 #include "Game/UI/MissionUI.h"
+#include "Game/UI/FadePanel.h"
 
 /*------ Sprite ------*/
 #include "Game/Effect/Cherry.h"
 #include "Game/Effect/Bubble.h"
+/*------ LoadScene ------*/
+#include "Game/Scene/LoadScene.h"
 
 // ゲームシーン内での状態分けのenum
 enum class GAME_STATE : int32_t{
 	TITLE,// タイトルなのにゲームシーンに入れてごめん♡
+	LOAD,
 	TUTORIAL,
 	GAME
 };
@@ -149,6 +153,11 @@ private:
 	std::unique_ptr<FinishUI> finishUI_ = nullptr;
 	std::unique_ptr<GameStartUI> gameStartUI_ = nullptr;
 	std::unique_ptr<MissionUI> missionUI_ = nullptr;
+	// パネル
+	std::unique_ptr<FadePanel> fadePanel_ = nullptr;
+
+	// --------- Load ----------- //
+	std::unique_ptr<LoadScene> loadScene_;
 	
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;

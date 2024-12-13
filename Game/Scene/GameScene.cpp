@@ -136,6 +136,16 @@ void GameScene::Init(){
 	fade_->SetCenterPos({ 640.0f, 360.0f });
 	fade_->SetTextureSize({ 2000.0f,2000.0f });
 
+	// panel
+	fadePanel_ = std::make_unique<FadePanel>();
+	fadePanel_->Init();
+
+	// -------------------------------------------------
+	// ↓ LoadSceneの設定
+	// -------------------------------------------------
+	loadScene_ = std::make_unique<LoadScene>();
+	loadScene_->Init();
+
 	// -------------------------------------------------
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
@@ -229,25 +239,46 @@ void GameScene::Update(){
 
 	if(Input::IsTriggerKey(DIK_SPACE)) {
 		if(currentState_ == GAME_STATE::TITLE) {
-			if (!isGameStart_) {
-				currentState_ = GAME_STATE::TUTORIAL;
-				tutorialUI_->LineUpUI(player_->GetWorldTranslation());
-				obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos(), 0);
-				obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos(), 0);
-				obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
-				obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
-			} else {
-				currentState_ = GAME_STATE::GAME;
-				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);
-				obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
-				obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
-				gameStartUI_->SetUI();
-				missionUI_->Start();
-			}
-
+			fadePanel_->SetFadeOut(0.6f);
 		} /*else if (currentState_ == GAME_STATE::TUTORIAL) {
 			currentState_ = GAME_STATE::GAME;
 		}*/
+	}
+
+	fadePanel_->Update();
+
+	if (currentState_ == GAME_STATE::TITLE) {
+		if (fadePanel_->GetIsFinished()) {
+			currentState_ = GAME_STATE::LOAD;
+		}
+	}
+
+	if (currentState_ == GAME_STATE::LOAD) {
+		if (fadePanel_->GetIsFinished()) {
+			loadScene_->Update();
+		}
+
+		if (loadScene_->GetIsLoadFinish()) {
+			if (fadePanel_->GetDoNoting()) {
+				fadePanel_->SetFadeOutOpen(0.6f);
+				if (!isGameStart_) {
+					currentState_ = GAME_STATE::TUTORIAL;
+					tutorialUI_->LineUpUI(player_->GetWorldTranslation());
+					obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos(), 0);
+					obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos(), 0);
+					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
+				} else {
+					currentState_ = GAME_STATE::GAME;
+					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
+					gameStartUI_->SetUI();
+					missionUI_->Start();
+				}
+			}
+		}
+		return;
 	}
 
 	if(currentState_ == GAME_STATE::TUTORIAL) {
@@ -611,6 +642,15 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	//Render::SetRenderTarget(Sprite2D_RenderTarget);
 
+	// 一番最初に描画して他の物が描画されないようにする
+	Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
+	if (currentState_ == GAME_STATE::LOAD) {
+		//fadePanel_->Draw();
+		if (fadePanel_->GetIsFinished()) {
+			loadScene_->Draw();
+		}
+		return;
+	}
 
 	if(currentState_ != GAME_STATE::TITLE) {
 
@@ -653,6 +693,8 @@ void GameScene::Draw() const{
 			fade_->Draw();
 		}
 	}
+
+	fadePanel_->Draw();
 }
 
 

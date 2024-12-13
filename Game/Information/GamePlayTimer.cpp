@@ -81,6 +81,8 @@ void GamePlayTimer::Init(float limit) {
 
 	timeleftUI_->SetCenterPos(startPos_);
 
+	timeGauge_->SetCenterPos(timeGaugeOutSide_->GetCenterPos() + timeGaugeBarOffset_);
+
 	// -------------------------------------------------
 	// ↓ scaleUp用の変数 
 	// -------------------------------------------------
