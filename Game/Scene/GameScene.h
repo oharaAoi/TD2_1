@@ -123,7 +123,6 @@ private:
 
 	bool isGameStart_;
 
-
 	// ---------- manager ---------- //
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
@@ -168,6 +167,10 @@ private:
 	std::unique_ptr<AudioPlayer> mainBGM_inWater_;
 	std::unique_ptr<AudioPlayer> windSound_;
 	std::unique_ptr<AudioPlayer> swimSound_;
+
+	// ---------- nextSceneを変える用 ---------- //
+	float notControlTime_;
+	float notControlTimeLimit_ = 5.0f;
 
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;

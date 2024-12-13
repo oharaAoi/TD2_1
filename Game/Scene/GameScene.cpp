@@ -33,6 +33,8 @@ void GameScene::Init() {
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
 	gamePlayTimer_->Init(30.0f);
 
+	isGameStart_ = true;
+	notControlTime_ = 0.0f;
 
 	// -------------------------------------------------
 	// ↓ editorの初期化
@@ -228,13 +230,22 @@ void GameScene::Update() {
 	if (currentState_ == GAME_STATE::TITLE) {
 		if (Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W)) {
 			isGameStart_ = !isGameStart_;
+			notControlTime_ = 0.0f;
 		}
 
 		if (Input::IsTriggerKey(DIK_DOWN) || Input::IsTriggerKey(DIK_S)) {
 			isGameStart_ = !isGameStart_;
+			notControlTime_ = 0.0f;
 		}
 
 		guideUI_->SetArrow(isGameStart_);
+
+		if (isGameStart_) {
+			notControlTime_ += GameTimer::DeltaTime();
+			if (notControlTimeLimit_ <= notControlTime_) {
+				isGameStart_ = false;
+			}
+		}
 	}
 
 	if (Input::IsTriggerKey(DIK_SPACE)) {
