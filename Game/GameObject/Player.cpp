@@ -93,9 +93,14 @@ void Player::Init(){
 
 
 	// カットインスプライト
-	cutInSprite_ = Engine::CreateSprite("CutIn.png");
-	cutInSprite_->SetAnchorPoint({ 0.5f, 0.5f });
-	cutInSprite_->SetCenterPos({ 640.0f,360.0f });
+	cutInSprite_[0] = Engine::CreateSprite("CutIn.png");
+	cutInSprite_[0]->SetAnchorPoint({ 0.5f, 0.5f });
+	cutInSprite_[0]->SetCenterPos({ 640.0f,360.0f });
+
+	cutInSprite_[1] = Engine::CreateSprite("white.png");
+	cutInSprite_[1]->SetTextureSize({ 1280.0f, 720.0f });
+	cutInSprite_[1]->SetScale({ 10.0f, 10.0f });
+	cutInSprite_[1]->SetColor({ 0,0,0,0 });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,6 +145,7 @@ void Player::Update(){
 		// 着水した瞬間
 		if(preFlying_) {
 			isSplash_ = true;
+			autoFlying_ = false;
 			//isFlying_ = false;//コメントアウト外さない
 			if(waterSurfaceCoolTime <= 0) {
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
@@ -267,6 +273,8 @@ void Player::Move(){
 
 	// 角度を加算
 	pressTime_ = std::clamp(pressTime_, -1.0f, 1.0f);
+	if(isCutIn_ && !autoFlying_){ pressTime_ = 0.0f; }
+
 	currentAngle_ = kMaxAngle_ * pressTime_;
 
 	// 移動量を加算
@@ -682,17 +690,19 @@ void Player::OnCollision(Collider* other){
 		}
 	}
 
-	if(other->GetObjectType() == (int)ObjectType::DRIFTWOOD) {
-		pressTime_ *= (-1.0f) * reflection_;
-		dontInputPressTime_ = dontInputTime_;
-		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", nullptr, true,
-			Vector3(1, 1, 1), Quaternion(), other->GetWorldTranslation());
-		SpeedDown();
-		Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
+	if(!isCutIn_ && !autoFlying_){
+		if(other->GetObjectType() == (int)ObjectType::DRIFTWOOD) {
+			pressTime_ *= (-1.0f) * reflection_;
+			dontInputPressTime_ = dontInputTime_;
+			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", nullptr, true,
+				Vector3(1, 1, 1), Quaternion(), other->GetWorldTranslation());
+			SpeedDown();
+			Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 
-	} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
-		SpeedDown();
-		Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
+		} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
+			SpeedDown();
+			Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
+		}
 	}
 }
 
@@ -701,47 +711,42 @@ void Player::OnCollision(Collider* other){
 // Max時のカットイン演出
 void Player::DrawCutIn(){
 
-	// 媒介変数計算
-	float t = std::clamp((cutInTime_ - kCutInTime_ * 0.8f) / (kCutInTime_ - kCutInTime_ * 0.8f),0.0f,1.0f);
-	float t2 = (std::clamp(cutInTime_, 0.0f, kCutInTime_ * 0.3f)) / (kCutInTime_ * 0.3f);
+	if(isCutIn_){
 
-	// 時間の更新
-	cutInTime_ -= GameTimer::DeltaTime();
+		// 媒介変数計算
+		float t = std::clamp((cutInTime_ - kCutInTime_ * 0.8f) / (kCutInTime_ - kCutInTime_ * 0.8f), 0.0f, 1.0f);
+		float t2 = (std::clamp(cutInTime_, 0.0f, kCutInTime_ * 0.3f)) / (kCutInTime_ * 0.3f);
 
-	// カットイン終了時処理
-	if(cutInTime_ <= 0.0f){
-		//isCutIn_ = false;
-		//autoFlying_ = true;
-		cutInTime_ = kCutInTime_;
+		// 時間の更新
+		cutInTime_ -= GameTimer::DeltaTime();
+
+		// 拡縮と回転
+		float ease = EaseOutBack(((1.0f - t)));
+		ease = ease * ease * ease;
+		cutInSprite_[0]->SetScale({ 1.0f,ease });
+		cutInSprite_[0]->SetRotate(-6.28f + 6.28f * EaseOutExpo(((1.0f - t))));
+		cutInSprite_[1]->SetColor({ 0.0f,0.0f,0.0f,ease * 0.9f });
+		if(t2 < 1.0f){
+			float ease2 = EaseOutExpo(1.0f - t2);
+			cutInSprite_[0]->SetScale({ 1.0f,1.0f - ease2 });
+			cutInSprite_[1]->SetColor({ 0.0f,0.0f,0.0f,(1.0f - ease2) * 0.9f });
+		}
+
+		// 描画
+		cutInSprite_[1]->Draw();
+		cutInSprite_[0]->Draw();
+
+
+		// カットイン終了時処理
+		if(cutInTime_ <= 0.0f){
+			isCutIn_ = false;
+			cutInTime_ = kCutInTime_;
+		}
+
+		if(cutInTime_ < kCutInTime_ * 0.2f){
+			autoFlying_ = true;
+		}
 	}
-
-	// 拡縮と回転
-	float ease = EaseOutBack(/*EaseOutExpo*/((1.0f - t)));
-	ease = ease * ease * ease;
-	cutInSprite_->SetScale({ 1.0f,ease });
-	cutInSprite_->SetRotate(-6.28f + 6.28f * EaseOutExpo(/*EaseOutExpo*/((1.0f - t))));
-	//cutInSprite_->SetCenterPos({ 640.0f,360.0f + 720.0f * ease });
-
-	if(t2 < 1.0f){
-		float ease2 = EaseOutExpo(1.0f - t2);
-		//cutInSprite_->SetCenterPos({ 640.0f,360.0f + -720.0f * ease2 });
-		cutInSprite_->SetScale({ 1.0f,1.0f - ease2 });
-	}
-
-	cutInSprite_->Draw();
-
-
-
-	//if(isCutIn_){
-	//
-	//
-	//	// カットイン終了時処理
-	//	if(cutInTime_ <= 0.0f){
-	//		isCutIn_ = false;
-	//		autoFlying_ = true;
-	//		cutInTime_ = kCutInTime_;
-	//	}
-	//}
 }
 
 
@@ -786,7 +791,11 @@ void Player::MoveWater(){
 				pressTime_ += addPressTime_ * GameTimer::TimeRate();
 
 			} else {
-				pressTime_ -= addPressTime_ * GameTimer::TimeRate();
+				if(!autoFlying_){
+					pressTime_ -= addPressTime_ * GameTimer::TimeRate();
+				} else{
+					pressTime_ += addPressTime_ * GameTimer::TimeRate();
+				}
 			}
 			seCoolTime -= GameTimer::DeltaTime();
 			if(seCoolTime <= 0 && Input::IsTriggerKey(DIK_SPACE)) {

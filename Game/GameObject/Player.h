@@ -252,7 +252,7 @@ private:
 	bool autoFlying_ = false;
 	const float kCutInTime_ = 1.5f;
 	float cutInTime_ = kCutInTime_;
-	std::unique_ptr<Sprite> cutInSprite_;
+	std::unique_ptr<Sprite> cutInSprite_[2];
 
 
 	// 飛距離計測用　----------------------------------
