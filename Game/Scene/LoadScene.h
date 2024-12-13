@@ -92,6 +92,8 @@ private:
 	float moveTheta_;		// sin波
 	float moveAmplitude_;	// 振幅
 
+	float birdFallAngleStrength_;
+
 	uint32_t moveIndex_ = 0;
 
 	bool isMove_ = false;			// 鯉が動いているか

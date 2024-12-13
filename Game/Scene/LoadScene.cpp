@@ -64,6 +64,8 @@ void LoadScene::Init() {
 
 	moveIndex_ = 0;				// 移動するindex
 
+	birdFallAngleStrength_ = 2.0f;
+
 	isMove_ = true;
 	isLoadFinish_ = false;
 
@@ -123,6 +125,7 @@ void LoadScene::Update() {
 		birdFallVelocity_[oi] += birdFallAcceleration_[oi] * GameTimer::DeltaTime();
 		birdIconPos_[oi] += (birdFallVelocity_[oi] * GameTimer::DeltaTime());
 		birdIcon_[oi]->SetCenterPos(birdIconPos_[oi]);
+		birdIcon_[oi]->SetRotate((birdFallVelocity_[oi].y * birdFallAngleStrength_) * toRadian);
 		birdIcon_[oi]->Update();
 	}
 	
