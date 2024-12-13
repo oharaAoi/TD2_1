@@ -90,6 +90,8 @@ void Player::Init(){
 	jumpUI_Scale_Offset_ = -0.5f;
 	jumpUI_Rotate_Offset_ = 0.665f;
 	jumpUI_Translate_Offset_ = { 65,-11.5f,17 };
+
+	isFirstIsSplash_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +143,11 @@ void Player::Update(){
 				waterSurfaceCoolTime = 0.25f;
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.5f);
 			}
+		}
+
+		if (!isFirstIsSplash_) {
+			Input::SetNotAccepted(false);
+			isFirstIsSplash_ = true;
 		}
 	}
 	waterSurfaceCoolTime -= GameTimer::DeltaTime();
