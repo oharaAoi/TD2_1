@@ -243,6 +243,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Torso.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "KoiGeuge_Tail.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "CutIn.png");
+
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "panel.png");
 
 	// Load
