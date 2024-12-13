@@ -115,8 +115,13 @@ void Engine::Finalize() {
 
 #ifdef _DEBUG
 void Engine::DrawImGui() {
-	/*ImGui::Begin("Engine");
-	ImGui::End();*/
+	ImGui::Begin("Engine");
+	if (Input::GetNotAccepted()) {
+		ImGui::Text("NotAccepted : true");
+	} else {
+		ImGui::Text("NotAccepted : false");
+	}
+	ImGui::End();
 }
 #endif
 
