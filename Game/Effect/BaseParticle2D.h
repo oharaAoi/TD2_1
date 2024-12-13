@@ -21,6 +21,10 @@ public:
 	virtual bool GetIsActive()const{ return lifetime_ > 0.0f; }
 	float GetLifeTime()const{ return lifetime_; }
 	void InitRandomColor(const std::initializer_list<Vector4>& colorList);
+	void SetTextureName(const std::string& filename){ 
+		filename_ = filename;
+		particle_->SetTexture(filename_);
+	}
 
 protected:
 

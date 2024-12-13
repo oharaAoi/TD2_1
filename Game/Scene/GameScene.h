@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine.h"
 #include <unordered_map>
+#include <queue>
 
 /*---- game object ---*/
 #include "Game/GameObject/Player.h"
@@ -44,6 +45,7 @@
 /*------ Sprite ------*/
 #include "Game/Effect/Cherry.h"
 #include "Game/Effect/Bubble.h"
+#include "Game/Effect/RankUp.h"
 /*------ LoadScene ------*/
 #include "Game/Scene/LoadScene.h"
 
@@ -120,6 +122,10 @@ private:
 	float level3=650;
 	float speedMeterAlpha_;
 	bool isStartupScene_ = true;
+	float maxHeight_ = 0.0f;
+	int rankCount_ = -1;
+	std::queue<float>borders_;
+	std::string rankTextureNames[4] = { "A.png","S.png","SS.png","SSS.png"};
 
 	bool isGameStart_;
 
@@ -128,6 +134,7 @@ private:
 	std::unique_ptr<ObstaclesManager> obstaclesManager_ = nullptr;
 	std::unique_ptr<ParticleManager<Cherry>> cherryEmitter_ = nullptr;
 	std::unique_ptr<ParticleManager<Bubble>> bubbleEmitter_ = nullptr;
+	std::unique_ptr<ParticleManager<RankUp>> rankUpParticleEmitter_ = nullptr;
 
 	AnimetionEffectManager* animationEffectManager_;
 
