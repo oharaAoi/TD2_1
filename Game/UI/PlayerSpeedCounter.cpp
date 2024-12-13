@@ -1,8 +1,13 @@
 #include "PlayerSpeedCounter.h"
+#include "Engine/Math/Easing.h"
 
 PlayerSpeedCounter::PlayerSpeedCounter(){}
 
 PlayerSpeedCounter::~PlayerSpeedCounter(){}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Init(){
 	timeDrawScale_ = { 0.5f, 0.5f };
@@ -33,7 +38,29 @@ void PlayerSpeedCounter::Init(){
 		sprite->SetScale(timeDrawScale_);
 		sprite->Update();
 	}
+
+	// -------------------------------------------------
+	// ↓ speedMax
+	// -------------------------------------------------
+
+	speedMaxPos_ = { -700, 250.0f };
+	speedMaxUI_ = Engine::CreateSprite("speedMax.png");
+	speedMaxUI_->SetTextureCenterPos(speedMaxPos_);
+
+	isFadeIn_ = true;
+	time_ = 0.0f;
+	moveTime_ = 1.5f;
+
+	fadeInStartPos_ = { -700, 250.0f };
+	fadeOutPos_ = { 2000, 250.0f };
+	isUiMove_ = false;
+	isFinish_ = false;
+	isFadeIn_ = true;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Update(float speed, float raito, float alpha){
 
@@ -47,12 +74,27 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha){
 	needleSprite_->SetRotate(std::lerp(0.0f, needleAngleMax_, easeRatio));
 	needleSprite_->Update();
 
+	if (speed == 150.0f) {
+		if (preSpeed_ != 150.0f) {
+			isUiMove_ = true;
+			isFinish_ = false;
+		}
+	}
+
 	for(int oi = 0; oi < UI_speed_.size(); ++oi) {
 		UI_speed_[oi]->SetColor({ 1.0f,1.0f,1.0f,alpha });
 		UI_speed_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(speed, oi + 1)));
 		UI_speed_[oi]->Update();
 	}
+
+	SpeedMaxUpdate();
+
+	preSpeed_ = speed;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Draw() const{
 	backSprite_->Draw();
@@ -61,7 +103,52 @@ void PlayerSpeedCounter::Draw() const{
 	for(int oi = 0; oi < UI_speed_.size(); ++oi) {
 		UI_speed_[oi]->Draw();
 	}
+
+	if (isFinish_) { return; }
+	speedMaxUI_->Draw();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PlayerSpeedCounter::SpeedMaxUpdate() {
+	if (isFinish_) { return; }
+	if (!isUiMove_) { return; }
+	SpeedMaxMove();
+
+	speedMaxUI_->SetTextureCenterPos(speedMaxPos_);
+	speedMaxUI_->Update();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PlayerSpeedCounter::SpeedMaxMove() {
+	// fadeがtrueだったら画面外から画面ないへ
+	time_ += GameTimer::DeltaTime();
+	float t = time_ / moveTime_;
+	if (isFadeIn_) {
+		speedMaxPos_ = Vector2::Lerp(fadeInStartPos_, Vector2(640, fadeInStartPos_.y), EaseOutElastic(t));
+	} else {
+		speedMaxPos_ = Vector2::Lerp(Vector2(640, fadeInStartPos_.y), fadeOutPos_, EaseInOutBack(t));
+	}
+
+	// 時間を過ぎたら
+	if (time_ >= moveTime_) {
+		time_ = 0.0f;
+
+		if (!isFadeIn_) {
+			isFinish_ = true;
+		}
+		isFadeIn_ = !isFadeIn_;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ↓　
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 float PlayerSpeedCounter::DegitCount(float value){
 	if(value == 0.0f) { return 0; }

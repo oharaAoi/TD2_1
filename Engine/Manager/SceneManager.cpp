@@ -228,6 +228,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "SpaceButton.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Tutorial_4.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMax.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_2.png");

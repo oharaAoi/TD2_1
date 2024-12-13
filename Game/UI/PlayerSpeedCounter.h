@@ -18,6 +18,9 @@ public:
 	void Update(float speed, float raito, float alpha);
 	void Draw() const;
 
+	void SpeedMaxUpdate();
+	void SpeedMaxMove();
+
 	/// <summary>
 	/// 桁数を割り出す
 	/// </summary>
@@ -74,5 +77,24 @@ private:
 	float needleAngleMax_ = 2.12f;
 	float easeT=0.1f;
 	float easeRatio;
+
+	float preSpeed_;
+
+	// -------------------------------------------------
+	// ↓ speedMax
+	// -------------------------------------------------
+	std::unique_ptr<Sprite> speedMaxUI_ = nullptr;
+	// Parameter
+	float time_;
+	float moveTime_ = 1.8f;
+
+	Vector2 fadeInStartPos_;
+	Vector2 fadeOutPos_;
+	Vector2 speedMaxPos_;
+
+	// フラグ
+	bool isUiMove_;
+	bool isFadeIn_;
+	bool isFinish_;
 };
 
