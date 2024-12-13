@@ -81,6 +81,9 @@ private:
 	Vector2 birdIconPos_[4];		// 鳥の座標
 	Vector2 firstCarpIconPos_;		// 鯉の初期座標
 
+	Vector2 birdFallVelocity_[4];
+	Vector2 birdFallAcceleration_[4];
+
 	// ------------------- move関連 ------------------- //
 	float moveTime_;
 	float moveLimit_;

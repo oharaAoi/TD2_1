@@ -36,6 +36,8 @@ void LoadScene::Init() {
 	for (uint32_t oi = 0; oi < 3; ++oi) {
 		birdIcon_[oi] = Engine::CreateSprite("birdIcon.png");
 		birdIcon_[oi]->SetCenterPos(birdIconPos_[oi]);
+		birdFallVelocity_[oi] = Vector2(0.0f, 0.0f);
+		birdFallAcceleration_[oi] = Vector2(0.0f, 0.0f);
 	}
 	
 	// パネル
@@ -118,6 +120,8 @@ void LoadScene::Update() {
 	background_->Update();
 
 	for (uint32_t oi = 0; oi < 3; ++oi) {
+		birdFallVelocity_[oi] += birdFallAcceleration_[oi] * GameTimer::DeltaTime();
+		birdIconPos_[oi] += (birdFallVelocity_[oi] * GameTimer::DeltaTime());
 		birdIcon_[oi]->SetCenterPos(birdIconPos_[oi]);
 		birdIcon_[oi]->Update();
 	}
@@ -179,6 +183,8 @@ void LoadScene::CarpIconMove() {
 	carpIconPos_.y -= movePosY_;
 
 	if (moveTime_ >= moveLimit_) {
+		birdIcon_[moveIndex_]->SetRotate(13.0f * toRadian);
+		birdFallAcceleration_[moveIndex_] = Vector2(0.0f, 200.8f);
 		firstCarpIconPos_ = birdIconPos_[moveIndex_];
 		moveAmplitude_ += 60.0f;
 		moveIndex_++;
