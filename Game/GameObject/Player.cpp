@@ -567,10 +567,10 @@ void Player::OnCollision(Collider* other){
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
 			// ボディーとスピードが最大だったらカットインフラグをオンにする
-			if(baseSpeed_ == kMaxBaseSpeed_){
+			if(baseSpeed_ + temporaryAcceleration_ >= 150.0f){
 				if(bodyCount_ == kMaxBodyCount_){
 					if(!isCutIn_ && !autoFlying_){
-						isCutIn_ = true;
+ 						isCutIn_ = true;
 						gamePlayTimer_->AddTime(5.0f);
 						AudioPlayer::SinglShotPlay("CutIn1.mp3", 0.15f);
 						AudioPlayer::SinglShotPlay("CutIn2.mp3", 0.15f);
