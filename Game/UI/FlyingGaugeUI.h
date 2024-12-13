@@ -54,6 +54,7 @@ private:
 	float halfHeight_t;
 	float skytreeHeight_ = 634.0f;
 	float halfWindowHeight_ = 158.0f;
+	float coefficient = 0.383f;
 	Vector2 skytreeBasePos_ = {160.0f,144.0f};
 	Vector2 iconBasePos_ = { 200.0f,kWindowHeight_ };
 	Vector2 maxIconBasePos_ = {-10000.0f,-10000.0f};

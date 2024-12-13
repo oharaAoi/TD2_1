@@ -54,15 +54,15 @@ void FlyingGaugeUI::Update(float currentHeight){
 #endif // _DEBUG
 
 
-	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, kWindowHeight_ * 0.4f * (height_t[0] - height_t[1])));
-	icon_->SetCenterPos(iconBasePos_ + Vector2(0.0f, -kWindowHeight_ * 0.4f * height_t[1]));
+	tower_->SetCenterPos(skytreeBasePos_ + Vector2(0.0f, kWindowHeight_ * coefficient * (height_t[0] - height_t[1])));
+	icon_->SetCenterPos(iconBasePos_ + Vector2(0.0f, -kWindowHeight_ * coefficient * height_t[1]));
 
 	// 最高高度更新
 	if(maxHeight_t <= height_t[0]){
 		maxHeight_t = height_t[0];
 		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos());
 	} else{
-		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos() + Vector2(0.0f, -kWindowHeight_ * 0.4f * (maxHeight_t - height_t[0])));
+		icon_maxHeight_->SetCenterPos(icon_->GetCenterPos() + Vector2(0.0f, -kWindowHeight_ * coefficient * (maxHeight_t - height_t[0])));
 	}
 
 
