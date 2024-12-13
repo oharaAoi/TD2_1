@@ -32,6 +32,12 @@ void PlayerControlUI::Update(const Vector2& pos, bool isGliding) {
 
 	sprite_ui_->Update();
 
+	if (Input::IsPressKey(DIK_SPACE)) {
+		spaceButton_->SetColor(Vector4(0.3f, 0.3f, 0.3f, 1.0f ));
+	} else {
+		spaceButton_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+
 	spaceButton_->Update();
 }
 
