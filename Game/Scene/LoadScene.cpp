@@ -51,7 +51,7 @@ void LoadScene::Init() {
 	// -------------------------------------------------
 	firstCarpIconPos_ = carpIconPos_;
 	preCarpIconPos_ = carpIconPos_;
-	birdIconPos_[3] = { 1280.0f, -50.0f };
+	birdIconPos_[3] = { 1280.0f, -70.0f };
 
 	moveTime_ = 0.0f;
 	moveLimit_ = 0.7f;
@@ -82,7 +82,7 @@ void LoadScene::Update() {
 	// fadeが完了していたら
 	if (fadePanel_->GetIsFinished()) {
 		isMove_ = true;
-		if (carpIconPos_.y <= -30.0f) {
+		if (carpIconPos_.y <= -40.0f) {
 			isLoadFinish_ = true;
 			return;
 		}
@@ -192,7 +192,7 @@ void LoadScene::CarpIconMove() {
 		}
 	}
 
-	if (carpIconPos_.y <= -30.0f) {
+	if (carpIconPos_.y <= -40.0f) {
 		if (moveIndex_ >= 3) {
 			if (isMove_) {
 				isMove_ = false;
