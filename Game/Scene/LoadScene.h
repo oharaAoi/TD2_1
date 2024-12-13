@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "Engine/Engine.h"
 #include "Engine/2d/Sprite.h"
 #include "Game/UI/FadePanel.h"
 
@@ -7,6 +8,22 @@
 /// 鳥で飛べることを簡単に示唆するScene
 /// </summary>
 class LoadScene {
+public:
+
+	struct EffectData {
+		std::unique_ptr<Sprite> effectSprite_;
+		float moveTime_;
+		Vector4 color_;
+		float alpha_;
+
+		EffectData() {
+			effectSprite_ = Engine::CreateSprite("UIeffect.png");
+			moveTime_ = 0.0f;
+			color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			alpha_ = 1.0f;
+		}
+	};
+
 public:
 
 	LoadScene();
@@ -25,6 +42,11 @@ public:
 	/// 鯉のアイコンを移動させる
 	/// </summary>
 	void CarpIconMove();
+
+	/// <summary>
+	/// Effectの追加
+	/// </summary>
+	void EmiteEffect();
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -51,6 +73,9 @@ private:
 	// パネル
 	std::unique_ptr<FadePanel> fadePanel_ = nullptr;
 
+	// 鳥を踏んだ時の演出
+	std::list<EffectData> birdJumpEffectList_;
+
 	// ------------------- parameter関連 ------------------- //
 	Vector2 carpIconPos_;			// 鯉の座標
 	Vector2 birdIconPos_[4];		// 鳥の座標
@@ -68,5 +93,10 @@ private:
 
 	bool isMove_ = false;			// 鯉が動いているか
 	bool isLoadFinish_ = false;		// load画面を終了するか
+
+	Vector2 preCarpIconPos_;		// 前フレームの鯉の座標
+
+	// ------------------- Effect関連 ------------------- //
+	float effectMoveTime_ = 0.0f;
 };
 

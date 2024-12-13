@@ -101,8 +101,6 @@ void Player::Init(){
 	cutInSprite_[1]->SetTextureSize({ 1280.0f, 720.0f });
 	cutInSprite_[1]->SetScale({ 10.0f, 10.0f });
 	cutInSprite_[1]->SetColor({ 0,0,0,0 });
-
-	isFirstIsSplash_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,9 +155,8 @@ void Player::Update(){
 			}
 		}
 
-		if (!isFirstIsSplash_) {
+		if (Input::GetNotAccepted()) {
 			Input::SetNotAccepted(false);
-			isFirstIsSplash_ = true;
 		}
 	}
 	waterSurfaceCoolTime -= GameTimer::DeltaTime();
