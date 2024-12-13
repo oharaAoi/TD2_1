@@ -58,8 +58,8 @@ void MissionUI::Init(GamePlayTimer* pGamePlayTimer) {
 	speedMission_->SetScale({ 0.6f, 0.6f });
 	heightMission_->SetScale({ 0.6f, 0.6f });
 
-	speedMission_->SetCenterPos(topStartPos_);
-	heightMission_->SetCenterPos({ topStartPos_.x, topStartPos_.y + interval_ });
+	speedMission_->SetCenterPos({ topStartPos_.x, topStartPos_.y + interval_ });
+	heightMission_->SetCenterPos(topStartPos_);
 
 	speedCheck_->SetCenterPos({ -300.0f, 0.0f });
 	heightCheck_->SetCenterPos({ -300.0f, 0.0f });
@@ -182,7 +182,12 @@ void MissionUI::SpeedMissionAppearance() {
 	appearanceSpeedCount_ += GameTimer::DeltaTime();
 	float t = appearanceSpeedCount_ / appearanceTime_;
 
-	Vector2 speedPos = Vector2::Lerp(topStartPos_, topEndPos_, EaseOutBack(t));
+	Vector2 speedPos = Vector2::Lerp(
+		{ topStartPos_.x, topStartPos_.y + interval_ },
+		{ topEndPos_.x, topEndPos_.y + interval_ },
+		EaseOutBack(t)
+	);
+
 	speedMission_->SetCenterPos(speedPos);
 
 	if (appearanceSpeedCount_ > appearanceTime_) {
@@ -200,13 +205,9 @@ void MissionUI::HeightMissionAppearance() {
 	appearanceHeightCount_ += GameTimer::DeltaTime();
 	float t = appearanceHeightCount_ / appearanceTime_;
 
-	Vector2 heightPos = Vector2::Lerp(
-		{ topStartPos_.x, topStartPos_.y + interval_ },
-		{ topEndPos_.x, topEndPos_.y + interval_ },
-		EaseOutBack(t)
-	);
-
+	Vector2 heightPos = Vector2::Lerp(topStartPos_, topEndPos_, EaseOutBack(t));
 	heightMission_->SetCenterPos(heightPos);
+
 
 	if (appearanceHeightCount_ > appearanceTime_) {
 		if (!(nowHeightMission_ == HeightMission::Mission_Finish)) {
@@ -235,7 +236,12 @@ void MissionUI::SpeedMissionDisappear() {
 	float t = disappearSpeedCount_ / disappearTime_;
 
 	// 座標の移動
-	Vector2 speedPos = Vector2::Lerp(topEndPos_, topStartPos_, EaseInBack(t));
+	Vector2 speedPos = Vector2::Lerp(
+		{ topEndPos_.x, topEndPos_.y + interval_ },
+		{ topStartPos_.x, topStartPos_.y + interval_ },
+		EaseInBack(t)
+	);
+
 	speedMission_->SetCenterPos(speedPos);
 
 	// ついでにCheckマークも消す
@@ -257,12 +263,7 @@ void MissionUI::HeightMissionDisappear() {
 	float t = disappearHeightCount_ / disappearTime_;
 
 	// 座標の移動
-	Vector2 heightPos = Vector2::Lerp(
-		{ topEndPos_.x, topEndPos_.y + interval_ },
-		{ topStartPos_.x, topStartPos_.y + interval_ },
-		EaseInBack(t)
-	);
-
+	Vector2 heightPos = Vector2::Lerp(topEndPos_, topStartPos_, EaseInBack(t));
 	heightMission_->SetCenterPos(heightPos);
 
 	// ついでにCheckマークも消す
