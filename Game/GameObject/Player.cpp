@@ -371,7 +371,7 @@ void Player::MoveLimit(){
 		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
 		pressTime_ = 0.0f;
 		// 減速させる
-		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.5f * GameTimer::DeltaTime();
+		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.1f * GameTimer::DeltaTime();
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 	}
 
