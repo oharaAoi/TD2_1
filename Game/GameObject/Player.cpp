@@ -363,17 +363,17 @@ void Player::Move(){
 
 
 void Player::MoveLimit(){
-
+	Vector3 translate = transform_->GetTranslation();
 	// 地面に接触したら
-	if(transform_->GetTranslation().y - radius_ < GameScene::GetGroundDepth()){
-		// 移動制限
-		Vector3 translate = transform_->GetTranslation();
-		transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
+	if(translate.y - radius_ <= GameScene::GetGroundDepth()){
+		// 移動制限		
+		//transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
 		pressTime_ = 0.0f;
 		// 減速させる
 		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.1f * GameTimer::DeltaTime();
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 	}
+	transform_->SetTranslaion({ translate.x,std::clamp(translate.y,GameScene::GetGroundDepth() + 2.0f,2000.0f),translate.z });
 
 }
 
