@@ -10,7 +10,7 @@ PlayerBodyCountUI::~PlayerBodyCountUI() {}
 void PlayerBodyCountUI::Init() {
 	uiPos_ = { -200, 250.0f };
 	backPos_UI_ = { 165, 90.0f };
-	
+
 	frontSize_UI_ = { 0.0f, 1.0f };
 
 	tailUIPos_ = { 52, 100.0f };
@@ -40,17 +40,37 @@ void PlayerBodyCountUI::Init() {
 
 	interval_bodyUI_ = 51;
 
+	for (std::list<BodyUIData>::iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
+		(*it).sprite_->SetScale({ 1.0f, 1.0f });
+		(*it).sprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.4f });
+		(*it).sprite_->Update();
+		++it;
+	}
+
+	for (uint32_t oi = 0; oi < 7; ++oi) {
+		auto& add = backBody_UI_List_.emplace_back(BodyUIData());
+		add.sprite_->SetCenterPos({
+					tailUIPos_.x + (interval_bodyUI_ * (backBody_UI_List_.size()) + 6),
+					tailUIPos_.y
+		});
+		headUIPos_ = { tailUIPos_.x + (interval_bodyUI_ * (backBody_UI_List_.size()) + 6),
+					tailUIPos_.y };
+	}
+
+	headUIPos_.x += interval_bodyUI_ + 5;
+
+	
 	// -------------------------------------------------
 	// ↓ Effectの初期化
 	// -------------------------------------------------
 
 	bodyReleseEffect_ = Engine::CreateSprite("KoiGeuge_Torso.png");
 
-	dropVelocity_ = {0.0f, 0.0f};
-	dropStartVelocity_ = {-2.0f, 1.0f};
-	dropEndVelocity_ = {-0.5f, 14.0f};
+	dropVelocity_ = { 0.0f, 0.0f };
+	dropStartVelocity_ = { -2.0f, 1.0f };
+	dropEndVelocity_ = { -0.5f, 14.0f };
 
-	dropBodyColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
+	dropBodyColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	dropDownCount_ = 0.0f;
 	dropDownTime_ = 0.9f;
@@ -113,7 +133,15 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 			scale.y = std::clamp(scale.y, 0.0f, 1.4f);
 			(*it).sprite_->SetScale(scale);
 		}
-		
+		lastBodyPos_ = (*it).sprite_->GetCenterPos();
+		lastBodyPos_.y = tailUIPos_.y;
+		(*it).sprite_->Update();
+		++it;
+	}
+
+	for (std::list<BodyUIData>::iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
+		(*it).sprite_->SetScale({ 1.0f, 1.0f });
+		(*it).sprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.4f });
 		(*it).sprite_->Update();
 		++it;
 	}
@@ -138,8 +166,8 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 		(*it).color_ = { 1.0f, 1.0f, 1.0f, (*it).alpha_ };
 
 		(*it).effectSprite_->SetColor((*it).color_);
-	
-		(*it).effectSprite_->SetCenterPos(headUIPos_);
+
+		(*it).effectSprite_->SetCenterPos(lastBodyPos_);
 		(*it).effectSprite_->Update();
 
 		++it;
@@ -149,7 +177,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 		DropBody();
 		bodyReleseEffect_->Update();
 	}
-	
+
 	if (!isUiMove_) { return; }
 
 	Move();
@@ -180,6 +208,11 @@ void PlayerBodyCountUI::Draw() const {
 	tail_UI_->Draw();
 
 	for (std::list<BodyUIData>::const_iterator it = body_UI_List_.begin(); it != body_UI_List_.end();) {
+		(*it).sprite_->Draw();
+		++it;
+	}
+
+	for (std::list<BodyUIData>::const_iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
 		(*it).sprite_->Draw();
 		++it;
 	}
@@ -232,13 +265,13 @@ void PlayerBodyCountUI::AddBody() {
 	add.sprite_->SetCenterPos({
 		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size()) + 6),
 		tailUIPos_.y
-	});
+							  });
 
 	add.time_ = 0.0f;
 
-	// 頭も同時に移動させておく
-	headUIPos_ = add.sprite_->GetCenterPos();
-	headUIPos_.x += interval_bodyUI_ + 5;
+	//// 頭も同時に移動させておく
+	//headUIPos_ = add.sprite_->GetCenterPos();
+	//headUIPos_.x += interval_bodyUI_ + 5;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,9 +285,9 @@ void PlayerBodyCountUI::ReleseBody() {
 	// リストに最後に追加された要素を削除する
 	body_UI_List_.pop_back();
 
-	const auto& end = body_UI_List_.back();
-	headUIPos_ = end.sprite_->GetCenterPos() ;
-	headUIPos_.x += interval_bodyUI_ + 5;
+	/*const auto& end = body_UI_List_.back();
+	headUIPos_ = end.sprite_->GetCenterPos();
+	headUIPos_.x += interval_bodyUI_ + 5;*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,7 +305,7 @@ void PlayerBodyCountUI::DropBody() {
 
 	// 回転をさせる
 	float rotate = bodyReleseEffect_->GetRotate();
-	rotate -= dropRotate_ * toRadian*GameTimer::DeltaTime();
+	rotate -= dropRotate_ * toRadian * GameTimer::DeltaTime();
 	bodyReleseEffect_->SetRotate(rotate);
 
 	dropVelocity_ = Vector2::Lerp(dropStartVelocity_, dropEndVelocity_, EaseOutCubic(t));

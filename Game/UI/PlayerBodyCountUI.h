@@ -88,8 +88,11 @@ private:
 
 	std::unique_ptr<Sprite> head_UI_ = nullptr;
 	std::unique_ptr<Sprite> tail_UI_ = nullptr;
-
+	
 	std::list<BodyUIData> body_UI_List_;
+	std::list<BodyUIData> backBody_UI_List_;
+
+	uint32_t nowBodyCount_ = 1;
 
 	float interval_bodyUI_;
 	
@@ -109,6 +112,8 @@ private:
 
 	Vector2 headUIPos_;
 	Vector2 tailUIPos_;
+
+	Vector2 lastBodyPos_;
 
 	// フラグ
 	bool isUiMove_;
