@@ -96,7 +96,7 @@ private:
 
 	float interval_bodyUI_;
 	
-	Vector2 uiPos_;
+	Vector2 maxUIPos;
 
 	// Parameter
 	float time_;

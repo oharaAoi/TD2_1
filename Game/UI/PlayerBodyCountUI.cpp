@@ -8,7 +8,7 @@ PlayerBodyCountUI::~PlayerBodyCountUI() {}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::Init() {
-	uiPos_ = { -200, 250.0f };
+	maxUIPos = { -200, 160.0f };
 	backPos_UI_ = { 165, 90.0f };
 
 	frontSize_UI_ = { 0.0f, 1.0f };
@@ -16,7 +16,8 @@ void PlayerBodyCountUI::Init() {
 	tailUIPos_ = { 52, 100.0f };
 
 	maxBody_UI_ = Engine::CreateSprite("bodyMax.png");
-	maxBody_UI_->SetTextureCenterPos(uiPos_);
+	maxBody_UI_->SetTextureCenterPos(maxUIPos);
+	maxBody_UI_->SetScale(Vector2(.7f, .7f));
 
 	gaugeBack_UI_ = Engine::CreateSprite("TorsoGaugeBack.png");
 	gaugeFront_UI_ = Engine::CreateSprite("TorsoGaugeFront.png");
@@ -33,8 +34,8 @@ void PlayerBodyCountUI::Init() {
 	time_ = 0.0f;
 	moveTime_ = 1.0f;
 
-	fadeInStartPos_ = { -200, 250.0f };
-	fadeOutPos_ = { 1500, 250.0f };
+	fadeInStartPos_ = { -200, 160.0f };
+	fadeOutPos_ = { 1500, 160.0f };
 
 	effectMoveTime_ = 0.6f;
 
@@ -178,11 +179,11 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 		bodyReleseEffect_->Update();
 	}
 
-	if (!isUiMove_) { return; }
+	if (isUiMove_) {
+		Move();
+	}
 
-	Move();
-
-	maxBody_UI_->SetTextureCenterPos(uiPos_);
+	maxBody_UI_->SetTextureCenterPos(maxUIPos);
 	maxBody_UI_->Update();
 
 }
@@ -221,7 +222,7 @@ void PlayerBodyCountUI::Draw() const {
 		bodyReleseEffect_->Draw();
 	}
 
-	if (!isUiMove_) { return; }
+	//if (!isUiMove_) { return; }
 	maxBody_UI_->Draw();
 }
 
@@ -230,9 +231,9 @@ void PlayerBodyCountUI::Move() {
 	time_ += GameTimer::DeltaTime();
 	float t = time_ / moveTime_;
 	if (isFadeIn_) {
-		uiPos_ = Vector2::Lerp(fadeInStartPos_, Vector2(640, fadeInStartPos_.y), EaseOutElastic(t));
+		maxUIPos = Vector2::Lerp(fadeInStartPos_, Vector2(640, fadeInStartPos_.y), EaseOutElastic(t));
 	} else {
-		uiPos_ = Vector2::Lerp(Vector2(640, fadeInStartPos_.y), fadeOutPos_, EaseInOutBack(t));
+		maxUIPos = Vector2::Lerp(Vector2(640, fadeInStartPos_.y), fadeOutPos_, EaseInOutBack(t));
 	}
 
 	// 時間を過ぎたら
@@ -330,6 +331,10 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 #ifdef _DEBUG
 void PlayerBodyCountUI::Debug_Gui() {
 	if (ImGui::TreeNode("playerBodyUI")) {
+		ImGui::BulletText("maxUI");
+		ImGui::DragFloat2("maxUI_position", &maxUIPos.x, 2.0f);
+
+		ImGui::BulletText("bodyUI");
 		ImGui::DragFloat3("backPos_UI", &backPos_UI_.x, 1.0f);
 		ImGui::Spacing();
 		ImGui::DragFloat3("dropStartVelocity", &dropStartVelocity_.x, 0.1f);
