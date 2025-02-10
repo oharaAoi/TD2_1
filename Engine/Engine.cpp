@@ -137,6 +137,14 @@ bool Engine::ProcessMessage() {
 void Engine::BeginFrame() {
 #ifdef _DEBUG
 	imguiManager_->Begin();
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar |
+		ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+	if (ImGui::Begin("BaseWindow", nullptr, window_flags)) {
+
+	}
+	ImGuiID dockspace_id = ImGui::GetID("BaseDockspace");
+	ImGui::DockSpace(dockspace_id, ImVec2(0, 0), ImGuiDockNodeFlags_None);
 #endif
 	dxCommon_->Begin();
 	Render::Begin();
@@ -166,6 +174,7 @@ void Engine::EndFrame() {
 
 void Engine::EndImGui() {
 #ifdef _DEBUG
+	ImGui::End();
 	imguiManager_->End();
 	imguiManager_->Draw(dxCommands_->GetCommandList());
 #endif

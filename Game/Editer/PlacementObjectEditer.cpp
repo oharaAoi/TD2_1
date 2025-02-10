@@ -544,7 +544,6 @@ void PlacementObjectEditer::NewObjectTypeSelect() {
 	if (ImGui::RadioButton("DRIFTWOOD", newPopType_ == PlacementObjType::DRIFTWOOD)) {
 		newPopType_ = PlacementObjType::DRIFTWOOD;
 	}
-
 }
 
 void PlacementObjectEditer::SubTypeChange(SubAttributeType& subType) {

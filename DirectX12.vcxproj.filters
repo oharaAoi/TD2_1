@@ -136,6 +136,9 @@
     <Filter Include="Game\GameObject\Placement">
       <UniqueIdentifier>{62aa89db-42d1-461e-9af7-b8c5f7f9cd21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Json">
+      <UniqueIdentifier>{b76e535a-fb55-4a46-8e9c-f1c8a8347940}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -590,6 +593,12 @@
     </ClCompile>
     <ClCompile Include="Game\Effect\RankUp.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Json\JsonAdjustmentItem.cpp">
+      <Filter>Engine\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Json\IJsonConverter.cpp">
+      <Filter>Engine\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1090,6 +1099,12 @@
     </ClInclude>
     <ClInclude Include="Game\Effect\RankUp.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Json\JsonAdjustmentItem.h">
+      <Filter>Engine\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Json\IJsonConverter.h">
+      <Filter>Engine\Json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

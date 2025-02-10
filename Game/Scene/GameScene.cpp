@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "Engine/Json/JsonAdjustmentItem.h"
 
 bool GamePlayTimer::isFinish_ = false;
 
@@ -29,6 +30,7 @@ void GameScene::Init(){
 	currentState_ = GAME_STATE::TITLE;
 
 	AdjustmentItem::GetInstance()->Init("GameScene");
+	JsonAdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
 	gamePlayTimer_->Init(50.0f);
@@ -528,7 +530,7 @@ void GameScene::Update(){
 
 	Vector3 playerScreenPos = Transform({ 0.0f, 0.0f, 0.0f },
 		player_->GetTransform()->GetWorldMatrix() * camera_->GetVpvpMatrix());
-	playerControlUI_->Update({ playerScreenPos.x, playerScreenPos.y }, player_->GetIsCloseWing());
+	playerControlUI_->Update(Vector2(playerScreenPos.x, playerScreenPos.y));
 
 	guideUI_->Update();
 
