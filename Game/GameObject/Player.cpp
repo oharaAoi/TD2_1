@@ -466,6 +466,10 @@ void Player::AddBody(BaseGameObject* pTarget){
 			AudioPlayer::SinglShotPlay("CutIn2.mp3", 0.15f);
 		}
 	}
+
+	if (bodyUpEffect_ != nullptr) {
+		bodyUpEffect_->AddEffect();
+	}
 }
 
 // 最後尾を削除
