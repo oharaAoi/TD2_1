@@ -10,7 +10,7 @@
 /// <summary>
 /// Tutorial用に使用するUI
 /// </summary>
-class TutorialUI {
+class TutorialUI{
 public:
 
 	TutorialUI();
@@ -24,18 +24,23 @@ public:
 
 	void AdaptAdjustment();
 
+	// チュートリアルテキスト用関数
+	void UpdateTutorialText();
+	void DrawTutorialText();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
 
-	void SetPlayerPos(const Vector3& playerPos) { playerPos_ = playerPos; }
+	void SetPlayerPos(const Vector3& playerPos){ playerPos_ = playerPos; }
 
 	Vector3 GetSessionFishPos();
 	Vector3 GetSessionBirdPos();
 	Vector3 GetStartPos();
-	
-private:
+	bool GetIsTextShowing() const{ return isTextShowing_; }
 
+
+private:
 	AdjustmentItem* adjust_;
 	std::string groupName_;
 
@@ -55,5 +60,11 @@ private:
 
 	Vector3 scaleUp_;
 	float scaleUpStrength_;
+
+	static const int32_t tutorialCount_ = 3;
+	bool isShownText_[tutorialCount_];
+	bool isTextShowing_ = false;
+	std::unique_ptr<Sprite> tutorialText_;
+	std::unique_ptr<Sprite> textBackSprite_;
 };
 

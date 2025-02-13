@@ -365,7 +365,10 @@ void GameScene::Update(){
 	// ↓ オブジェクトの更新
 	// -------------------------------------------------
 	/*-------------- object -------------*/
-	player_->Update();
+	if(tutorialUI_->GetIsTextShowing() == false){
+		player_->Update();// チュートリアルテキストが表示されていないときだけ更新
+	}
+
 	debugModel_->Update();
 
 	worldObjects_->LoopStage();
@@ -745,6 +748,11 @@ void GameScene::Draw() const{
 
 		playerControlUI_->Draw(player_->GetIsFlying());
 
+		// チュートリアルテキストの描画
+		if(currentState_ == GAME_STATE::TUTORIAL){
+			Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
+			tutorialUI_->DrawTutorialText();
+		}
 
 	} else {
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
@@ -792,6 +800,7 @@ void GameScene::Update_TUTORIAL(){
 	}
 
 	// UIの更新
+	tutorialUI_->SetPlayerPos(player_->GetWorldTranslation());
 	tutorialUI_->Update();
 }
 
