@@ -280,6 +280,9 @@ void SceneManager::Load() {
 	
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "FishCanEat.png");
 
+	// 1up
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "1up.png");
+
 	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/BirdJumpEffect/", "BirdJumpEffect.gltf");

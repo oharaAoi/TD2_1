@@ -94,7 +94,7 @@ public:
 	/// <param name="range"></param>
 	void SetUvDrawRange(const Vector2& range) { materialData_->uvDrawRange = range; }
 
-	const Vector2 GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
+	const Vector2& GetCenterPos() const { return Vector2{ transform_.translate.x, transform_.translate.y}; }
 	const Vector2 GetScale() const { return Vector2(transform_.scale.x, transform_.scale.y); }
 	const float GetRotate() const { return transform_.rotate.z; }
 	const Vector2 GetTextureSize() const { return textureSize_; }

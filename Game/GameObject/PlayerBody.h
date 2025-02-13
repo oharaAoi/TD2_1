@@ -11,9 +11,13 @@ public:
 
 public:
 
+	void ScaleUpBody();
+
 	void UpdateMatrix();
 	void SetTarget(BaseGameObject* target){ pTargetObject_ = target; }
 	void SetSpace(float spaceLength){ spaceLength_ = spaceLength; }
+
+	void SetScaleUp();
 
 	const Vector3 GetTranslation() const { return transform_->GetTranslation(); }
 	const Quaternion GetQuaternion() const { return transform_->GetQuaternion(); }
@@ -28,4 +32,8 @@ private:
 	float angle_;
 	Vector3 rotate_;
 	Quaternion newRotate;
+
+	bool isNewCreate_ = true;
+	float scaleUpTimeCount_ = 0.0f;
+	float scaleUpTime_ = 1.0f;
 };
