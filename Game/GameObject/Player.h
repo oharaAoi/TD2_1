@@ -14,6 +14,9 @@
 #include "Game/Information/JumpAssessor.h"
 #include "Game/Information/GamePlayTimer.h"
 
+// effect
+#include "Game/Effect/BodyUpEffect.h"
+
 class PlayerAnimator;
 
 
@@ -108,6 +111,7 @@ public:
 	const bool GetIsCutIn() const { return isCutIn_; }
 
 	void SetGamePlayTimer(GamePlayTimer* gamePlayTimer) { gamePlayTimer_ = gamePlayTimer; }
+	void SetBodyUpEffect(BodyUpEffect* bodyUpEffect) { bodyUpEffect_ = bodyUpEffect; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -122,6 +126,7 @@ private:
 	std::unique_ptr<PlayerAnimator> animetor_;
 
 	GamePlayTimer* gamePlayTimer_ = nullptr;
+	BodyUpEffect* bodyUpEffect_ = nullptr;
 
 	// 付属モデル---------------------------------------
 

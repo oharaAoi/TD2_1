@@ -420,9 +420,6 @@
     <ClCompile Include="Game\GameObject\WaterSpace.cpp">
       <Filter>Game\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject\Player.cpp">
-      <Filter>Game\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\DirectX\RootSignature\RootSignatureBuilder.cpp">
       <Filter>Engine\DirectX\RootSignature</Filter>
     </ClCompile>
@@ -599,6 +596,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Json\IJsonConverter.cpp">
       <Filter>Engine\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\BodyUpEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject\Player.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1105,6 +1108,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Json\IJsonConverter.h">
       <Filter>Engine\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Effect\BodyUpEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

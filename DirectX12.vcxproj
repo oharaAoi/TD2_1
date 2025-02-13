@@ -199,6 +199,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Camera\ResultCamera.cpp" />
     <ClCompile Include="Game\Editer\PlacementObjectEditer.cpp" />
     <ClCompile Include="Game\Effect\BaseParticle2D.cpp" />
+    <ClCompile Include="Game\Effect\BodyUpEffect.cpp" />
     <ClCompile Include="Game\Effect\Bubble.cpp" />
     <ClCompile Include="Game\Effect\Cherry.cpp" />
     <ClCompile Include="Game\Effect\EmissionEffect.cpp" />
@@ -362,6 +363,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Camera\ResultCamera.h" />
     <ClInclude Include="Game\Editer\PlacementObjectEditer.h" />
     <ClInclude Include="Game\Effect\BaseParticle2D.h" />
+    <ClInclude Include="Game\Effect\BodyUpEffect.h" />
     <ClInclude Include="Game\Effect\Bubble.h" />
     <ClInclude Include="Game\Effect\Cherry.h" />
     <ClInclude Include="Game\Effect\EmissionEffect.h" />

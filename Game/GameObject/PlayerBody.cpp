@@ -1,9 +1,17 @@
 #include "PlayerBody.h"
-PlayerBody::PlayerBody(){}
+#include "Engine/Math/Easing.h"
+
+PlayerBody::PlayerBody(){
+	scaleUpTimeCount_ = 0.0f;
+}
 
 PlayerBody::~PlayerBody(){}
 
 void PlayerBody::Update(){
+	if (isNewCreate_) {
+		ScaleUpBody();
+	}
+
 	if(pTargetObject_){
 
 		// ターゲットとの座標の差分
@@ -49,6 +57,24 @@ void PlayerBody::Debug(int num){
 #endif // DEBUG}
 }
 
+void PlayerBody::ScaleUpBody() {
+	scaleUpTimeCount_ += GameTimer::DeltaTime();
+	scaleUpTimeCount_ = std::clamp(scaleUpTimeCount_, 0.0f, scaleUpTime_);
+
+	float t = scaleUpTimeCount_ / scaleUpTime_;
+	Vector3 lerpScale = Vector3::Lerp({0,0,0}, {1,1,1}, EaseOutBounce(t));
+	transform_->SetScale(lerpScale);
+
+	if (scaleUpTimeCount_ >= scaleUpTime_) {
+		isNewCreate_ = false;
+	}
+}
+
 void PlayerBody::UpdateMatrix(){
 	BaseGameObject::Update();
+}
+
+void PlayerBody::SetScaleUp() {
+	scaleUpTimeCount_ = false;
+	isNewCreate_ = true;
 }

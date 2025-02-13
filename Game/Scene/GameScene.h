@@ -24,11 +24,14 @@
 #include "Game/Scene/BaseScene.h"
 #include "Game/Camera/Camera.h"
 #include "Game/Camera/DebugCamera.h"
+#include "Game/Information/StageInformation.h"
+#include "Game/Information/GamePlayTimer.h"
+
+/*------ Effect ------*/
 #include "Game/Effect/Trail.h"
 #include "Game/Effect/Splash.h"
-#include "Game/Information/StageInformation.h"
+#include "Game/Effect/BodyUpEffect.h"
 #include  "Game/Effect/Trail.h"
-#include "Game/Information/GamePlayTimer.h"
 /*------ UI ------*/
 #include "Game/UI/FlyingTimerUI.h"
 #include "Game/UI/FlyingGaugeUI.h"
@@ -161,6 +164,9 @@ private:
 	std::unique_ptr<MissionUI> missionUI_ = nullptr;
 	// パネル
 	std::unique_ptr<FadePanel> fadePanel_ = nullptr;
+
+	// ---------- Effect ---------- //
+	std::unique_ptr<BodyUpEffect> bodyUpEffect_ = nullptr;
 
 	// --------- Load ----------- //
 	std::unique_ptr<LoadScene> loadScene_;

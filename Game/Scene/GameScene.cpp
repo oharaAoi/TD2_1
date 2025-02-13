@@ -153,6 +153,12 @@ void GameScene::Init(){
 	fadePanel_->Init();
 
 	// -------------------------------------------------
+	// ↓ Effectの初期化
+	// -------------------------------------------------
+	bodyUpEffect_ = std::make_unique<BodyUpEffect>();
+	bodyUpEffect_->Init();
+
+	// -------------------------------------------------
 	// ↓ LoadSceneの設定
 	// -------------------------------------------------
 	loadScene_ = std::make_unique<LoadScene>();
@@ -183,6 +189,8 @@ void GameScene::Init(){
 	// ↓ その他
 	// -------------------------------------------------
 	player_->SetGamePlayTimer(gamePlayTimer_.get());
+	player_->SetBodyUpEffect(bodyUpEffect_.get());
+
 	borders_.push(250.0f);
 	borders_.push(500.0f);
 	borders_.push(750.0f);
@@ -544,6 +552,11 @@ void GameScene::Update(){
 	}
 
 	// -------------------------------------------------
+	// ↓ UIの更新
+	// -------------------------------------------------
+	bodyUpEffect_->Update(Vector2(playerScreenPos.x, playerScreenPos.y));
+
+	// -------------------------------------------------
 	// ↓ スプライト
 	// -------------------------------------------------
 
@@ -745,6 +758,9 @@ void GameScene::Draw() const{
 		missionUI_->Draw();
 		finishUI_->Draw();
 		gameStartUI_->Draw();
+
+		// spriteEffect
+		bodyUpEffect_->Draw();
 
 		playerControlUI_->Draw(player_->GetIsFlying());
 
