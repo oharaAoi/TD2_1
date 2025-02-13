@@ -442,6 +442,7 @@ void Player::AddBody(BaseGameObject* pTarget){
 	if(followModels_.size() != 0){
 		auto& preBody = followModels_.back();
 		preBody->SetObject("Player_Torso.obj");
+		preBody->SetScaleUp();
 	}
 
 	auto& body = followModels_.emplace_back(std::make_unique<PlayerBody>());
