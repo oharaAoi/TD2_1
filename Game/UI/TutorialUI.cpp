@@ -87,9 +87,10 @@ void TutorialUI::Init(){
 	// テキストの初期化
 	/*=================================*/
 	tutorialText_ = Engine::CreateSprite("tutorialText.png");
-	tutorialText_->SetCenterPos({ 640.0f, 540.0f });
+	tutorialText_->SetCenterPos({ 640.0f, 555.0f });
 	tutorialText_->SetAnchorPoint({ 0.5f, 0.5f });
 	tutorialText_->SetRectRange({ 1280.0f, 60.0f });
+	tutorialText_->SetTextureSize({ 1280.0f, 60.0f });
 	tutorialText_->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
 
 	textBackSprite_ = Engine::CreateSprite("tutorialBackSprite.png");
@@ -115,6 +116,8 @@ void TutorialUI::Update(){
 		ui.second->GetTransform()->SetScale(scaleUp_);
 		ui.second->Update();
 	}
+
+	tutorialText_->Update();
 
 	// テキストの更新
 	UpdateTutorialText();
