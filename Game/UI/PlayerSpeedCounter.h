@@ -5,6 +5,13 @@
 #include <Vector2.h>
 #include "Engine/Utilities/AdjustmentItem.h"
 
+enum SpeedRaitoState {
+	Raito_0,
+	Raito_30,
+	Raito_70,
+	Raito_100,
+};
+
 /// <summary>
 /// Playerの時間を表示するクラス
 /// </summary>
@@ -18,8 +25,24 @@ public:
 	void Update(float speed, float raito, float alpha, bool isPlayerFlying);
 	void Draw() const;
 
+	// ------------------- Speedの割合に関する処理 ------------------- //
+
+	void SpeedRaitoUpdate(float speed);
+
+	void SpeedAnnounceMove();
+
+	// ------------------- SpeedMaxに関する処理 ------------------- //
 	void SpeedMaxUpdate();
 	void SpeedMaxMove();
+
+	void SetMaxSpeed(float maxSpeed) { maxSpeed_ = maxSpeed; }
+
+
+#ifdef _DEBUG
+	void Debug_Gui();
+#endif // _DEBUG
+
+private:
 
 	/// <summary>
 	/// 桁数を割り出す
@@ -47,10 +70,6 @@ public:
 	/// </summary>
 	/// <param name="array"></param>
 	//void CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin);
-
-#ifdef _DEBUG
-	void Debug_Gui();
-#endif // _DEBUG
 
 private:
 
@@ -80,6 +99,8 @@ private:
 
 	float preSpeed_;
 
+	float maxSpeed_;
+
 	// -------------------------------------------------
 	// ↓ speedMax
 	// -------------------------------------------------
@@ -96,5 +117,36 @@ private:
 	bool isUiMove_;
 	bool isFadeIn_;
 	bool isFinish_;
+
+	// -------------------------------------------------
+	// ↓ Speedのアナウンス
+	// -------------------------------------------------
+
+	SpeedRaitoState speedRaitoState_ = Raito_0;
+	bool isAnnounce_ = false;
+
+	std::unique_ptr<Sprite> speedSprite_;
+	std::unique_ptr<Sprite> percentSprite_;
+	std::unique_ptr<Sprite> speedAnnounceNumber_[2];
+
+	Vector2 announcePos_;
+	Vector2 speedLocalPos_ = {-100.0f, 0.0f};
+	Vector2 percentLocalPos_ = { 125.0f, 0.0f };
+	Vector2 numberLocalPos_;
+	Vector2 numberSpriteDivision_ = {64.0f, 0.0f};
+
+	// Parameter
+	float announceTime_;
+	float announceMoveTime_ = 1.8f;
+
+	Vector2 announceFadeInStartPos_;
+	Vector2 announceFadeOutPos_;
+	Vector2 announceSpeedMaxPos_;
+
+	// フラグ
+	bool isAnnounceUiMove_;
+	bool isAnnounceFadeIn_;
+	bool isAnnounceFinish_;
+
 };
 

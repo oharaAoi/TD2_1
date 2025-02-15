@@ -175,6 +175,7 @@ private:
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
 	std::unique_ptr<Sprite>fade_ = nullptr;
+
 	// ------------ Audio ---------- //
 	std::unique_ptr<AudioPlayer> mainBGM_;
 	std::unique_ptr<AudioPlayer> mainBGM_inWater_;
