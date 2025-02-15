@@ -138,6 +138,7 @@ void Player::Update(){
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
 
+			//ここのコメントを外したいけど、警告出るので任せます
 			//JumpAssessor::SetJumpData(GetMoveSpeed(), bodyCount_, jumpUI_transform_.get());
 		}
 

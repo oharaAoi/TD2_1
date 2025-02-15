@@ -55,7 +55,7 @@ void JumpAssessor::Update(){
 	if(!isUIvisible_){ return; }
 
 	// 表示時間を更新
-	visibleTimer = std::clamp(visibleTimer += GameTimer::DeltaTime(),0.0f,kVisibleTime);
+	visibleTimer = std::clamp(visibleTimer += GameTimer::DeltaTime(), 0.0f, kVisibleTime);
 	// 媒介変数
 	float t = visibleTimer / kVisibleTime;
 
@@ -82,7 +82,7 @@ void JumpAssessor::Draw(){
 //////////////////////////////////////////////////////////////////////////////////////
 // ジャンプの評価を行う
 //////////////////////////////////////////////////////////////////////////////////////
-void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* parentWT, Camera* pCamera){
+void JumpAssessor::SetJumpData(float speed, int32_t bodyCount, WorldTransform* parentWT, Camera* pCamera){
 
 	isUIvisible_ = true;
 	parentWT_ = parentWT;
@@ -92,23 +92,13 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 		AnimetionEffectManager::AddListEffect(
 			"./Game/Resources/Model/evaluationPERFECT/", "evaluationPERFECT.gltf",
 			parentWT,
-			false, 
-			Vector3(0.5f, 0.5f, 0.5f),Quaternion(), Vector3()
+			false,
+			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
 		);
 		AudioPlayer::SinglShotPlay("ParfectSE.mp3", 0.3f);
 
 
-	} else if(speed >= 120.0f or bodyCount >= 6){// good
-		AnimetionEffectManager::AddListEffect(
-			"./Game/Resources/Model/evaluationGood/", "evaluationGood.gltf",
-			parentWT,
-			false,
-			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
-		);
-		AudioPlayer::SinglShotPlay("GoodSE.mp3", 0.2f);
-
-	
-	} else if(speed >= 70.0f or bodyCount >= 4){// nice
+	} else if(speed < 150.f or bodyCount >= 0){// 速度不足
 		AnimetionEffectManager::AddListEffect(
 			"./Game/Resources/Model/evaluationNice/", "evaluationNice.gltf",
 			parentWT,
@@ -117,19 +107,29 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount,WorldTransform* pa
 		);
 		AudioPlayer::SinglShotPlay("NiceSE.mp3", 0.15f);
 
+	} else if(speed >= 0 or bodyCount < 8){// 胴体不足
+		AnimetionEffectManager::AddListEffect(
+			"./Game/Resources/Model/evaluationGood/", "evaluationGood.gltf",
+			parentWT,
+			false,
+			Vector3(0.5f, 0.5f, 0.5f), Quaternion(), Vector3()
+		);
+		AudioPlayer::SinglShotPlay("GoodSE.mp3", 0.2f);
+
+
 	} else{
 
 	}
 
 
 	// パーセンテージの計算
-	float speedPercentage = std::clamp(speed / 150.0f,0.0f,1.0f);
-	float bodyCountPercentage = std::clamp((float)bodyCount / 8.0f,0.0f,1.0f);
+	float speedPercentage = std::clamp(speed / 150.0f, 0.0f, 1.0f);
+	float bodyCountPercentage = std::clamp((float)bodyCount / 8.0f, 0.0f, 1.0f);
 	int percentage = int((speedPercentage + bodyCountPercentage) * 50.0f);
 
 	// 数字の切り抜き
 	int digits[3] = { percentage / 100, (percentage / 10) % 10, percentage % 10 };
 	for(int i = 0; i < 3; ++i){
-		instance_->percentageSprite_[i]->SetLeftTop({ widthEvery_ * digits[i] ,0.0f});
+		instance_->percentageSprite_[i]->SetLeftTop({ widthEvery_ * digits[i] ,0.0f });
 	}
 }
