@@ -119,7 +119,7 @@ private:
 	bool isFinish_;
 
 	// -------------------------------------------------
-	// ↓ speedMax
+	// ↓ Speedのアナウンス
 	// -------------------------------------------------
 
 	SpeedRaitoState speedRaitoState_ = Raito_0;
