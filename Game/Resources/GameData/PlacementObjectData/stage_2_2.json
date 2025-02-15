@@ -42,6 +42,27 @@
             ],
             "subType": 0
         },
+        "BIRD_10": {
+            "objType": 2,
+            "position": [
+                49.599998474121094,
+                196.1999969482422,
+                0.0
+            ],
+            "radius": 13.0,
+            "rotate": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                8.0,
+                8.0,
+                8.0
+            ],
+            "subType": 0
+        },
         "BIRD_2": {
             "objType": 2,
             "position": [
@@ -126,7 +147,7 @@
             ],
             "subType": 2
         },
-        "FISH_9": {
+        "FISH_6": {
             "objType": 1,
             "position": [
                 191.8000030517578,
@@ -147,7 +168,7 @@
             ],
             "subType": 1
         },
-        "ROCK_6": {
+        "ROCK_7": {
             "objType": 0,
             "position": [
                 22.700000762939453,
@@ -168,7 +189,7 @@
             ],
             "subType": 1
         },
-        "ROCK_7": {
+        "ROCK_8": {
             "objType": 0,
             "position": [
                 87.0,
@@ -189,7 +210,7 @@
             ],
             "subType": 1
         },
-        "ROCK_8": {
+        "ROCK_9": {
             "objType": 0,
             "position": [
                 162.8000030517578,

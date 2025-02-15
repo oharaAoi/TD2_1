@@ -135,6 +135,8 @@ private:
 	Vector2 numberLocalPos_;
 	Vector2 numberSpriteDivision_ = {64.0f, 0.0f};
 
+	float drawHeight = 80.0f;//速度のアナウンスの描画する高さ
+
 	// Parameter
 	float announceTime_;
 	float announceMoveTime_ = 1.8f;

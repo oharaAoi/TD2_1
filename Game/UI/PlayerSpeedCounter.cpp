@@ -44,7 +44,7 @@ void PlayerSpeedCounter::Init(){
 	// ↓ speedMax
 	// -------------------------------------------------
 
-	speedMaxPos_ = { -700, 100.0f };
+	speedMaxPos_ = { -700, drawHeight };
 	speedMaxUI_ = Engine::CreateSprite("speedMax.png");
 	speedMaxUI_->SetTextureCenterPos(speedMaxPos_);
 	speedMaxUI_->SetScale(Vector2(0.7f, .7f));
@@ -53,8 +53,8 @@ void PlayerSpeedCounter::Init(){
 	time_ = 0.0f;
 	moveTime_ = 1.5f;
 
-	fadeInStartPos_ = { -700, 100.0f };
-	fadeOutPos_ = { 2000, 100.0f };
+	fadeInStartPos_ = { -700, drawHeight };
+	fadeOutPos_ = { 2000, drawHeight };
 	isUiMove_ = false;
 	isFinish_ = false;
 	isFadeIn_ = true;

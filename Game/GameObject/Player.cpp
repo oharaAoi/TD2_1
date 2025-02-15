@@ -594,6 +594,13 @@ void Player::OnCollision(Collider* other){
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 			//基礎速度の変動
 			baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_);
+
+			//チュートリアルなら速度を制限する
+			if(isTutorial_){
+				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_ * 0.7f);
+				baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_*0.7f);
+			}
+
 			// ボディーとスピードが最大だったらカットインフラグをオンにする
 			if(baseSpeed_ + temporaryAcceleration_ >= 150.0f && bodyCount_ >= kMaxBodyCount_){
 				if(!isCutIn_ && !autoFlying_){
