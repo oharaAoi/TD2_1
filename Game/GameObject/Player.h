@@ -113,6 +113,8 @@ public:
 	void SetGamePlayTimer(GamePlayTimer* gamePlayTimer) { gamePlayTimer_ = gamePlayTimer; }
 	void SetBodyUpEffect(BodyUpEffect* bodyUpEffect) { bodyUpEffect_ = bodyUpEffect; }
 
+	void SetIsTutorial(bool isTutorial) { isTutorial_ = isTutorial; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG
@@ -243,6 +245,8 @@ private:
 	bool isFacedBird_;		// 鳥に正面衝突したかどうか
 	bool isEnableLaunch_;	// 胴体で再発射可能かどうか
 	bool isjet_;			// 胴体発射したか
+
+	bool isTutorial_ = false;
 
 	// データ格納変数　----------------------------------
 

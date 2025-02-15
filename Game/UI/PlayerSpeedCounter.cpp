@@ -6,7 +6,7 @@ PlayerSpeedCounter::PlayerSpeedCounter(){}
 PlayerSpeedCounter::~PlayerSpeedCounter(){}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Init(){
@@ -60,7 +60,7 @@ void PlayerSpeedCounter::Init(){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPlayerFlying){
@@ -75,9 +75,19 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 	needleSprite_->SetRotate(std::lerp(0.0f, needleAngleMax_, easeRatio));
 	needleSprite_->Update();
 
+	// -------------------------------------------------
+	// ↓ 現在のspeedの割合を出す
+	// -------------------------------------------------
+
+	float speedRaito = speed / maxSpeed_;
+
+
+	// -------------------------------------------------
+	// ↓ speedMaxになる時の計算を行う
+	// -------------------------------------------------
 	if (!isPlayerFlying) {
-		if (speed == 150.0f) {
-			if (preSpeed_ != 150.0f) {
+		if (speed == maxSpeed_) {
+			if (preSpeed_ != maxSpeed_) {
 				isUiMove_ = true;
 				isFinish_ = false;
 			}
@@ -96,7 +106,7 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Draw() const{
@@ -111,9 +121,27 @@ void PlayerSpeedCounter::Draw() const{
 	speedMaxUI_->Draw();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//===========================================================================================//
+//
+// Speedの割合に関する処理
+//
+//===========================================================================================//
+
+void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
+	float speedRaito = speed / maxSpeed_;
+
+	if (speedRaito >= 30.0f) {
+		if (speedRaitoState_ < SpeedRaitoState::Raito_30) {
+
+		}
+	}
+}
+
+//===========================================================================================//
+//
+// speedMaxに関する処理
+//
+//===========================================================================================//
 
 void PlayerSpeedCounter::SpeedMaxUpdate() {
 	if (isFinish_) { return; }
@@ -149,9 +177,11 @@ void PlayerSpeedCounter::SpeedMaxMove() {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//===========================================================================================//
+//
+// その他処理
+//
+//===========================================================================================//
 
 float PlayerSpeedCounter::DegitCount(float value){
 	if(value == 0.0f) { return 0; }
@@ -196,6 +226,11 @@ Vector2 PlayerSpeedCounter::CalculationSpriteLT(float value){
 //void PlayerSpeedCounter::CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin) {
 //}
 
+//===========================================================================================//
+//
+// Debug処理
+//
+//===========================================================================================//
 #ifdef _DEBUG
 #include <externals/imgui/imgui.h>
 void PlayerSpeedCounter::Debug_Gui(){

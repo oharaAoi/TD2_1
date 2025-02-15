@@ -5,6 +5,13 @@
 #include <Vector2.h>
 #include "Engine/Utilities/AdjustmentItem.h"
 
+enum SpeedRaitoState {
+	Raito_0,
+	Raito_30,
+	Raito_70,
+	Raito_100,
+};
+
 /// <summary>
 /// Playerの時間を表示するクラス
 /// </summary>
@@ -18,8 +25,22 @@ public:
 	void Update(float speed, float raito, float alpha, bool isPlayerFlying);
 	void Draw() const;
 
+	// ------------------- Speedの割合に関する処理 ------------------- //
+
+	void SpeedRaitoUpdate(float speed);
+
+	// ------------------- SpeedMaxに関する処理 ------------------- //
 	void SpeedMaxUpdate();
 	void SpeedMaxMove();
+
+	void SetMaxSpeed(float maxSpeed) { maxSpeed_ = maxSpeed; }
+
+
+#ifdef _DEBUG
+	void Debug_Gui();
+#endif // _DEBUG
+
+private:
 
 	/// <summary>
 	/// 桁数を割り出す
@@ -47,10 +68,6 @@ public:
 	/// </summary>
 	/// <param name="array"></param>
 	//void CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin);
-
-#ifdef _DEBUG
-	void Debug_Gui();
-#endif // _DEBUG
 
 private:
 
@@ -80,6 +97,8 @@ private:
 
 	float preSpeed_;
 
+	float maxSpeed_;
+
 	// -------------------------------------------------
 	// ↓ speedMax
 	// -------------------------------------------------
@@ -96,5 +115,12 @@ private:
 	bool isUiMove_;
 	bool isFadeIn_;
 	bool isFinish_;
+
+	// -------------------------------------------------
+	// ↓ speedMax
+	// -------------------------------------------------
+
+	SpeedRaitoState speedRaitoState_ = Raito_0;
+
 };
 

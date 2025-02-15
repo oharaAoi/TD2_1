@@ -414,6 +414,16 @@ void Player::UpdateBody(){
 	int bodyCount = kMinBodyCount_ + int(chargePower_ / division);
 
 	if(bodyCount > bodyCount_ or bodyCount_ < kMinBodyCount_){
+
+		if (isTutorial_) {
+			if (bodyCount_ > 2) {
+				for (auto& body : followModels_) {
+					body->Update();
+				}
+				return;
+			}
+		}
+
 		if(followModels_.size() != 0){
 			AddBody(followModels_.back().get());
 		} else{
@@ -435,7 +445,6 @@ void Player::UpdateBody(){
 }
 
 void Player::AddBody(BaseGameObject* pTarget){
-
 	pTarget->UpdateMatrix();
 	if(bodyCount_ >= kMaxBodyCount_){ return; }
 
@@ -571,8 +580,12 @@ void Player::OnCollision(Collider* other){
 		if(bodyCount_ >= pFish->GetEatCount()){//chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()
 
 			// チャージを行う
-			chargePower_ += pFish->GetEnergy();
-			chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
+			if (isTutorial_) {
+				if (followModels_.size() <= 2) {
+					chargePower_ += pFish->GetEnergy();
+					chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
+				}
+			}
 			// 一時加速する
 			temporaryAcceleration_ += increaseVelocity_;
 			temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
