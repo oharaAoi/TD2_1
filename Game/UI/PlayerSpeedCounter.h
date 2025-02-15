@@ -29,6 +29,8 @@ public:
 
 	void SpeedRaitoUpdate(float speed);
 
+	void SpeedAnnounceMove();
+
 	// ------------------- SpeedMaxに関する処理 ------------------- //
 	void SpeedMaxUpdate();
 	void SpeedMaxMove();
@@ -121,6 +123,30 @@ private:
 	// -------------------------------------------------
 
 	SpeedRaitoState speedRaitoState_ = Raito_0;
+	bool isAnnounce_ = false;
+
+	std::unique_ptr<Sprite> speedSprite_;
+	std::unique_ptr<Sprite> percentSprite_;
+	std::unique_ptr<Sprite> speedAnnounceNumber_[2];
+
+	Vector2 announcePos_;
+	Vector2 speedLocalPos_ = {-100.0f, 0.0f};
+	Vector2 percentLocalPos_ = { 125.0f, 0.0f };
+	Vector2 numberLocalPos_;
+	Vector2 numberSpriteDivision_ = {64.0f, 0.0f};
+
+	// Parameter
+	float announceTime_;
+	float announceMoveTime_ = 1.8f;
+
+	Vector2 announceFadeInStartPos_;
+	Vector2 announceFadeOutPos_;
+	Vector2 announceSpeedMaxPos_;
+
+	// フラグ
+	bool isAnnounceUiMove_;
+	bool isAnnounceFadeIn_;
+	bool isAnnounceFinish_;
 
 };
 
