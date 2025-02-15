@@ -585,6 +585,9 @@ void Player::OnCollision(Collider* other){
 					chargePower_ += pFish->GetEnergy();
 					chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 				}
+			} else {
+				chargePower_ += pFish->GetEnergy();
+				chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 			}
 			// 一時加速する
 			temporaryAcceleration_ += increaseVelocity_;

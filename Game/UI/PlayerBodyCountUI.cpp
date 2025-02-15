@@ -1,4 +1,5 @@
 #include "PlayerBodyCountUI.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 PlayerBodyCountUI::PlayerBodyCountUI() {}
 PlayerBodyCountUI::~PlayerBodyCountUI() {}
@@ -90,6 +91,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	if (playerBodyCount == 8) {
 		if (preCount_ != 8) {
 			isUiMove_ = true;
+			AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 		}
 	}
 

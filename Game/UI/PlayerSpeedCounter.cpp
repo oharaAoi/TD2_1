@@ -1,5 +1,6 @@
 #include "PlayerSpeedCounter.h"
 #include "Engine/Math/Easing.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 PlayerSpeedCounter::PlayerSpeedCounter(){}
 
@@ -90,6 +91,7 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 			if (preSpeed_ != maxSpeed_) {
 				isUiMove_ = true;
 				isFinish_ = false;
+				AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 			}
 		}
 	}
