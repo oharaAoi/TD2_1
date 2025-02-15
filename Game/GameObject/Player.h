@@ -119,6 +119,7 @@ public:
 
 	const float GetFlyingTime() const { return timer_.GetCurrentLength(); }
 	const float GetMaxFlyingTime() const { return timer_.GetMaxLnegth(); }
+	void SetCameraPtr(Camera* pCamera){ pCamera_ = pCamera; }
 
 private:
 
@@ -127,6 +128,7 @@ private:
 
 	GamePlayTimer* gamePlayTimer_ = nullptr;
 	BodyUpEffect* bodyUpEffect_ = nullptr;
+	Camera* pCamera_ = nullptr;
 
 	// 付属モデル---------------------------------------
 

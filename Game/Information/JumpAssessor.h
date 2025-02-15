@@ -25,7 +25,7 @@ private:
 	bool isUIvisible_;
 
 	// 評価に応じて表示するスプライト
-	std::array<std::unique_ptr<Sprite>, 3> percentageSprite_;
+	std::array<std::unique_ptr<Sprite>, 4> percentageSprite_;
 	std::unique_ptr<Sprite> evaluationSprite_;
 	WorldTransform* parentWT_ = nullptr;
 	Camera* pCamera_ = nullptr;

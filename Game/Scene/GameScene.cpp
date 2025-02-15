@@ -45,7 +45,7 @@ void GameScene::Init(){
 
 	obstaclesManager_ = std::make_unique<ObstaclesManager>();
 	obstaclesManager_->Init(player_.get());
-	if(StageInformation::GetStageNumMax() != 0) {
+	if(StageInformation::GetStageNumMax() != 0){
 		obstaclesManager_->SetObstacles(StageInformation::GetStage());
 	}
 	obstaclesManager_->SetGameScene(this);
@@ -125,7 +125,7 @@ void GameScene::Init(){
 
 	// ランクアップ時のエフェクト
 	rankUpParticleEmitter_ = std::make_unique<ParticleManager<RankUp>>();
-	rankUpParticleEmitter_->SetEmitRange({ 0.0f,kWindowHeight_ }, { kWindowWidth_,kWindowHeight_});
+	rankUpParticleEmitter_->SetEmitRange({ 0.0f,kWindowHeight_ }, { kWindowWidth_,kWindowHeight_ });
 	rankUpParticleEmitter_->SetInterval(0.1f);
 	rankUpParticleEmitter_->SetEmitCountEvery(1);
 	rankUpParticleEmitter_->SetIsActive(false);
@@ -168,6 +168,7 @@ void GameScene::Init(){
 	// ↓ ターゲットの設定
 	// -------------------------------------------------
 	camera_->SetPlayerPtr(player_.get());
+	player_->SetCameraPtr(camera_.get());
 
 	// -------------------------------------------------
 	// ↓ Audioの生成
@@ -226,28 +227,28 @@ void GameScene::Load(){
 void GameScene::Update(){
 #ifdef _DEBUG
 	//プレイヤーの動きを停止
-	if(Input::IsTriggerKey(DIK_1)) {
+	if(Input::IsTriggerKey(DIK_1)){
 
 		player_->DebugFreeze();
 	}
 	//ブースト
-	if(Input::IsTriggerKey(DIK_2)) {
+	if(Input::IsTriggerKey(DIK_2)){
 
 		player_->DebugBoost();
 	}
 	//デバッグカメラをプレイヤーの座標に合わせる
-	if(Input::IsTriggerKey(DIK_3)) {
+	if(Input::IsTriggerKey(DIK_3)){
 
 		debugCamera_->SetPlayerPos(player_.get()->GetWorldTranslation());
 		isDegugCameraActive_ = !isDegugCameraActive_;
 	}
 	//進める
-	if(Input::IsTriggerKey(DIK_4)) {
+	if(Input::IsTriggerKey(DIK_4)){
 
 		player_->DebugAdvancePos();
 	}
 	//進める
-	if(Input::IsTriggerKey(DIK_5)) {
+	if(Input::IsTriggerKey(DIK_5)){
 
 		player_->DebugResetPos();
 	}
@@ -256,30 +257,30 @@ void GameScene::Update(){
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
 
-	if(currentState_ == GAME_STATE::TITLE) {
-		if(Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W)) {
+	if(currentState_ == GAME_STATE::TITLE){
+		if(Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W)){
 			isGameStart_ = !isGameStart_;
 			notControlTime_ = 0.0f;
 		}
 
-		if(Input::IsTriggerKey(DIK_DOWN) || Input::IsTriggerKey(DIK_S)) {
+		if(Input::IsTriggerKey(DIK_DOWN) || Input::IsTriggerKey(DIK_S)){
 			isGameStart_ = !isGameStart_;
 			notControlTime_ = 0.0f;
 		}
 
 		guideUI_->SetArrow(isGameStart_);
 
-		if(isGameStart_) {
+		if(isGameStart_){
 			notControlTime_ += GameTimer::DeltaTime();
-			if(notControlTimeLimit_ <= notControlTime_) {
+			if(notControlTimeLimit_ <= notControlTime_){
 				isGameStart_ = false;
 			}
 		}
 	}
 
-	if(Input::IsTriggerKey(DIK_SPACE)) {
-		if(currentState_ == GAME_STATE::TITLE) {
-			if(fadePanel_->GetDoNoting()) {
+	if(Input::IsTriggerKey(DIK_SPACE)){
+		if(currentState_ == GAME_STATE::TITLE){
+			if(fadePanel_->GetDoNoting()){
 				fadePanel_->SetFadeOut(0.6f);
 				Input::SetNotAccepted(true);
 			}
@@ -290,21 +291,21 @@ void GameScene::Update(){
 
 	fadePanel_->Update();
 
-	if(currentState_ == GAME_STATE::TITLE) {
-		if(fadePanel_->GetIsFinished()) {
+	if(currentState_ == GAME_STATE::TITLE){
+		if(fadePanel_->GetIsFinished()){
 			currentState_ = GAME_STATE::LOAD;
 		}
 	}
 
-	if(currentState_ == GAME_STATE::LOAD) {
-		if(fadePanel_->GetIsFinished()) {
+	if(currentState_ == GAME_STATE::LOAD){
+		if(fadePanel_->GetIsFinished()){
 			loadScene_->Update();
 		}
 
-		if(loadScene_->GetIsLoadFinish()) {
-			if(fadePanel_->GetDoNoting()) {
+		if(loadScene_->GetIsLoadFinish()){
+			if(fadePanel_->GetDoNoting()){
 				fadePanel_->SetFadeOutOpen(0.6f);
-				if(!isGameStart_) {
+				if(!isGameStart_){
 					currentState_ = GAME_STATE::TUTORIAL;
 					tutorialUI_->LineUpUI(player_->GetWorldTranslation());
 					obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos(), 0);
@@ -312,7 +313,7 @@ void GameScene::Update(){
 					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
 					obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
 					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(450, 0, 0), 1);
-				} else {
+				} else{
 					currentState_ = GAME_STATE::GAME;
 					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);
 					obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
@@ -325,7 +326,7 @@ void GameScene::Update(){
 		return;
 	}
 
-	if(currentState_ == GAME_STATE::TUTORIAL) {
+	if(currentState_ == GAME_STATE::TUTORIAL){
 		Update_TUTORIAL();
 	}
 
@@ -338,12 +339,12 @@ void GameScene::Update(){
 	// ↓ Cameraの更新
 	// -------------------------------------------------
 
-	if(!isDegugCameraActive_) {
+	if(!isDegugCameraActive_){
 		camera_->Update();
 		Render::SetEyePos(camera_->GetWorldTranslate());
 		Render::SetViewProjection(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 		Render::SetViewProjection2D(camera_->GetViewMatrix2D(), camera_->GetProjectionMatrix2D());
-	} else {
+	} else{
 		debugCamera_->Update();
 		Render::SetEyePos(debugCamera_->GetWorldTranslate());
 		Render::SetViewProjection(debugCamera_->GetViewMatrix(), debugCamera_->GetProjectionMatrix());
@@ -353,10 +354,10 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
-	if(Input::IsTriggerKey(DIK_ESCAPE)) {
+	if(Input::IsTriggerKey(DIK_ESCAPE)){
 		SetNextScene(SceneType::Scene_Game);
 	}
-	if(isPause_) {
+	if(isPause_){
 		isStepFrame_ = false;
 
 	#ifdef _DEBUG
@@ -364,7 +365,7 @@ void GameScene::Update(){
 		placementObjectEditor_->Update();
 	#endif
 		// stepフラグが立っていたら1フレームだけ進める
-		if(!isStepFrame_) {
+		if(!isStepFrame_){
 			return;
 		}
 	}
@@ -382,7 +383,7 @@ void GameScene::Update(){
 	worldObjects_->LoopStage();
 	worldObjects_->Update(player_->GetWorldTranslation().x);
 
-	if(currentState_ == GAME_STATE::TITLE) {
+	if(currentState_ == GAME_STATE::TITLE){
 		Vector3 pos = player_->GetWorldTranslation();
 		pos.z += 10.0f;
 	}
@@ -393,11 +394,11 @@ void GameScene::Update(){
 
 	obstaclesManager_->SetPlayerPosition(player_->GetWorldTranslation());
 
-	if(player_->GetMaxFlyingTime() > level3) {
+	if(player_->GetMaxFlyingTime() > level3){
 		obstaclesManager_->SetLevel(3);
 
 
-	} else if(player_->GetMaxFlyingTime() > level2) {
+	} else if(player_->GetMaxFlyingTime() > level2){
 		obstaclesManager_->SetLevel(2);
 
 	}
@@ -416,23 +417,23 @@ void GameScene::Update(){
 	trail_->AddTrail(player_->GetTransform()->GetTranslation(), player_->GetTransform()->GetQuaternion(), player_->GetIsFlying());
 	trail_->SetPlayerPosition(player_->GetTransform()->GetTranslation());
 
-	if(currentState_ == GAME_STATE::TITLE) {
+	if(currentState_ == GAME_STATE::TITLE){
 		cherryEmitter_->Update();
-	} else {
+	} else{
 
-		if(gamePlayTimer_->GetTimeLinit() <= 0.0f) {
+		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
 
-			if(!player_->GetIsFlying()) {
+			if(!player_->GetIsFlying()){
 				isEndAndInWater_ = true;
 				finishUI_->SetUI(false);
 
 
-			} else {
+			} else{
 				finishUI_->SetUI(true);
 			}
 
-			if(isEndAndInWater_) {
-				if(!startSceneChange_) {
+			if(isEndAndInWater_){
+				if(!startSceneChange_){
 					AudioPlayer::SinglShotPlay("Bubble.mp3", 0.3f);
 
 				}
@@ -467,7 +468,7 @@ void GameScene::Update(){
 				}
 
 
-				if(borders_.size() == 0) {
+				if(borders_.size() == 0){
 					break;
 				}
 			}
@@ -477,25 +478,27 @@ void GameScene::Update(){
 	}
 
 	CheckAddSplash();
-	for(auto& splash : splash_) {
+	for(auto& splash : splash_){
 		splash->Update();
 	}
 
 	animationEffectManager_->Update();
+
+	JumpAssessor::GetInstance()->Update();
 
 	// -------------------------------------------------
 	// ↓ Editer
 	// -------------------------------------------------
 
 #ifdef _DEBUG
-	if(isGuiDraw_) {
-		if(!isStepFrame_) {
+	if(isGuiDraw_){
+		if(!isStepFrame_){
 			Debug_Gui();
 
 			// editorの処理
 			placementObjectEditor_->Update();
 		}
-}
+	}
 #endif
 
 	// -------------------------------------------------
@@ -514,12 +517,12 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ 不要になった要素などの削除
 	// -------------------------------------------------
-	splash_.remove_if([](auto& splash) {return splash->GetIsEndSplash(); });
+	splash_.remove_if([](auto& splash){return splash->GetIsEndSplash(); });
 
 	// -------------------------------------------------
 	// ↓ UIの更新
 	// -------------------------------------------------
-	if(currentState_ != GAME_STATE::TITLE) {
+	if(currentState_ != GAME_STATE::TITLE){
 		//flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 		if(!isStartupScene_){
 			flyingGaugeUI_->Update(player_->GetFlyingTime());
@@ -529,11 +532,11 @@ void GameScene::Update(){
 		startSceneTime_ = std::clamp(startSceneTime_ - GameTimer::DeltaTime(), 0.0f, 2.0f);
 	}
 
-	if(player_->GetIsJet()) {
+	if(player_->GetIsJet()){
 		playerBodyCountUI_->EmiteEffect();
 	}
 
-	if(currentState_ != GAME_STATE::TITLE) {
+	if(currentState_ != GAME_STATE::TITLE){
 		playerBodyCountUI_->Update(player_->GetBodyCount());
 	}
 
@@ -547,7 +550,7 @@ void GameScene::Update(){
 
 	gameStartUI_->Update();
 
-	if(currentState_ == GAME_STATE::GAME) {
+	if(currentState_ == GAME_STATE::GAME){
 		missionUI_->Update(player_->GetMoveSpeed(), player_->GetWorldTranslation().y);
 	}
 
@@ -560,14 +563,14 @@ void GameScene::Update(){
 	// ↓ スプライト
 	// -------------------------------------------------
 
-	if(player_->GetIsFlying()) {
-		if(currentState_ != GAME_STATE::TITLE) {
+	if(player_->GetIsFlying()){
+		if(currentState_ != GAME_STATE::TITLE){
 			sky_->SetTexture("blueSky_ORE.png");
 		}
-	} else {
+	} else{
 		sky_->SetTexture("sky.png");
 
-		if(speedMeterAlpha_ >= 1.0f) {
+		if(speedMeterAlpha_ >= 1.0f){
 			isStartupScene_ = false;
 		}
 	}
@@ -576,11 +579,11 @@ void GameScene::Update(){
 	// ↓ audioの更新
 	// -------------------------------------------------
 
-	if(player_->GetIsFlying()) {
+	if(player_->GetIsFlying()){
 		BGM_volumeT_ = std::clamp(BGM_volumeT_ + (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
 		speedMeterAlpha_ = std::clamp(speedMeterAlpha_ - (0.02f * GameTimer::TimeRate()), 0.0f, 1.0f);
 
-	} else {
+	} else{
 		BGM_volumeT_ = std::clamp(BGM_volumeT_ - (0.05f * GameTimer::TimeRate()), 0.0f, 1.0f);
 		speedMeterAlpha_ = std::clamp(speedMeterAlpha_ + (0.02f * GameTimer::TimeRate()), 0.0f, 1.0f);
 	}
@@ -589,7 +592,7 @@ void GameScene::Update(){
 	float end_t = std::clamp((gamePlayTimer_->GetOutgameTime()) / outgameWaitTime_, 0.0f, 1.0f);
 	BGM_masterVolumeRate_ = 1.0f - end_t;
 
-	if(BGM_masterVolumeRate_ <= 0.0f) {
+	if(BGM_masterVolumeRate_ <= 0.0f){
 		mainBGM_->Stop();
 		mainBGM_inWater_->Stop();
 		windSound_->Stop();
@@ -608,8 +611,8 @@ void GameScene::Update(){
 	EffectSystem::GetInstacne()->SetCameraMatrix(camera_->GetCameraMatrix());
 	EffectSystem::GetInstacne()->SetViewProjectionMatrix(camera_->GetViewMatrix(), camera_->GetProjectionMatrix());
 
-	if(GetGameState() == GAME_STATE::GAME) {
-		if(player_->GetIsMove()) {
+	if(GetGameState() == GAME_STATE::GAME){
+		if(player_->GetIsMove()){
 			gamePlayTimer_->Update(player_->GetIsFlying());
 
 			//if (gamePlayTimer_->GetIsFinish()) {
@@ -619,17 +622,17 @@ void GameScene::Update(){
 	}
 
 #ifdef _DEBUG
-	if(Input::IsTriggerKey(DIK_RSHIFT)) {
+	if(Input::IsTriggerKey(DIK_RSHIFT)){
 		Init();
 	}
 
-	if(Input::IsTriggerKey(DIK_ESCAPE)) {
+	if(Input::IsTriggerKey(DIK_ESCAPE)){
 		isGuiDraw_ = !isGuiDraw_;
 	}
 #endif // _DEBUG
 
 
-	if(gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_) {
+	if(gamePlayTimer_->GetOutgameTime() > outgameWaitTime_ + fadeWaitTime_){
 		SetNextScene(SceneType::Scene_Result);
 	}
 
@@ -642,7 +645,7 @@ void GameScene::Update(){
 void GameScene::Draw() const{
 
 
-	if(BGM_masterVolumeRate_ > 0.0f) {
+	if(BGM_masterVolumeRate_ > 0.0f){
 		mainBGM_->Play(true, 0.1f, true);
 		mainBGM_inWater_->Play(true, 0.1f, true);
 		windSound_->Play(true, 0.1f, true);
@@ -661,7 +664,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	// tutorialUIの描画
 	/////////////////////////////////
-	if(currentState_ == GAME_STATE::TUTORIAL) {
+	if(currentState_ == GAME_STATE::TUTORIAL){
 		Engine::SetPipeline(PipelineType::NormalPipeline);
 		tutorialUI_->Draw();
 	}
@@ -672,17 +675,17 @@ void GameScene::Draw() const{
 
 	obstaclesManager_->Draw();
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	for(auto& splash : splash_) {
+	for(auto& splash : splash_){
 		splash->Draw();
 	}
 
 #ifdef _DEBUG
 	Engine::SetPipeline(PipelineType::PrimitivePipeline);
 	// コライダーの表示
-	if(Collider::isColliderBoxDraw_) {
-		if(!isDegugCameraActive_) {
+	if(Collider::isColliderBoxDraw_){
+		if(!isDegugCameraActive_){
 			collisionManager_->Draw(camera_->GetViewMatrix() * camera_->GetProjectionMatrix());
-		} else {
+		} else{
 			collisionManager_->Draw(debugCamera_->GetViewMatrix() * debugCamera_->GetProjectionMatrix());
 		}
 	}
@@ -701,7 +704,7 @@ void GameScene::Draw() const{
 	/////////////////////////////////
 	Engine::SetPipeline(PipelineType::AddPipeline);
 
-	if(currentState_ != GAME_STATE::TITLE) {
+	if(currentState_ != GAME_STATE::TITLE){
 		trail_->Draw();
 	}
 
@@ -715,7 +718,7 @@ void GameScene::Draw() const{
 	worldObjects_->DrawWater();
 
 	Engine::SetPipeline(PipelineType::NormalPipeline);
-	if(currentState_ == GAME_STATE::GAME) {
+	if(currentState_ == GAME_STATE::GAME){
 		player_->DrawHeightMeter();
 	}
 	/////////////////////////////////
@@ -730,17 +733,17 @@ void GameScene::Draw() const{
 
 	// 一番最初に描画して他の物が描画されないようにする
 	Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
-	if(currentState_ == GAME_STATE::LOAD) {
+	if(currentState_ == GAME_STATE::LOAD){
 		//fadePanel_->Draw();
-		if(fadePanel_->GetIsFinished()) {
+		if(fadePanel_->GetIsFinished()){
 			loadScene_->Draw();
 		}
 		return;
 	}
 
-	if(currentState_ != GAME_STATE::TITLE) {
+	if(currentState_ != GAME_STATE::TITLE){
 
-		if(gamePlayTimer_->GetTimeLinit() <= 0.0f) {
+		if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
 			Engine::SetPipeline(PipelineType::AddBlendSpritePipeline);
 			bubbleEmitter_->Draw();
 		}
@@ -764,13 +767,15 @@ void GameScene::Draw() const{
 
 		playerControlUI_->Draw(player_->GetIsFlying());
 
-		// チュートリアルテキストの描画
+		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
+		JumpAssessor::GetInstance()->Draw();
+
 		if(currentState_ == GAME_STATE::TUTORIAL){
-			Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
+			// チュートリアルテキストの描画
 			tutorialUI_->DrawTutorialText();
 		}
 
-	} else {
+	} else{
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		titleLogo_->Draw();
 		cherryEmitter_->Draw();
@@ -782,8 +787,8 @@ void GameScene::Draw() const{
 	}
 
 	// フェードの描画
-	if(gamePlayTimer_->GetTimeLinit() <= 0.0f) {
-		if(isEndAndInWater_) {
+	if(gamePlayTimer_->GetTimeLinit() <= 0.0f){
+		if(isEndAndInWater_){
 			float t = std::clamp((gamePlayTimer_->GetOutgameTime() - fadeWaitTime_) / outgameWaitTime_, 0.0f, 1.0f);
 			fade_->SetColor({ 1.0f,1.0f,1.0f,t });
 			fade_->Draw();
@@ -801,15 +806,15 @@ void GameScene::Draw() const{
 void GameScene::Update_TUTORIAL(){
 
 #ifdef _DEBUG
-	if(Input::IsTriggerKey(DIK_Z)) {
+	if(Input::IsTriggerKey(DIK_Z)){
 		currentState_ = GAME_STATE::GAME;
-}
+	}
 #endif // _DEBUG
 
 
 
 
-	if(player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x) {
+	if(player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x){
 		currentState_ = GAME_STATE::GAME;
 		gameStartUI_->SetUI();
 		missionUI_->Start();
@@ -830,25 +835,25 @@ void GameScene::UpdateColliderList(){
 
 	collisionManager_->AddCollider(player_.get());
 
-	for(auto& obstacle : obstaclesManager_->GetPlacementObject()) {
+	for(auto& obstacle : obstaclesManager_->GetPlacementObject()){
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle->GetWorldTranslation()).Length());
-		if(lenght < obstaclesManager_->GetUpdateLenght()) {
+		if(lenght < obstaclesManager_->GetUpdateLenght()){
 			collisionManager_->AddCollider(obstacle.get());
 		}
 	}
 
 #ifdef _DEBUG
 
-	for(auto& obstacle : placementObjectEditor_->GetDebugPlacementObjs()) {
+	for(auto& obstacle : placementObjectEditor_->GetDebugPlacementObjs()){
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
-		if(lenght < obstaclesManager_->GetUpdateLenght()) {
+		if(lenght < obstaclesManager_->GetUpdateLenght()){
 			collisionManager_->AddCollider(obstacle.object_.get());
 		}
 	}
 
-	for(auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()) {
+	for(auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()){
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
-		if(lenght < obstaclesManager_->GetUpdateLenght()) {
+		if(lenght < obstaclesManager_->GetUpdateLenght()){
 			collisionManager_->AddCollider(obstacle.object_.get());
 		}
 	}
@@ -877,7 +882,7 @@ void GameScene::UpdateColliderList(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void GameScene::CheckAddSplash(){
-	if(player_->GetIsSplash()) {
+	if(player_->GetIsSplash()){
 
 		Vector3 emitPos = player_->GetTransform()->GetTranslation();
 		emitPos.y = 0.01f;
@@ -895,7 +900,7 @@ void GameScene::CheckAddSplash(){
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
 void GameScene::Debug_Gui(){
-	if(isGuiDraw_) {
+	if(isGuiDraw_){
 
 		ImGui::Begin("GameScene");
 		ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
@@ -906,20 +911,20 @@ void GameScene::Debug_Gui(){
 		Audio::SetMasterVolume(volume);
 
 		//ImGui::DragFloat3()
-		if(ImGui::Button("NextScene")) {
+		if(ImGui::Button("NextScene")){
 			SetNextScene(SceneType::Scene_Result);
 		}
 
-		if(ImGui::Button("stop")) {
+		if(ImGui::Button("stop")){
 			isPause_ = true;
 		}
 		ImGui::SameLine();
-		if(ImGui::Button("play")) {
+		if(ImGui::Button("play")){
 			isPause_ = false;
 		}
-		if(isPause_) {
+		if(isPause_){
 			ImGui::SameLine();
-			if(ImGui::Button("step")) {
+			if(ImGui::Button("step")){
 				isStepFrame_ = true;
 			}
 		}
@@ -931,10 +936,10 @@ void GameScene::Debug_Gui(){
 		//==================================================================================
 		{
 			ImGui::Checkbox("isDebugCameraActive", &isDegugCameraActive_);
-			if(ImGui::TreeNode("Camera")) {
-				if(!isDegugCameraActive_) {
+			if(ImGui::TreeNode("Camera")){
+				if(!isDegugCameraActive_){
 					camera_->Debug_Gui();
-				} else {
+				} else{
 					debugCamera_->Debug_Gui();
 				}
 				ImGui::TreePop();
@@ -945,7 +950,7 @@ void GameScene::Debug_Gui(){
 		// ↓　UI
 		//==================================================================================
 		{
-			if(ImGui::TreeNode("UI")) {
+			if(ImGui::TreeNode("UI")){
 				ImGui::Begin("UI");
 				gamePlayTimer_->Debug_Gui();
 				flyingTimerUI_->Debug_Gui();
@@ -964,7 +969,7 @@ void GameScene::Debug_Gui(){
 		// ↓　Player
 		//==================================================================================
 		{
-			if(ImGui::TreeNode("Player")) {
+			if(ImGui::TreeNode("Player")){
 				player_->Debug_Gui();
 				gamePlayTimer_->Debug_Gui();
 				ImGui::TreePop();
@@ -975,8 +980,8 @@ void GameScene::Debug_Gui(){
 		// ↓　other
 		//==================================================================================
 		{
-			if(currentState_ == GAME_STATE::TUTORIAL) {
-				if(ImGui::TreeNode("Tutorial")) {
+			if(currentState_ == GAME_STATE::TUTORIAL){
+				if(ImGui::TreeNode("Tutorial")){
 					tutorialUI_->Debug_Gui();
 					ImGui::TreePop();
 				}
