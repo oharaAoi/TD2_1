@@ -138,7 +138,7 @@ void Player::Update(){
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
 
-			JumpAssessor::SetJumpData(GetMoveSpeed(), bodyCount_, jumpUI_transform_.get());
+			//JumpAssessor::SetJumpData(GetMoveSpeed(), bodyCount_, jumpUI_transform_.get());
 		}
 
 	} else {
