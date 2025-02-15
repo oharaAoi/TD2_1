@@ -115,6 +115,8 @@ private:
 
 	Vector2 lastBodyPos_;
 
+	Vector2 bodyScale_ = { .7f, .7f };
+
 	// フラグ
 	bool isUiMove_;
 	bool isFadeIn_;

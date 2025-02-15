@@ -28,8 +28,12 @@ void PlayerBodyCountUI::Init() {
 	head_UI_ = Engine::CreateSprite("KoiGeuge_Head.png");
 	tail_UI_ = Engine::CreateSprite("KoiGeuge_Tail.png");
 	headUIPos_.x = 5;
+
 	head_UI_->SetCenterPos(headUIPos_);
 	tail_UI_->SetCenterPos(tailUIPos_);
+
+	head_UI_->SetScale(bodyScale_);
+	tail_UI_->SetScale(bodyScale_);
 
 	isFadeIn_ = true;
 	time_ = 0.0f;
@@ -40,10 +44,10 @@ void PlayerBodyCountUI::Init() {
 
 	effectMoveTime_ = 0.6f;
 
-	interval_bodyUI_ = 51;
+	interval_bodyUI_ = 36;
 
 	for (std::list<BodyUIData>::iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
-		(*it).sprite_->SetScale({ 1.0f, 1.0f });
+		(*it).sprite_->SetScale(bodyScale_);
 		(*it).sprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.4f });
 		(*it).sprite_->Update();
 		++it;
@@ -51,6 +55,7 @@ void PlayerBodyCountUI::Init() {
 
 	for (uint32_t oi = 0; oi < 7; ++oi) {
 		auto& add = backBody_UI_List_.emplace_back(BodyUIData());
+		add.sprite_->SetScale(bodyScale_);
 		add.sprite_->SetCenterPos({
 					tailUIPos_.x + (interval_bodyUI_ * (backBody_UI_List_.size()) + 6),
 					tailUIPos_.y
@@ -131,7 +136,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 			float t = (*it).time_ / 0.5f;
 
 			Vector2 scale;
-			scale = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutBack(t));
+			scale = Vector2::Lerp({ 0.0f, 0.0f }, bodyScale_, EaseOutBack(t));
 			scale.x = std::clamp(scale.x, 0.0f, 1.4f);
 			scale.y = std::clamp(scale.y, 0.0f, 1.4f);
 			(*it).sprite_->SetScale(scale);
@@ -143,7 +148,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	}
 
 	for (std::list<BodyUIData>::iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
-		(*it).sprite_->SetScale({ 1.0f, 1.0f });
+		(*it).sprite_->SetScale(bodyScale_);
 		(*it).sprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.4f });
 		(*it).sprite_->Update();
 		++it;
@@ -265,6 +270,7 @@ void PlayerBodyCountUI::EmiteEffect() {
 
 void PlayerBodyCountUI::AddBody() {
 	auto& add = body_UI_List_.emplace_back(BodyUIData());
+	add.sprite_->SetScale(bodyScale_);
 	add.sprite_->SetCenterPos({
 		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size()) + 6),
 		tailUIPos_.y
