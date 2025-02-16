@@ -760,13 +760,12 @@ void GameScene::Draw() const{
 		}
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
+		bodyUpEffect_->Draw();// spriteEffect
 		player_->DrawCutIn();
 		missionUI_->Draw();
 		finishUI_->Draw();
 		gameStartUI_->Draw();
 
-		// spriteEffect
-		bodyUpEffect_->Draw();
 
 		playerControlUI_->Draw(player_->GetIsFlying());
 
