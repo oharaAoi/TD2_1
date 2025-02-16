@@ -19,7 +19,7 @@ void BodyUpEffect::Init() {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 void BodyUpEffect::Update(const Vector2& screenPos) {
 	playerScreenPos_ = screenPos;
-
+	playerScreenPos_.x -= 90;
 	upEffects_.remove_if([&](const EffectData& effect) {
 		return effect.disapperCount > disapperTime_;
 					  });
