@@ -286,7 +286,6 @@ private:
 	// タイトル用変数
 	float title_sinfIncrement_;
 
-
 public:// アクセッサ
 
 	void SetIsMove(bool flag){ isMove_ = flag; }

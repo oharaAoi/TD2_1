@@ -823,6 +823,7 @@ void GameScene::Update_TUTORIAL(){
 		gameStartUI_->SetUI();
 		missionUI_->Start();
 		player_->SetIsTutorial(false);
+
 	}
 
 	// UIの更新

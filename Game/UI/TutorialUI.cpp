@@ -98,6 +98,12 @@ void TutorialUI::Init(){
 	textBackSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	textBackSprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
 
+	spaceSprite_ = Engine::CreateSprite("SpaceButton.png");
+	spaceSprite_->SetCenterPos({ 1000.0f, 630.0f });
+	spaceSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	spaceSprite_->SetScale({ 0.5f, 0.5f });
+	spaceSprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,6 +111,7 @@ void TutorialUI::Init(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TutorialUI::Update(){
+
 	scaleUp_ = { scaleUpStrength_, scaleUpStrength_, scaleUpStrength_ };
 
 	jumpTutorialPos_ = tutorialUI_["kari4"]->GetTransform()->GetTranslation() + jumpTutorialOffsetPos_;
@@ -118,6 +125,7 @@ void TutorialUI::Update(){
 	}
 
 	tutorialText_->Update();
+	spaceSprite_->Update();
 
 	// テキストの更新
 	UpdateTutorialText();
@@ -252,9 +260,23 @@ void TutorialUI::UpdateTutorialText(){
 		float t = textTimer / textAppearingTime;
 		float t2 = tutorialTimer / textAppearingTime;
 
+		// spaceのUIは0.5秒ごとに暗い、明るいを繰り返す
+		float alpha;
+		bool isFlashing = std::fmod(GameTimer::TotalTime(), 1.0f) < 0.5f;
+		if(isFlashing){
+			alpha = 0.5f;
+			spaceSprite_->SetScale(Vector2(0.5f,0.5f) * 0.9f);
+		} else{
+			alpha = 1.0f;
+			spaceSprite_->SetScale(Vector2(0.5f, 0.5f));
+		}
+
 		// テキストの表示
 		tutorialText_->SetColor({ 1.0f, 1.0f, 1.0f, t });
 		textBackSprite_->SetColor({ 1.0f, 1.0f, 1.0f, t2 });
+		spaceSprite_->SetColor({ 1.0f, 1.0f, 1.0f, t2 * alpha });
+
+
 
 		// ページの更新
 		if(Input::IsTriggerKey(DIK_SPACE)){
@@ -276,6 +298,7 @@ void TutorialUI::DrawTutorialText(){
 	if(isTextShowing_){
 		textBackSprite_->Draw();
 		tutorialText_->Draw();
+		spaceSprite_->Draw();
 	}
 }
 

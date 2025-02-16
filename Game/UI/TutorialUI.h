@@ -66,5 +66,6 @@ private:
 	bool isTextShowing_ = false;
 	std::unique_ptr<Sprite> tutorialText_;
 	std::unique_ptr<Sprite> textBackSprite_;
+	std::unique_ptr<Sprite> spaceSprite_;
 };
 

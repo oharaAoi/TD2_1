@@ -114,40 +114,40 @@ void Player::Update(){
 	isjet_ = false;
 
 	// 移動
-	if(isMove_) {
+	if(isMove_){
 		Move();
-	} else {
+	} else{
 		velocity_ = { 0.0f,0.0f,0.0f };
-		if(Input::IsTriggerKey(DIK_SPACE)) {
+		if(Input::IsTriggerKey(DIK_SPACE)){
 			isMove_ = true;
 		}
 	}
 
 	// 飛行フラグ更新
-	if(transform_->GetTranslation().y > 0.0f) {
+	if(transform_->GetTranslation().y > 0.0f){
 		// 水から出た瞬間
-		if(!preFlying_) {
+		if(!preFlying_){
 			isFlying_ = true;
 			isSplash_ = true;
 			isEnableLaunch_ = true;
 			wingAnimatinoKeyFrame_ = 0;
-			if(waterSurfaceCoolTime <= 0) {
+			if(waterSurfaceCoolTime <= 0){
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.08f);
 				waterSurfaceCoolTime = 0.25f;
 				Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_ * 0.25f);
 			}
 
-			JumpAssessor::GetInstance()->SetJumpData(GetMoveSpeed(), bodyCount_, jumpUI_transform_.get(),pCamera_);
+			JumpAssessor::GetInstance()->SetJumpData(GetMoveSpeed(), bodyCount_, jumpUI_transform_.get(), pCamera_);
 		}
 
-	} else {
+	} else{
 		// 着水した瞬間
-		if(preFlying_) {
+		if(preFlying_){
 			isSplash_ = true;
 			autoFlying_ = false;
 			//isFlying_ = false;//コメントアウト外さない
-			if(waterSurfaceCoolTime <= 0) {
+			if(waterSurfaceCoolTime <= 0){
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.08f);
 				waterSurfaceCoolTime = 0.25f;
@@ -155,7 +155,7 @@ void Player::Update(){
 			}
 		}
 
-		if(Input::GetNotAccepted()) {
+		if(Input::GetNotAccepted()){
 			Input::SetNotAccepted(false);
 		}
 	}
@@ -192,14 +192,14 @@ void Player::Update(){
 	// -------------------------------------------------
 	// ↓ 羽根の更新
 	// -------------------------------------------------
-	if(isFlying_) {
+	if(isFlying_){
 		const PlayerBody* topBody = followModels_.begin()->get();
-		if(isFalling_ && isCloseWing_) {
+		if(isFalling_ && isCloseWing_){
 			wings_->Update(topBody->GetTranslation(), wingAnimatinoKeyFrame_);
-		} else {
+		} else{
 			wings_->Update(topBody->GetTranslation(), wingAnimatinoKeyFrame_);
 		}
-	} else {
+	} else{
 		wings_->NotFlying();
 	}
 
@@ -244,7 +244,7 @@ void Player::Draw() const{
 
 void Player::DrawAnimetor() const{
 	animetor_->Draw();
-	if(isFlying_) {
+	if(isFlying_){
 		wings_->Draw();
 	}
 }
@@ -286,8 +286,7 @@ void Player::Move(){
 
 	//鳥ジャンプの速度をへらしていく
 	maxSpeedTimeCount -= GameTimer::DeltaTime();
-	if(maxSpeedTimeCount <= 0)
-	{
+	if(maxSpeedTimeCount <= 0){
 		isHighSpeedMove = false;
 	}
 
@@ -415,9 +414,9 @@ void Player::UpdateBody(){
 
 	if(bodyCount > bodyCount_ or bodyCount_ < kMinBodyCount_){
 
-		if (isTutorial_) {
-			if (bodyCount_ > 2) {
-				for (auto& body : followModels_) {
+		if(isTutorial_){
+			if(bodyCount_ > 2){
+				for(auto& body : followModels_){
 					body->Update();
 				}
 				return;
@@ -467,6 +466,7 @@ void Player::AddBody(BaseGameObject* pTarget){
 	body->Update();
 
 	bodyCount_++;
+
 	if(baseSpeed_ + temporaryAcceleration_ >= 150.0f && bodyCount_ >= kMaxBodyCount_){
 		if(!isCutIn_ && !autoFlying_){
 			isCutIn_ = true;
@@ -476,7 +476,7 @@ void Player::AddBody(BaseGameObject* pTarget){
 		}
 	}
 
-	if (bodyUpEffect_ != nullptr) {
+	if(bodyUpEffect_ != nullptr){
 		bodyUpEffect_->AddEffect();
 	}
 }
@@ -544,16 +544,16 @@ void Player::Debug_Gui(){
 	ImGui::DragFloat("dropSpeed", &dropSpeed_, 0.1f);
 	ImGui::DragFloat("kBirdJumpMaxRaito", &kBirdJumpMaxRaito_, 0.1f);
 
-	if(ImGui::Button("ReAdapt")) {
+	if(ImGui::Button("ReAdapt")){
 		AdaptAdjustmentItem();
 	}
 
 
 	ImGui::Checkbox("isMove", &isMove_);
 
-	if(hitWaterSurface_) {
+	if(hitWaterSurface_){
 		ImGui::Text("Hit");
-	} else {
+	} else{
 		ImGui::Text("not Hit");
 	}
 	ImGui::End();
@@ -580,12 +580,12 @@ void Player::OnCollision(Collider* other){
 		if(bodyCount_ >= pFish->GetEatCount()){//chargePower_ / fishSizeDivision >= (float)pFish->GetFishSize()
 
 			// チャージを行う
-			if (isTutorial_) {
-				if (followModels_.size() <= 2) {
+			if(isTutorial_){
+				if(bodyCount_ < 3){
 					chargePower_ += pFish->GetEnergy();
 					chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 				}
-			} else {
+			} else{
 				chargePower_ += pFish->GetEnergy();
 				chargePower_ = std::clamp(chargePower_, 0.0f, 1.0f);
 			}
@@ -598,7 +598,7 @@ void Player::OnCollision(Collider* other){
 			//チュートリアルなら速度を制限する
 			if(isTutorial_){
 				temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_ * 0.7f);
-				baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_*0.7f);
+				baseSpeed_ = std::clamp(baseSpeed_ + kAddSpeed_, kMinBaseSpeed_, kMaxBaseSpeed_ * 0.7f);
 			}
 
 			// ボディーとスピードが最大だったらカットインフラグをオンにする
@@ -639,7 +639,7 @@ void Player::OnCollision(Collider* other){
 		}
 	}
 
-	if(other->GetObjectType() == (int)ObjectType::BIRD) {
+	if(other->GetObjectType() == (int)ObjectType::BIRD){
 
 		if(isFlying_ && !isFalling_){ return; }
 
@@ -648,7 +648,7 @@ void Player::OnCollision(Collider* other){
 
 			// ある程度上から踏みつけないといけない
 			if(dropSpeed_ < gravity_ * 0.25f){//dropSpeed_ < gravity_ * 0.25f//transform_->GetTranslation().y>other->GetWorldTranslation().y+ other->GetObb().size.y*0.25f
-				if(!isFacedBird_) {
+				if(!isFacedBird_){
 					// dropSpeedが早ければ早い程早くなる
 					curMaxSpeed = std::abs(dropSpeed_);
 					curMaxSpeed = std::clamp(curMaxSpeed, 1.0f, kBirdJumpMaxRaito_ / 2);//通常時の限界は最高速度の半分
@@ -658,13 +658,13 @@ void Player::OnCollision(Collider* other){
 					isFalling_ = false;
 					isCloseWing_ = false;
 
-					if(birdJumpNum_ >= 3) {
+					if(birdJumpNum_ >= 3){
 						maxSpeedTimeCount = kMaxSpeedTime;
 						curMaxSpeed = kBirdJumpMaxRaito_;
 						birdJumpNum_ = 0;
 						isHighSpeedMove = true;
 						AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
-					} else {
+					} else{
 						maxSpeedTimeCount = kMaxSpeedTime / 2;
 						//birdJumpRaito_ = 1.0f;
 					}
@@ -691,7 +691,7 @@ void Player::OnCollision(Collider* other){
 
 				if(transform_->GetTranslation().x > other->GetWorldTranslation().x){
 
-					if(!isFacedBird_) {
+					if(!isFacedBird_){
 						// dropSpeedが早ければ早い程早くなる
 						curMaxSpeed = std::abs(dropSpeed_);
 						curMaxSpeed = std::clamp(curMaxSpeed, 1.0f, kBirdJumpMaxRaito_ / 2);//通常時の限界は最高速度の半分
@@ -701,13 +701,13 @@ void Player::OnCollision(Collider* other){
 						isFalling_ = false;
 						isCloseWing_ = false;
 
-						if(birdJumpNum_ >= 3) {
+						if(birdJumpNum_ >= 3){
 							maxSpeedTimeCount = kMaxSpeedTime;
 							curMaxSpeed = kBirdJumpMaxRaito_;
 							birdJumpNum_ = 0;
 							isHighSpeedMove = true;
 							AudioPlayer::SinglShotPlay("AddSpeed.mp3", 0.5f);
-						} else {
+						} else{
 							maxSpeedTimeCount = kMaxSpeedTime / 2;
 							//birdJumpRaito_ = 1.0f;
 						}
@@ -733,7 +733,7 @@ void Player::OnCollision(Collider* other){
 	}
 
 	if(!isCutIn_ && !autoFlying_){
-		if(other->GetObjectType() == (int)ObjectType::DRIFTWOOD) {
+		if(other->GetObjectType() == (int)ObjectType::DRIFTWOOD){
 			pressTime_ *= (-1.0f) * reflection_;
 			dontInputPressTime_ = dontInputTime_;
 			AnimetionEffectManager::AddListEffect("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf", nullptr, true,
@@ -741,7 +741,7 @@ void Player::OnCollision(Collider* other){
 			SpeedDown();
 			Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 
-		} else if(other->GetObjectType() == (int)ObjectType::ROCK) {
+		} else if(other->GetObjectType() == (int)ObjectType::ROCK){
 			SpeedDown();
 			Camera::ShakeStart(cameraShakeTime_, cameraShakeRadius_);
 		}
@@ -827,12 +827,12 @@ void Player::MoveWater(){
 		addPressTime_ = std::lerp(maxAddPress, minAddPress, totalSpeedRatio);
 
 		// 入力を受け付けない時間がプラスだったら入力しない
-		if(dontInputPressTime_ < 0) {
+		if(dontInputPressTime_ < 0){
 			// 押すと上昇、離すと沈む
-			if(Input::IsPressKey(DIK_SPACE)) {
+			if(Input::IsPressKey(DIK_SPACE)){
 				pressTime_ += addPressTime_ * GameTimer::TimeRate();
 
-			} else {
+			} else{
 				if(!autoFlying_){
 					pressTime_ -= addPressTime_ * GameTimer::TimeRate();
 				} else{
@@ -840,7 +840,7 @@ void Player::MoveWater(){
 				}
 			}
 			seCoolTime -= GameTimer::DeltaTime();
-			if(seCoolTime <= 0 && Input::IsTriggerKey(DIK_SPACE)) {
+			if(seCoolTime <= 0 && Input::IsTriggerKey(DIK_SPACE)){
 				AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.1f);
 				seCoolTime = 0.25f;
 			}/*
@@ -848,7 +848,7 @@ void Player::MoveWater(){
 				AudioPlayer::SinglShotPlay("MoveChangeDown.mp3", 0.2f);
 				seCoolTime = 0.25f;
 			}*/
-		} else {
+		} else{
 			dontInputPressTime_ -= GameTimer::DeltaTime();
 		}
 
@@ -916,7 +916,7 @@ void Player::MoveSky(){
 		collisionAllowableTime_ = kAllowableTime;
 		//diveTime_ = kDiveTime_;
 
-	} else {//////////// 上昇がある程度弱まったら下降を開始する /////////////////
+	} else{//////////// 上昇がある程度弱まったら下降を開始する /////////////////
 
 		collisionAllowableTime_ -= GameTimer::DeltaTime();
 
@@ -927,9 +927,9 @@ void Player::MoveSky(){
 		// ---------------- 滑空状態にするか下降状態にするかを判定するための処理 ----------------------- //
 		// 飛行中は押していると滑空する
 		// pressタイムがプラスの時は上を向いているので受け付けない
-		if(pressTime_ <= 0) {
-			if(!isFacedBird_) {
-				if(Input::IsPressKey(DIK_SPACE)) {
+		if(pressTime_ <= 0){
+			if(!isFacedBird_){
+				if(Input::IsPressKey(DIK_SPACE)){
 					// 押している時は滑空する
 					// 下降ベクトル
 					dropSpeed_ = 0.0f;
@@ -939,7 +939,7 @@ void Player::MoveSky(){
 					baseSpeed_ = defaultSpeed * 2.0f;
 
 
-				} else {
+				} else{
 					// 離しているので下降する
 					isCloseWing_ = true;
 					baseSpeed_ = defaultSpeed;
@@ -947,7 +947,7 @@ void Player::MoveSky(){
 
 			}
 		}
-		if(wingOpen != isCloseWing_ && !isCloseWing_) {
+		if(wingOpen != isCloseWing_ && !isCloseWing_){
 			AudioPlayer::SinglShotPlay("WingOpen.mp3", 0.14f);
 			seCoolTime = 0.25f;
 		}
@@ -964,7 +964,7 @@ void Player::MoveSky(){
 			dropSpeed_ = 0.0f;
 			//dropSpeed_ += gravity_* descentRatio * GameTimer::DeltaTime();
 
-			if(wingAnimatinoKeyFrame_ < 1.0f) {
+			if(wingAnimatinoKeyFrame_ < 1.0f){
 				wingAnimatinoKeyFrame_ += GameTimer::DeltaTime() * 4;
 			}
 
@@ -974,7 +974,7 @@ void Player::MoveSky(){
 			dropSpeed_ += gravity_ * GameTimer::DeltaTime();
 			dropVec = Vector3(0.0f, dropSpeed_, 0.0f) * GameTimer::TimeRate();
 
-			if(wingAnimatinoKeyFrame_ > 0.0f) {
+			if(wingAnimatinoKeyFrame_ > 0.0f){
 				wingAnimatinoKeyFrame_ -= GameTimer::DeltaTime() * 2;
 			}
 
