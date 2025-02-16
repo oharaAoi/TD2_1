@@ -104,6 +104,9 @@ void TutorialUI::Init(){
 	spaceSprite_->SetScale({ 0.5f, 0.5f });
 	spaceSprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
 
+	tutorialText_->Update();
+	textBackSprite_->Update();
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

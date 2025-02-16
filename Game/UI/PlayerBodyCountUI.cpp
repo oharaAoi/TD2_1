@@ -90,19 +90,22 @@ void PlayerBodyCountUI::Init() {
 	// ↓ announce
 	// -------------------------------------------------
 	bodySprite_ = Engine::CreateSprite("body.png");
-	bodySprite_->SetCenterPos({ -200, 160.0f });
+	bodySprite_->SetCenterPos({ -400, 160.0f });
 	bodySprite_->SetScale({ 0.6f, 0.6f });
+	bodySprite_->Update();
 
 	percentSprite_ = Engine::CreateSprite("percent2.png");
-	percentSprite_->SetCenterPos({ -200, 160.0f });
+	percentSprite_->SetCenterPos({ -400, 160.0f });
+	percentSprite_->Update();
 
 	for (int oi = 0; oi < 2; ++oi) {
 		bodyAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
-		bodyAnnounceNumber_[oi]->SetCenterPos({ -200, 160.0f });
+		bodyAnnounceNumber_[oi]->SetCenterPos({ -400, 160.0f });
 		bodyAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
 		bodyAnnounceNumber_[oi]->SetTextureSize(numberSpriteSize_);
-		bodyAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
+		//bodyAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
 		bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
+		bodyAnnounceNumber_[oi]->Update();
 	}
 
 	BodyRaitoState_ = BodyRaitoState::Raito_Zero;
@@ -111,8 +114,8 @@ void PlayerBodyCountUI::Init() {
 	announceTime_ = 0.0f;
 	announceMoveTime_ = 1.5f;
 
-	announcePos_ = { -200, 160.0f };
-	announceFadeInStartPos_ = { -200, 160.0f };
+	announcePos_ = { -300, 160.0f };
+	announceFadeInStartPos_ = { -300, 160.0f };
 	announceFadeOutPos_ = { 2000, 160.0f };
 	isAnnounceUiMove_ = false;
 	isAnnounceFinish_ = false;
@@ -381,6 +384,7 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 
 void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
 	if (isFlying) {
+		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
 		return;
 	}
 
@@ -392,11 +396,11 @@ void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
 
 	bool isUp = false;
 
-	if (bodyRaito_ < firstRaito_ + .1f) {
+	/*if (bodyRaito_ < (4.0f / 8.0f)) {
 		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
 	} else if (bodyRaito_ < secondRaito_) {
-		BodyRaitoState_ = BodyRaitoState::Raito_3;
-	}
+  		BodyRaitoState_ = BodyRaitoState::Raito_3;
+	}*/
 
 	if (bodyRaito_ >= firstRaito_ && BodyRaitoState_ == BodyRaitoState::Raito_Zero) {
 		if (BodyRaitoState_ < BodyRaitoState::Raito_3) {

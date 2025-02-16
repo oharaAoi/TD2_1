@@ -64,18 +64,21 @@ void PlayerSpeedCounter::Init(){
 	// -------------------------------------------------
 	speedSprite_ = Engine::CreateSprite("speed.png");
 	speedSprite_->SetScale({0.6f, 0.6f});
-	speedSprite_->SetCenterPos({ -200, 160.0f });
+	speedSprite_->SetCenterPos({ -500, 160.0f });
+	speedSprite_->Update();
 
 	percentSprite_ = Engine::CreateSprite("percent2.png");
-	percentSprite_->SetCenterPos({ -200, 160.0f });
+	percentSprite_->SetCenterPos({ -500, 160.0f });
+	percentSprite_->Update();
 
 	for (int oi = 0; oi < 2; ++oi) {
 		speedAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
-		speedAnnounceNumber_[oi]->SetCenterPos({ -200, 160.0f });
+		speedAnnounceNumber_[oi]->SetCenterPos({ -400, 160.0f });
 		speedAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
 		speedAnnounceNumber_[oi]->SetTextureSize(numberSpriteSize_);
-		speedAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
+		//speedAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
 		speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
+		speedAnnounceNumber_[oi]->Update();
 	}
 	
 	speedRaitoState_ = SpeedRaitoState::Raito_0;
@@ -84,8 +87,8 @@ void PlayerSpeedCounter::Init(){
 	announceTime_ = 0.0f;
 	announceMoveTime_ = 1.5f;
 
-	announcePos_ = { -200, 100.0f };
-	announceFadeInStartPos_ = { -200, 100.0f };
+	announcePos_ = { -300, 100.0f };
+	announceFadeInStartPos_ = { -300, 100.0f };
 	announceFadeOutPos_ = { 2000, 100.0f };
 	isAnnounceUiMove_ = false;
 	isAnnounceFinish_ = false;

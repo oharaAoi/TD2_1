@@ -218,8 +218,8 @@ private:
 	Vector2 numberOriginPos_;
 
 	float bodyRaito_ = 0.0f;
-	float firstRaito_ = .3f;
-	float secondRaito_ = .7f;
+	float firstRaito_ = (4.0f / 8.0f);
+	float secondRaito_ = (6.0f / 8.0f);
 
 };
 
