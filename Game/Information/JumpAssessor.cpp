@@ -57,7 +57,7 @@ void JumpAssessor::Update(){
 	static  float kApeearTime = 0.2f;
 	static float appearTimer = 0.0f;
 	static bool isAlreadyAppeared = false;
-	static  float kDisplayTime = 1.0f;
+	static  float kDisplayTime = 1.5f;
 	static float displayTimer = 0.0f;
 	static Vector3 offset = { 0.5f,0.5f,0.5f };
 	static Vector2 percentageFieldSize = { 209.0f, 120.0f };

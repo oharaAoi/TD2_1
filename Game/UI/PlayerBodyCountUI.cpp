@@ -91,7 +91,7 @@ void PlayerBodyCountUI::Init() {
 	// -------------------------------------------------
 	bodySprite_ = Engine::CreateSprite("body.png");
 	bodySprite_->SetScale({ 0.6f, 0.6f });
-	percentSprite_ = Engine::CreateSprite("percent.png");
+	percentSprite_ = Engine::CreateSprite("percent2.png");
 	for (int oi = 0; oi < 2; ++oi) {
 		bodyAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
 		bodyAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);

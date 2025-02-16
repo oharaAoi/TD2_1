@@ -64,7 +64,7 @@ void PlayerSpeedCounter::Init(){
 	// -------------------------------------------------
 	speedSprite_ = Engine::CreateSprite("speed.png");
 	speedSprite_->SetScale({0.6f, 0.6f});
-	percentSprite_ = Engine::CreateSprite("percent.png");
+	percentSprite_ = Engine::CreateSprite("percent2.png");
 	for (int oi = 0; oi < 2; ++oi) {
 		speedAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
 		speedAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
