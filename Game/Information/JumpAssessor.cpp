@@ -64,8 +64,10 @@ void JumpAssessor::Update(){
 	static float spriteTheta = 0.0f;
 	static float evalutionMaxScale = 0.3f;
 	static float digitMaxScale = 1.0f;
-	static Vector2 screenOffset = { 50.0f,0.0f };
+	static Vector2 kScreenOffset = { 50.0f,0.0f };
+	static Vector2 screenOffset = screenOffset;
 	static float evalutionSeparetorSize = 40.0f;
+	static Vector2 evalutionBaseOffset = Vector2(-percentageFieldSize.x * 0.5f, -percentageFieldSize.y * 0.6f);
 	static float h = 0.0f;
 
 #ifdef _DEBUG
@@ -76,6 +78,7 @@ void JumpAssessor::Update(){
 	ImGui::DragFloat("evalutionMaxScale", &evalutionMaxScale, 0.01f);
 	ImGui::DragFloat3("offset", &offset.x, 0.01f);
 	ImGui::DragFloat2("percentageFieldSize", &percentageFieldSize.x, 0.01f);
+	ImGui::DragFloat2("evalutionBaseOffset", &evalutionBaseOffset.x, 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -116,6 +119,11 @@ void JumpAssessor::Update(){
 		h += GameTimer::DeltaTime();
 	}
 
+	// 桁が少ないときは左詰めする
+	int arrignmentCount = !isDigitVisible_[0] + !isDigitVisible_[1];
+	screenOffset = kScreenOffset + Vector2(-(percentageFieldSize.x / 4) * arrignmentCount, 0.0f);
+
+
 	// スプライトのトランスフォームを更新
 	for(int i = 0; i < 4; ++i){
 		Vector3 numberOffset = { i * (percentageFieldSize.x / 4) - percentageFieldSize.x * 0.5f,0.0f,0.0f };
@@ -131,9 +139,9 @@ void JumpAssessor::Update(){
 	}
 
 	for(int i = 0; i < 2; i++){
-		Vector2 evalutionOffset = Vector2(percentageFieldSize.x * 0.5f, -percentageFieldSize.y * 0.5f + (i * -evalutionSeparetorSize));
+		Vector2 evalutionOffset = evalutionBaseOffset + Vector2(0.0f,(i * -evalutionSeparetorSize));
 		evalutionOffset *= ease;
-		instance_->evaluationSprite_[i]->SetCenterPos(Vector2(screenPos.x, screenPos.y) + evalutionOffset + screenOffset);
+		instance_->evaluationSprite_[i]->SetCenterPos(Vector2(screenPos.x, screenPos.y) + evalutionOffset + kScreenOffset);
 		instance_->evaluationSprite_[i]->SetScale(Vector2(t, t) * evalutionMaxScale);
 		instance_->evaluationSprite_[i]->Update();
 	}
