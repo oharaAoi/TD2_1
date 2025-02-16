@@ -3,6 +3,8 @@
 
 PlayerBody::PlayerBody(){
 	scaleUpTimeCount_ = 0.0f;
+	scaleDownTimeCount_ = 0.0f;
+	isScaleDown_ = false;
 }
 
 PlayerBody::~PlayerBody(){}
@@ -58,12 +60,30 @@ void PlayerBody::Debug(int num){
 }
 
 void PlayerBody::ScaleUpBody() {
-	scaleUpTimeCount_ += GameTimer::DeltaTime();
-	scaleUpTimeCount_ = std::clamp(scaleUpTimeCount_, 0.0f, scaleUpTime_);
+	// scaleを標準のサイズに戻す
+	if (isScaleDown_) {
+		// scaleを大きくする
+		scaleDownTimeCount_ += GameTimer::DeltaTime();
+		scaleDownTimeCount_ = std::clamp(scaleUpTimeCount_, 0.0f, scaleUpTime_);
 
-	float t = scaleUpTimeCount_ / scaleUpTime_;
-	Vector3 lerpScale = Vector3::Lerp({0,0,0}, {1,1,1}, EaseOutBounce(t));
-	transform_->SetScale(lerpScale);
+		float t = scaleDownTimeCount_ / scaleDownTime_;
+		Vector3 lerpScale = Vector3::Lerp({ 0,0,0 }, upScale_, EaseOutElastic(t));
+		transform_->SetScale(lerpScale);
+
+		if (scaleDownTimeCount_ >= scaleDownTime_) {
+			isScaleDown_ = false;
+		}
+
+	} else {
+		// scaleを大きくする
+		scaleUpTimeCount_ += GameTimer::DeltaTime();
+		scaleUpTimeCount_ = std::clamp(scaleUpTimeCount_, 0.0f, scaleUpTime_);
+
+		float t = scaleUpTimeCount_ / scaleUpTime_;
+		Vector3 lerpScale = Vector3::Lerp(upScale_, { 1,1,1 }, EaseOutBounce(t));
+		transform_->SetScale(lerpScale);
+	}
+	
 
 	if (scaleUpTimeCount_ >= scaleUpTime_) {
 		isNewCreate_ = false;

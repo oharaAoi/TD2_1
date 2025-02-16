@@ -34,6 +34,13 @@ private:
 	Quaternion newRotate;
 
 	bool isNewCreate_ = true;
+	bool isScaleDown_ = false;
+
 	float scaleUpTimeCount_ = 0.0f;
 	float scaleUpTime_ = 1.0f;
+
+	float scaleDownTimeCount_ = 0.0f;
+	float scaleDownTime_ = 1.0f;
+
+	Vector3 upScale_ = {14.0f, 0.2f,2.0f};
 };
