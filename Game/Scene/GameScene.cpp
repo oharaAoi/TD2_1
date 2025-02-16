@@ -522,6 +522,14 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ UIの更新
 	// -------------------------------------------------
+	if (currentState_ == GAME_STATE::TUTORIAL) {
+		playerSpeedCounter_->SetIsTutorial(true);
+		playerBodyCountUI_->SetIsTutorial(true);
+	} else {
+		playerSpeedCounter_->SetIsTutorial(false);
+		playerBodyCountUI_->SetIsTutorial(false);
+	}
+
 	if(currentState_ != GAME_STATE::TITLE) {
 		//flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 		if(!isStartupScene_){
@@ -537,7 +545,7 @@ void GameScene::Update(){
 	}
 
 	if(currentState_ != GAME_STATE::TITLE) {
-		playerBodyCountUI_->Update(player_->GetBodyCount());
+		playerBodyCountUI_->Update(player_->GetBodyCount(), player_->GetIsFlying());
 	}
 
 	finishUI_->Update();
