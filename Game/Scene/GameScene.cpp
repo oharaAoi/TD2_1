@@ -19,6 +19,7 @@ void GameScene::Finalize(){
 	windSound_->Finalize();
 	swimSound_->Finalize();
 	AnimetionEffectManager::GetInstance()->Finalize();
+	JumpAssessor::GetInstance()->Finalize();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

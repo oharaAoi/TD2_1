@@ -34,6 +34,8 @@ public:
 	Sprite();
 	~Sprite();
 
+	void Finalize();
+
 	void Init(ID3D12Device* device, const std::string& fileName);
 	/// <summary>
 	/// 更新処理

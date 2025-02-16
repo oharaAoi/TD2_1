@@ -17,6 +17,8 @@ public:
 	void Update();
 	void Draw();
 
+	void Finalize();
+
 public:
 	void SetJumpData(float speed,int32_t bodyCount, WorldTransform* parentWT,Camera* pCamera);
 

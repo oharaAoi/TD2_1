@@ -13,6 +13,17 @@ Sprite::~Sprite() {
 	transformBuffer_.Reset();
 }
 
+void Sprite::Finalize() {
+	vertexData_ = nullptr;
+	indexData_ = nullptr;
+	materialData_ = nullptr;
+	transformData_ = nullptr;
+	vertexBuffer_.Reset();
+	indexBuffer_.Reset();
+	materialBuffer_.Reset();
+	transformBuffer_.Reset();
+}
+
 void Sprite::Init(ID3D12Device* device, const std::string& fileName) {
 	textureSize_ = TextureManager::GetInstance()->GetTextureSize(fileName);
 	textureName_ = fileName;

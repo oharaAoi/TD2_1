@@ -166,6 +166,18 @@ void JumpAssessor::Draw(){
 	}
 }
 
+void JumpAssessor::Finalize() {
+	for (int i = 0; i < 4; ++i) {
+		instance_->percentageSprite_[i]->Finalize();
+	}
+
+	for (int i = 0; i < 2; i++) {
+		instance_->evaluationSprite_[i]->Finalize();
+	}
+
+	instance_ = nullptr;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 // ジャンプの評価を行う
