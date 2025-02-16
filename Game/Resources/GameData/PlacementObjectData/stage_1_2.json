@@ -63,6 +63,27 @@
             ],
             "subType": 0
         },
+        "BIRD_7": {
+            "objType": 2,
+            "position": [
+                50.0,
+                243.3000030517578,
+                0.0
+            ],
+            "radius": 13.0,
+            "rotate": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                8.0,
+                8.0,
+                8.0
+            ],
+            "subType": 0
+        },
         "FISH_3": {
             "objType": 1,
             "position": [

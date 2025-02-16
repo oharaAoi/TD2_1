@@ -8,6 +8,13 @@
 #include "Engine/Math/Easing.h"
 #include "Engine/Math/Vector4.h"
 
+enum BodyRaitoState {
+	Raito_Zero,
+	Raito_3,
+	Raito_7,
+	Raito_1,
+};
+
 /// <summary>
 /// Playerの体の数を数える
 /// </summary>
@@ -72,6 +79,34 @@ public:
 	/// <param name="pos"></param>
 	void SetDrop(const Vector2& pos);
 
+	// ------------------- bodyの割合に関する処理 ------------------- //
+
+	void SpeedRaitoUpdate(float speed);
+
+	void SpeedAnnounceMove();
+
+	/// <summary>
+	/// 桁数を割り出す
+	/// </summary>
+	/// <returns></returns>
+	float DegitCount(float value);
+
+	/// <summary>
+	/// 実数値の計算
+	/// </summary>
+	/// <param name="value"></param>
+	/// <param name="n"></param>
+	/// <returns></returns>
+	float IntegerCount(float value, int n);
+
+	/// <summary>
+	/// Spriteの左上座標を決める
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
+	Vector2 CalculationSpriteLT(float value);
+
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
@@ -115,6 +150,8 @@ private:
 
 	Vector2 lastBodyPos_;
 
+	Vector2 bodyScale_ = { .7f, .7f };
+
 	// フラグ
 	bool isUiMove_;
 	bool isFadeIn_;
@@ -142,5 +179,38 @@ private:
 	float dropRotate_;
 
 	bool isDrop_;
+
+	// -------------------------------------------------
+	// ↓ bodyのアナウンス
+	// -------------------------------------------------
+
+	BodyRaitoState BodyRaitoState_ = Raito_Zero;
+	bool isAnnounce_ = false;
+
+	std::unique_ptr<Sprite> bodySprite_;
+	std::unique_ptr<Sprite> percentSprite_;
+	std::unique_ptr<Sprite> bodyAnnounceNumber_[2];
+
+	Vector2 announcePos_;
+	Vector2 bodyLocalPos_ = { -100.0f, 0.0f };
+	Vector2 percentLocalPos_ = { 125.0f, 0.0f };
+	Vector2 numberLocalPos_;
+	Vector2 numberSpriteDivision_ = { 64.0f, 0.0f };
+
+	// Parameter
+	float announceTime_;
+	float announceMoveTime_ = 1.8f;
+
+	Vector2 announceFadeInStartPos_;
+	Vector2 announceFadeOutPos_;
+	Vector2 announceBodyMaxPos_;
+
+	// フラグ
+	bool isAnnounceUiMove_;
+	bool isAnnounceFadeIn_;
+	bool isAnnounceFinish_;
+
+	Vector2 numberSpriteSize_ = { 48.0f, 72.0f };
+	Vector2 numberOriginPos_;
 };
 

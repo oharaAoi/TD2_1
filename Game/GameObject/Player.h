@@ -113,6 +113,8 @@ public:
 	void SetGamePlayTimer(GamePlayTimer* gamePlayTimer) { gamePlayTimer_ = gamePlayTimer; }
 	void SetBodyUpEffect(BodyUpEffect* bodyUpEffect) { bodyUpEffect_ = bodyUpEffect; }
 
+	void SetIsTutorial(bool isTutorial) { isTutorial_ = isTutorial; }
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif // _DEBUG
@@ -246,6 +248,8 @@ private:
 	bool isEnableLaunch_;	// 胴体で再発射可能かどうか
 	bool isjet_;			// 胴体発射したか
 
+	bool isTutorial_ = false;
+
 	// データ格納変数　----------------------------------
 
 	std::unique_ptr<WorldTransform> aboveWaterSurfacePos;// プレイヤーの上部の水面の座標
@@ -253,7 +257,7 @@ private:
 	Vector3 jumpUI_Translate_Offset_;
 	float jumpUI_Scale_Offset_;
 	float jumpUI_Rotate_Offset_;
-	bool isDebugUI_Visible_ = true;
+	bool isDebugUI_Visible_ = false;
 
 	float swimmigDepth_;	// プレイヤーがどれだけ潜っているか
 	uint32_t getCoinNum_ = 0;// コインを何枚取得したか
@@ -286,5 +290,6 @@ private:
 public:// アクセッサ
 
 	void SetIsMove(bool flag){ isMove_ = flag; }
+	const float GetDefaultSpeed() const{ return defaultSpeed; }
 };
 

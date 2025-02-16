@@ -200,6 +200,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number2.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "percent.png");
 	//TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankBack.png");
 	//TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "RankFront.png");
 	//TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "Rank.png");
@@ -284,6 +286,9 @@ void SceneManager::Load() {
 
 	// 1up
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "1up.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speed.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "body.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "percent.png");
 
 	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");

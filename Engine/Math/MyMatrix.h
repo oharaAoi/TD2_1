@@ -2,6 +2,7 @@
 #include <Engine/Math/Matrix3x3.h>
 #include <Engine/Math/Matrix4x4.h>
 #include <Engine/Math/Vector3.h>
+#include <Engine/Math/Vector2.h>
 #include <assert.h>
 #include <cmath>
 
@@ -79,6 +80,7 @@ Matrix4x4 MakeRotateXMatrix(const float& radian);
 Matrix4x4 MakeRotateYMatrix(const float& radian);
 Matrix4x4 MakeRotateZMatrix(const float& radian);
 Matrix4x4 MakeRotateXYZMatrix(const Vector3& radian);
+Matrix3x3 MakeRotateMatrix(const float& radian);
 
 /// <summary>
 /// 三次元アフィン変換行列
@@ -98,6 +100,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const
 /// <param name="matrix"></param>
 /// <returns></returns>
 Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+Vector2 Transform(const Vector2& vector, const Matrix3x3& matrix);
 
 /// <summary>
 /// 正射影行列

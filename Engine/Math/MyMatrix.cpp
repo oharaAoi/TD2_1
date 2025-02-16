@@ -279,6 +279,15 @@ Matrix4x4 MakeRotateXYZMatrix(const Vector3& radian) {
     return result;
 }
 
+Matrix3x3 MakeRotateMatrix(const float& radian){
+	Matrix3x3 result{};
+	result.m[0][0] = std::cos(radian);
+	result.m[0][1] = std::sin(radian);
+	result.m[1][0] = -std::sin(radian);
+	result.m[1][1] = std::cos(radian);
+	return result;
+}
+
 
 /// <summary>
 /// 3次元アフィン変換
@@ -336,6 +345,17 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
     result.z /= w;
 
     return result;
+}
+
+Vector2 Transform(const Vector2& vector, const Matrix3x3& matrix){
+	Vector2 result;
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + 1.0f * matrix.m[2][0];
+	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + 1.0f * matrix.m[2][1];
+	float w = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + 1.0f * matrix.m[2][2];
+	//assert(w != 0.0f);
+	result.x /= w;
+	result.y /= w;
+	return result;
 }
 
 /// <summary>

@@ -1,4 +1,5 @@
 #include "PlayerBodyCountUI.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 PlayerBodyCountUI::PlayerBodyCountUI() {}
 PlayerBodyCountUI::~PlayerBodyCountUI() {}
@@ -27,8 +28,12 @@ void PlayerBodyCountUI::Init() {
 	head_UI_ = Engine::CreateSprite("KoiGeuge_Head.png");
 	tail_UI_ = Engine::CreateSprite("KoiGeuge_Tail.png");
 	headUIPos_.x = 5;
+
 	head_UI_->SetCenterPos(headUIPos_);
 	tail_UI_->SetCenterPos(tailUIPos_);
+
+	head_UI_->SetScale(bodyScale_);
+	tail_UI_->SetScale(bodyScale_);
 
 	isFadeIn_ = true;
 	time_ = 0.0f;
@@ -39,10 +44,10 @@ void PlayerBodyCountUI::Init() {
 
 	effectMoveTime_ = 0.6f;
 
-	interval_bodyUI_ = 51;
+	interval_bodyUI_ = 36;
 
 	for (std::list<BodyUIData>::iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
-		(*it).sprite_->SetScale({ 1.0f, 1.0f });
+		(*it).sprite_->SetScale(bodyScale_);
 		(*it).sprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.4f });
 		(*it).sprite_->Update();
 		++it;
@@ -50,6 +55,7 @@ void PlayerBodyCountUI::Init() {
 
 	for (uint32_t oi = 0; oi < 7; ++oi) {
 		auto& add = backBody_UI_List_.emplace_back(BodyUIData());
+		add.sprite_->SetScale(bodyScale_);
 		add.sprite_->SetCenterPos({
 					tailUIPos_.x + (interval_bodyUI_ * (backBody_UI_List_.size()) + 6),
 					tailUIPos_.y
@@ -79,6 +85,33 @@ void PlayerBodyCountUI::Init() {
 	dropRotate_ = 375.0f;
 
 	isDrop_ = false;
+
+	// -------------------------------------------------
+	// ↓ announce
+	// -------------------------------------------------
+	bodySprite_ = Engine::CreateSprite("body.png");
+	bodySprite_->SetScale({ 0.6f, 0.6f });
+	percentSprite_ = Engine::CreateSprite("percent.png");
+	for (int oi = 0; oi < 2; ++oi) {
+		bodyAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
+		bodyAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
+		bodyAnnounceNumber_[oi]->SetTextureSize(numberSpriteSize_);
+		bodyAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
+		bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
+	}
+
+	BodyRaitoState_ = BodyRaitoState::Raito_Zero;
+	isAnnounce_ = false;
+
+	announceTime_ = 0.0f;
+	announceMoveTime_ = 1.5f;
+
+	announcePos_ = { -200, 160.0f };
+	announceFadeInStartPos_ = { -200, 160.0f };
+	announceFadeOutPos_ = { 2000, 160.0f };
+	isAnnounceUiMove_ = false;
+	isAnnounceFinish_ = false;
+	isAnnounceFadeIn_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,10 +119,15 @@ void PlayerBodyCountUI::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::Update(int playerBodyCount) {
+
+	SpeedRaitoUpdate(float(playerBodyCount));
+	SpeedAnnounceMove();
+
 	// 8以上かつ動いて入なかったら
 	if (playerBodyCount == 8) {
 		if (preCount_ != 8) {
 			isUiMove_ = true;
+			AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 		}
 	}
 
@@ -129,7 +167,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 			float t = (*it).time_ / 0.5f;
 
 			Vector2 scale;
-			scale = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutBack(t));
+			scale = Vector2::Lerp({ 0.0f, 0.0f }, bodyScale_, EaseOutBack(t));
 			scale.x = std::clamp(scale.x, 0.0f, 1.4f);
 			scale.y = std::clamp(scale.y, 0.0f, 1.4f);
 			(*it).sprite_->SetScale(scale);
@@ -141,7 +179,7 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 	}
 
 	for (std::list<BodyUIData>::iterator it = backBody_UI_List_.begin(); it != backBody_UI_List_.end();) {
-		(*it).sprite_->SetScale({ 1.0f, 1.0f });
+		(*it).sprite_->SetScale(bodyScale_);
 		(*it).sprite_->SetColor({ 1.0f, 1.0f, 1.0f, 0.4f });
 		(*it).sprite_->Update();
 		++it;
@@ -193,6 +231,13 @@ void PlayerBodyCountUI::Update(int playerBodyCount) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::Draw() const {
+
+	bodySprite_->Draw();
+	percentSprite_->Draw();
+	for (int oi = 0; oi < 2; ++oi) {
+		bodyAnnounceNumber_[oi]->Draw();
+	}
+
 
 	// -------------------------------------------------
 	// ↓ effectを描画する
@@ -263,6 +308,7 @@ void PlayerBodyCountUI::EmiteEffect() {
 
 void PlayerBodyCountUI::AddBody() {
 	auto& add = body_UI_List_.emplace_back(BodyUIData());
+	add.sprite_->SetScale(bodyScale_);
 	add.sprite_->SetCenterPos({
 		tailUIPos_.x + (interval_bodyUI_ * (body_UI_List_.size()) + 6),
 		tailUIPos_.y
@@ -326,6 +372,124 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 	bodyReleseEffect_->SetCenterPos(pos);
 	dropDownCount_ = 0.0f;
 	isDrop_ = true;
+}
+
+void PlayerBodyCountUI::SpeedRaitoUpdate(float speed) {
+	float BodyRaito = speed / 8.0f;
+
+	bool isUp = false;
+
+	if (BodyRaito < 0.2f) {
+		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
+	} else if (BodyRaito < 0.7f) {
+		BodyRaitoState_ = BodyRaitoState::Raito_3;
+	}
+
+	if (BodyRaito >= 0.2f && BodyRaitoState_ == BodyRaitoState::Raito_Zero) {
+		if (BodyRaitoState_ < BodyRaitoState::Raito_3) {
+			isUp = true;
+		}
+	} else if (BodyRaito >= 0.7f && BodyRaitoState_ == BodyRaitoState::Raito_3) {
+		if (BodyRaitoState_ < BodyRaitoState::Raito_7) {
+			isUp = true;
+		}
+	}
+
+	if (isUp) {
+		if (BodyRaitoState_ < BodyRaitoState::Raito_3) {
+			BodyRaitoState_ = BodyRaitoState::Raito_3;
+			isAnnounceUiMove_ = true;
+			isAnnounceFinish_ = false;
+			announceTime_ = 0.0f;
+		} else if (BodyRaitoState_ < BodyRaitoState::Raito_7) {
+			BodyRaitoState_ = BodyRaitoState::Raito_7;
+			isAnnounceUiMove_ = true;
+			isAnnounceFinish_ = false;
+			announceTime_ = 0.0f;
+		} else if (BodyRaitoState_ < BodyRaitoState::Raito_1) {
+			BodyRaitoState_ = BodyRaitoState::Raito_1;
+			isAnnounceUiMove_ = false;
+		}
+	}
+
+	bodySprite_->SetCenterPos(announcePos_ + bodyLocalPos_);
+	percentSprite_->SetCenterPos(announcePos_ + percentLocalPos_);
+
+	bodySprite_->Update();
+	percentSprite_->Update();
+	for (int oi = 0; oi < 2; ++oi) {
+		if (BodyRaitoState_ == BodyRaitoState::Raito_3) {
+			bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(20.0f, oi + 1)));
+		} else if (BodyRaitoState_ == BodyRaitoState::Raito_7) {
+			bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(70.0f, oi + 1)));
+		}
+		bodyAnnounceNumber_[oi]->SetCenterPos(announcePos_ + numberLocalPos_ + (numberSpriteDivision_ * (1 - oi)));
+		bodyAnnounceNumber_[oi]->Update();
+	}
+}
+
+void PlayerBodyCountUI::SpeedAnnounceMove() {
+	if (isAnnounceFinish_) { return; }
+	if (!isAnnounceUiMove_) { return; }
+
+	// fadeがtrueだったら画面外から画面ないへ
+	announceTime_ += GameTimer::DeltaTime();
+	float t = announceTime_ / announceMoveTime_;
+	if (isAnnounceFadeIn_) {
+		announcePos_ = Vector2::Lerp(announceFadeInStartPos_, Vector2(640, announceFadeInStartPos_.y), EaseOutElastic(t));
+	} else {
+		announcePos_ = Vector2::Lerp(Vector2(640, announceFadeInStartPos_.y), announceFadeOutPos_, EaseInOutBack(t));
+	}
+
+	// 時間を過ぎたら
+	if (announceTime_ >= announceMoveTime_) {
+		announceTime_ = 0.0f;
+
+		if (!isAnnounceFadeIn_) {
+			isAnnounceFinish_ = true;
+		}
+		isAnnounceFadeIn_ = !isAnnounceFadeIn_;
+	}
+}
+
+float PlayerBodyCountUI::DegitCount(float value) {
+	if (value == 0.0f) { return 0; }
+	// 桁数 = log10(値) + 1(std::log10はvalueが10以下の時は0が返される)
+	return static_cast<float>(std::floor(std::log10(value)) + 1);
+}
+
+float PlayerBodyCountUI::IntegerCount(float value, int n) {
+	if (value <= 0.0f) {
+		return 0.0f;
+	}
+	// n桁目を取得するために数値を10で割ったあまりから割り出す
+	int num = (static_cast<int>(value) / static_cast<int>(std::pow(10, n - 1)));
+	int result = num % 10;
+	return static_cast<float>(result);
+}
+
+Vector2 PlayerBodyCountUI::CalculationSpriteLT(float value) {
+	if (value == 0) {
+		return { 0.0f, 0.0f };
+	} else if (value == 1) {
+		return { numberSpriteSize_.x , 0.0f };
+	} else if (value == 2) {
+		return { numberSpriteSize_.x * 2.0f, 0.0f };
+	} else if (value == 3) {
+		return { numberSpriteSize_.x * 3.0f, 0.0f };
+	} else if (value == 4) {
+		return { numberSpriteSize_.x * 4.0f, 0.0f };
+	} else if (value == 5) {
+		return { numberSpriteSize_.x * 5.0f, 0.0f };
+	} else if (value == 6) {
+		return { numberSpriteSize_.x * 6.0f, 0.0f };
+	} else if (value == 7) {
+		return { numberSpriteSize_.x * 7.0f, 0.0f };
+	} else if (value == 8) {
+		return { numberSpriteSize_.x * 8.0f , 0.0f };
+	} else {
+		return { numberSpriteSize_.x * 9.0f , 0.0f };
+	}
 }
 
 #ifdef _DEBUG

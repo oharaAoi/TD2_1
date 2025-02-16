@@ -89,6 +89,7 @@ void GameScene::Init(){
 
 	playerSpeedCounter_ = std::make_unique<PlayerSpeedCounter>();
 	playerSpeedCounter_->Init();
+	playerSpeedCounter_->SetMaxSpeed(player_->GetMaxMoveSpeed());
 
 	playerBodyCountUI_ = std::make_unique<PlayerBodyCountUI>();
 	playerBodyCountUI_->Init();
@@ -191,6 +192,7 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	player_->SetGamePlayTimer(gamePlayTimer_.get());
 	player_->SetBodyUpEffect(bodyUpEffect_.get());
+	player_->SetIsTutorial(true);
 
 	borders_.push(250.0f);
 	borders_.push(500.0f);
@@ -320,6 +322,7 @@ void GameScene::Update(){
 					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
 					gameStartUI_->SetUI();
 					missionUI_->Start();
+					player_->SetIsTutorial(false);
 				}
 			}
 		}
@@ -808,7 +811,8 @@ void GameScene::Update_TUTORIAL(){
 #ifdef _DEBUG
 	if(Input::IsTriggerKey(DIK_Z)){
 		currentState_ = GAME_STATE::GAME;
-	}
+		player_->SetIsTutorial(false);
+}
 #endif // _DEBUG
 
 
@@ -818,6 +822,7 @@ void GameScene::Update_TUTORIAL(){
 		currentState_ = GAME_STATE::GAME;
 		gameStartUI_->SetUI();
 		missionUI_->Start();
+		player_->SetIsTutorial(false);
 	}
 
 	// UIの更新
@@ -849,7 +854,7 @@ void GameScene::UpdateColliderList(){
 		if(lenght < obstaclesManager_->GetUpdateLenght()){
 			collisionManager_->AddCollider(obstacle.object_.get());
 		}
-	}
+	} 
 
 	for(auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()){
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());

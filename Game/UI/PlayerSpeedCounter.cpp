@@ -1,12 +1,13 @@
 #include "PlayerSpeedCounter.h"
 #include "Engine/Math/Easing.h"
+#include "Engine/Audio/AudioPlayer.h"
 
 PlayerSpeedCounter::PlayerSpeedCounter(){}
 
 PlayerSpeedCounter::~PlayerSpeedCounter(){}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Init(){
@@ -43,7 +44,7 @@ void PlayerSpeedCounter::Init(){
 	// ↓ speedMax
 	// -------------------------------------------------
 
-	speedMaxPos_ = { -700, 160.0f };
+	speedMaxPos_ = { -700, drawHeight };
 	speedMaxUI_ = Engine::CreateSprite("speedMax.png");
 	speedMaxUI_->SetTextureCenterPos(speedMaxPos_);
 	speedMaxUI_->SetScale(Vector2(0.7f, .7f));
@@ -52,15 +53,42 @@ void PlayerSpeedCounter::Init(){
 	time_ = 0.0f;
 	moveTime_ = 1.5f;
 
-	fadeInStartPos_ = { -700, 160.0f };
-	fadeOutPos_ = { 2000, 160.0f };
+	fadeInStartPos_ = { -700, drawHeight };
+	fadeOutPos_ = { 2000, drawHeight };
 	isUiMove_ = false;
 	isFinish_ = false;
 	isFadeIn_ = true;
+
+	// -------------------------------------------------
+	// ↓ announce
+	// -------------------------------------------------
+	speedSprite_ = Engine::CreateSprite("speed.png");
+	speedSprite_->SetScale({0.6f, 0.6f});
+	percentSprite_ = Engine::CreateSprite("percent.png");
+	for (int oi = 0; oi < 2; ++oi) {
+		speedAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
+		speedAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
+		speedAnnounceNumber_[oi]->SetTextureSize(numberSpriteSize_);
+		speedAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
+		speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(static_cast<float>(0.0f), oi)));
+	}
+	
+	speedRaitoState_ = SpeedRaitoState::Raito_0;
+	isAnnounce_ = false;
+
+	announceTime_ = 0.0f;
+	announceMoveTime_ = 1.5f;
+
+	announcePos_ = { -200, 100.0f };
+	announceFadeInStartPos_ = { -200, 100.0f };
+	announceFadeOutPos_ = { 2000, 100.0f };
+	isAnnounceUiMove_ = false;
+	isAnnounceFinish_ = false;
+	isAnnounceFadeIn_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPlayerFlying){
@@ -75,11 +103,22 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 	needleSprite_->SetRotate(std::lerp(0.0f, needleAngleMax_, easeRatio));
 	needleSprite_->Update();
 
+	// -------------------------------------------------
+	// ↓ 現在のspeedの割合を出す
+	// -------------------------------------------------
+
+	SpeedRaitoUpdate(speed);
+	SpeedAnnounceMove();
+
+	// -------------------------------------------------
+	// ↓ speedMaxになる時の計算を行う
+	// -------------------------------------------------
 	if (!isPlayerFlying) {
-		if (speed == 150.0f) {
-			if (preSpeed_ != 150.0f) {
+		if (speed == maxSpeed_) {
+			if (preSpeed_ != maxSpeed_) {
 				isUiMove_ = true;
 				isFinish_ = false;
+				AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 			}
 		}
 	}
@@ -96,10 +135,16 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
+// ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Draw() const{
+	speedSprite_->Draw();
+	percentSprite_->Draw();
+	for (int oi = 0; oi < 2; ++oi) {
+		speedAnnounceNumber_[oi]->Draw();
+	}
+
 	backSprite_->Draw();
 	//taniSprite_->Draw();
 	needleSprite_->Draw();
@@ -111,9 +156,95 @@ void PlayerSpeedCounter::Draw() const{
 	speedMaxUI_->Draw();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//===========================================================================================//
+//
+// Speedの割合に関する処理
+//
+//===========================================================================================//
+
+void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
+	float speedRaito = speed / maxSpeed_;
+
+	bool isUp = false;
+
+	if (speedRaito < 0.3f) {
+		speedRaitoState_ = SpeedRaitoState::Raito_0;
+	} else if (speedRaito < 0.7f) {
+		speedRaitoState_ = SpeedRaitoState::Raito_30;
+	}
+
+	if (speedRaito >= 0.3f && speedRaitoState_ == SpeedRaitoState::Raito_0) {
+		if (speedRaitoState_ < SpeedRaitoState::Raito_30) {
+			isUp = true;
+		}
+	} else if (speedRaito >= 0.7f && speedRaitoState_ == SpeedRaitoState::Raito_30) {
+		if (speedRaitoState_ < SpeedRaitoState::Raito_70) {
+			isUp = true;
+		}
+	}
+
+	if (isUp) {
+		if (speedRaitoState_ < SpeedRaitoState::Raito_30) {
+			speedRaitoState_ = SpeedRaitoState::Raito_30;
+			isAnnounceUiMove_ = true;
+			isAnnounceFinish_ = false;
+			announceTime_ = 0.0f;
+		} else if(speedRaitoState_ < SpeedRaitoState::Raito_70) {
+			speedRaitoState_ = SpeedRaitoState::Raito_70;
+			isAnnounceUiMove_ = true;
+			isAnnounceFinish_ = false;
+			announceTime_ = 0.0f;
+		} else if (speedRaitoState_ < SpeedRaitoState::Raito_100) {
+			speedRaitoState_ = SpeedRaitoState::Raito_100;
+			isAnnounceUiMove_ = false;
+		}
+	}
+
+	speedSprite_->SetCenterPos(announcePos_ + speedLocalPos_);
+	percentSprite_->SetCenterPos(announcePos_ + percentLocalPos_);
+
+	speedSprite_->Update();
+	percentSprite_->Update();
+	for (int oi = 0; oi < 2; ++oi) {
+		if (speedRaitoState_ == SpeedRaitoState::Raito_30) {
+			speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(30.0f, oi + 1)));
+		} else if(speedRaitoState_ == SpeedRaitoState::Raito_70) {
+			speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(70.0f, oi + 1)));
+		}
+		speedAnnounceNumber_[oi]->SetCenterPos(announcePos_ + numberLocalPos_ + (numberSpriteDivision_ * (1 - oi)));
+		speedAnnounceNumber_[oi]->Update();
+	}
+}
+
+void PlayerSpeedCounter::SpeedAnnounceMove() {
+	if (isAnnounceFinish_) { return; }
+	if (!isAnnounceUiMove_) { return; }
+
+	// fadeがtrueだったら画面外から画面ないへ
+	announceTime_ += GameTimer::DeltaTime();
+	float t = announceTime_ / announceMoveTime_;
+	if (isAnnounceFadeIn_) {
+		announcePos_ = Vector2::Lerp(announceFadeInStartPos_, Vector2(640, announceFadeInStartPos_.y), EaseOutElastic(t));
+	} else {
+		announcePos_ = Vector2::Lerp(Vector2(640, announceFadeInStartPos_.y), announceFadeOutPos_, EaseInOutBack(t));
+	}
+
+	// 時間を過ぎたら
+	if (announceTime_ >= announceMoveTime_) {
+		announceTime_ = 0.0f;
+
+		if (!isAnnounceFadeIn_) {
+			isAnnounceFinish_ = true;
+		}
+		isAnnounceFadeIn_ = !isAnnounceFadeIn_;
+	}
+}
+
+//===========================================================================================//
+//
+// speedMaxに関する処理
+//
+//===========================================================================================//
 
 void PlayerSpeedCounter::SpeedMaxUpdate() {
 	if (isFinish_) { return; }
@@ -149,9 +280,11 @@ void PlayerSpeedCounter::SpeedMaxMove() {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// ↓　
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//===========================================================================================//
+//
+// その他処理
+//
+//===========================================================================================//
 
 float PlayerSpeedCounter::DegitCount(float value){
 	if(value == 0.0f) { return 0; }
@@ -196,6 +329,11 @@ Vector2 PlayerSpeedCounter::CalculationSpriteLT(float value){
 //void PlayerSpeedCounter::CreateNewDigite(std::vector<std::unique_ptr<Sprite>>& array, float value, uint32_t digite, const Vector2& origin) {
 //}
 
+//===========================================================================================//
+//
+// Debug処理
+//
+//===========================================================================================//
 #ifdef _DEBUG
 #include <externals/imgui/imgui.h>
 void PlayerSpeedCounter::Debug_Gui(){
@@ -210,6 +348,13 @@ void PlayerSpeedCounter::Debug_Gui(){
 		ImGui::DragFloat2("needlePos ", &needlePos.x, 1.0f);
 		ImGui::DragFloat("needleRotate", &needleAngle, 0.01f);
 		ImGui::DragFloat2("numberOriginPos", &numberOriginPos_.x, 1.0f);
+
+		ImGui::BulletText("speedAnnounce");
+		ImGui::DragFloat2("announcePos", &announcePos_.x, 1.0f);
+		ImGui::DragFloat2("speedLocalPos", &speedLocalPos_.x, 1.0f);
+		ImGui::DragFloat2("numberLocalPos", &numberLocalPos_.x, 1.0f);
+		ImGui::DragFloat2("percentLocalPos", &percentLocalPos_.x, 1.0f);
+		ImGui::DragFloat2("numberSpriteDivision", &numberSpriteDivision_.x, 1.0f);
 
 		for(int oi = 0; oi < (int)maxDigit_; ++oi) {
 			UI_speed_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 1) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
