@@ -131,6 +131,7 @@ void Player::Update(){
 			isSplash_ = true;
 			isEnableLaunch_ = true;
 			wingAnimatinoKeyFrame_ = 0;
+			invincibleTime_ = kInvincibleTime_;
 			if(waterSurfaceCoolTime <= 0){
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.08f);
@@ -199,6 +200,11 @@ void Player::Update(){
 		} else{
 			wings_->Update(topBody->GetTranslation(), wingAnimatinoKeyFrame_);
 		}
+
+		if(isFalling_){
+			invincibleTime_ -= GameTimer::DeltaTime();
+		}
+
 	} else{
 		wings_->NotFlying();
 	}
@@ -342,6 +348,7 @@ void Player::Move(){
 						float division = 1.0f / (kMaxBodyCount_ - kMinBodyCount_);
 						chargePower_ = ((bodyCount_ - kMinBodyCount_) - 1) * division;
 						pressTime_ = 0.7f;
+						invincibleTime_ = kInvincibleTime_;
 						AudioPlayer::SinglShotPlay("boost.mp3", 0.5f);
 					}
 				}
@@ -349,8 +356,19 @@ void Player::Move(){
 				isEnableLaunch_ = false;
 				if(currentAngle_ <= 0.1f){
 					isFalling_ = true;
+					invincibleTime_ = kInvincibleTime_;
 				}
 			}
+		}
+
+		static float h = 0.0f;
+		h += GameTimer::DeltaTime();
+
+		if(invincibleTime_ > 0.0f){
+			// 無敵中は虹色
+			wings_->SetColor(FloatColor(HSV_to_RGB(h, 1.0f, 1.0f, 1.0f)));
+		} else{
+			wings_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		}
 	}
 
@@ -642,6 +660,7 @@ void Player::OnCollision(Collider* other){
 	if(other->GetObjectType() == (int)ObjectType::BIRD){
 
 		if(isFlying_ && !isFalling_){ return; }
+		if(invincibleTime_ > 0.0f){ return; }
 
 		// 翼を閉じて落下しているときだけ踏みつけられる
 		if(isCloseWing_){

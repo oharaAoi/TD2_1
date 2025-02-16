@@ -30,6 +30,7 @@ public:
 	void SetWindOpenTime(float time) { windOpenTime_ = time; }
 
 	void NotFlying();
+	void SetColor(const Vector4& color);
 
 private:
 

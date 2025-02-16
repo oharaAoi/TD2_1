@@ -58,6 +58,12 @@ void PlayerWings::NotFlying() {
 	}
 }
 
+void PlayerWings::SetColor(const Vector4& color){
+	for(uint32_t oi = 0; oi < 2; ++oi){
+		wings_[oi]->SetColor(color);
+	}
+}
+
 #ifdef _DEBUG
 void PlayerWings::Debug_Gui() {
 	if (ImGui::TreeNode("wings")) {

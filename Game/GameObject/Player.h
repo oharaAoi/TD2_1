@@ -185,6 +185,10 @@ private:
 	float chargePower_;
 	const float kBodyLaunchSpeed_ = 10.0f;
 
+	// 上昇中・下降開始後の無敵時間
+	const float kInvincibleTime_ = 0.5f;
+	float invincibleTime_ = kInvincibleTime_;
+
 	// 着水して水に潜った際の猶予時間
 	const float kDiveTime_ = 0.5f;
 	float diveTime_ = kDiveTime_;
