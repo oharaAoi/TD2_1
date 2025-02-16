@@ -29,11 +29,11 @@ void PlayerBodyCountUI::Init() {
 	tail_UI_ = Engine::CreateSprite("KoiGeuge_Tail.png");
 	headUIPos_.x = 5;
 
-	head_UI_->SetCenterPos(headUIPos_);
-	tail_UI_->SetCenterPos(tailUIPos_);
-
 	head_UI_->SetScale(bodyScale_);
 	tail_UI_->SetScale(bodyScale_);
+
+	head_UI_->Update();
+	tail_UI_->Update();
 
 	isFadeIn_ = true;
 	time_ = 0.0f;
@@ -90,10 +90,15 @@ void PlayerBodyCountUI::Init() {
 	// ↓ announce
 	// -------------------------------------------------
 	bodySprite_ = Engine::CreateSprite("body.png");
+	bodySprite_->SetCenterPos({ -200, 160.0f });
 	bodySprite_->SetScale({ 0.6f, 0.6f });
-	percentSprite_ = Engine::CreateSprite("percent2.png");
+
+	percentSprite_ = Engine::CreateSprite("percent.png");
+	percentSprite_->SetCenterPos({ -200, 160.0f });
+
 	for (int oi = 0; oi < 2; ++oi) {
 		bodyAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
+		bodyAnnounceNumber_[oi]->SetCenterPos({ -200, 160.0f });
 		bodyAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
 		bodyAnnounceNumber_[oi]->SetTextureSize(numberSpriteSize_);
 		bodyAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
@@ -118,10 +123,10 @@ void PlayerBodyCountUI::Init() {
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PlayerBodyCountUI::Update(int playerBodyCount) {
+void PlayerBodyCountUI::Update(int playerBodyCount, bool isFlying) {
 
-	SpeedRaitoUpdate(float(playerBodyCount));
-	SpeedAnnounceMove();
+	BodyRaitoUpdate(float(playerBodyCount), isFlying);
+	BodyAnnounceMove();
 
 	// 8以上かつ動いて入なかったら
 	if (playerBodyCount == 8) {
@@ -374,22 +379,30 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 	isDrop_ = true;
 }
 
-void PlayerBodyCountUI::SpeedRaitoUpdate(float speed) {
-	float BodyRaito = speed / 8.0f;
+void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
+	if (isFlying) {
+		return;
+	}
+
+	if (isTutorial_) {
+		return;
+	}
+
+	bodyRaito_ = speed / 8.0f;
 
 	bool isUp = false;
 
-	if (BodyRaito < 0.2f) {
+	if (bodyRaito_ < firstRaito_ + .1f) {
 		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
-	} else if (BodyRaito < 0.7f) {
+	} else if (bodyRaito_ < secondRaito_) {
 		BodyRaitoState_ = BodyRaitoState::Raito_3;
 	}
 
-	if (BodyRaito >= 0.2f && BodyRaitoState_ == BodyRaitoState::Raito_Zero) {
+	if (bodyRaito_ >= firstRaito_ && BodyRaitoState_ == BodyRaitoState::Raito_Zero) {
 		if (BodyRaitoState_ < BodyRaitoState::Raito_3) {
 			isUp = true;
 		}
-	} else if (BodyRaito >= 0.7f && BodyRaitoState_ == BodyRaitoState::Raito_3) {
+	} else if (bodyRaito_ >= secondRaito_ && BodyRaitoState_ == BodyRaitoState::Raito_3) {
 		if (BodyRaitoState_ < BodyRaitoState::Raito_7) {
 			isUp = true;
 		}
@@ -419,7 +432,7 @@ void PlayerBodyCountUI::SpeedRaitoUpdate(float speed) {
 	percentSprite_->Update();
 	for (int oi = 0; oi < 2; ++oi) {
 		if (BodyRaitoState_ == BodyRaitoState::Raito_3) {
-			bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(20.0f, oi + 1)));
+			bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(40.0f, oi + 1)));
 		} else if (BodyRaitoState_ == BodyRaitoState::Raito_7) {
 			bodyAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(70.0f, oi + 1)));
 		}
@@ -428,7 +441,7 @@ void PlayerBodyCountUI::SpeedRaitoUpdate(float speed) {
 	}
 }
 
-void PlayerBodyCountUI::SpeedAnnounceMove() {
+void PlayerBodyCountUI::BodyAnnounceMove() {
 	if (isAnnounceFinish_) { return; }
 	if (!isAnnounceUiMove_) { return; }
 
@@ -508,6 +521,9 @@ void PlayerBodyCountUI::Debug_Gui() {
 		ImGui::Spacing();
 		ImGui::DragFloat2("headPos", &headUIPos_.x, 1.0f);
 		ImGui::DragFloat2("tailPos", &tailUIPos_.x, 1.0f);
+
+		ImGui::BulletText("Raito");
+		ImGui::Text("bodyRaito : %f", bodyRaito_);
 
 		if (ImGui::Button("isDrop")) {
 			SetDrop(backPos_UI_);

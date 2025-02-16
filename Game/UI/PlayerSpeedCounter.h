@@ -37,6 +37,7 @@ public:
 
 	void SetMaxSpeed(float maxSpeed) { maxSpeed_ = maxSpeed; }
 
+	void SetIsTutorial(bool isTutorial) { isTutorial_ = isTutorial; }
 
 #ifdef _DEBUG
 	void Debug_Gui();
@@ -150,5 +151,10 @@ private:
 	bool isAnnounceFadeIn_;
 	bool isAnnounceFinish_;
 
+	bool isTutorial_ = false;
+
+	float speedRaito_ = 0.0f;
+	float firstRaito_ = .4f;
+	float secondRaito_ = .7f;
 };
 

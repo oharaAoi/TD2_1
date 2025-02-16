@@ -51,7 +51,7 @@ public:
 	~PlayerBodyCountUI();
 
 	void Init();
-	void Update(int playerBodyCount);
+	void Update(int playerBodyCount, bool isFlying);
 	void Draw() const;
 
 	void Move();
@@ -81,9 +81,9 @@ public:
 
 	// ------------------- bodyの割合に関する処理 ------------------- //
 
-	void SpeedRaitoUpdate(float speed);
+	void BodyRaitoUpdate(float speed, bool isFlying);
 
-	void SpeedAnnounceMove();
+	void BodyAnnounceMove();
 
 	/// <summary>
 	/// 桁数を割り出す
@@ -112,6 +112,8 @@ public:
 #endif
 
 	void SetIsUiMove(bool isMove) { isUiMove_ = isMove; }
+
+	void SetIsTutorial(bool isTutorial) {isTutorial_ = isTutorial;}
 
 private:
 
@@ -210,7 +212,14 @@ private:
 	bool isAnnounceFadeIn_;
 	bool isAnnounceFinish_;
 
+	bool isTutorial_ = false;
+
 	Vector2 numberSpriteSize_ = { 48.0f, 72.0f };
 	Vector2 numberOriginPos_;
+
+	float bodyRaito_ = 0.0f;
+	float firstRaito_ = .3f;
+	float secondRaito_ = .7f;
+
 };
 

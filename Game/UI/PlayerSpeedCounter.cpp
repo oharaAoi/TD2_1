@@ -64,9 +64,14 @@ void PlayerSpeedCounter::Init(){
 	// -------------------------------------------------
 	speedSprite_ = Engine::CreateSprite("speed.png");
 	speedSprite_->SetScale({0.6f, 0.6f});
-	percentSprite_ = Engine::CreateSprite("percent2.png");
+	speedSprite_->SetCenterPos({ -200, 160.0f });
+
+	percentSprite_ = Engine::CreateSprite("percent.png");
+	percentSprite_->SetCenterPos({ -200, 160.0f });
+
 	for (int oi = 0; oi < 2; ++oi) {
 		speedAnnounceNumber_[oi] = Engine::CreateSprite("number.png");
+		speedAnnounceNumber_[oi]->SetCenterPos({ -200, 160.0f });
 		speedAnnounceNumber_[oi]->SetRectRange(numberSpriteSize_);
 		speedAnnounceNumber_[oi]->SetTextureSize(numberSpriteSize_);
 		speedAnnounceNumber_[oi]->SetTextureCenterPos({ numberOriginPos_.x - ((oi - 2) * (numberSpriteSize_.x - 10)) ,numberOriginPos_.y });
@@ -163,21 +168,27 @@ void PlayerSpeedCounter::Draw() const{
 //===========================================================================================//
 
 void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
+	if (isTutorial_) {
+		return;
+	}
+	
 	float speedRaito = speed / maxSpeed_;
 
 	bool isUp = false;
 
-	if (speedRaito < 0.3f) {
+	if (speedRaito < firstRaito_) {
 		speedRaitoState_ = SpeedRaitoState::Raito_0;
-	} else if (speedRaito < 0.7f) {
-		speedRaitoState_ = SpeedRaitoState::Raito_30;
+	} else if (speedRaito < secondRaito_) {
+		if (speedRaitoState_ != SpeedRaitoState::Raito_70) {
+			speedRaitoState_ = SpeedRaitoState::Raito_30;
+		}
 	}
 
-	if (speedRaito >= 0.3f && speedRaitoState_ == SpeedRaitoState::Raito_0) {
+	if (speedRaito >= firstRaito_ && speedRaitoState_ == SpeedRaitoState::Raito_0) {
 		if (speedRaitoState_ < SpeedRaitoState::Raito_30) {
 			isUp = true;
 		}
-	} else if (speedRaito >= 0.7f && speedRaitoState_ == SpeedRaitoState::Raito_30) {
+	} else if (speedRaito >= secondRaito_ && speedRaitoState_ == SpeedRaitoState::Raito_30) {
 		if (speedRaitoState_ < SpeedRaitoState::Raito_70) {
 			isUp = true;
 		}
@@ -207,7 +218,7 @@ void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
 	percentSprite_->Update();
 	for (int oi = 0; oi < 2; ++oi) {
 		if (speedRaitoState_ == SpeedRaitoState::Raito_30) {
-			speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(30.0f, oi + 1)));
+			speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(40.0f, oi + 1)));
 		} else if(speedRaitoState_ == SpeedRaitoState::Raito_70) {
 			speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(70.0f, oi + 1)));
 		}
