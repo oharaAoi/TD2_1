@@ -93,7 +93,7 @@ void PlayerBodyCountUI::Init() {
 	bodySprite_->SetCenterPos({ -200, 160.0f });
 	bodySprite_->SetScale({ 0.6f, 0.6f });
 
-	percentSprite_ = Engine::CreateSprite("percent.png");
+	percentSprite_ = Engine::CreateSprite("percent2.png");
 	percentSprite_->SetCenterPos({ -200, 160.0f });
 
 	for (int oi = 0; oi < 2; ++oi) {

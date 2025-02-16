@@ -289,7 +289,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "1up.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speed.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "body.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "percent.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "percent2.png");
 
 	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");
