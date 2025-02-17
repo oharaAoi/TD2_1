@@ -201,7 +201,7 @@ private:
 
 	// Parameter
 	float announceTime_;
-	float announceMoveTime_ = 1.8f;
+	float announceMoveTime_ = 2.0f;
 
 	Vector2 announceFadeInStartPos_;
 	Vector2 announceFadeOutPos_;

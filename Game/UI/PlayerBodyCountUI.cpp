@@ -114,8 +114,8 @@ void PlayerBodyCountUI::Init() {
 	announceTime_ = 0.0f;
 	announceMoveTime_ = 1.5f;
 
-	announcePos_ = { -300, 160.0f };
-	announceFadeInStartPos_ = { -300, 160.0f };
+	announcePos_ = { -200, 160.0f };
+	announceFadeInStartPos_ = { -200, 160.0f };
 	announceFadeOutPos_ = { 2000, 160.0f };
 	isAnnounceUiMove_ = false;
 	isAnnounceFinish_ = false;
@@ -240,10 +240,12 @@ void PlayerBodyCountUI::Update(int playerBodyCount, bool isFlying) {
 
 void PlayerBodyCountUI::Draw() const {
 
-	bodySprite_->Draw();
-	percentSprite_->Draw();
-	for (int oi = 0; oi < 2; ++oi) {
-		bodyAnnounceNumber_[oi]->Draw();
+	if (!isUiMove_) {
+		bodySprite_->Draw();
+		percentSprite_->Draw();
+		for (int oi = 0; oi < 2; ++oi) {
+			bodyAnnounceNumber_[oi]->Draw();
+		}
 	}
 
 
@@ -385,6 +387,7 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
 	if (isFlying) {
 		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
+		announceTime_ = 0.0f;
 		return;
 	}
 
@@ -415,17 +418,25 @@ void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
 	if (isUp) {
 		if (BodyRaitoState_ < BodyRaitoState::Raito_3) {
 			BodyRaitoState_ = BodyRaitoState::Raito_3;
+			isAnnounceFadeIn_ = true;
 			isAnnounceUiMove_ = true;
 			isAnnounceFinish_ = false;
 			announceTime_ = 0.0f;
+			announcePos_ = { -200, 160.0f };
 		} else if (BodyRaitoState_ < BodyRaitoState::Raito_7) {
 			BodyRaitoState_ = BodyRaitoState::Raito_7;
+			isAnnounceFadeIn_ = true;
 			isAnnounceUiMove_ = true;
 			isAnnounceFinish_ = false;
 			announceTime_ = 0.0f;
+			announcePos_ = { -200, 160.0f };
 		} else if (BodyRaitoState_ < BodyRaitoState::Raito_1) {
 			BodyRaitoState_ = BodyRaitoState::Raito_1;
-			isAnnounceUiMove_ = false;
+			isAnnounceFadeIn_ = true;
+			isAnnounceUiMove_ = true;
+			isAnnounceFinish_ = false;
+			announceTime_ = 0.0f;
+			announcePos_ = { -200, 160.0f };
 		}
 	}
 

@@ -87,8 +87,8 @@ void PlayerSpeedCounter::Init(){
 	announceTime_ = 0.0f;
 	announceMoveTime_ = 1.5f;
 
-	announcePos_ = { -300, 100.0f };
-	announceFadeInStartPos_ = { -300, 100.0f };
+	announcePos_ = { -200, 100.0f };
+	announceFadeInStartPos_ = { -200, 100.0f };
 	announceFadeOutPos_ = { 2000, 100.0f };
 	isAnnounceUiMove_ = false;
 	isAnnounceFinish_ = false;
@@ -147,10 +147,12 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerSpeedCounter::Draw() const{
-	speedSprite_->Draw();
-	percentSprite_->Draw();
-	for (int oi = 0; oi < 2; ++oi) {
-		speedAnnounceNumber_[oi]->Draw();
+	if (!isUiMove_) {
+		speedSprite_->Draw();
+		percentSprite_->Draw();
+		for (int oi = 0; oi < 2; ++oi) {
+			speedAnnounceNumber_[oi]->Draw();
+		}
 	}
 
 	backSprite_->Draw();
@@ -181,9 +183,11 @@ void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
 
 	if (speedRaito < firstRaito_) {
 		speedRaitoState_ = SpeedRaitoState::Raito_0;
+		announceTime_ = 0.0f;
 	} else if (speedRaito < secondRaito_) {
 		if (speedRaitoState_ != SpeedRaitoState::Raito_70) {
 			speedRaitoState_ = SpeedRaitoState::Raito_30;
+			announceTime_ = 0.0f;
 		}
 	}
 
@@ -202,15 +206,23 @@ void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
 			speedRaitoState_ = SpeedRaitoState::Raito_30;
 			isAnnounceUiMove_ = true;
 			isAnnounceFinish_ = false;
+			isAnnounceFadeIn_ = true;
 			announceTime_ = 0.0f;
+			announcePos_ = { -200, 100.0f };
 		} else if(speedRaitoState_ < SpeedRaitoState::Raito_70) {
 			speedRaitoState_ = SpeedRaitoState::Raito_70;
 			isAnnounceUiMove_ = true;
 			isAnnounceFinish_ = false;
+			isAnnounceFadeIn_ = true;
 			announceTime_ = 0.0f;
+			announcePos_ = { -200, 100.0f };
 		} else if (speedRaitoState_ < SpeedRaitoState::Raito_100) {
 			speedRaitoState_ = SpeedRaitoState::Raito_100;
 			isAnnounceUiMove_ = false;
+			isAnnounceFinish_ = false;
+			isAnnounceFadeIn_ = true;
+			announceTime_ = 0.0f;
+			announcePos_ = { -200, 100.0f };
 		}
 	}
 
