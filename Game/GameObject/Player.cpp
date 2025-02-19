@@ -144,10 +144,12 @@ void Player::Update(){
 
 	} else{
 		// 着水した瞬間
+		isFlying_ = false;
+		isCloseWing_ = true;
+
 		if(preFlying_){
 			isSplash_ = true;
 			autoFlying_ = false;
-			//isFlying_ = false;//コメントアウト外さない
 			if(waterSurfaceCoolTime <= 0){
 				AudioPlayer::SinglShotPlay("inWaterSurface.mp3", 0.08f);
 				AudioPlayer::SinglShotPlay("outWaterSurface.mp3", 0.08f);
@@ -907,7 +909,7 @@ void Player::MoveWater(){
 void Player::MoveSky(){
 
 	if(!isFlying_){ return; }
-	// 飛んでいないときにだけ操作を受け付ける
+	// 飛んでいないときはreturn
 	// 飛行中-------------------------------------------
 
 		// 上昇を徐々に遅くする
@@ -1006,7 +1008,7 @@ void Player::MoveSky(){
 		if(transform_->GetTranslation().y + dropVec.y < 0.0f){
 			isDiving_ = true;
 			isFalling_ = false;
-			isFlying_ = false;//isFlying_をfalseにするのはここだけ
+			//isFlying_ = false;//isFlying_をfalseにするのはここだけ
 			isFacedBird_ = false;
 			divingSpeed_ = transform_->GetTranslation().y - prePos_.y;
 			// 潜水速度を一定範囲に保つ
