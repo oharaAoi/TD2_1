@@ -385,7 +385,7 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 }
 
 void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
-	if (isFlying) {
+	if (isFlying && !isAnnounceUiMove_) {
 		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
 		announceTime_ = 0.0f;
 		return;
