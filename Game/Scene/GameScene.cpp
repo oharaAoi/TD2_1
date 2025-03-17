@@ -316,6 +316,7 @@ void GameScene::Update(){
 					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
 					obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
 					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(450, 0, 0), 1);
+					player_->SetTutorialStartPosX();
 				} else{
 					currentState_ = GAME_STATE::GAME;
 					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);

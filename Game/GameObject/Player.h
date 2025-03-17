@@ -238,6 +238,9 @@ private:
 
 	float wingAnimatinoKeyFrame_;
 
+	// チュートリアルシーン入ってからの距離
+	float tutorialStartPosX_ = 0.0f;
+
 	// フラグ-------------------------------------------
 
 	bool hitWaterSurface_;
@@ -253,6 +256,7 @@ private:
 	bool isjet_;			// 胴体発射したか
 
 	bool isTutorial_ = false;
+	bool isAlreadyTutorialJump_ = false;// チュートリアルでジャンプしたかどうか
 
 	// データ格納変数　----------------------------------
 
@@ -294,5 +298,6 @@ public:// アクセッサ
 
 	void SetIsMove(bool flag){ isMove_ = flag; }
 	const float GetDefaultSpeed() const{ return defaultSpeed; }
+	void SetTutorialStartPosX(){ tutorialStartPosX_ = transform_->GetTranslation().x; }
 };
 

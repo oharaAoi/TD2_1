@@ -1,6 +1,8 @@
 #include "TutorialScene.h"
 
-TutorialScene::TutorialScene() {}
+TutorialScene::TutorialScene() {
+	player_->SetTutorialStartPosX();
+}
 TutorialScene::~TutorialScene() {}
 
 void TutorialScene::Finalize() {

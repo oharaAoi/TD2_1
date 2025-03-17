@@ -847,6 +847,23 @@ void Player::MoveWater(){
 
 		addPressTime_ = std::lerp(maxAddPress, minAddPress, totalSpeedRatio);
 
+		//チュートリアルの際の処理
+		if(isTutorial_){
+
+			// 鳥のチュートリアルのところで自動で飛ぶ(x座標が3390になったら)
+			if(transform_->GetTranslation().x - tutorialStartPosX_ >= 1060.0f){
+				if(!isAlreadyTutorialJump_){
+					autoFlying_ = true;
+					isAlreadyTutorialJump_ = true;
+
+					// bodyCountが4になるまで追加
+					while(bodyCount_ < 5){
+						AddBody(followModels_.back().get());
+					}
+				}
+			}
+		}
+
 		// 入力を受け付けない時間がプラスだったら入力しない
 		if(dontInputPressTime_ < 0){
 			// 押すと上昇、離すと沈む
