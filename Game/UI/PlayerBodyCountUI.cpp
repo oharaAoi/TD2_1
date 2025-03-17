@@ -59,14 +59,14 @@ void PlayerBodyCountUI::Init() {
 		add.sprite_->SetCenterPos({
 					tailUIPos_.x + (interval_bodyUI_ * (backBody_UI_List_.size()) + 6),
 					tailUIPos_.y
-		});
+								  });
 		headUIPos_ = { tailUIPos_.x + (interval_bodyUI_ * (backBody_UI_List_.size()) + 6),
 					tailUIPos_.y };
 	}
 
 	headUIPos_.x += interval_bodyUI_ + 5;
 
-	
+
 	// -------------------------------------------------
 	// ↓ Effectの初期化
 	// -------------------------------------------------
@@ -127,6 +127,10 @@ void PlayerBodyCountUI::Init() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::Update(int playerBodyCount, bool isFlying) {
+
+	if (playerBodyCount == 2) {
+		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
+	}
 
 	BodyRaitoUpdate(float(playerBodyCount), isFlying);
 	BodyAnnounceMove();
@@ -385,10 +389,14 @@ void PlayerBodyCountUI::SetDrop(const Vector2& pos) {
 }
 
 void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
-	if (isFlying && !isAnnounceUiMove_) {
-		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
-		announceTime_ = 0.0f;
-		return;
+	if (isFlying) {
+		if (!isAnnounceUiMove_) {
+			if (isAnnounceFinish_) {
+				BodyRaitoState_ = BodyRaitoState::Raito_Zero;
+				announceTime_ = 0.0f;
+				return;
+			}
+		}
 	}
 
 	if (isTutorial_) {
@@ -402,7 +410,7 @@ void PlayerBodyCountUI::BodyRaitoUpdate(float speed, bool isFlying) {
 	/*if (bodyRaito_ < (4.0f / 8.0f)) {
 		BodyRaitoState_ = BodyRaitoState::Raito_Zero;
 	} else if (bodyRaito_ < secondRaito_) {
-  		BodyRaitoState_ = BodyRaitoState::Raito_3;
+		BodyRaitoState_ = BodyRaitoState::Raito_3;
 	}*/
 
 	if (bodyRaito_ >= firstRaito_ && BodyRaitoState_ == BodyRaitoState::Raito_Zero) {
