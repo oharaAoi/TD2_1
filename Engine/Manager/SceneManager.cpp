@@ -147,7 +147,7 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/ResultNumbers/", "dot.obj");
 	//ModelManager::LoadModel("./Game/Resources/Model/Player_result/", "Player_result.fbx");
 
-	ModelManager::LoadModel("./Game/Resources/Model/EatFish/", "EatFish.gltf");
+	ModelManager::LoadModel("./Game/Resources/Model/EatFish_new/", "EatFish_new.gltf");
 	ModelManager::LoadModel("./Game/Resources/Model/AnimationWing/", "Wing.gltf");
 
 	ModelManager::LoadModel("./Game/Resources/Model/Player/", "Player_Head.obj");

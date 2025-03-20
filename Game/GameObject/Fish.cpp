@@ -106,8 +106,8 @@ void Fish::IndividualFromCommon(const SubAttributeType& subType) {
 void Fish::Change() {
 	if ((isPreAte_ == false) && (isAte_ == true)) {
 		// 食べられる
-		SetObject("EatFish.gltf");
-		SetAnimater("./Game/Resources/Model/EatFish/", "EatFish.gltf", true);
+		SetObject("EatFish_new.gltf");
+		SetAnimater("./Game/Resources/Model/EatFish_new/", "EatFish_new.gltf", true);
 		SetIsLighting(false);
 		float scale = (float)this->GetFishSize() + 2.0f;
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishWeakening/", "FishWeakening.gltf",
