@@ -838,6 +838,8 @@ void GameScene::Update_TUTORIAL(){
 	// UIの更新
 	tutorialUI_->SetPlayerPos(player_->GetWorldTranslation());
 	tutorialUI_->Update();
+	// テキストの更新
+	tutorialUI_->UpdateTutorialText(player_->GetFlyingTutorialDisplay());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

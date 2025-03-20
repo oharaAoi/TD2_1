@@ -862,6 +862,8 @@ void Player::MoveWater(){
 					}
 				}
 			}
+
+
 		}
 
 		// 入力を受け付けない時間がプラスだったら入力しない
@@ -945,6 +947,14 @@ void Player::MoveSky(){
 	//		isEnableLaunch_ = false;// 再発射できないようにする
 	//	}
 	//}
+
+	if (isTutorial_) {
+		if (autoFlying_) {
+			if (isFalling_) {
+				flyingTutorialDisplay_ = true;
+			}
+		}
+	}
 
 	////////////////////////////// 上昇中 /////////////////////////////////
 	if(!isFalling_){

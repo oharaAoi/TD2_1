@@ -110,6 +110,10 @@ public:
 	const bool GetIsEnableLaunch() const { return isEnableLaunch_; }
 	const bool GetIsCutIn() const { return isCutIn_; }
 
+	const bool GetAutoFlying() const { return autoFlying_; }
+	const bool GetFlyingTutorialDisplay() const { return flyingTutorialDisplay_; }
+	void SetFlyingTutorialDisplay(bool isFlyingTutorialDisplay) { flyingTutorialDisplay_ = isFlyingTutorialDisplay; }
+
 	void SetGamePlayTimer(GamePlayTimer* gamePlayTimer) { gamePlayTimer_ = gamePlayTimer; }
 	void SetBodyUpEffect(BodyUpEffect* bodyUpEffect) { bodyUpEffect_ = bodyUpEffect; }
 
@@ -278,6 +282,7 @@ private:
 	// カットイン関連
 	bool isCutIn_ = false;
 	bool autoFlying_ = false;
+	bool flyingTutorialDisplay_ = false;
 	const float kCutInTime_ = 1.5f;
 	float cutInTime_ = kCutInTime_;
 	std::unique_ptr<Sprite> cutInSprite_[2];

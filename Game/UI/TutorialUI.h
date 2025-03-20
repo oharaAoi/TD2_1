@@ -25,7 +25,7 @@ public:
 	void AdaptAdjustment();
 
 	// チュートリアルテキスト用関数
-	void UpdateTutorialText();
+	void UpdateTutorialText(bool playerFlying);
 	void DrawTutorialText();
 
 #ifdef _DEBUG
@@ -39,6 +39,7 @@ public:
 	Vector3 GetStartPos();
 	bool GetIsTextShowing() const{ return isTextShowing_; }
 
+	void SetFlyingTutorial();
 
 private:
 	AdjustmentItem* adjust_;
@@ -61,7 +62,7 @@ private:
 	Vector3 scaleUp_;
 	float scaleUpStrength_;
 
-	static const int32_t tutorialCount_ = 3;
+	static const int32_t tutorialCount_ = 4;
 	bool isShownText_[tutorialCount_];
 	bool isTextShowing_ = false;
 	std::unique_ptr<Sprite> tutorialText_;

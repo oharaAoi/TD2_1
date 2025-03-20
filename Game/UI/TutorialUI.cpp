@@ -129,9 +129,6 @@ void TutorialUI::Update(){
 
 	tutorialText_->Update();
 	spaceSprite_->Update();
-
-	// テキストの更新
-	UpdateTutorialText();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,17 +190,20 @@ Vector3 TutorialUI::GetStartPos(){
 	return tutorialUI_["start"]->GetTransform()->GetTranslation();
 }
 
+void TutorialUI::SetFlyingTutorial() {
+	
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　看板に近づいたら一時停止して説明を表示する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::UpdateTutorialText(){
+void TutorialUI::UpdateTutorialText(bool playerFlying){
 
 	static float sensingDistance = 75.0f;
 	static float distanceToUI[tutorialCount_] = { 0.0f, 0.0f, 0.0f };
-	static const int32_t kTextPage[tutorialCount_] = { 1,4,3 };// テキストのページ数
-	static const int32_t textOffset[tutorialCount_] = { 0,1,5 };// テキストのオフセット
+	static const int32_t kTextPage[tutorialCount_] = { 1,4,3,2};// テキストのページ数
+	static const int32_t textOffset[tutorialCount_] = { 0,1,5,8 };// テキストのオフセット
 	static int32_t textPage[tutorialCount_] = { 0,0,0 };// 現在のページ
 	static int32_t currentTutorialIndex = -1;// 現在のチュートリアルのインデックス
 	static bool isReacedEndPage = false;// ページが最後まで行ったかどうか
@@ -215,10 +215,8 @@ void TutorialUI::UpdateTutorialText(){
 
 	// 各看板との距離を計算して、一定の距離に近づいたらテキストを表示する
 	for(int i = 0; i < 3; i++){
-
 		distanceToUI[i] = (tutorialUI_["kari" + std::to_string(i + 1)]->GetTransform()->GetTranslation() - playerPos_).Length();
 		if(distanceToUI[i] < sensingDistance){
-
 			// 一度表示したらもう表示しない
 			if(!isShownText_[i]){
 				isTextShowing_ = true;
@@ -231,6 +229,18 @@ void TutorialUI::UpdateTutorialText(){
 		}
 	}
 
+	// 飛んでいる時に出すUI
+	if (playerFlying) {
+		if (!isShownText_[3]) {
+			const uint32_t index = 3;
+			isTextShowing_ = true;
+			isShownText_[index] = true;
+			textPage[index] = 0;
+			currentTutorialIndex = index;
+			textTimer = 0.0f;
+			tutorialText_->SetLeftTop({ 0.0f, 60.0f * (textOffset[currentTutorialIndex] + textPage[currentTutorialIndex]) });
+		}
+	}
 
 	// テキストの表示
 	if(isTextShowing_){
