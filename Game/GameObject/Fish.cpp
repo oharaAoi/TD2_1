@@ -67,7 +67,7 @@ void Fish::OnCollision(Collider* other){
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
 			nullptr, false, transform_.get()->GetScale(), Quaternion(), GetWorldTranslation());
 
-		int randomInt = RandomInt(3, 4);
+		int randomInt = RandomInt(3, 6);
 		FishEnergyManager::GetInstance()->AddEnergy(transform_->GetWorldMatrix(), randomInt);
 	}
 }
