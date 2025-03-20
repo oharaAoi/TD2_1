@@ -66,8 +66,8 @@ public:
         Vector2 result;
         float len = this->Length();
         if (len != 0) {
-            result.x /= len;
-            result.y /= len;
+            result.x = this->x / len;
+            result.y = this->y / len;
         }
 
         return result;

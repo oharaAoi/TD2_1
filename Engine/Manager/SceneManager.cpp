@@ -254,6 +254,8 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "SS.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "SSS.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "fishEnergy.png");
+
 	// Load
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "LoadBackGround.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "carpIcon.png");

@@ -32,6 +32,7 @@
 #include "Game/Effect/Splash.h"
 #include "Game/Effect/BodyUpEffect.h"
 #include  "Game/Effect/Trail.h"
+#include "Game/Effect/FishEnergyManager.h"
 /*------ UI ------*/
 #include "Game/UI/FlyingTimerUI.h"
 #include "Game/UI/FlyingGaugeUI.h"
@@ -167,6 +168,7 @@ private:
 
 	// ---------- Effect ---------- //
 	std::unique_ptr<BodyUpEffect> bodyUpEffect_ = nullptr;
+	FishEnergyManager* fishEnergyManager_ = nullptr;
 
 	// --------- Load ----------- //
 	std::unique_ptr<LoadScene> loadScene_;

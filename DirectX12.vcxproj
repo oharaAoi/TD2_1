@@ -203,6 +203,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Effect\Bubble.cpp" />
     <ClCompile Include="Game\Effect\Cherry.cpp" />
     <ClCompile Include="Game\Effect\EmissionEffect.cpp" />
+    <ClCompile Include="Game\Effect\FishEnergy.cpp" />
+    <ClCompile Include="Game\Effect\FishEnergyManager.cpp" />
     <ClCompile Include="Game\Effect\ParticleManager.cpp" />
     <ClCompile Include="Game\Effect\RankUp.cpp" />
     <ClCompile Include="Game\Effect\Splash.cpp" />
@@ -368,6 +370,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Effect\Bubble.h" />
     <ClInclude Include="Game\Effect\Cherry.h" />
     <ClInclude Include="Game\Effect\EmissionEffect.h" />
+    <ClInclude Include="Game\Effect\FishEnergy.h" />
+    <ClInclude Include="Game\Effect\FishEnergyManager.h" />
     <ClInclude Include="Game\Effect\ParticleManager.h" />
     <ClInclude Include="Game\Effect\RankUp.h" />
     <ClInclude Include="Game\Effect\Splash.h" />
