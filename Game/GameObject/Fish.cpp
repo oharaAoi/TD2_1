@@ -1,5 +1,6 @@
 #include "Fish.h"
 #include <Game/Manager/AnimetionEffectManager.h>
+#include <Game/Effect/FishEnergyManager.h>
 
 //////////////////////////////////////////////////////
 //  コンストラクタ・デストラクタ
@@ -64,6 +65,8 @@ void Fish::OnCollision(Collider* other){
 		isActive_ = false;
 		AnimetionEffectManager::AddListEffect("./Game/Resources/Model/FishDestroy/", "FishDestroy.gltf",
 			nullptr, false, transform_.get()->GetScale(), Quaternion(), GetWorldTranslation());
+
+		FishEnergyManager::GetInstance()->AddEnergy(transform_->GetWorldMatrix(), 4);
 	}
 }
 

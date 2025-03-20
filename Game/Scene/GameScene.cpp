@@ -20,6 +20,7 @@ void GameScene::Finalize(){
 	swimSound_->Finalize();
 	AnimetionEffectManager::GetInstance()->Finalize();
 	JumpAssessor::GetInstance()->Finalize();
+	FishEnergyManager::GetInstance()->Finalize();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +160,9 @@ void GameScene::Init(){
 	// -------------------------------------------------
 	bodyUpEffect_ = std::make_unique<BodyUpEffect>();
 	bodyUpEffect_->Init();
+
+	fishEnergyManager_ = FishEnergyManager::GetInstance();
+	fishEnergyManager_->Init();
 
 	// -------------------------------------------------
 	// ↓ LoadSceneの設定
@@ -489,6 +493,10 @@ void GameScene::Update(){
 
 	animationEffectManager_->Update();
 
+	fishEnergyManager_->SetTargetPos(playerBodyCountUI_->GetLastBodyPos());
+	fishEnergyManager_->SetVpvpMatrix(camera_->GetVpvpMatrix());
+	fishEnergyManager_->Update();
+
 	JumpAssessor::GetInstance()->Update();
 
 	// -------------------------------------------------
@@ -771,13 +779,15 @@ void GameScene::Draw() const{
 		playerSpeedCounter_->Draw();
 		playerBodyCountUI_->Draw();
 		bodyUpEffect_->Draw();// spriteEffect
-		player_->DrawCutIn();
 		missionUI_->Draw();
 		finishUI_->Draw();
 		gameStartUI_->Draw();
 
 
 		playerControlUI_->Draw(player_->GetIsFlying());
+		fishEnergyManager_->Draw();
+
+		player_->DrawCutIn();
 
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		JumpAssessor::GetInstance()->Draw();
@@ -823,9 +833,6 @@ void GameScene::Update_TUTORIAL(){
 		player_->SetIsTutorial(false);
 }
 #endif // _DEBUG
-
-
-
 
 	if(player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x){
 		currentState_ = GAME_STATE::GAME;

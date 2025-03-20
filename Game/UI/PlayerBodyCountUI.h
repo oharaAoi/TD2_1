@@ -113,7 +113,9 @@ public:
 
 	void SetIsUiMove(bool isMove) { isUiMove_ = isMove; }
 
-	void SetIsTutorial(bool isTutorial) {isTutorial_ = isTutorial;}
+	void SetIsTutorial(bool isTutorial) { isTutorial_ = isTutorial; }
+
+	const Vector2& GetLastBodyPos() const { return lastBodyPos_; }
 
 private:
 
@@ -125,14 +127,14 @@ private:
 
 	std::unique_ptr<Sprite> head_UI_ = nullptr;
 	std::unique_ptr<Sprite> tail_UI_ = nullptr;
-	
+
 	std::list<BodyUIData> body_UI_List_;
 	std::list<BodyUIData> backBody_UI_List_;
 
 	uint32_t nowBodyCount_ = 1;
 
 	float interval_bodyUI_;
-	
+
 	Vector2 maxUIPos;
 
 	// Parameter
