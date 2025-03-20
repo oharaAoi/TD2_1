@@ -1,4 +1,5 @@
 #include "TutorialUI.h"
+#include "Engine/Math/Easing.h"
 
 TutorialUI::TutorialUI(){
 }
@@ -213,12 +214,17 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	static const float kWatingTime = 0.2f;// テキストが表示されるまでの待ち時間
 	static float waitTime = kWatingTime;// テキストが表示されるまでの待ち時間
 
+
 	// 各看板との距離を計算して、一定の距離に近づいたらテキストを表示する
 	for(int i = 0; i < 3; i++){
 		distanceToUI[i] = (tutorialUI_["kari" + std::to_string(i + 1)]->GetTransform()->GetTranslation() - playerPos_).Length();
 		if(distanceToUI[i] < sensingDistance){
 			// 一度表示したらもう表示しない
 			if(!isShownText_[i]){
+				spaceScaleUpTime_ = 0.0f;
+				notInputAcceptanceTime_ = 0.0f;
+				isInputSpaceDraw_ = false;
+
 				isTextShowing_ = true;
 				isShownText_[i] = true;
 				textPage[i] = 0;
@@ -232,6 +238,10 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	// 飛んでいる時に出すUI
 	if (playerFlying) {
 		if (!isShownText_[3]) {
+			spaceScaleUpTime_ = 0.0f; 
+			notInputAcceptanceTime_ = 0.0f;
+			isInputSpaceDraw_ = false;
+
 			const uint32_t index = 3;
 			isTextShowing_ = true;
 			isShownText_[index] = true;
@@ -289,20 +299,33 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 		textBackSprite_->SetColor({ 1.0f, 1.0f, 1.0f, t2 });
 		spaceSprite_->SetColor({ 1.0f, 1.0f, 1.0f, t2 * alpha });
 
-
-
 		// ページの更新
-		if(Input::IsTriggerKey(DIK_SPACE)){
-			textPage[currentTutorialIndex]++;
+		if (notInputAcceptanceTime_ > notInputAcceptanceTimeLimit_) {
+			isInputSpaceDraw_ = true;
 
-			// ページが最後まで行ったか確認
-			if(textPage[currentTutorialIndex] >= kTextPage[currentTutorialIndex]){
-				isReacedEndPage = true;
-			} else{
-				textTimer = 0.0f;// まだページが残っているのでタイマーをリセット
-				// テキストkの切り抜き範囲の更新
-				tutorialText_->SetLeftTop({ 0.0f, 60.0f * (textOffset[currentTutorialIndex] + textPage[currentTutorialIndex]) });
+			// スペースを大きくする
+			if (spaceScaleUpTime_ < spaceScaleUpTimeLimit_) {
+				spaceScaleUpTime_ += GameTimer::DeltaTime();
+				float t = spaceScaleUpTime_ / spaceScaleUpTimeLimit_;
+				Vector2 scale = Vector2::Lerp({0,0}, {0.5f,0.5f }, EaseOutCubic(t));
+				spaceSprite_->SetScale(scale);
 			}
+
+			if (Input::IsTriggerKey(DIK_SPACE)) {
+				textPage[currentTutorialIndex]++;
+
+				// ページが最後まで行ったか確認
+				if (textPage[currentTutorialIndex] >= kTextPage[currentTutorialIndex]) {
+					isReacedEndPage = true;
+				} else {
+					textTimer = 0.0f;// まだページが残っているのでタイマーをリセット
+					// テキストkの切り抜き範囲の更新
+					tutorialText_->SetLeftTop({ 0.0f, 60.0f * (textOffset[currentTutorialIndex] + textPage[currentTutorialIndex]) });
+				}
+			}
+		} else {
+			isInputSpaceDraw_ = false;
+			notInputAcceptanceTime_ += GameTimer::DeltaTime();
 		}
 	}
 }
@@ -311,7 +334,9 @@ void TutorialUI::DrawTutorialText(){
 	if(isTextShowing_){
 		textBackSprite_->Draw();
 		tutorialText_->Draw();
-		spaceSprite_->Draw();
+		if (isInputSpaceDraw_) {
+			spaceSprite_->Draw();
+		}
 	}
 }
 

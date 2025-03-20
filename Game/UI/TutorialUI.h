@@ -68,5 +68,13 @@ private:
 	std::unique_ptr<Sprite> tutorialText_;
 	std::unique_ptr<Sprite> textBackSprite_;
 	std::unique_ptr<Sprite> spaceSprite_;
+
+	float notInputAcceptanceTimeLimit_ = 1.0f;
+	float notInputAcceptanceTime_ = 0.0f;
+	bool isInputSpaceDraw_ = false;
+
+	float spaceScaleUpTime_ = 0.0f;
+	float spaceScaleUpTimeLimit_ = 0.5f;
+
 };
 
