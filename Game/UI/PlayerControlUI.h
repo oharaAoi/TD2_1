@@ -49,5 +49,10 @@ private: // メンバ変数
 	std::unique_ptr<Sprite> spaceButton_;
 	
 	Player* pPlayer_;
+
+	float totalEaseTime=0.2f;
+	float easeT;
+	float minEaseScale = -0.3f;//収縮割合
+	float curEaseScale;
 };
 

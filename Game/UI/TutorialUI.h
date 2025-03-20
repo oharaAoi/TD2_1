@@ -69,7 +69,7 @@ private:
 	std::unique_ptr<Sprite> textBackSprite_;
 	std::unique_ptr<Sprite> spaceSprite_;
 
-	float notInputAcceptanceTimeLimit_ = 1.0f;
+	float notInputAcceptanceTimeLimit_ = 0.5f;
 	float notInputAcceptanceTime_ = 0.0f;
 	bool isInputSpaceDraw_ = false;
 
