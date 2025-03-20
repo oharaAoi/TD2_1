@@ -131,6 +131,7 @@ private:
 	float bigNumberAlpha_;
 
 	float slopeAngle_ = 10.0f;
+
 };
 
 

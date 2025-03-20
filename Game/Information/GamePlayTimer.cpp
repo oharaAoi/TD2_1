@@ -1,16 +1,14 @@
 #include "GamePlayTimer.h"
 
-GamePlayTimer::GamePlayTimer() {
-}
+GamePlayTimer::GamePlayTimer(){}
 
-GamePlayTimer::~GamePlayTimer() {
-}
+GamePlayTimer::~GamePlayTimer(){}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::Init(float limit) {
+void GamePlayTimer::Init(float limit){
 	isFinish_ = false;
 	gameTimer_ = limit;
 	gameTimeLimit_ = limit;
@@ -24,7 +22,7 @@ void GamePlayTimer::Init(float limit) {
 	// gauge
 	timeGauge_ = Engine::CreateSprite("TimeGaugeBar.png");
 	timeGaugeOutSide_ = Engine::CreateSprite("TimeGauge2.png");
-	
+
 	// timeUpCount
 	bigNumberUI_ = Engine::CreateSprite("BigNumber5.png");
 	bigNumberUI_->SetTextureCenterPos({ 640.0f, 360.0f });
@@ -78,7 +76,6 @@ void GamePlayTimer::Init(float limit) {
 	endPos_ = { 2000.0f, 250.0f };
 	time_ = 0;
 	moveTime_ = 1.5f;
-
 	timeleftUI_->SetCenterPos(startPos_);
 
 	timeGauge_->SetCenterPos(timeGaugeOutSide_->GetCenterPos() + timeGaugeBarOffset_);
@@ -87,19 +84,25 @@ void GamePlayTimer::Init(float limit) {
 	// ↓ scaleUp用の変数 
 	// -------------------------------------------------
 
-	bigNumberScale_ = {1.0f, 1.0f};
+	bigNumberScale_ = { 1.0f, 1.0f };
 	scaleUpTime_ = 0.0f;
 	bigNumberAlpha_ = 0.5f;
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::Update(bool isPlayerFlying) {
+void GamePlayTimer::Update(bool isPlayerFlying){
+
 	gameTimer_ -= GameTimer::DeltaTime();
+
+	if(gameTimer_ > 0.f && Input::IsPressKey(DIK_SPACE) && !isPlayerFlying) {
+		gameTimer_ = (std::max)(gameTimer_, 0.25f);
+	}
 	float raito = gameTimer_ / gameTimeLimit_;
-	
+
 	// 時間のゲージを変更する
 	timeGaugeOutSide_->Update();
 
@@ -109,33 +112,37 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	timeGauge_->Update();
 
 	// 5秒前になったら大きな時間を表示する
-	if (gameTimer_ <= 5.0f) {
+	if(gameTimer_ <= 5.0f && gameTimer_ > 0.25f) {
 
-		if (!isOverTime_ && !isFinish_) {
-			if (scaleUpTime_ == 0.0f) {
+		if(!isOverTime_ && !isFinish_) {
+			if(scaleUpTime_ == 0.0f ) {
 				AudioPlayer::SinglShotPlay("timeUpCount.mp3", 0.6f);
 			}
 		}
 
 		scaleUpTime_ += GameTimer::DeltaTime();
-		if (gameTimer_ <= 1.0f) {
+		if(gameTimer_ <= 1.0f) {
 			bigNumberUI_->SetTexture("BigNumber1.png");
 			bigNumberUI_->SetRotate(-slopeAngle_ * toRadian);
-		} else if (gameTimer_ <= 2.0f) {
+		} else if(gameTimer_ <= 2.0f) {
 			bigNumberUI_->SetTexture("BigNumber2.png");
 			bigNumberUI_->SetRotate(slopeAngle_ * toRadian);
-		} else if (gameTimer_ <= 3.0f) {
+		} else if(gameTimer_ <= 3.0f) {
 			bigNumberUI_->SetTexture("BigNumber3.png");
 			bigNumberUI_->SetRotate(-slopeAngle_ * toRadian);
-		} else if (gameTimer_ <= 4.0f) {
+		} else if(gameTimer_ <= 4.0f) {
 			bigNumberUI_->SetTexture("BigNumber4.png");
 			bigNumberUI_->SetRotate(slopeAngle_ * toRadian);
-		} else if (gameTimer_ <= 5.0f) {
+		} else if(gameTimer_ <= 5.0f) {
 			bigNumberUI_->SetTexture("BigNumber5.png");
 			bigNumberUI_->SetRotate(-slopeAngle_ * toRadian);
 		}
 
-		BigNumberScalUp();
+
+		if(gameTimer_ > 0.25f || gameTimer_ < 0.25f){
+			BigNumberScalUp();
+
+		}
 
 		bigNumberUI_->Update();
 	} else {
@@ -143,21 +150,21 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 	}
 
 	// タイムアップ10秒前
-	if (std::floor(gameTimer_) == 10.0f) {
+	if(std::floor(gameTimer_) == 10.0f) {
 		timeleftUI_->SetTexture("timer10.png");
 		timeleft10s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
 	// タイムアップ60秒前
-	if (std::floor(gameTimer_) == 60.0f) {
+	if(std::floor(gameTimer_) == 60.0f) {
 		timeleftUI_->SetTexture("timer60.png");
 		timeleft60s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
 
-	if (gameTimer_ <= 0.0f) {
+	if(gameTimer_ <= 0.0f) {
 		// Playerが飛んでいたら
-		if (!isPlayerFlying) {
+		if(!isPlayerFlying) {
 			// 制限時間を超えたら
 
 			isFinish_ = true;
@@ -168,31 +175,31 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 			timeGaugeOutSide_->SetTexture("TimeGauge_OverTime.png");
 
 			// 今飛んでいなくて前飛んでいたら
-			if (!isPlayerFlying && isPreFlying_) {
+			if(!isPlayerFlying && isPreFlying_) {
 				isFinish_ = true;
 				//AudioPlayer::SinglShotPlay("timeUp.wav", 0.6f);
 			}
 		}
 	}
 
-	if (isFinish_) {
+	if(isFinish_) {
 		outgameTime_ += GameTimer::DeltaTime();
 	}
 
-	if (isMove_) {
+	if(isMove_) {
 		SpriteMove();
 		timeleftUI_->SetCenterPos(uiPos_);
 		timeleftUI_->Update();
 	}
 
-	if (isAddTime_) {
+	if(isAddTime_) {
 		AddClockMove();
 		addTimeSprite_->SetColor(addClockColor_);
 		addTimeSprite_->Update();
 	}
 
 #ifdef _DEBUG
-	if (Input::IsTriggerKey(DIK_0)) {
+	if(Input::IsTriggerKey(DIK_0)) {
 		gameTimer_ = 3;
 	}
 #endif // _DEBUG
@@ -203,17 +210,17 @@ void GamePlayTimer::Update(bool isPlayerFlying) {
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::Draw() const {
+void GamePlayTimer::Draw() const{
 	timeGauge_->Draw();
 	timeGaugeOutSide_->Draw();
 
-	if (!isOverTime_ && !isFinish_) {
-		if (gameTimer_ <= 5.0f) {
+	if(!isOverTime_ && !isFinish_) {
+		if(gameTimer_ <= 5.0f) {
 			bigNumberUI_->Draw();
 		}
 	}
-	
-	if (isAddTime_) {
+
+	if(isAddTime_) {
 		addTimeSprite_->Draw();
 	}
 
@@ -224,7 +231,7 @@ void GamePlayTimer::Draw() const {
 // ↓　計測
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::Measurement() {
+void GamePlayTimer::Measurement(){
 	isFinish_ = false;
 	gameTimer_ = 0;
 }
@@ -233,8 +240,8 @@ void GamePlayTimer::Measurement() {
 // ↓　TimeUpの文字のscaleを大きくする
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::BigNumberScalUp() {
-	if (scaleUpTime_ <= scaleUpTimeLimit_) {
+void GamePlayTimer::BigNumberScalUp(){
+	if(scaleUpTime_ <= scaleUpTimeLimit_) {
 		float t = scaleUpTime_ / scaleUpTimeLimit_;
 		bigNumberScale_ = Vector2::Lerp({ 0.0f, 0.0f }, { 1.0f, 1.0f }, EaseOutExpo(t));
 		bigNumberUI_->SetScale(bigNumberScale_);
@@ -242,13 +249,15 @@ void GamePlayTimer::BigNumberScalUp() {
 
 	} else {
 		float t = (scaleUpTime_ - scaleUpTimeLimit_) / (1.0f - scaleUpTimeLimit_);
-		bigNumberAlpha_ = std::lerp(0.5f, 0.0f, EaseInOutCubic(t));
+
+		if(gameTimer_ >= 1.f)bigNumberAlpha_ = std::lerp(0.5f, 0.0f, EaseInOutCubic(t));
+
 	}
 
-	if (scaleUpTime_ >= 1.0f) {
+	if(scaleUpTime_ >= 1.0f) {
 		scaleUpTime_ = 0.0f;
 	}
-	
+
 	bigNumberUI_->SetColor(Vector4(1.0f, 1.0f, 1.0f, bigNumberAlpha_));
 }
 
@@ -256,7 +265,7 @@ void GamePlayTimer::BigNumberScalUp() {
 // ↓　調整項目の時間
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::AdaptAdjustmentItem() {
+void GamePlayTimer::AdaptAdjustmentItem(){
 	originPos_ = adjustItem_->GetValue<Vector2>(groupName_, "numberOriginPos");
 	timeGaugeBarOffset_ = adjustItem_->GetValue<Vector2>(groupName_, "timeGaugeBarOffset");
 	addTimeOffsetX_ = adjustItem_->GetValue<float>(groupName_, "addTimeOffsetX");
@@ -271,21 +280,21 @@ void GamePlayTimer::AdaptAdjustmentItem() {
 // ↓　残り時間通知のTextureの追加
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::SpriteMove() {
+void GamePlayTimer::SpriteMove(){
 	// fadeがtrueだったら画面外から画面ないへ
 	time_ += GameTimer::DeltaTime();
 	float t = time_ / moveTime_;
-	if (isFadeIn_) {
+	if(isFadeIn_) {
 		uiPos_ = Vector2::Lerp(startPos_, Vector2(640, startPos_.y), EaseOutElastic(t));
 	} else {
 		uiPos_ = Vector2::Lerp(Vector2(640, startPos_.y), endPos_, EaseInOutBack(t));
 	}
 
 	// 時間を過ぎたら
-	if (time_ >= moveTime_) {
+	if(time_ >= moveTime_) {
 		time_ = 0.0f;
 
-		if (!isFadeIn_) {
+		if(!isFadeIn_) {
 			isMove_ = false;
 			time_ = 0.0f;
 		}
@@ -298,20 +307,20 @@ void GamePlayTimer::SpriteMove() {
 // ↓　時間の追加
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::AddTime(float time) {
-	if (isOverTime_) {
+void GamePlayTimer::AddTime(float time){
+	if(isOverTime_) {
 		return;
 	}
 
-	if (time == 5.0f) {
+	if(time == 5.0f) {
 		addTimeSprite_->SetTexture("missionClearAddTime_5.png");
 	} else {
 		addTimeSprite_->SetTexture("missionClearAddTime.png");
 	}
-		
+
 	gameTimer_ += time;
 
-	if (gameTimer_ > gameTimeLimit_) {
+	if(gameTimer_ > gameTimeLimit_) {
 		gameTimeLimit_ = gameTimer_;
 	}
 
@@ -325,11 +334,12 @@ void GamePlayTimer::AddTime(float time) {
 // ↓　時間追加の際の時計の動き
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GamePlayTimer::AddClockMove() {
+void GamePlayTimer::AddClockMove(){
+
 	addClockMoveCount_ += GameTimer::DeltaTime();
 	float t = addClockMoveCount_ / addClockMoveTime_;
 
-	if (isAppearance_) {
+	if(isAppearance_) {
 		Vector2 pos = addTimeSprite_->GetCenterPos();
 		pos = Vector2::Lerp(addTimeStartPos_, addTimeEndPos_, EaseOutExpo(t));
 		addTimeSprite_->SetCenterPos(pos);
@@ -345,10 +355,9 @@ void GamePlayTimer::AddClockMove() {
 
 	addClockColor_.w = alpa_;
 
-	if (addClockMoveCount_ > addClockMoveTime_) {
+	if(addClockMoveCount_ > addClockMoveTime_) {
 		addClockMoveCount_ = 0;
-
-		if (!isAppearance_) {
+		if(!isAppearance_) {
 			isAddTime_ = false;
 		}
 
@@ -362,8 +371,8 @@ void GamePlayTimer::AddClockMove() {
 
 #ifdef _DEBUG
 #include "Engine/Manager/ImGuiManager.h"
-void GamePlayTimer::Debug_Gui() {
-	if (ImGui::TreeNode("GamePlayTimer")) {
+void GamePlayTimer::Debug_Gui(){
+	if(ImGui::TreeNode("GamePlayTimer")) {
 		ImGui::Text("gameTimer_ : %f", gameTimer_);
 		ImGui::SliderFloat("gameTimer", &gameTimer_, 0.0f, gameTimeLimit_);
 		ImGui::DragFloat3("originPos", &originPos_.x, 0.1f);
@@ -373,20 +382,20 @@ void GamePlayTimer::Debug_Gui() {
 		/*ImGui::DragFloat2("numberSpriteScale", &numberSpriteScale_.x, 0.1f);
 		ImGui::DragFloat("inverval", &numberInterval_, 0.1f);
 		*/
-		if (ImGui::TreeNode("timeGauge")) {
+		if(ImGui::TreeNode("timeGauge")) {
 			timeGauge_->Debug_Gui();
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNode("timeGaugeOutSide")) {
+		if(ImGui::TreeNode("timeGaugeOutSide")) {
 			timeGaugeOutSide_->Debug_Gui();
 			ImGui::TreePop();
 		}
 
-		if (ImGui::Button("AddTime")) {
+		if(ImGui::Button("AddTime")) {
 			AddTime(10.0f);
 		}
 
-		if (ImGui::Button("ReAdapt")) {
+		if(ImGui::Button("ReAdapt")) {
 			AdaptAdjustmentItem();
 		}
 
