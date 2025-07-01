@@ -37,6 +37,7 @@ private:
 	std::string groupName_;
 
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> uiMap_;
+	std::unordered_map<std::string, std::unique_ptr<Sprite>> uiMap_EN_;
 	std::list<Sprite*> drawSpriteList_;
 
 	Vector2 scale_;

@@ -8,8 +8,12 @@
             109.0,
             672.0
         ],
+        "Title_Arrow": [
+            480.0,
+            570.0
+        ],
         "title_gameStart": [
-            680.0,
+            640.0,
             560.0
         ],
         "title_pushSpace": [
