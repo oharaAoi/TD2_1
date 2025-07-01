@@ -280,6 +280,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "Tutorial_4.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tutorialBackSprite.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tutorialText.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tutorialText_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "tower.png");

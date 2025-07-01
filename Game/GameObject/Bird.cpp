@@ -26,6 +26,12 @@ void Bird::Init() {
 	obb_.size = { radius_*0.6f, radius_, radius_ * 0.6f };
 	obb_.center = GetWorldTranslation();
 
+	birdScale_ = Vector3(6, 6, 6);
+	scalingTime_ = 1.0f;
+
+	scalingTimer_ = scalingTime_;
+	scalingSign_ = 1;
+
 	SetIsLighting(false);
 }
 
@@ -39,6 +45,8 @@ void Bird::Update() {
 		transform_->SetTranslaion(firstPos_ + (moveDirection_.Normalize() * (moveRadius_ * move_t)));
 		time_ += GameTimer::DeltaTime();
 	}
+
+	ScalingTimer();
 
 	obb_.center = GetWorldTranslation();
 	obb_.MakeOBBAxis(transform_->GetQuaternion());
@@ -71,7 +79,7 @@ void Bird::OnCollision(Collider* other) {
 void Bird::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 						 const Vector3& pos, const SubAttributeType& subType){
 	BasePlacementObject::ApplyLoadData(scale, rotate, pos, subType);
-	transform_->SetScale({ 6, 6, 6 });
+	transform_->SetScale(birdScale_);
     	firstPos_ = pos;
 }
 
@@ -88,8 +96,16 @@ void Bird::IndividualFromCommon(const SubAttributeType& subType) {
 
 void Bird::ScaleChange(bool playerCloseWind) {
 	if (playerCloseWind) {
-		transform_->SetScale({ 6, 6, 6 });
+		scalingSign_ = 1;
 	} else {
-		transform_->SetScale({ 0, 0, 0 });
+		scalingSign_ = -1;
 	}
+}
+
+void Bird::ScalingTimer() {
+	scalingTimer_ += GameTimer::DeltaTime() * static_cast<float>(scalingSign_);
+	scalingTimer_ = std::clamp(scalingTimer_, 0.0f, scalingTime_);
+
+	float t = scalingTimer_ / scalingTime_;
+	transform_->SetScale(Vector3::Lerp({0.0f, 0.0f, 0.0f,}, birdScale_, t));
 }

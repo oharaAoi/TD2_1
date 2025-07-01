@@ -398,6 +398,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Information\FlyingTimer.h" />
     <ClInclude Include="Game\Information\GamePlayTimer.h" />
     <ClInclude Include="Game\Information\JumpAssessor.h" />
+    <ClInclude Include="Game\Information\PlayConfig.h" />
     <ClInclude Include="Game\Information\Score.h" />
     <ClInclude Include="Game\Information\StageInformation.h" />
     <ClInclude Include="Game\Manager\AnimationManager.h" />
