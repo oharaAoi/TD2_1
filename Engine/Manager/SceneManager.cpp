@@ -234,6 +234,10 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMax.png");
 
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_Titlle_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial_EN.png");
+
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionHeight_1.png");
