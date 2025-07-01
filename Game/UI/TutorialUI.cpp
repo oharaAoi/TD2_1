@@ -216,7 +216,6 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	static const float kWatingTime = 0.2f;// テキストが表示されるまでの待ち時間
 	static float waitTime = kWatingTime;// テキストが表示されるまでの待ち時間
 
-
 	// 各看板との距離を計算して、一定の距離に近づいたらテキストを表示する
 	for(int i = 0; i < 3; i++){
 		distanceToUI[i] = (tutorialUI_["kari" + std::to_string(i + 1)]->GetTransform()->GetTranslation() - playerPos_).Length();
