@@ -73,6 +73,6 @@ void BirdToge::ScaleChange(bool playerCloseWind) {
 	if (playerCloseWind) {
 		transform_->SetScale({ 0, 0, 0 });
 	} else {
-		transform_->SetScale(bird_->GetTransform()->GetScale());
+		transform_->SetScale({ 6, 6, 6 });
 	}
 }
