@@ -105,6 +105,7 @@ public:
 	const int GetBodyCount() const { return bodyCount_; }
 
 	const bool GetIsJet() const { return isjet_; }
+	const bool GetIsFalling() const { return isFalling_; }
 
 	const bool GetIsFacedBird() const { return isFacedBird_; }
 	const bool GetIsEnableLaunch() const { return isEnableLaunch_; }
