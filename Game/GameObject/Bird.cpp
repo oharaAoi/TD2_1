@@ -1,5 +1,6 @@
 #include "Bird.h"
 #include <Game/Manager/AnimetionEffectManager.h>
+#include "BirdToge.h"
 
 
 //////////////////////////////////////////////////////
@@ -82,5 +83,13 @@ void Bird::IndividualFromCommon(const SubAttributeType& subType) {
 	case SubAttributeType::NOTMOVE:
 		isMove_ = false;
 		break;
+	}
+}
+
+void Bird::ScaleChange(bool playerCloseWind) {
+	if (playerCloseWind) {
+		transform_->SetScale({ 6, 6, 6 });
+	} else {
+		transform_->SetScale({ 0, 0, 0 });
 	}
 }

@@ -73,6 +73,33 @@ void ObstaclesManager::Update(){
 		}
 
 		// -------------------------------------------------
+		// ↓ playerの羽の開閉に関する鳥のモデルの変更
+		// -------------------------------------------------
+
+		if ((*it)->GetObjectType() == (int)ObjectType::BIRD) {
+			bool playerCloseWing = pPlayer_->GetIsCloseWing();
+			if (!playerCloseWing) {
+				Bird* bird = dynamic_cast<Bird*>((*it).get());
+				bird->ScaleChange(playerCloseWing);
+
+			} else {
+				Bird* bird = dynamic_cast<Bird*>((*it).get());
+				bird->ScaleChange(playerCloseWing);
+			}
+		} else if ((*it)->GetObjectType() == (int)ObjectType::BIRDTOGE) {
+			bool playerCloseWing = pPlayer_->GetIsCloseWing();
+			if (!playerCloseWing) {
+				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+				birdToge->ScaleChange(playerCloseWing);
+
+			} else {
+				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+				birdToge->ScaleChange(playerCloseWing);
+			}
+		}
+
+
+		// -------------------------------------------------
 		// ↓ 本更新
 		// -------------------------------------------------
 		(*it)->Update();
@@ -186,6 +213,17 @@ void ObstaclesManager::TutorialImport(const std::string& fileName, const Vector3
 			obj->Init();
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 			obj->SetObbSize(obj->GetRadius());
+
+			{
+				auto& birdToge = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
+				birdToge.reset(new BirdToge);
+				birdToge->Init();
+				birdToge->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+				birdToge->SetObbSize(obj->GetRadius());
+
+				dynamic_cast<BirdToge*>(birdToge.get())->SetBird(dynamic_cast<Bird*>(obj.get()));
+			}
+
 			break;
 		case PlacementObjType::DRIFTWOOD:
 			obj.reset(new Driftwood);
@@ -248,12 +286,28 @@ void ObstaclesManager::RandomImportCreate(){
 				obj->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				obj->SetObbSize(obj->GetRadius());
 
-
 				randTheta = RandomFloat(0.0f, 3.14f * 2.0f);
 				direction = { std::cosf(randTheta),std::sinf(randTheta),0.0f };
-				dynamic_cast<Bird*>(obj.get())->SetMoveDirection(direction);
-				dynamic_cast<Bird*>(obj.get())->SetMoveRadius(RandomFloat(6.0f, 10.0f));
-				dynamic_cast<Bird*>(obj.get())->SetIsMove(RandomInt(0, 1));
+				{
+					Bird* bird = dynamic_cast<Bird*>(obj.get());
+					bird->SetMoveDirection(direction);
+					bird->SetMoveRadius(RandomFloat(6.0f, 10.0f));
+					bird->SetIsMove(RandomInt(0, 1));
+				}
+
+				{
+					auto& birdToge = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
+					birdToge.reset(new BirdToge);
+					birdToge->Init();
+					birdToge->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
+					birdToge->SetObbSize(obj->GetRadius());
+
+					BirdToge* toge = dynamic_cast<BirdToge*>(birdToge.get());
+					toge->SetMoveDirection(direction);
+					toge->SetMoveRadius(RandomFloat(6.0f, 10.0f));
+					toge->SetIsMove(RandomInt(0, 1));
+					toge->SetBird(dynamic_cast<Bird*>(obj.get()));
+				}
 
 				break;
 
@@ -340,6 +394,21 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 			}
 			createPos.y = std::clamp(createPos.y, 11.0f,999.0f);
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+
+			{
+				auto& birdToge = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
+				birdToge.reset(new BirdToge);
+				birdToge->Init();
+				// 60.0f以上の高さにいたら少し上げる
+				if (pPlayer_->GetTransform()->GetTranslation().y >= birdAdjustmentHeight && createPos.y >= 30) {
+					createPos.y += std::abs(pPlayer_->GetTransform()->GetTranslation().y - createPos.y) * birdPopYRaito_;
+				}
+				createPos.y = std::clamp(createPos.y, 11.0f, 999.0f);
+				birdToge->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
+
+				dynamic_cast<BirdToge*>(birdToge.get())->SetBird(dynamic_cast<Bird*>(obj.get()));
+			}
+
 			//obj->SetObbSize(obj->GetRadius());
 			break;
 		case PlacementObjType::DRIFTWOOD:

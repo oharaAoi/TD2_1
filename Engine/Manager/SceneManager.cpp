@@ -186,6 +186,8 @@ void SceneManager::Load() {
 	ModelManager::LoadModel("./Game/Resources/Model/TutorialGuide/", "TutorialGuide.obj");
 	ModelManager::LoadModel("./Game/Resources/Model/MaxHeight/", "MaxHeight.obj");
 
+	ModelManager::LoadModel("./Game/Resources/Model/BirdToge/", "BirdToge.gltf");
+
 	// 仕様上連続して読み込みたい物
 	ModelManager::LoadModel("./Game/Resources/Model/Watersurface/", "Watersurface.obj");
 	TextureManager::LoadTextureFile("./Game/Resources/Model/", "normalMap.png");

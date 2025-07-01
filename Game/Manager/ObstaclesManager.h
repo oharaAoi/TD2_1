@@ -7,6 +7,7 @@
 #include "Game/GameObject/Item.h"
 #include "Game/GameObject/Rock.h"
 #include "Game/GameObject/Bird.h"
+#include "Game/GameObject/BirdToge.h"
 #include "Game/GameObject/Driftwood.h"
 #include "Game/GameObject/Waterweed.h"
 #include "Game/GameObject/Coin.h"

@@ -240,7 +240,6 @@ void Player::Draw() const{
 		body->Draw();
 	}
 
-
 #ifdef _DEBUG
 	if(isDebugUI_Visible_){
 		debugJumpUI_->Draw();

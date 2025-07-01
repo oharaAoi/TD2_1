@@ -212,6 +212,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Effect\Trail.cpp" />
     <ClCompile Include="Game\GameObject\BasePlacementObject.cpp" />
     <ClCompile Include="Game\GameObject\Bird.cpp" />
+    <ClCompile Include="Game\GameObject\BirdToge.cpp" />
     <ClCompile Include="Game\GameObject\Coin.cpp" />
     <ClCompile Include="Game\GameObject\Driftwood.cpp" />
     <ClCompile Include="Game\GameObject\Fish.cpp" />
@@ -379,6 +380,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Effect\Trail.h" />
     <ClInclude Include="Game\GameObject\BasePlacementObject.h" />
     <ClInclude Include="Game\GameObject\Bird.h" />
+    <ClInclude Include="Game\GameObject\BirdToge.h" />
     <ClInclude Include="Game\GameObject\Coin.h" />
     <ClInclude Include="Game\GameObject\Driftwood.h" />
     <ClInclude Include="Game\GameObject\Fish.h" />
