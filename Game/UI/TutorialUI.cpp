@@ -1,5 +1,6 @@
 #include "TutorialUI.h"
 #include "Engine/Math/Easing.h"
+#include "../Information/PlayConfig.h"
 
 TutorialUI::TutorialUI(){
 }
@@ -87,7 +88,8 @@ void TutorialUI::Init(){
 	/*=================================*/
 	// テキストの初期化
 	/*=================================*/
-	tutorialText_ = Engine::CreateSprite("tutorialText.png");
+	std::string textureName = PlayConfig::language == LANGUAGE_JP ? "tutorialText.png" : "tutorialText_EN.png";
+	tutorialText_ = Engine::CreateSprite(textureName);
 	tutorialText_->SetCenterPos({ 640.0f, 555.0f });
 	tutorialText_->SetAnchorPoint({ 0.5f, 0.5f });
 	tutorialText_->SetRectRange({ 1280.0f, 60.0f });
@@ -191,8 +193,8 @@ Vector3 TutorialUI::GetStartPos(){
 	return tutorialUI_["start"]->GetTransform()->GetTranslation();
 }
 
-void TutorialUI::SetFlyingTutorial() {
-	
+void TutorialUI::SetFlyingTutorial(){
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +205,7 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 
 	static float sensingDistance = 75.0f;
 	static float distanceToUI[tutorialCount_] = { 0.0f, 0.0f, 0.0f };
-	static const int32_t kTextPage[tutorialCount_] = { 1,4,3,2};// テキストのページ数
+	static const int32_t kTextPage[tutorialCount_] = { 1,4,3,2 };// テキストのページ数
 	static const int32_t textOffset[tutorialCount_] = { 0,1,5,8 };// テキストのオフセット
 	static int32_t textPage[tutorialCount_] = { 0,0,0 };// 現在のページ
 	static int32_t currentTutorialIndex = -1;// 現在のチュートリアルのインデックス
@@ -236,9 +238,9 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	}
 
 	// 飛んでいる時に出すUI
-	if (playerFlying) {
-		if (!isShownText_[3]) {
-			spaceScaleUpTime_ = 0.0f; 
+	if(playerFlying){
+		if(!isShownText_[3]){
+			spaceScaleUpTime_ = 0.0f;
 			notInputAcceptanceTime_ = 0.0f;
 			isInputSpaceDraw_ = false;
 
@@ -288,7 +290,7 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 		bool isFlashing = std::fmod(GameTimer::TotalTime(), 1.0f) < 0.5f;
 		if(isFlashing){
 			alpha = 0.5f;
-			spaceSprite_->SetScale(Vector2(0.5f,0.5f) * 0.9f);
+			spaceSprite_->SetScale(Vector2(0.5f, 0.5f) * 0.9f);
 		} else{
 			alpha = 1.0f;
 			spaceSprite_->SetScale(Vector2(0.5f, 0.5f));
@@ -300,30 +302,30 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 		spaceSprite_->SetColor({ 1.0f, 1.0f, 1.0f, t2 * alpha });
 
 		// ページの更新
-		if (notInputAcceptanceTime_ > notInputAcceptanceTimeLimit_) {
+		if(notInputAcceptanceTime_ > notInputAcceptanceTimeLimit_){
 			isInputSpaceDraw_ = true;
 
 			// スペースを大きくする
-			if (spaceScaleUpTime_ < spaceScaleUpTimeLimit_) {
+			if(spaceScaleUpTime_ < spaceScaleUpTimeLimit_){
 				spaceScaleUpTime_ += GameTimer::DeltaTime();
 				float t = spaceScaleUpTime_ / spaceScaleUpTimeLimit_;
-				Vector2 scale = Vector2::Lerp({0,0}, {0.5f,0.5f }, EaseOutCubic(t));
+				Vector2 scale = Vector2::Lerp({ 0,0 }, { 0.5f,0.5f }, EaseOutCubic(t));
 				spaceSprite_->SetScale(scale);
 			}
 
-			if (Input::IsTriggerKey(DIK_SPACE)) {
+			if(Input::IsTriggerKey(DIK_SPACE)){
 				textPage[currentTutorialIndex]++;
 
 				// ページが最後まで行ったか確認
-				if (textPage[currentTutorialIndex] >= kTextPage[currentTutorialIndex]) {
+				if(textPage[currentTutorialIndex] >= kTextPage[currentTutorialIndex]){
 					isReacedEndPage = true;
-				} else {
+				} else{
 					textTimer = 0.0f;// まだページが残っているのでタイマーをリセット
 					// テキストkの切り抜き範囲の更新
 					tutorialText_->SetLeftTop({ 0.0f, 60.0f * (textOffset[currentTutorialIndex] + textPage[currentTutorialIndex]) });
 				}
 			}
-		} else {
+		} else{
 			isInputSpaceDraw_ = false;
 			notInputAcceptanceTime_ += GameTimer::DeltaTime();
 		}
@@ -334,7 +336,7 @@ void TutorialUI::DrawTutorialText(){
 	if(isTextShowing_){
 		textBackSprite_->Draw();
 		tutorialText_->Draw();
-		if (isInputSpaceDraw_) {
+		if(isInputSpaceDraw_){
 			spaceSprite_->Draw();
 		}
 	}

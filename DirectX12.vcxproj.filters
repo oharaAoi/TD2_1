@@ -1136,6 +1136,9 @@
     <ClInclude Include="Game\GameObject\BirdToge.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Information\PlayConfig.h">
+      <Filter>Game\GameObject\Information</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\HLSL\Object3d.PS.hlsl">
