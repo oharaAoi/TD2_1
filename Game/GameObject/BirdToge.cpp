@@ -23,12 +23,19 @@ void BirdToge::Init() {
 	obb_.size = { radius_ * 0.6f, radius_, radius_ * 0.6f };
 	obb_.center = GetWorldTranslation();
 
+	birdScale_ = Vector3(6, 6, 6);
+	scalingTime_ = 0.4f;
+
+	scalingTimer_ = scalingTime_;
+	scalingSign_ = 1;
+
 	SetIsLighting(false);
 }
 
 void BirdToge::Update() {
 	typeID_ = (int)ObjectType::BIRDTOGE;
 
+	ScalingTimer();
 	transform_->SetTranslaion(bird_->GetWorldTranslation());
 
 	obb_.center = GetWorldTranslation();
@@ -52,7 +59,7 @@ void BirdToge::OnCollision(Collider* other) {
 void BirdToge::ApplyLoadData(const Vector3& scale, const Quaternion& rotate,
 							 const Vector3& pos, const SubAttributeType& subType) {
 	BasePlacementObject::ApplyLoadData(scale, rotate, pos, subType);
-	transform_->SetScale({ 6, 6, 6 });
+	transform_->SetScale(birdScale_);
 	firstPos_ = pos;
 	typeID_ = (int)ObjectType::BIRDTOGE;
 }
@@ -71,8 +78,16 @@ void BirdToge::IndividualFromCommon(const SubAttributeType& subType) {
 
 void BirdToge::ScaleChange(bool playerCloseWind) {
 	if (playerCloseWind) {
-		transform_->SetScale({ 0, 0, 0 });
+		scalingSign_ = -1;
 	} else {
-		transform_->SetScale({ 6, 6, 6 });
+		scalingSign_ = 1;
 	}
+}
+
+void BirdToge::ScalingTimer() {
+	scalingTimer_ += GameTimer::DeltaTime() * static_cast<float>(scalingSign_);
+	scalingTimer_ = std::clamp(scalingTimer_, 0.0f, scalingTime_);
+
+	float t = scalingTimer_ / scalingTime_;
+	transform_->SetScale(Vector3::Lerp({ 0.0f, 0.0f, 0.0f, }, birdScale_, EaseInOutCubic(t)));
 }

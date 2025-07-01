@@ -77,24 +77,36 @@ void ObstaclesManager::Update(){
 		// -------------------------------------------------
 
 		if ((*it)->GetObjectType() == (int)ObjectType::BIRD) {
-			bool playerCloseWing = pPlayer_->GetIsCloseWing();
-			if (!playerCloseWing) {
+			if (!pPlayer_->GetIsFalling()) {
 				Bird* bird = dynamic_cast<Bird*>((*it).get());
-				bird->ScaleChange(playerCloseWing);
-
+				bird->ScaleChange(true);
 			} else {
-				Bird* bird = dynamic_cast<Bird*>((*it).get());
-				bird->ScaleChange(playerCloseWing);
+
+				bool playerCloseWing = pPlayer_->GetIsCloseWing();
+				if (!playerCloseWing) {
+					Bird* bird = dynamic_cast<Bird*>((*it).get());
+					bird->ScaleChange(playerCloseWing);
+
+				} else {
+					Bird* bird = dynamic_cast<Bird*>((*it).get());
+					bird->ScaleChange(playerCloseWing);
+				}
 			}
 		} else if ((*it)->GetObjectType() == (int)ObjectType::BIRDTOGE) {
-			bool playerCloseWing = pPlayer_->GetIsCloseWing();
-			if (!playerCloseWing) {
-				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
-				birdToge->ScaleChange(playerCloseWing);
-
+			if (!pPlayer_->GetIsFalling()) {
+				BirdToge* bird = dynamic_cast<BirdToge*>((*it).get());
+				bird->ScaleChange(true);
+				
 			} else {
-				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
-				birdToge->ScaleChange(playerCloseWing);
+				bool playerCloseWing = pPlayer_->GetIsCloseWing();
+				if (!playerCloseWing) {
+					BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+					birdToge->ScaleChange(playerCloseWing);
+
+				} else {
+					BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+					birdToge->ScaleChange(playerCloseWing);
+				}
 			}
 		}
 
