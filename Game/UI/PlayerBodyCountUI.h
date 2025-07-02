@@ -121,6 +121,7 @@ private:
 
 	AdjustmentItem* adjust_;
 	std::unique_ptr<Sprite> maxBody_UI_ = nullptr;
+	std::unique_ptr<Sprite> maxBody_UI_EN_ = nullptr;
 
 	std::unique_ptr<Sprite> gaugeBack_UI_ = nullptr;
 	std::unique_ptr<Sprite> gaugeFront_UI_ = nullptr;
@@ -192,6 +193,7 @@ private:
 	bool isAnnounce_ = false;
 
 	std::unique_ptr<Sprite> bodySprite_;
+	std::unique_ptr<Sprite> bodySprite_EN_;
 	std::unique_ptr<Sprite> percentSprite_;
 	std::unique_ptr<Sprite> bodyAnnounceNumber_[2];
 

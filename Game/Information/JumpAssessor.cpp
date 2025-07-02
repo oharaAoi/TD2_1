@@ -1,6 +1,7 @@
 #include "JumpAssessor.h"
 #include "Engine/Math/Easing.h"
 #include "Engine/Math/MyMath.h"
+#include "Game/Information/PlayConfig.h"
 
 //////////////////////////////////////////////////////////////////////////////////////
 // static変数の初期化
@@ -248,12 +249,21 @@ void JumpAssessor::SetJumpData(float speed, int32_t bodyCount, WorldTransform* p
 
 	if(percentage < 100){
 		if(speedPercentage < 1.0f){
-			evaluationSprite_[index]->SetTexture("evaluation1.png");// 速度不足
+			if (PlayConfig::language == LANGUAGE_JP) {
+				evaluationSprite_[index]->SetTexture("evaluation1.png");// 速度不足
+			} else if (PlayConfig::language == LANGUAGE_EN) {
+				evaluationSprite_[index]->SetTexture("evaluation1_EN.png");// 速度不足
+			}
+			
 			index++;
 		}
 
 		if(bodyCountPercentage < 1.0f){
-			evaluationSprite_[index]->SetTexture("evaluation2.png");// 胴体数不足
+			if (PlayConfig::language == LANGUAGE_JP) {
+				evaluationSprite_[index]->SetTexture("evaluation2.png");// 胴体数不足
+			} else if (PlayConfig::language == LANGUAGE_EN) {
+				evaluationSprite_[index]->SetTexture("evaluation2_EN.png");// 胴体数不足
+			}
 			index++;
 		}
 

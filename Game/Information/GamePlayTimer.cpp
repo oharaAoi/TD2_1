@@ -1,4 +1,5 @@
 #include "GamePlayTimer.h"
+#include "Game/Information/PlayConfig.h"
 
 GamePlayTimer::GamePlayTimer(){}
 
@@ -35,6 +36,7 @@ void GamePlayTimer::Init(float limit){
 	timeleft60s_->Init("timeRemaining.mp3");
 
 	timeleftUI_ = Engine::CreateSprite("timer60.png");
+	timeleftUI_EN_ = Engine::CreateSprite("timer60_EN.png");
 
 	// -------------------------------------------------
 	// ↓ 調整項目
@@ -76,7 +78,9 @@ void GamePlayTimer::Init(float limit){
 	endPos_ = { 2000.0f, 250.0f };
 	time_ = 0;
 	moveTime_ = 1.5f;
+
 	timeleftUI_->SetCenterPos(startPos_);
+	timeleftUI_EN_->SetCenterPos(startPos_);
 
 	timeGauge_->SetCenterPos(timeGaugeOutSide_->GetCenterPos() + timeGaugeBarOffset_);
 
@@ -152,12 +156,14 @@ void GamePlayTimer::Update(bool isPlayerFlying){
 	// タイムアップ10秒前
 	if(std::floor(gameTimer_) == 10.0f) {
 		timeleftUI_->SetTexture("timer10.png");
+		timeleftUI_EN_->SetTexture("timer10_EN.png");
 		timeleft10s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
 	// タイムアップ60秒前
 	if(std::floor(gameTimer_) == 60.0f) {
 		timeleftUI_->SetTexture("timer60.png");
+		timeleftUI_EN_->SetTexture("timer60_EN.png");
 		timeleft60s_->Play(false, 0.5f, true);
 		isMove_ = true;
 	}
@@ -198,6 +204,9 @@ void GamePlayTimer::Update(bool isPlayerFlying){
 		addTimeSprite_->Update();
 	}
 
+	timeleftUI_EN_->SetCenterPos(timeleftUI_->GetCenterPos());
+	timeleftUI_EN_->Update();
+
 #ifdef _DEBUG
 	if(Input::IsTriggerKey(DIK_0)) {
 		gameTimer_ = 3;
@@ -224,7 +233,11 @@ void GamePlayTimer::Draw() const{
 		addTimeSprite_->Draw();
 	}
 
-	timeleftUI_->Draw();
+	if (PlayConfig::language == LANGUAGE_JP) {
+		timeleftUI_->Draw();
+	} else if (PlayConfig::language == LANGUAGE_EN) {
+		timeleftUI_EN_->Draw();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

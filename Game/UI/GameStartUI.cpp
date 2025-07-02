@@ -1,4 +1,5 @@
 #include "GameStartUI.h"
+#include "Game/Information/PlayConfig.h"
 
 GameStartUI::GameStartUI() {
 }
@@ -10,6 +11,9 @@ void GameStartUI::Init() {
 	uiPos_ = { -700, 250.0f };
 	start_UI_ = Engine::CreateSprite("gameStart.png");
 	start_UI_->SetTextureCenterPos(uiPos_);
+
+	start_UI_EN_ = Engine::CreateSprite("gameStart_EN.png");
+	start_UI_EN_->SetTextureCenterPos(uiPos_);
 
 	isFadeIn_ = true;
 	time_ = 0.0f;
@@ -29,11 +33,20 @@ void GameStartUI::Update() {
 
 	start_UI_->SetTextureCenterPos(uiPos_);
 	start_UI_->Update();
+
+	start_UI_EN_->SetTextureCenterPos(uiPos_);
+	start_UI_EN_->Update();
 }
 
 void GameStartUI::Draw() const {
 	if (isFinish_) { return; }
-	start_UI_->Draw();
+
+	if (PlayConfig::language == LANGUAGE_JP) {
+		start_UI_->Draw();
+	} else if(PlayConfig::language == LANGUAGE_EN) {
+		start_UI_EN_->Draw();
+	}
+	
 }
 
 void GameStartUI::Move() {

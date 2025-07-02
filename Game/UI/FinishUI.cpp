@@ -1,4 +1,5 @@
 #include "FinishUI.h"
+#include "Game/Information/PlayConfig.h"
 
 FinishUI::FinishUI() {}
 FinishUI::~FinishUI() {}
@@ -27,11 +28,13 @@ void FinishUI::Update() {
 
 	finish_UI_->SetTextureCenterPos(uiPos_);
 	finish_UI_->Update();
+
 }
 
 void FinishUI::Draw() const {
 	if (!isUiMove_) { return; }
 	finish_UI_->Draw();
+	
 }
 
 void FinishUI::Move() {
@@ -60,7 +63,12 @@ void FinishUI::SetUI(bool isOverTime) {
 		return;
 	}
 	if (isOverTime) {
-		finish_UI_->SetTexture("overTime.png");
+		if (PlayConfig::language == LANGUAGE_JP) {
+			finish_UI_->SetTexture("overTime.png");
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			finish_UI_->SetTexture("overTime_EN.png");
+		}
+		
 		finish_UI_->SetTextureCenterPos(uiPos_);
 	}
 

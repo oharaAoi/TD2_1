@@ -110,6 +110,8 @@ private:
 	// 終了前のUI
 	std::unique_ptr<Sprite> timeleftUI_;
 
+	std::unique_ptr<Sprite> timeleftUI_EN_;
+
 	bool isMove_;
 	bool isFadeIn_;
 

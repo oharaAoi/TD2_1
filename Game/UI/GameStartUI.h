@@ -24,6 +24,7 @@ public:
 private:
 
 	std::unique_ptr<Sprite> start_UI_ = nullptr;
+	std::unique_ptr<Sprite> start_UI_EN_ = nullptr;
 
 	Vector2 uiPos_;
 

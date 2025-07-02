@@ -234,10 +234,6 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMax.png");
 
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game_EN.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_Titlle_EN.png");
-	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial_EN.png");
-
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_1.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_2.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionHeight_1.png");
@@ -299,6 +295,26 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speed.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "body.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "percent2.png");
+
+	// EN ver
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "evaluation1_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "evaluation2_EN.png");
+
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_Titlle_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_tutorial_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "body_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "bodyMax_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "gameStart_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionHeight_1_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionHeight_2_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_1_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "missionSpeed_2_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "overTime_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speed_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMax_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer10_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer60_EN.png");
 
 	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");

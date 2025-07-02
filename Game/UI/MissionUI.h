@@ -77,6 +77,9 @@ private:
 	std::unique_ptr<Sprite> speedMission_;
 	std::unique_ptr<Sprite> heightMission_;
 
+	std::unique_ptr<Sprite> speedMission_EN_;
+	std::unique_ptr<Sprite> heightMission_EN_;
+
 	std::unique_ptr<Sprite> speedCheck_;
 	std::unique_ptr<Sprite> heightCheck_;
 

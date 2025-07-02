@@ -24,7 +24,7 @@ public:
 private:
 
 	std::unique_ptr<Sprite> finish_UI_ = nullptr;
-
+	
 	Vector2 uiPos_;
 
 	// Parameter

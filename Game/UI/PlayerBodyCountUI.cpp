@@ -1,5 +1,6 @@
 #include "PlayerBodyCountUI.h"
 #include "Engine/Audio/AudioPlayer.h"
+#include "Game/Information/PlayConfig.h"
 
 PlayerBodyCountUI::PlayerBodyCountUI() {}
 PlayerBodyCountUI::~PlayerBodyCountUI() {}
@@ -9,7 +10,7 @@ PlayerBodyCountUI::~PlayerBodyCountUI() {}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PlayerBodyCountUI::Init() {
-	maxUIPos = { -200, 160.0f };
+	maxUIPos = { -400, 160.0f };
 	backPos_UI_ = { 165, 90.0f };
 
 	frontSize_UI_ = { 0.0f, 1.0f };
@@ -19,6 +20,10 @@ void PlayerBodyCountUI::Init() {
 	maxBody_UI_ = Engine::CreateSprite("bodyMax.png");
 	maxBody_UI_->SetTextureCenterPos(maxUIPos);
 	maxBody_UI_->SetScale(Vector2(.7f, .7f));
+
+	maxBody_UI_EN_ = Engine::CreateSprite("bodyMax_EN.png");
+	maxBody_UI_EN_->SetTextureCenterPos(maxUIPos);
+	maxBody_UI_EN_->SetScale(Vector2(.7f, .7f));
 
 	gaugeBack_UI_ = Engine::CreateSprite("TorsoGaugeBack.png");
 	gaugeFront_UI_ = Engine::CreateSprite("TorsoGaugeFront.png");
@@ -40,7 +45,7 @@ void PlayerBodyCountUI::Init() {
 	moveTime_ = 1.0f;
 
 	fadeInStartPos_ = { -200, 160.0f };
-	fadeOutPos_ = { 1500, 160.0f };
+	fadeOutPos_ = { 1800, 160.0f };
 
 	effectMoveTime_ = 0.6f;
 
@@ -93,6 +98,11 @@ void PlayerBodyCountUI::Init() {
 	bodySprite_->SetCenterPos({ -400, 160.0f });
 	bodySprite_->SetScale({ 0.6f, 0.6f });
 	bodySprite_->Update();
+
+	bodySprite_EN_ = Engine::CreateSprite("body_EN.png");
+	bodySprite_EN_->SetCenterPos({ -400, 160.0f });
+	bodySprite_EN_->SetScale({ 0.6f, 0.6f });
+	bodySprite_EN_->Update();
 
 	percentSprite_ = Engine::CreateSprite("percent2.png");
 	percentSprite_->SetCenterPos({ -400, 160.0f });
@@ -236,6 +246,12 @@ void PlayerBodyCountUI::Update(int playerBodyCount, bool isFlying) {
 	maxBody_UI_->SetTextureCenterPos(maxUIPos);
 	maxBody_UI_->Update();
 
+	maxBody_UI_EN_->SetTextureCenterPos(maxUIPos);
+	maxBody_UI_EN_->Update();
+
+	bodySprite_EN_->SetCenterPos(bodySprite_->GetCenterPos());
+	bodySprite_EN_->Update();
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,7 +261,11 @@ void PlayerBodyCountUI::Update(int playerBodyCount, bool isFlying) {
 void PlayerBodyCountUI::Draw() const {
 
 	if (!isUiMove_) {
-		bodySprite_->Draw();
+		if (PlayConfig::language == LANGUAGE_JP) {
+			bodySprite_->Draw();
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			bodySprite_EN_->Draw();
+		}
 		percentSprite_->Draw();
 		for (int oi = 0; oi < 2; ++oi) {
 			bodyAnnounceNumber_[oi]->Draw();
@@ -282,7 +302,12 @@ void PlayerBodyCountUI::Draw() const {
 	}
 
 	//if (!isUiMove_) { return; }
-	maxBody_UI_->Draw();
+	if (PlayConfig::language == LANGUAGE_JP) {
+		maxBody_UI_->Draw();
+	} else if (PlayConfig::language == LANGUAGE_EN) {
+		maxBody_UI_EN_->Draw();
+	}
+	
 }
 
 void PlayerBodyCountUI::Move() {

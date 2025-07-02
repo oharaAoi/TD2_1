@@ -1,6 +1,7 @@
 #include "PlayerSpeedCounter.h"
 #include "Engine/Math/Easing.h"
 #include "Engine/Audio/AudioPlayer.h"
+#include "Game/Information/PlayConfig.h"
 
 PlayerSpeedCounter::PlayerSpeedCounter(){}
 
@@ -44,10 +45,14 @@ void PlayerSpeedCounter::Init(){
 	// ↓ speedMax
 	// -------------------------------------------------
 
-	speedMaxPos_ = { -700, drawHeight };
+	speedMaxPos_ = { -800, drawHeight };
 	speedMaxUI_ = Engine::CreateSprite("speedMax.png");
 	speedMaxUI_->SetTextureCenterPos(speedMaxPos_);
 	speedMaxUI_->SetScale(Vector2(0.7f, .7f));
+
+	speedMaxUI_EN_ = Engine::CreateSprite("speedMax_EN.png");
+	speedMaxUI_EN_->SetTextureCenterPos(speedMaxPos_);
+	speedMaxUI_EN_->SetScale(Vector2(0.7f, .7f));
 
 	isFadeIn_ = true;
 	time_ = 0.0f;
@@ -66,6 +71,11 @@ void PlayerSpeedCounter::Init(){
 	speedSprite_->SetScale({0.6f, 0.6f});
 	speedSprite_->SetCenterPos({ -500, 160.0f });
 	speedSprite_->Update();
+
+	speedSprite_EN_ = Engine::CreateSprite("speed_EN.png");
+	speedSprite_EN_->SetScale({ 0.6f, 0.6f });
+	speedSprite_EN_->SetCenterPos({ -500, 160.0f });
+	speedSprite_EN_->Update();
 
 	percentSprite_ = Engine::CreateSprite("percent2.png");
 	percentSprite_->SetCenterPos({ -500, 160.0f });
@@ -148,7 +158,12 @@ void PlayerSpeedCounter::Update(float speed, float raito, float alpha, bool isPl
 
 void PlayerSpeedCounter::Draw() const{
 	if (!isUiMove_) {
-		speedSprite_->Draw();
+		if (PlayConfig::language == LANGUAGE_JP) {
+			speedSprite_->Draw();
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			speedSprite_EN_->Draw();
+		}
+		
 		percentSprite_->Draw();
 		for (int oi = 0; oi < 2; ++oi) {
 			speedAnnounceNumber_[oi]->Draw();
@@ -163,7 +178,12 @@ void PlayerSpeedCounter::Draw() const{
 	}
 
 	if (isFinish_) { return; }
-	speedMaxUI_->Draw();
+
+	if (PlayConfig::language == LANGUAGE_JP) {
+		speedMaxUI_->Draw();
+	} else if (PlayConfig::language == LANGUAGE_EN) {
+		speedMaxUI_EN_->Draw();
+	}
 }
 
 //===========================================================================================//
@@ -231,6 +251,10 @@ void PlayerSpeedCounter::SpeedRaitoUpdate(float speed) {
 
 	speedSprite_->Update();
 	percentSprite_->Update();
+
+	speedSprite_EN_->SetCenterPos(speedSprite_->GetCenterPos());
+	speedSprite_EN_->Update();
+
 	for (int oi = 0; oi < 2; ++oi) {
 		if (speedRaitoState_ == SpeedRaitoState::Raito_30) {
 			speedAnnounceNumber_[oi]->SetLeftTop(CalculationSpriteLT(IntegerCount(40.0f, oi + 1)));
@@ -279,6 +303,9 @@ void PlayerSpeedCounter::SpeedMaxUpdate() {
 
 	speedMaxUI_->SetTextureCenterPos(speedMaxPos_);
 	speedMaxUI_->Update();
+
+	speedMaxUI_EN_->SetCenterPos(speedMaxUI_->GetCenterPos());
+	speedMaxUI_EN_->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

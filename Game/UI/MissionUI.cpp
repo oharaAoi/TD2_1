@@ -1,4 +1,5 @@
 #include "MissionUI.h"
+#include "Game/Information/PlayConfig.h"
 
 MissionUI::MissionUI() {
 }
@@ -55,6 +56,9 @@ void MissionUI::Init(GamePlayTimer* pGamePlayTimer) {
 	speedMission_ = Engine::CreateSprite("missionSpeed_1.png");
 	heightMission_ = Engine::CreateSprite("missionHeight_1.png");
 
+	speedMission_EN_ = Engine::CreateSprite("missionSpeed_1_EN.png");
+	heightMission_EN_ = Engine::CreateSprite("missionHeight_1_EN.png");
+
 	speedMission_->SetScale({ 0.6f, 0.6f });
 	heightMission_->SetScale({ 0.6f, 0.6f });
 
@@ -63,6 +67,12 @@ void MissionUI::Init(GamePlayTimer* pGamePlayTimer) {
 
 	speedCheck_->SetCenterPos({ -300.0f, 0.0f });
 	heightCheck_->SetCenterPos({ -300.0f, 0.0f });
+
+	speedMission_EN_->SetCenterPos(speedMission_->GetCenterPos());
+	speedMission_EN_->SetScale(speedMission_->GetScale());
+
+	heightMission_EN_->SetCenterPos(heightMission_->GetCenterPos());
+	heightMission_EN_->SetScale(heightMission_->GetScale());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +87,7 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 		if (!isHeightAppearance_) {
 			isHeightAppearance_ = true;
 			heightMission_->SetTexture("missionComplete.png");
+			heightMission_EN_->SetTexture("missionComplete.png");
 		}
 	}
 
@@ -151,6 +162,16 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 
 	speedMission_->Update();
 	heightMission_->Update();
+
+	// EN対応
+	speedMission_EN_->SetCenterPos(speedMission_->GetCenterPos());
+	speedMission_EN_->SetScale(speedMission_->GetScale());
+
+	heightMission_EN_->SetCenterPos(heightMission_->GetCenterPos());
+	heightMission_EN_->SetScale(heightMission_->GetScale());
+
+	speedMission_EN_->Update();
+	heightMission_EN_->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,8 +182,13 @@ void MissionUI::Draw() const {
 	speedCheck_->Draw();
 	heightCheck_->Draw();
 
-	speedMission_->Draw();
-	heightMission_->Draw();
+	if (PlayConfig::language == LANGUAGE_JP) {
+		speedMission_->Draw();
+		heightMission_->Draw();
+	} else if (PlayConfig::language == LANGUAGE_EN) {
+		speedMission_EN_->Draw();
+		heightMission_EN_->Draw();
+	}
 }
 
 void MissionUI::Start() {
@@ -333,7 +359,11 @@ void MissionUI::SpeedMissionChange() {
 	switch (nowSpeedMission_) {
 	case SpeedMission::Mission_80:
 		nowSpeedMission_ = SpeedMission::Mission_150;
-		speedMission_->SetTexture("missionSpeed_2.png");
+		if (PlayConfig::language == LANGUAGE_JP) {
+			speedMission_->SetTexture("missionSpeed_2.png");
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			speedMission_EN_->SetTexture("missionSpeed_2_EN.png");
+		}
 		break;
 	case SpeedMission::Mission_150:
 		nowSpeedMission_ = SpeedMission::Mission_Finish;
@@ -354,7 +384,11 @@ void MissionUI::HeightMissionChange() {
 	switch (nowHeightMission_) {
 	case HeightMission::Mission_150:
 		nowHeightMission_ = HeightMission::Mission_500;
-		heightMission_->SetTexture("missionHeight_2.png");
+		if (PlayConfig::language == LANGUAGE_JP) {
+			heightMission_->SetTexture("missionHeight_2.png");
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			heightMission_EN_->SetTexture("missionHeight_2_EN.png");
+		}
 		break;
 	case HeightMission::Mission_500:
 		nowHeightMission_ = HeightMission::Mission_Finish;

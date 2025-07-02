@@ -106,6 +106,7 @@ private:
 	// ↓ speedMax
 	// -------------------------------------------------
 	std::unique_ptr<Sprite> speedMaxUI_ = nullptr;
+	std::unique_ptr<Sprite> speedMaxUI_EN_ = nullptr;
 	// Parameter
 	float time_;
 	float moveTime_ = 1.8f;
@@ -127,6 +128,7 @@ private:
 	bool isAnnounce_ = false;
 
 	std::unique_ptr<Sprite> speedSprite_;
+	std::unique_ptr<Sprite> speedSprite_EN_;
 	std::unique_ptr<Sprite> percentSprite_;
 	std::unique_ptr<Sprite> speedAnnounceNumber_[2];
 
