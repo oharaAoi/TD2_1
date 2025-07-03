@@ -134,9 +134,9 @@ private:
 
 	Vector2 announcePos_;
 	Vector2 speedLocalPos_ = {-100.0f, 0.0f};
-	Vector2 percentLocalPos_ = { 125.0f, 0.0f };
-	Vector2 numberLocalPos_;
-	Vector2 numberSpriteDivision_ = {64.0f, 0.0f};
+	Vector2 percentLocalPos_ = { 150.0f, 0.0f };
+	Vector2 numberLocalPos_ = { 24.0f, 0.0f };
+	Vector2 numberSpriteDivision_ = { 55.0f, 0.0f};
 
 	float drawHeight = 80.0f;//速度のアナウンスの描画する高さ
 
