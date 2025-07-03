@@ -304,6 +304,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "evaluation2_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment1_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment2_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "1up_EN.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_Titlle_EN.png");
@@ -320,6 +321,7 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "speedMax_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer10_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "timer60_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "TimeGauge_OverTime_EN.png");
 
 	// animationEffect
 	ModelManager::LoadModel("./Game/Resources/Model/DriftWoodDestroy/", "DriftWoodDestroy.gltf");

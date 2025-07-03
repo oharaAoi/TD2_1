@@ -178,7 +178,11 @@ void GamePlayTimer::Update(bool isPlayerFlying){
 
 		} else { // オーバータイムに入る
 			isOverTime_ = true;
-			timeGaugeOutSide_->SetTexture("TimeGauge_OverTime.png");
+			if (PlayConfig::language == LANGUAGE_JP) {
+				timeGaugeOutSide_->SetTexture("TimeGauge_OverTime.png");
+			} else if (PlayConfig::language == LANGUAGE_EN) {
+				timeGaugeOutSide_->SetTexture("TimeGauge_OverTime_EN.png");
+			}
 
 			// 今飛んでいなくて前飛んでいたら
 			if(!isPlayerFlying && isPreFlying_) {
@@ -233,11 +237,7 @@ void GamePlayTimer::Draw() const{
 		addTimeSprite_->Draw();
 	}
 
-	if (PlayConfig::language == LANGUAGE_JP) {
-		timeleftUI_->Draw();
-	} else if (PlayConfig::language == LANGUAGE_EN) {
-		timeleftUI_EN_->Draw();
-	}
+	timeleftUI_->Draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,6 @@
 #include "BodyUpEffect.h"
 #include "Engine/Math/Easing.h"
+#include "Game/Information/PlayConfig.h"
 
 BodyUpEffect::BodyUpEffect() {
 }
@@ -57,7 +58,12 @@ void BodyUpEffect::Draw() const {
 
 void BodyUpEffect::AddEffect() {
 	auto& newEffect = upEffects_.emplace_back();
-	newEffect.sprite = Engine::CreateSprite("1up.png");
+	if (PlayConfig::language == LANGUAGE_JP) {
+		newEffect.sprite = Engine::CreateSprite("1up.png");
+	} else {
+		newEffect.sprite = Engine::CreateSprite("1up_EN.png");
+	}
+
 	newEffect.sprite->SetCenterPos(playerScreenPos_);
 	newEffect.lifeTimeCount = 0.0f;
 	newEffect.disapperCount = 0.0f;

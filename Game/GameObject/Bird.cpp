@@ -27,7 +27,7 @@ void Bird::Init() {
 	obb_.center = GetWorldTranslation();
 
 	birdScale_ = Vector3(6, 6, 6);
-	scalingTime_ = 1.0f;
+	scalingTime_ = 0.4f;
 
 	scalingTimer_ = scalingTime_;
 	scalingSign_ = 1;
@@ -107,5 +107,10 @@ void Bird::ScalingTimer() {
 	scalingTimer_ = std::clamp(scalingTimer_, 0.0f, scalingTime_);
 
 	float t = scalingTimer_ / scalingTime_;
-	transform_->SetScale(Vector3::Lerp({0.0f, 0.0f, 0.0f,}, birdScale_, t));
+
+	if (scalingSign_ > 0) {
+		transform_->SetScale(Vector3::Lerp({ 0.0f, 0.0f, 0.0f, }, birdScale_, EaseOutBounce(t)));
+	} else if (scalingSign_ < 0) {
+		transform_->SetScale(Vector3::Lerp({ 0.0f, 0.0f, 0.0f, }, birdScale_,  EaseInExpo(t)));
+	}
 }
