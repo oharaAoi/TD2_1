@@ -6,5 +6,5 @@ enum LanguageSetting{
 };
 
 struct PlayConfig{
-	static inline LanguageSetting language = LANGUAGE_JP;
+	static inline LanguageSetting language = LANGUAGE_EN;
 };

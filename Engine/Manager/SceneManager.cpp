@@ -302,6 +302,8 @@ void SceneManager::Load() {
 	// EN ver
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "evaluation1_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "evaluation2_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment1_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "resultComment2_EN.png");
 
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_game_EN.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/UI/", "UI_Titlle_EN.png");

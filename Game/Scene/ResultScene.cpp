@@ -1,4 +1,5 @@
 #include "ResultScene.h"
+#include "Game/Information/PlayConfig.h"
 
 bool ResultScene::isViewingRanking_ = false;
 
@@ -267,10 +268,19 @@ void ResultScene::Init(){
 	fade_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	fade_->Update();
 
-	if(rank_ == SCORE_RANK::SSS){
-		comment_ = Engine::CreateSprite("resultComment.png");
+	if (rank_ == SCORE_RANK::SSS) {
+		if (PlayConfig::language == LANGUAGE_JP) {
+			comment_ = Engine::CreateSprite("resultComment.png");
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			comment_ = Engine::CreateSprite("resultComment1_EN.png");
+		}
+		
 	} else{
-		comment_ = Engine::CreateSprite("resultComment2.png");
+		if (PlayConfig::language == LANGUAGE_JP) {
+			comment_ = Engine::CreateSprite("resultComment2.png");
+		} else if (PlayConfig::language == LANGUAGE_EN) {
+			comment_ = Engine::CreateSprite("resultComment2_EN.png");
+		}
 	}
 	comment_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
 	comment_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });

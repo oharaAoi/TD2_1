@@ -395,7 +395,7 @@ void Audio::ReStartAudio(IXAudio2SourceVoice* pSourceVoice) {
 /// <param name="pSourceVoice"></param>
 void Audio::SetVolume(IXAudio2SourceVoice* pSourceVoice, float volume) {
 	HRESULT result = S_FALSE;
-	result = pSourceVoice->SetVolume(volume);
+	result = pSourceVoice->SetVolume(volume * masterVolume_);
 	assert(SUCCEEDED(result));
 }
 
