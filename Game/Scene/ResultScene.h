@@ -123,7 +123,10 @@ private:
 	std::unique_ptr<Sprite> backgroundSprite_ = nullptr;
 	std::unique_ptr<Sprite> fade_ = nullptr;
 	std::unique_ptr<Sprite> comment_ = nullptr;
+	std::unique_ptr<Sprite> comment_EN_ = nullptr;
 	float commentSpriteAlpha_ = -1.0f;
+
+	Vector2 comment_EN_pos_;
 
 	// ---------- Score --------- //
 	std::unique_ptr<Score> scoreData_;

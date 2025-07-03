@@ -269,23 +269,22 @@ void ResultScene::Init(){
 	fade_->Update();
 
 	if (rank_ == SCORE_RANK::SSS) {
-		if (PlayConfig::language == LANGUAGE_JP) {
-			comment_ = Engine::CreateSprite("resultComment.png");
-		} else if (PlayConfig::language == LANGUAGE_EN) {
-			comment_ = Engine::CreateSprite("resultComment1_EN.png");
-		}
+		comment_ = Engine::CreateSprite("resultComment.png");
+		comment_EN_ = Engine::CreateSprite("resultComment1_EN.png");
 		
 	} else{
-		if (PlayConfig::language == LANGUAGE_JP) {
-			comment_ = Engine::CreateSprite("resultComment2.png");
-		} else if (PlayConfig::language == LANGUAGE_EN) {
-			comment_ = Engine::CreateSprite("resultComment2_EN.png");
-		}
+		comment_ = Engine::CreateSprite("resultComment2.png");
+		comment_EN_ = Engine::CreateSprite("resultComment2_EN.png");
 	}
 	comment_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
 	comment_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
 	comment_->SetColor({ 1.0f,1.0f,1.0f,0.0f });
 	comment_->Update();
+
+	comment_EN_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
+	comment_EN_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
+	comment_EN_->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+	comment_EN_->Update();
 
 	debugScale_ = scoreRankModel_->GetTransform()->GetScale();
 	debugTranslate_ = scoreRankModel_->GetTransform()->GetTranslation();
@@ -440,6 +439,9 @@ void ResultScene::Update(){
 		commentSpriteAlpha_ = std::clamp(commentSpriteAlpha_, 0.0f, 1.0f);
 		comment_->SetColor({ 1.0f,1.0f,1.0f,commentSpriteAlpha_ });
 		comment_->Update();
+
+		comment_EN_->SetColor({ 1.0f,1.0f,1.0f,commentSpriteAlpha_ });
+		comment_EN_->Update();
 	}
 
 
@@ -492,6 +494,7 @@ void ResultScene::Draw() const{
 	Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 	backgroundSprite_->Draw(true);
 	comment_->Draw();
+	comment_EN_->Draw();
 
 	// ====================== effect ====================== //
 	tickerTapeEmitter_->Draw();
@@ -536,6 +539,10 @@ void ResultScene::Debug_Gui(){
 	}
 
 	guideUI_->Debug_Gui();
+
+	ImGui::BulletText("Comment_EN");
+	ImGui::DragFloat2("commentPos", &comment_EN_pos_.x, 1.0f);
+	comment_EN_->SetCenterPos(comment_EN_pos_);
 
 	ImGui::End();
 }
