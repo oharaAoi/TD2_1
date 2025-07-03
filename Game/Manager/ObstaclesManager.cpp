@@ -79,34 +79,27 @@ void ObstaclesManager::Update(){
 		if ((*it)->GetObjectType() == (int)ObjectType::BIRD) {
 			if (!pPlayer_->GetIsFalling()) {
 				Bird* bird = dynamic_cast<Bird*>((*it).get());
-				bird->ScaleChange(true);
+				bird->ScaleChange(true);	// 大きくなる
+
+			} else if (Input::IsPressKey(DIK_SPACE)) {
+				Bird* bird = dynamic_cast<Bird*>((*it).get());
+				bird->ScaleChange(false);	// 小さくなる
 			} else {
-
-				bool playerCloseWing = pPlayer_->GetIsCloseWing();
-				if (!playerCloseWing) {
-					Bird* bird = dynamic_cast<Bird*>((*it).get());
-					bird->ScaleChange(playerCloseWing);
-
-				} else {
-					Bird* bird = dynamic_cast<Bird*>((*it).get());
-					bird->ScaleChange(playerCloseWing);
-				}
+				Bird* bird = dynamic_cast<Bird*>((*it).get());
+				bird->ScaleChange(true);	// 大きくなる
 			}
+		
 		} else if ((*it)->GetObjectType() == (int)ObjectType::BIRDTOGE) {
 			if (!pPlayer_->GetIsFalling()) {
-				BirdToge* bird = dynamic_cast<BirdToge*>((*it).get());
-				bird->ScaleChange(true);
-				
-			} else {
-				bool playerCloseWing = pPlayer_->GetIsCloseWing();
-				if (!playerCloseWing) {
-					BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
-					birdToge->ScaleChange(playerCloseWing);
+				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+				birdToge->ScaleChange(true);	// トゲになる
 
-				} else {
-					BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
-					birdToge->ScaleChange(playerCloseWing);
-				}
+			} else if (Input::IsPressKey(DIK_SPACE)) {
+				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+				birdToge->ScaleChange(false);	// なくなる
+			} else {
+				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
+				birdToge->ScaleChange(true);	// トゲになる
 			}
 		}
 
