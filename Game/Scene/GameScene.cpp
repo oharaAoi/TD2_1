@@ -36,7 +36,7 @@ void GameScene::Init(){
 	JsonAdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(50.0f);
+	gamePlayTimer_->Init(70.0f);
 
 	isGameStart_ = true;
 	notControlTime_ = 0.0f;
@@ -827,6 +827,7 @@ void GameScene::Draw() const{
 			bubbleEmitter_->Draw();
 		}
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
+		playerControlUI_->Draw(player_->GetIsFlying());
 		rankUpParticleEmitter_->Draw();
 
 		if(!isStartupScene_){
@@ -840,15 +841,12 @@ void GameScene::Draw() const{
 		finishUI_->Draw();
 		gameStartUI_->Draw();
 
-
-		playerControlUI_->Draw(player_->GetIsFlying());
 		fishEnergyManager_->Draw();
-
-		player_->DrawCutIn();
 
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		JumpAssessor::GetInstance()->Draw();
 		gamePlayTimer_->Draw();
+		player_->DrawCutIn();
 
 		if(currentState_ == GAME_STATE::TUTORIAL){
 			// チュートリアルテキストの描画

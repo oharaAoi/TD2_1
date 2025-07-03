@@ -126,7 +126,9 @@ private:
 	std::unique_ptr<Sprite> comment_EN_ = nullptr;
 	float commentSpriteAlpha_ = -1.0f;
 
-	Vector2 comment_EN_pos_;
+	float commentAlphaMax_EN_ = 0.08f;
+
+	Vector2 comment_EN_pos_ = {675.0f, 360.0f};
 
 	// ---------- Score --------- //
 	std::unique_ptr<Score> scoreData_;

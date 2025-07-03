@@ -270,11 +270,11 @@ void ResultScene::Init(){
 
 	if (rank_ == SCORE_RANK::SSS) {
 		comment_ = Engine::CreateSprite("resultComment.png");
-		comment_EN_ = Engine::CreateSprite("resultComment1_EN.png");
+		comment_EN_ = Engine::CreateSprite("resultComment1_2_EN.png");
 		
 	} else{
 		comment_ = Engine::CreateSprite("resultComment2.png");
-		comment_EN_ = Engine::CreateSprite("resultComment2_EN.png");
+		comment_EN_ = Engine::CreateSprite("resultComment2_2_EN.png");
 	}
 	comment_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
 	comment_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
@@ -282,7 +282,7 @@ void ResultScene::Init(){
 	comment_->Update();
 
 	comment_EN_->SetTextureSize({ kWindowWidth_,kWindowHeight_ });
-	comment_EN_->SetCenterPos({ kWindowWidth_ * 0.5f,kWindowHeight_ * 0.5f });
+	comment_EN_->SetCenterPos(comment_EN_pos_);
 	comment_EN_->SetColor({ 1.0f,1.0f,1.0f,0.0f });
 	comment_EN_->Update();
 
@@ -437,10 +437,13 @@ void ResultScene::Update(){
 	if(isViewingRanking_){
 		commentSpriteAlpha_ += GameTimer::DeltaTime() * 0.5f;
 		commentSpriteAlpha_ = std::clamp(commentSpriteAlpha_, 0.0f, 1.0f);
+		float EN_Alpha = commentSpriteAlpha_;
+		EN_Alpha = std::clamp(commentAlphaMax_EN_, 0.0f, commentAlphaMax_EN_);
+
 		comment_->SetColor({ 1.0f,1.0f,1.0f,commentSpriteAlpha_ });
 		comment_->Update();
 
-		comment_EN_->SetColor({ 1.0f,1.0f,1.0f,commentSpriteAlpha_ });
+		comment_EN_->SetColor({ 1.0f,1.0f,1.0f,commentAlphaMax_EN_ });
 		comment_EN_->Update();
 	}
 
@@ -494,7 +497,10 @@ void ResultScene::Draw() const{
 	Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 	backgroundSprite_->Draw(true);
 	comment_->Draw();
-	comment_EN_->Draw();
+
+	if (PlayConfig::language == LANGUAGE_EN) {
+		comment_EN_->Draw();
+	}
 
 	// ====================== effect ====================== //
 	tickerTapeEmitter_->Draw();
@@ -541,8 +547,14 @@ void ResultScene::Debug_Gui(){
 	guideUI_->Debug_Gui();
 
 	ImGui::BulletText("Comment_EN");
+	ImGui::DragFloat("EN_Alpha", &commentAlphaMax_EN_, 0.01f);
+	if (commentAlphaMax_EN_ < 0) {
+		commentAlphaMax_EN_ = 0;
+	}
+
 	ImGui::DragFloat2("commentPos", &comment_EN_pos_.x, 1.0f);
 	comment_EN_->SetCenterPos(comment_EN_pos_);
+	comment_EN_->Debug_Gui();
 
 	ImGui::End();
 }

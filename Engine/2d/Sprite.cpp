@@ -294,6 +294,7 @@ void Sprite::Debug_Gui() {
 	ImGui::DragFloat2("leftTop", &leftTop_.x, 1.0f);
 	ImGui::DragFloat2("uvDrawRange", &materialData_->uvDrawRange.x, 0.01f);
 
+	ImGui::ColorEdit4("color", &materialData_->color.x);
 
 }
 #endif

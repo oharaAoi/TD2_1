@@ -124,6 +124,8 @@ private:
 	Vector2 endPos_;
 	Vector2 uiPos_;
 
+	float timeLeftPosY_;
+
 	// ------------------- scaleUp用の変数 ------------------- //
 
 	Vector2 bigNumberScale_;

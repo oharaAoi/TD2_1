@@ -159,13 +159,30 @@ void GamePlayTimer::Update(bool isPlayerFlying){
 		timeleftUI_EN_->SetTexture("timer10_EN.png");
 		timeleft10s_->Play(false, 0.5f, true);
 		isMove_ = true;
+
+		if (isPlayerFlying) {
+			timeLeftPosY_ = 500.0f;
+		} else {
+			timeLeftPosY_ = 180.0f;
+		}
+		startPos_.y = timeLeftPosY_;
+		endPos_.y = timeLeftPosY_;
 	}
 	// タイムアップ60秒前
 	if(std::floor(gameTimer_) == 60.0f) {
+
 		timeleftUI_->SetTexture("timer60.png");
 		timeleftUI_EN_->SetTexture("timer60_EN.png");
 		timeleft60s_->Play(false, 0.5f, true);
 		isMove_ = true;
+
+		if (isPlayerFlying) {
+			timeLeftPosY_ = 500.0f;
+		} else {
+			timeLeftPosY_ = 180.0f;
+		}
+		startPos_.y = timeLeftPosY_;
+		endPos_.y = timeLeftPosY_;
 	}
 
 	if(gameTimer_ <= 0.0f) {
@@ -237,7 +254,11 @@ void GamePlayTimer::Draw() const{
 		addTimeSprite_->Draw();
 	}
 
-	timeleftUI_->Draw();
+	if (PlayConfig::language == LANGUAGE_JP) {
+		timeleftUI_->Draw();
+	} else {
+		timeleftUI_EN_->Draw();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,9 +319,9 @@ void GamePlayTimer::SpriteMove(){
 	time_ += GameTimer::DeltaTime();
 	float t = time_ / moveTime_;
 	if(isFadeIn_) {
-		uiPos_ = Vector2::Lerp(startPos_, Vector2(640, startPos_.y), EaseOutElastic(t));
+		uiPos_ = Vector2::Lerp(startPos_, Vector2(640, timeLeftPosY_), EaseOutElastic(t));
 	} else {
-		uiPos_ = Vector2::Lerp(Vector2(640, startPos_.y), endPos_, EaseInOutBack(t));
+		uiPos_ = Vector2::Lerp(Vector2(640, timeLeftPosY_), endPos_, EaseInOutBack(t));
 	}
 
 	// 時間を過ぎたら
