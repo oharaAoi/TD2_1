@@ -175,6 +175,9 @@ private:
 	
 	// ------------ Sprite ---------- //
 	std::unique_ptr<Sprite>titleLogo_ = nullptr;
+	std::unique_ptr<Sprite>languageJP_ = nullptr;
+	std::unique_ptr<Sprite>languageArrow_ = nullptr;
+	std::unique_ptr<Sprite>languageEN_ = nullptr;
 	std::unique_ptr<Sprite>sky_ = nullptr;
 	std::unique_ptr<Sprite>fade_ = nullptr;
 

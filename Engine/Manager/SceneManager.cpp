@@ -200,6 +200,9 @@ void SceneManager::Load() {
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "bubble.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "cherry.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "titleLogo.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "language_EN.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "language_JP.png");
+	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "languageArrow.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "sky.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number.png");
 	TextureManager::LoadTextureFile("./Game/Resources/Sprite/", "number2.png");

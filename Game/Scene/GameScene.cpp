@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Engine/Json/JsonAdjustmentItem.h"
+#include "../Information/PlayConfig.h"
 
 bool GamePlayTimer::isFinish_ = false;
 
@@ -146,6 +147,18 @@ void GameScene::Init(){
 	titleLogo_->SetLeftTop({ 0.0f,0.0f });
 	titleLogo_->SetCenterPos({ 640.0f, 360.0f });
 
+	// 言語設定
+	languageEN_ = Engine::CreateSprite("language_EN.png");
+	languageJP_ = Engine::CreateSprite("language_JP.png");
+	languageEN_->SetTextureSize({ 110.0f,110.0f });
+	languageJP_->SetTextureSize({ 110.0f,110.0f });
+	languageJP_->SetCenterPos({ 115.0f, 60.0f });
+	languageEN_->SetCenterPos({ 230.0f, 60.0f });
+	languageArrow_ = Engine::CreateSprite("languageArrow.png");
+	languageArrow_->SetTextureSize({ 350.0f,150.0f });
+	languageArrow_->SetCenterPos({ 180.0f, 60.0f });
+
+
 	fade_ = Engine::CreateSprite("white.png");
 	fade_->SetLeftTop({ 0.0f,0.0f });
 	fade_->SetCenterPos({ 640.0f, 360.0f });
@@ -265,6 +278,11 @@ void GameScene::Update(){
 	AdjustmentItem::GetInstance()->Update();
 
 	if(currentState_ == GAME_STATE::TITLE){
+
+		static float languageUITimer[2]{};
+		static const float kClampTime = 0.5f;
+		static float kAdditionalScale = 0.2f;
+
 		if(Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W)){
 			isGameStart_ = !isGameStart_;
 			notControlTime_ = 0.0f;
@@ -274,6 +292,46 @@ void GameScene::Update(){
 			isGameStart_ = !isGameStart_;
 			notControlTime_ = 0.0f;
 		}
+
+		// 言語設定
+		if(Input::IsTriggerKey(DIK_LEFT) || Input::IsTriggerKey(DIK_A) || Input::IsTriggerKey(DIK_RIGHT) || Input::IsTriggerKey(DIK_D)){
+			if(PlayConfig::language == LANGUAGE_JP){
+				PlayConfig::language = LANGUAGE_EN;
+				guideUI_->SetTitle();
+			} else{
+				PlayConfig::language = LANGUAGE_JP;
+				guideUI_->SetTitle();
+
+			}
+		}
+
+		if(PlayConfig::language == LANGUAGE_JP){
+			languageUITimer[0] = std::clamp(languageUITimer[0] + GameTimer::DeltaTime(),0.0f, kClampTime);
+			languageUITimer[1] = std::clamp(languageUITimer[1] - GameTimer::DeltaTime(),0.0f, kClampTime);
+		} else{
+			languageUITimer[0] = std::clamp(languageUITimer[0] - GameTimer::DeltaTime(), 0.0f, kClampTime);
+			languageUITimer[1] = std::clamp(languageUITimer[1] + GameTimer::DeltaTime(), 0.0f, kClampTime);
+		}
+
+		float ease[2] = {
+			EaseInOutExpo(languageUITimer[0] / kClampTime),
+			EaseInOutExpo(languageUITimer[1] / kClampTime)
+		};
+
+		float scale[2] = {
+			1.0f + kAdditionalScale * ease[0],
+			1.0f + kAdditionalScale * ease[1]
+		};
+
+		float alpha[2] = {
+			0.5f + 0.5f * ease[0],
+			0.5f + 0.5f * ease[1]
+		};
+
+		languageJP_->SetScale({ scale[0],scale[0] });
+		languageEN_->SetScale({ scale[1],scale[1] });
+		languageJP_->SetColor({ 1.0f,1.0f,1.0f,alpha[0] });
+		languageEN_->SetColor({ 1.0f,1.0f,1.0f,alpha[1] });
 
 		guideUI_->SetArrow(isGameStart_);
 
@@ -535,15 +593,15 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ UIの更新
 	// -------------------------------------------------
-	if (currentState_ == GAME_STATE::TUTORIAL) {
+	if(currentState_ == GAME_STATE::TUTORIAL){
 		playerSpeedCounter_->SetIsTutorial(true);
 		playerBodyCountUI_->SetIsTutorial(true);
-	} else {
+	} else{
 		playerSpeedCounter_->SetIsTutorial(false);
 		playerBodyCountUI_->SetIsTutorial(false);
 	}
 
-	if(currentState_ != GAME_STATE::TITLE) {
+	if(currentState_ != GAME_STATE::TITLE){
 		//flyingTimerUI_->Update(player_->GetFlyingTime(), player_->GetMaxFlyingTime());
 		if(!isStartupScene_){
 			flyingGaugeUI_->Update(player_->GetFlyingTime());
@@ -557,7 +615,7 @@ void GameScene::Update(){
 		playerBodyCountUI_->EmiteEffect();
 	}
 
-	if(currentState_ != GAME_STATE::TITLE) {
+	if(currentState_ != GAME_STATE::TITLE){
 		playerBodyCountUI_->Update(player_->GetBodyCount(), player_->GetIsFlying());
 	}
 
@@ -798,14 +856,26 @@ void GameScene::Draw() const{
 		}
 
 	} else{
+
+		static float titleTimer = 0.0f;
+
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		titleLogo_->Draw();
 		cherryEmitter_->Draw();
 		guideUI_->Draw();
 
+		languageJP_->Draw();
+		languageEN_->Draw();
+
+		float sinWave = std::sin(3.14f * titleTimer) * 0.05f;
+		languageArrow_->SetScale({ 1.0f + sinWave,1.0f + sinWave });
+		languageArrow_->Draw();
+
 		float t = std::clamp(startSceneTime_ / 2.0f, 0.0f, 1.0f);
 		fade_->SetColor({ 1.0f,1.0f,1.0f,t });
 		fade_->Draw();
+
+		titleTimer += GameTimer::DeltaTime();
 	}
 
 	// フェードの描画
@@ -831,7 +901,7 @@ void GameScene::Update_TUTORIAL(){
 	if(Input::IsTriggerKey(DIK_Z)){
 		currentState_ = GAME_STATE::GAME;
 		player_->SetIsTutorial(false);
-}
+	}
 #endif // _DEBUG
 
 	if(player_->GetWorldTranslation().x > tutorialUI_->GetStartPos().x){
@@ -873,7 +943,7 @@ void GameScene::UpdateColliderList(){
 		if(lenght < obstaclesManager_->GetUpdateLenght()){
 			collisionManager_->AddCollider(obstacle.object_.get());
 		}
-	} 
+	}
 
 	for(auto& obstacle : placementObjectEditor_->GetInportPlacementObjs()){
 		float lenght = std::abs((player_->GetWorldTranslation() - obstacle.object_->GetWorldTranslation()).Length());
