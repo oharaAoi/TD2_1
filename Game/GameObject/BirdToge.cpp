@@ -89,5 +89,9 @@ void BirdToge::ScalingTimer() {
 	scalingTimer_ = std::clamp(scalingTimer_, 0.0f, scalingTime_);
 
 	float t = scalingTimer_ / scalingTime_;
-	transform_->SetScale(Vector3::Lerp({ 0.0f, 0.0f, 0.0f, }, birdScale_, EaseInOutCubic(t)));
+	if (scalingSign_ > 0) {
+		transform_->SetScale(Vector3::Lerp({ 0.0f, 0.0f, 0.0f, }, birdScale_, EaseOutBounce(t)));
+	} else if(scalingSign_ < 0){
+		transform_->SetScale(Vector3::Lerp({ 0.0f, 0.0f, 0.0f, }, birdScale_, EaseInExpo(t)));
+	}
 }

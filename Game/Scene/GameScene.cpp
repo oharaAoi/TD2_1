@@ -827,7 +827,6 @@ void GameScene::Draw() const{
 			bubbleEmitter_->Draw();
 		}
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
-		gamePlayTimer_->Draw();
 		rankUpParticleEmitter_->Draw();
 
 		if(!isStartupScene_){
@@ -849,6 +848,7 @@ void GameScene::Draw() const{
 
 		Engine::SetPipeline(PipelineType::NormalBlendSpritePipeline);
 		JumpAssessor::GetInstance()->Draw();
+		gamePlayTimer_->Draw();
 
 		if(currentState_ == GAME_STATE::TUTORIAL){
 			// チュートリアルテキストの描画
