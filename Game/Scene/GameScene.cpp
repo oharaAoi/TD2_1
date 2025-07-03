@@ -621,10 +621,10 @@ void GameScene::Update(){
 	}
 
 	// 水に入っているかどうかで音の割合を切り替える
-	mainBGM_->SetVolume(0.1f * BGM_volumeT_ * BGM_masterVolumeRate_);
-	mainBGM_inWater_->SetVolume(0.1f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
-	windSound_->SetVolume(0.1f * BGM_volumeT_ * BGM_masterVolumeRate_);
-	swimSound_->SetVolume(0.07f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	mainBGM_->SetVolume(0.2f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	mainBGM_inWater_->SetVolume(0.2f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
+	windSound_->SetVolume(0.2f * BGM_volumeT_ * BGM_masterVolumeRate_);
+	swimSound_->SetVolume(0.1f * (1.0f - BGM_volumeT_) * BGM_masterVolumeRate_);
 
 	// -------------------------------------------------
 	// ↓ ParticleのViewを設定する

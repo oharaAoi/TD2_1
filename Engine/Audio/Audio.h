@@ -11,6 +11,7 @@
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
+#include <algorithm>
 #pragma comment(lib, "Mf.lib")
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "Mfreadwrite.lib")
@@ -140,7 +141,10 @@ public:
 	/// ゲーム全体の音を設定
 	/// </summary>
 	/// <param name="volume"></param>
-	static void SetMasterVolume(float volume) { masterVolume_ = volume; }
+	static void SetMasterVolume(float volume) {
+		masterVolume_ = volume; 
+		masterVolume_ = std::clamp(masterVolume_, 0.0f, 10000.0f);
+	}
 
 	/// <summary>
 	/// ゲーム全体の音を取得

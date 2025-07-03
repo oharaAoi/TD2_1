@@ -155,6 +155,16 @@ void Engine::BeginFrame() {
 		WinApp::GetInstance()->SetFullScreen(isFullScreen_);
 	}
 
+	if (Input::IsPressKey(DIK_K)) {
+		float volume = Audio::GetMasterVolume();
+		Audio::SetMasterVolume(volume + 0.1f);
+	}
+
+	if (Input::IsPressKey(DIK_L)) {
+		float volume = Audio::GetMasterVolume();
+		Audio::SetMasterVolume(volume - 0.1f);
+	}
+
 #ifdef _DEBUG
 	DrawImGui();
 #endif
