@@ -341,6 +341,18 @@ void TutorialUI::DrawTutorialText(){
 	}
 }
 
+void TutorialUI::SwitchLanguage() {
+	std::string textureName = PlayConfig::language == LANGUAGE_JP ? "tutorialText.png" : "tutorialText_EN.png";
+	tutorialText_ = Engine::CreateSprite(textureName);
+	tutorialText_ = Engine::CreateSprite(textureName);
+	tutorialText_->SetCenterPos({ 640.0f, 555.0f });
+	tutorialText_->SetAnchorPoint({ 0.5f, 0.5f });
+	tutorialText_->SetRectRange({ 1280.0f, 60.0f });
+	tutorialText_->SetTextureSize({ 1280.0f, 60.0f });
+	tutorialText_->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+	tutorialText_->Update();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　編集
 //////////////////////////////////////////////////////////////////////////////////////////////////

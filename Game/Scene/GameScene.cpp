@@ -36,7 +36,7 @@ void GameScene::Init(){
 	JsonAdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(70.0f);
+	gamePlayTimer_->Init(50.0f);
 
 	isGameStart_ = true;
 	notControlTime_ = 0.0f;
@@ -298,9 +298,12 @@ void GameScene::Update(){
 			if(PlayConfig::language == LANGUAGE_JP){
 				PlayConfig::language = LANGUAGE_EN;
 				guideUI_->SetTitle();
+				tutorialUI_->SwitchLanguage();
+
 			} else{
 				PlayConfig::language = LANGUAGE_JP;
 				guideUI_->SetTitle();
+				tutorialUI_->SwitchLanguage();
 
 			}
 		}

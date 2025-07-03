@@ -28,6 +28,8 @@ public:
 	void UpdateTutorialText(bool playerFlying);
 	void DrawTutorialText();
 
+	void SwitchLanguage();
+
 #ifdef _DEBUG
 	void Debug_Gui();
 #endif
