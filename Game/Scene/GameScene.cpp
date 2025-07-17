@@ -274,6 +274,11 @@ void GameScene::Update(){
 	}
 #endif // _DEBUG
 
+	// 入力に応じてデバイスを変更
+	CheckInput();
+
+	// UI
+
 	// 調整項目の更新
 	AdjustmentItem::GetInstance()->Update();
 
@@ -988,6 +993,33 @@ void GameScene::CheckAddSplash(){
 	}
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//  入力を確認
+//////////////////////////////////////////////////////////////////////////////////////////////////
+void GameScene::CheckInput(){
+
+	Vector2 stickInput;
+	stickInput = Input::GetLeftJoyStick() + Input::GetRightJoyStick();
+	bool isPadInput;
+	isPadInput = Input::GetIsPadTrigger(BUTTON_A) or Input::GetIsPadTrigger(DPAD_LEFT) or Input::GetIsPadTrigger(DPAD_RIGHT) or (stickInput.Length() != 0.0f);
+
+	bool isKeyInput;
+	isKeyInput = Input::IsTriggerKey(DIK_A) or Input::IsTriggerKey(DIK_D) or Input::IsTriggerKey(DIK_LEFT) or Input::IsTriggerKey(DIK_RIGHT) or Input::IsTriggerKey(DIK_SPACE);
+	
+
+	// 入力状況の更新 
+	if(isPadInput){
+		PlayConfig::inputMode = INPUTTYPE_PAD;
+	}
+
+
+	if(isKeyInput){
+		PlayConfig::inputMode = INPUTTYPE_KEYBOARD;
+	}
+
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　Debug表示
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -998,6 +1030,8 @@ void GameScene::Debug_Gui(){
 	if(isGuiDraw_){
 
 		ImGui::Begin("GameScene");
+		
+		ImGui::Text("input %d", PlayConfig::inputMode);
 		ImGui::Text("particle %d", cherryEmitter_->GetParticleCount());
 
 		// マスター音の追加

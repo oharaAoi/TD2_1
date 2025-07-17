@@ -89,6 +89,7 @@ public:
 	static GAME_STATE GetGameState() { return currentState_; }
 	static GAME_STATE GetPreGameState() { return preState_; }
 	void CheckAddSplash();
+	void CheckInput();
 
 private:
 
