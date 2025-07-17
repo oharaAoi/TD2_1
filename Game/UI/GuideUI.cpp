@@ -40,6 +40,13 @@ void GuideUI::Init() {
 }
 
 void GuideUI::Update() {
+	auto& map = (PlayConfig::language == LanguageSetting::LANGUAGE_JP) ? uiMap_ : uiMap_EN_;
+	if (PlayConfig::inputMode == InputMode::INPUTTYPE_KEYBOARD) {
+		map["push_space"]->SetTexture("SpaceButton.png");
+	} else {
+		map["push_space"]->SetTexture("Abutton.png");
+	}
+
 	for (auto& ui : drawSpriteList_) {
 		ui->Update();
 	}
@@ -85,7 +92,7 @@ void GuideUI::SetResult() {
 	
 	map["push_space"]->SetTextureCenterPos(adjustmentItem_->GetValue<Vector2>(groupName_, "Result_pushSpace"));
 	map["push_space"]->SetScale(scale_);
-	
+
 	drawSpriteList_.push_back(map["push_space"].get());
 }
 
