@@ -143,8 +143,10 @@ void TutorialUI::Update() {
 
 	if (PlayConfig::inputMode == InputMode::INPUTTYPE_KEYBOARD) {
 		tutorialUI_["kari1"]->SetTexture("Tutorial_1.png");
+		spaceSprite_->SetTexture("SpaceButton.png");
 	} else {
 		tutorialUI_["kari1"]->SetTexture("Tutorial_1_Controller.png");
+		spaceSprite_->SetTexture("Abutton.png");
 	}
 
 	for (auto& ui : tutorialUI_) {
