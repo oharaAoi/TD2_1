@@ -2,17 +2,17 @@
 #include "Engine/Math/Easing.h"
 #include "../Information/PlayConfig.h"
 
-TutorialUI::TutorialUI(){
+TutorialUI::TutorialUI() {
 }
 
-TutorialUI::~TutorialUI(){
+TutorialUI::~TutorialUI() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::Init(){
+void TutorialUI::Init() {
 
 	// このスケールで全体のUIのスケールを統一する
 	scaleUpStrength_ = 1.2f;
@@ -74,7 +74,7 @@ void TutorialUI::Init(){
 	jumpTutorialPos_ = tutorialUI_["kari4"]->GetTransform()->GetTranslation();
 
 	float index = 0;
-	for(auto& ui : tutorialUI_){
+	for (auto& ui : tutorialUI_) {
 		Vector3 pos = offsetPos_;
 		pos.x += (interval_ * index) + offsetLnegth_;
 		ui.second->GetTransform()->SetTranslaion(pos);
@@ -116,7 +116,7 @@ void TutorialUI::Init(){
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::Update(){
+void TutorialUI::Update() {
 
 	scaleUp_ = { scaleUpStrength_, scaleUpStrength_, scaleUpStrength_ };
 
@@ -125,7 +125,14 @@ void TutorialUI::Update(){
 	jumpTutorialUI_->GetTransform()->SetScale(scaleUp_);
 	jumpTutorialUI_->Update();
 
-	for(auto& ui : tutorialUI_){
+
+	if (PlayConfig::inputMode == InputMode::INPUTTYPE_KEYBOARD) {
+		tutorialUI_["kari1"]->SetTexture("Tutorial_1.png");
+	} else {
+		tutorialUI_["kari1"]->SetTexture("Tutorial_1_Controller.png");
+	}
+
+	for (auto& ui : tutorialUI_) {
 		ui.second->GetTransform()->SetScale(scaleUp_);
 		ui.second->Update();
 	}
@@ -138,9 +145,9 @@ void TutorialUI::Update(){
 // ↓　描画処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::Draw() const{
+void TutorialUI::Draw() const {
 	jumpTutorialUI_->Draw();
-	for(const auto& ui : tutorialUI_){
+	for (const auto& ui : tutorialUI_) {
 		ui.second->Draw();
 	}
 }
@@ -149,11 +156,11 @@ void TutorialUI::Draw() const{
 // ↓　編集
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::LineUpUI(const Vector3& playerPos){
+void TutorialUI::LineUpUI(const Vector3& playerPos) {
 	// この処理はプレイヤーが
-	if(!isLineUp_){
+	if (!isLineUp_) {
 		float index = 0;
-		for(auto& ui : tutorialUI_){
+		for (auto& ui : tutorialUI_) {
 			Vector3 pos = offsetPos_;
 			pos.x += (interval_ * index) + offsetLnegth_ + playerPos.x;
 			ui.second->GetTransform()->SetTranslaion(pos);
@@ -165,7 +172,7 @@ void TutorialUI::LineUpUI(const Vector3& playerPos){
 		isLineUp_ = true;
 		tutorialUI_["kari3"]->GetTransform()->SetTranslaion(tutorialUI_["kari3"]->GetTransform()->GetTranslation() + Vector3(100, 0, 0));
 
-	} else{
+	} else {
 		return;
 	}
 	tutorialUI_["start"]->GetTransform()->SetQuaternion(Quaternion::AngleAxis((-180.0f * toRadian), Vector3{ 0,1,0 }));
@@ -175,25 +182,25 @@ void TutorialUI::LineUpUI(const Vector3& playerPos){
 // ↓　調整項目の適応
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::AdaptAdjustment(){
+void TutorialUI::AdaptAdjustment() {
 	offsetPos_ = adjust_->GetValue<Vector3>(groupName_, "offsetPos");
 	interval_ = adjust_->GetValue<float>(groupName_, "interval");
 	offsetLnegth_ = adjust_->GetValue<float>(groupName_, "offsetLnegth");
 }
 
-Vector3 TutorialUI::GetSessionFishPos(){
+Vector3 TutorialUI::GetSessionFishPos() {
 	return tutorialUI_["kari3"]->GetTransform()->GetTranslation();
 }
 
-Vector3 TutorialUI::GetSessionBirdPos(){
+Vector3 TutorialUI::GetSessionBirdPos() {
 	return tutorialUI_["kari4"]->GetTransform()->GetTranslation();
 }
 
-Vector3 TutorialUI::GetStartPos(){
+Vector3 TutorialUI::GetStartPos() {
 	return tutorialUI_["start"]->GetTransform()->GetTranslation();
 }
 
-void TutorialUI::SetFlyingTutorial(){
+void TutorialUI::SetFlyingTutorial() {
 
 }
 
@@ -201,7 +208,7 @@ void TutorialUI::SetFlyingTutorial(){
 // ↓　看板に近づいたら一時停止して説明を表示する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TutorialUI::UpdateTutorialText(bool playerFlying){
+void TutorialUI::UpdateTutorialText(bool playerFlying) {
 
 	static float sensingDistance = 75.0f;
 	static float distanceToUI[tutorialCount_] = { 0.0f, 0.0f, 0.0f };
@@ -217,11 +224,11 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	static float waitTime = kWatingTime;// テキストが表示されるまでの待ち時間
 
 	// 各看板との距離を計算して、一定の距離に近づいたらテキストを表示する
-	for(int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		distanceToUI[i] = (tutorialUI_["kari" + std::to_string(i + 1)]->GetTransform()->GetTranslation() - playerPos_).Length();
-		if(distanceToUI[i] < sensingDistance){
+		if (distanceToUI[i] < sensingDistance) {
 			// 一度表示したらもう表示しない
-			if(!isShownText_[i]){
+			if (!isShownText_[i]) {
 				spaceScaleUpTime_ = 0.0f;
 				notInputAcceptanceTime_ = 0.0f;
 				isInputSpaceDraw_ = false;
@@ -237,8 +244,8 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	}
 
 	// 飛んでいる時に出すUI
-	if(playerFlying){
-		if(!isShownText_[3]){
+	if (playerFlying) {
+		if (!isShownText_[3]) {
 			spaceScaleUpTime_ = 0.0f;
 			notInputAcceptanceTime_ = 0.0f;
 			isInputSpaceDraw_ = false;
@@ -254,23 +261,23 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 	}
 
 	// テキストの表示
-	if(isTextShowing_){
+	if (isTextShowing_) {
 
-		if(waitTime > 0.0f){
+		if (waitTime > 0.0f) {
 			waitTime -= GameTimer::DeltaTime();// 止まってから1秒待ってからテキストを表示する
 			return;
 		}
 
 		// テキスト用のタイマーを更新
-		if(!isReacedEndPage){
+		if (!isReacedEndPage) {
 			textTimer += GameTimer::DeltaTime();// ページが残っている場合はタイマーを増やす
 			tutorialTimer += GameTimer::DeltaTime();
-		} else{
+		} else {
 			textTimer -= GameTimer::DeltaTime();// ページが最後まで行ったらタイマーを減らす(薄くして消していくため)
 			tutorialTimer -= GameTimer::DeltaTime();
 
 			// 時間が0になったらチュートリアルテキストの終了
-			if(tutorialTimer <= 0.0f){
+			if (tutorialTimer <= 0.0f) {
 				isTextShowing_ = false;
 				isReacedEndPage = false;
 				tutorialTimer = 0.0f;
@@ -287,10 +294,10 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 		// spaceのUIは0.5秒ごとに暗い、明るいを繰り返す
 		float alpha;
 		bool isFlashing = std::fmod(GameTimer::TotalTime(), 1.0f) < 0.5f;
-		if(isFlashing){
+		if (isFlashing) {
 			alpha = 0.5f;
 			spaceSprite_->SetScale(Vector2(0.5f, 0.5f) * 0.9f);
-		} else{
+		} else {
 			alpha = 1.0f;
 			spaceSprite_->SetScale(Vector2(0.5f, 0.5f));
 		}
@@ -301,41 +308,41 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 		spaceSprite_->SetColor({ 1.0f, 1.0f, 1.0f, t2 * alpha });
 
 		// ページの更新
-		if(notInputAcceptanceTime_ > notInputAcceptanceTimeLimit_){
+		if (notInputAcceptanceTime_ > notInputAcceptanceTimeLimit_) {
 			isInputSpaceDraw_ = true;
 
 			// スペースを大きくする
-			if(spaceScaleUpTime_ < spaceScaleUpTimeLimit_){
+			if (spaceScaleUpTime_ < spaceScaleUpTimeLimit_) {
 				spaceScaleUpTime_ += GameTimer::DeltaTime();
 				float t = spaceScaleUpTime_ / spaceScaleUpTimeLimit_;
 				Vector2 scale = Vector2::Lerp({ 0,0 }, { 0.5f,0.5f }, EaseOutCubic(t));
 				spaceSprite_->SetScale(scale);
 			}
 
-			if(Input::IsTriggerKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)){
+			if (Input::IsTriggerKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)) {
 				textPage[currentTutorialIndex]++;
 
 				// ページが最後まで行ったか確認
-				if(textPage[currentTutorialIndex] >= kTextPage[currentTutorialIndex]){
+				if (textPage[currentTutorialIndex] >= kTextPage[currentTutorialIndex]) {
 					isReacedEndPage = true;
-				} else{
+				} else {
 					textTimer = 0.0f;// まだページが残っているのでタイマーをリセット
 					// テキストkの切り抜き範囲の更新
 					tutorialText_->SetLeftTop({ 0.0f, 60.0f * (textOffset[currentTutorialIndex] + textPage[currentTutorialIndex]) });
 				}
 			}
-		} else{
+		} else {
 			isInputSpaceDraw_ = false;
 			notInputAcceptanceTime_ += GameTimer::DeltaTime();
 		}
 	}
 }
 
-void TutorialUI::DrawTutorialText(){
-	if(isTextShowing_){
+void TutorialUI::DrawTutorialText() {
+	if (isTextShowing_) {
 		textBackSprite_->Draw();
 		tutorialText_->Draw();
-		if(isInputSpaceDraw_){
+		if (isInputSpaceDraw_) {
 			spaceSprite_->Draw();
 		}
 	}
@@ -357,8 +364,8 @@ void TutorialUI::SwitchLanguage() {
 // ↓　編集
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef _DEBUG
-void TutorialUI::Debug_Gui(){
-	if(ImGui::TreeNode("TutorialUI")){
+void TutorialUI::Debug_Gui() {
+	if (ImGui::TreeNode("TutorialUI")) {
 		ImGui::DragFloat3("jumpTutorialOffsetPos", &jumpTutorialOffsetPos_.x, 0.1f);
 		ImGui::DragFloat3("offsetPos", &offsetPos_.x, 0.1f);
 		ImGui::DragFloat("interval", &interval_, 1.0f);
