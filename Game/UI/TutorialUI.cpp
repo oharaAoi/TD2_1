@@ -312,7 +312,7 @@ void TutorialUI::UpdateTutorialText(bool playerFlying){
 				spaceSprite_->SetScale(scale);
 			}
 
-			if(Input::IsTriggerKey(DIK_SPACE)){
+			if(Input::IsTriggerKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)){
 				textPage[currentTutorialIndex]++;
 
 				// ページが最後まで行ったか確認

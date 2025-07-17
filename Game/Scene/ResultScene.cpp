@@ -423,7 +423,7 @@ void ResultScene::Update(){
 
 
 	if(!isStartScene_){
-		if(Input::IsTriggerKey(DIK_SPACE)){
+		if(Input::IsTriggerKey(DIK_SPACE) || Input::GetIsPadTrigger(BUTTON_A)){
 
 			if(!isViewingRanking_){
 				isViewingRanking_ = true;

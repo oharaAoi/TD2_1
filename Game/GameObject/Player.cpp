@@ -118,7 +118,7 @@ void Player::Update(){
 		Move();
 	} else{
 		velocity_ = { 0.0f,0.0f,0.0f };
-		if(Input::IsTriggerKey(DIK_SPACE)){
+		if(Input::IsTriggerKey(DIK_SPACE) || Input::GetIsPadTrigger(BUTTON_A)){
 			isMove_ = true;
 		}
 	}
@@ -866,7 +866,7 @@ void Player::MoveWater(){
 		// 入力を受け付けない時間がプラスだったら入力しない
 		if(dontInputPressTime_ < 0){
 			// 押すと上昇、離すと沈む
-			if(Input::IsPressKey(DIK_SPACE)){
+			if(Input::IsPressKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)){
 				pressTime_ += addPressTime_ * GameTimer::TimeRate();
 
 			} else{
@@ -877,7 +877,7 @@ void Player::MoveWater(){
 				}
 			}
 			seCoolTime -= GameTimer::DeltaTime();
-			if(seCoolTime <= 0 && Input::IsTriggerKey(DIK_SPACE)){
+			if (seCoolTime <= 0 && (Input::IsTriggerKey(DIK_SPACE) || Input::GetIsPadTrigger(BUTTON_A))) {
 				AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.1f);
 				seCoolTime = 0.25f;
 			}/*
@@ -974,7 +974,7 @@ void Player::MoveSky(){
 		// pressタイムがプラスの時は上を向いているので受け付けない
 		if(pressTime_ <= 0){
 			if(!isFacedBird_){
-				if(Input::IsPressKey(DIK_SPACE)){
+				if(Input::IsPressKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)){
 					// 押している時は滑空する
 					// 下降ベクトル
 					dropSpeed_ = 0.0f;
