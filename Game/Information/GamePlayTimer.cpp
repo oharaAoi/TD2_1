@@ -102,7 +102,7 @@ void GamePlayTimer::Update(bool isPlayerFlying){
 
 	gameTimer_ -= GameTimer::DeltaTime();
 
-	if(gameTimer_ > 0.f && Input::IsPressKey(DIK_SPACE) && !isPlayerFlying) {
+	if (gameTimer_ > 0.f && (Input::IsPressKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)) && !isPlayerFlying) {
 		gameTimer_ = (std::max)(gameTimer_, 0.25f);
 	}
 	float raito = gameTimer_ / gameTimeLimit_;

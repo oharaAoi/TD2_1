@@ -81,7 +81,7 @@ void ObstaclesManager::Update(){
 				Bird* bird = dynamic_cast<Bird*>((*it).get());
 				bird->ScaleChange(true);	// 大きくなる
 
-			} else if (Input::IsPressKey(DIK_SPACE)) {
+			} else if (Input::IsPressKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)) {
 				Bird* bird = dynamic_cast<Bird*>((*it).get());
 				bird->ScaleChange(false);	// 小さくなる
 			} else {
@@ -94,7 +94,7 @@ void ObstaclesManager::Update(){
 				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
 				birdToge->ScaleChange(true);	// トゲになる
 
-			} else if (Input::IsPressKey(DIK_SPACE)) {
+			} else if (Input::IsPressKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)) {
 				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
 				birdToge->ScaleChange(false);	// なくなる
 			} else {

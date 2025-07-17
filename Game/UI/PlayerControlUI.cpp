@@ -13,7 +13,7 @@ void PlayerControlUI::Init(){
 }
 
 void PlayerControlUI::Update(const Vector2& playerScreenPos){
-	if(Input::IsPressKey(DIK_SPACE)) {
+	if(Input::IsPressKey(DIK_SPACE) || Input::GetPressPadTrigger(BUTTON_A)) {
 		spaceButton_->SetColor(Vector4(0.2f, 0.2f, 0.2f, 1.0f));
 		easeT += GameTimer::DeltaTime();
 

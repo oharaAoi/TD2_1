@@ -351,7 +351,7 @@ void GameScene::Update(){
 		}
 	}
 
-	if(Input::IsTriggerKey(DIK_SPACE)){
+	if (Input::IsTriggerKey(DIK_SPACE) || Input::GetIsPadTrigger(BUTTON_A)) {
 		if(currentState_ == GAME_STATE::TITLE){
 			if(fadePanel_->GetDoNoting()){
 				fadePanel_->SetFadeOut(0.6f);
