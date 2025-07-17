@@ -444,7 +444,7 @@ void GameScene::Update(){
 	// -------------------------------------------------
 	// ↓ 一時停止時の処理
 	// -------------------------------------------------
-	if(Input::IsTriggerKey(DIK_ESCAPE)){
+	if(Input::IsTriggerKey(DIK_ESCAPE) || Input::GetIsPadTrigger(START)){
 		SetNextScene(SceneType::Scene_Game);
 	}
 	if(isPause_){
