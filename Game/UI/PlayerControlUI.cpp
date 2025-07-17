@@ -1,5 +1,6 @@
 #include "PlayerControlUI.h"
 #include "Engine/Json/JsonAdjustmentItem.h"
+#include "Game/Information/PlayConfig.h"
 
 PlayerControlUI::PlayerControlUI(){}
 
@@ -28,6 +29,11 @@ void PlayerControlUI::Update(const Vector2& playerScreenPos){
 
 
 	spaceButton_->SetCenterPos(playerScreenPos + parameter_.spaceOffset);
+	if (PlayConfig::inputMode == InputMode::INPUTTYPE_KEYBOARD) {
+		spaceButton_->SetTexture("SpaceButton.png");
+	} else {
+		spaceButton_->SetTexture("Abutton.png");
+	}
 
 	spaceButton_->Update();
 }
