@@ -287,19 +287,34 @@ void GameScene::Update(){
 		static float languageUITimer[2]{};
 		static const float kClampTime = 0.5f;
 		static float kAdditionalScale = 0.2f;
+		static Vector2 stickValue;
+		static Vector2 preStickValue;
 
-		if(Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W)){
+		preStickValue = stickValue;
+		stickValue = Input::GetLeftJoyStick();
+
+		bool isStickRight = (stickValue.x >= 0.5f && preStickValue.x < 0.5f);
+		bool isStickLeft = (stickValue.x <= -0.5f && preStickValue.x > -0.5f);
+		bool isStickUp = (stickValue.y >= 0.5f && preStickValue.y < 0.5f);
+		float isStickDown = (stickValue.y <= -0.5f && preStickValue.y > -0.5f);
+
+		if(Input::IsTriggerKey(DIK_UP) || Input::IsTriggerKey(DIK_W) || Input::GetIsPadTrigger(DPAD_UP) || isStickUp
+			){
 			isGameStart_ = !isGameStart_;
 			notControlTime_ = 0.0f;
 		}
 
-		if(Input::IsTriggerKey(DIK_DOWN) || Input::IsTriggerKey(DIK_S)){
+		if(Input::IsTriggerKey(DIK_DOWN) || Input::IsTriggerKey(DIK_S) || Input::GetIsPadTrigger(DPAD_DOWN) || isStickDown
+			){
 			isGameStart_ = !isGameStart_;
 			notControlTime_ = 0.0f;
 		}
+
 
 		// 言語設定
-		if(Input::IsTriggerKey(DIK_LEFT) || Input::IsTriggerKey(DIK_A) || Input::IsTriggerKey(DIK_RIGHT) || Input::IsTriggerKey(DIK_D)){
+		if(Input::IsTriggerKey(DIK_LEFT) || Input::IsTriggerKey(DIK_A) || Input::IsTriggerKey(DIK_RIGHT) || Input::IsTriggerKey(DIK_D)
+			|| Input::GetIsPadTrigger(DPAD_RIGHT) || Input::GetIsPadTrigger(DPAD_LEFT) || isStickLeft || isStickRight
+			){
 			if(PlayConfig::language == LANGUAGE_JP){
 				PlayConfig::language = LANGUAGE_EN;
 				guideUI_->SetTitle();

@@ -118,6 +118,21 @@ void TutorialUI::Init(){
 
 void TutorialUI::Update(){
 
+	if(PlayConfig::inputMode == INPUTTYPE_KEYBOARD){
+		if(PlayConfig::language == LANGUAGE_JP){
+			tutorialText_.get()->SetTextureName("tutorialText.png");
+		} else{
+			tutorialText_.get()->SetTextureName("tutorialText_EN.png");
+		}
+	} else{
+		if(PlayConfig::language == LANGUAGE_JP){
+			tutorialText_.get()->SetTextureName("tutorialText_Pad.png");
+		} else{
+			tutorialText_.get()->SetTextureName("tutorialText_EN_Pad.png");
+		}
+	}
+
+
 	scaleUp_ = { scaleUpStrength_, scaleUpStrength_, scaleUpStrength_ };
 
 	jumpTutorialPos_ = tutorialUI_["kari4"]->GetTransform()->GetTranslation() + jumpTutorialOffsetPos_;

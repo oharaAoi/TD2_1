@@ -199,6 +199,10 @@ void Sprite::PostDraw(ID3D12GraphicsCommandList* commandList) const {
 // ↓　Textureを再設定する
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+void Sprite::SetTextureName(const std::string& name){
+	textureName_ = name;
+}
+
 void Sprite::SetTexture(const std::string& fileName) {
 	textureName_ = fileName;
 	textureSize_ = TextureManager::GetInstance()->GetTextureSize(fileName);

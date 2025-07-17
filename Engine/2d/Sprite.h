@@ -57,6 +57,8 @@ public:
 
 public:
 
+	void SetTextureName(const std::string& name);
+
 	/// <summary>
 	/// Textureをセットする
 	/// </summary>
