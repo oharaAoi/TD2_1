@@ -24,7 +24,7 @@
         "BIRD_1": {
             "objType": 2,
             "position": [
-                179.6999969482422,
+                193.3000030517578,
                 285.29998779296875,
                 0.0
             ],
@@ -63,7 +63,7 @@
             ],
             "subType": 0
         },
-        "BIRD_7": {
+        "BIRD_3": {
             "objType": 2,
             "position": [
                 127.69999694824219,
@@ -84,7 +84,7 @@
             ],
             "subType": 0
         },
-        "DRIFTWOOD_3": {
+        "DRIFTWOOD_4": {
             "objType": 4,
             "position": [
                 65.80000305175781,
@@ -105,7 +105,7 @@
             ],
             "subType": 0
         },
-        "FISH_4": {
+        "FISH_5": {
             "objType": 1,
             "position": [
                 112.0,
@@ -126,7 +126,7 @@
             ],
             "subType": 1
         },
-        "FISH_5": {
+        "FISH_6": {
             "objType": 1,
             "position": [
                 16.799999237060547,
@@ -147,7 +147,7 @@
             ],
             "subType": 1
         },
-        "FISH_6": {
+        "FISH_7": {
             "objType": 1,
             "position": [
                 66.4000015258789,
