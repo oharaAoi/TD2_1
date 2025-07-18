@@ -397,9 +397,9 @@ void GameScene::Update(){
 					tutorialUI_->LineUpUI(player_->GetWorldTranslation());
 					obstaclesManager_->TutorialImport("tutorial_Fish", tutorialUI_->GetSessionFishPos(), 0);
 					obstaclesManager_->TutorialImport("tutorial_bird", tutorialUI_->GetSessionBirdPos(), 0);
-					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(20, 0, 0), 1);
-					obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(220, 0, 0), 1);
-					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(450, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(100, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start2, tutorialUI_->GetStartPos() + Vector3(300, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start1, tutorialUI_->GetStartPos() + Vector3(620, 0, 0), 1);
 					player_->SetTutorialStartPosX();
 				} else{
 					currentState_ = GAME_STATE::GAME;
