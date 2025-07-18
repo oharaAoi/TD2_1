@@ -1,8 +1,8 @@
 #include "ObstaclesManager.h"
 #include "Game/Scene/GameScene.h"
 
-ObstaclesManager::ObstaclesManager(){}
-ObstaclesManager::~ObstaclesManager(){
+ObstaclesManager::ObstaclesManager() {}
+ObstaclesManager::~ObstaclesManager() {
 	Finalize();
 }
 
@@ -10,13 +10,13 @@ ObstaclesManager::~ObstaclesManager(){
 // ↓　初期化処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ObstaclesManager::Finalize(){
+void ObstaclesManager::Finalize() {
 	obstaclesList_.clear();
 }
 
-void ObstaclesManager::Init(Player* pPlayer){
+void ObstaclesManager::Init(Player* pPlayer) {
 	std::filesystem::path dire(kDirectoryPath_);
-	if(!std::filesystem::exists(kDirectoryPath_)) {
+	if (!std::filesystem::exists(kDirectoryPath_)) {
 		std::filesystem::create_directories(kDirectoryPath_);
 	}
 
@@ -42,7 +42,7 @@ void ObstaclesManager::Init(Player* pPlayer){
 // ↓　更新処理
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ObstaclesManager::Update(){
+void ObstaclesManager::Update() {
 	if (pGameScene_->GetGameState() == GAME_STATE::GAME) {
 		if (playerPos_.x - prePlayerPos_.x > 200.0f) {
 			NotMatchRandomImport();
@@ -53,8 +53,8 @@ void ObstaclesManager::Update(){
 	animationDrawList_.clear();
 	normalDrawList_.clear();
 	// リストの更新を行う
-	for(std::list<std::unique_ptr<BasePlacementObject>>::iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
-		if(!(*it)->GetIsActive()) {
+	for (std::list<std::unique_ptr<BasePlacementObject>>::iterator it = obstaclesList_.begin(); it != obstaclesList_.end();) {
+		if (!(*it)->GetIsActive()) {
 			it = obstaclesList_.erase(it);
 			continue;
 		}
@@ -65,7 +65,7 @@ void ObstaclesManager::Update(){
 		/*Collider* obj = dynamic_cast<Collider*>((*it).get());*/
 		Fish* pFish = dynamic_cast<Fish*>((*it).get());
 		if ((*it)->GetObjectType() == (int)ObjectType::FISH) {
-			if (pPlayer_->GetBodyCount()>= pFish->GetEatCount()) {//pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()
+			if (pPlayer_->GetBodyCount() >= pFish->GetEatCount()) {//pPlayer_->GetChargePower() / fishSizeDivision >= (float)pFish->GetFishSize()
 				pFish->SetIsAte(true);
 			} else {
 				pFish->SetIsAte(false);
@@ -88,7 +88,7 @@ void ObstaclesManager::Update(){
 				Bird* bird = dynamic_cast<Bird*>((*it).get());
 				bird->ScaleChange(true);	// 大きくなる
 			}
-		
+
 		} else if ((*it)->GetObjectType() == (int)ObjectType::BIRDTOGE) {
 			if (!pPlayer_->GetIsFalling()) {
 				BirdToge* birdToge = dynamic_cast<BirdToge*>((*it).get());
@@ -113,8 +113,8 @@ void ObstaclesManager::Update(){
 		// ↓ playerとの長さでactiveをoffにする
 		// -------------------------------------------------
 		float length = (((*it)->GetWorldTranslation().x - playerPos_.x));
-		if(length < -150.0f) {
- 			(*it)->SetIsActive(false);
+		if (length < -150.0f) {
+			(*it)->SetIsActive(false);
 		}
 
 		// -------------------------------------------------
@@ -149,7 +149,7 @@ void ObstaclesManager::Draw() const {
 	for (std::list<BasePlacementObject*>::const_iterator it = animationDrawList_.begin(); it != animationDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
 		// 描画範囲を伸ばすための500プラスデス
-		if(length < playerDrawLenght_ + 2000.0f) {
+		if (length < playerDrawLenght_ + 2000.0f) {
 			(*it)->Draw();
 		}
 		++it;
@@ -160,7 +160,7 @@ void ObstaclesManager::AllFileClear() {
 	levelFileName_.clear();
 }
 
-void ObstaclesManager::RandomImport(){
+void ObstaclesManager::RandomImport() {
 	// レベルごとでファイル名が保存がされているため、現在のレベルの配列から文字列を取得する
 	if (levelFileName_[importLevel_].size() - 1 <= 0) {
 		return;
@@ -173,20 +173,20 @@ void ObstaclesManager::RandomImport(){
 	Log("Load : GameData[" + randomFileName + "]\n");
 }
 
-void ObstaclesManager::NotMatchRandomImport(){
+void ObstaclesManager::NotMatchRandomImport() {
 	// レベルごとでファイル名が保存がされているため、現在のレベルの配列から文字列を取得する
-	if(levelFileName_[importLevel_].size() - 1 <= 0) {
+	if (levelFileName_[importLevel_].size() - 1 <= 0) {
 		return;
 	}
 
 	int fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
-	if(fileNum == prePattern){
-		for(int i = 0; i < 5; i++)
-		{
-			if(fileNum != prePattern){ break; }
+	for (int index = 0; index < 10; ++index) {
+		if (fileNum == prePattern || fileNum == prePrePattern) {
 			fileNum = RandomInt(0, static_cast<int>(levelFileName_[importLevel_].size()) - 1);
 		}
 	}
+
+	prePrePattern = prePattern;
 	prePattern = fileNum;
 	std::string randomFileName = levelFileName_[importLevel_][fileNum];
 
@@ -243,8 +243,8 @@ void ObstaclesManager::TutorialImport(const std::string& fileName, const Vector3
 // ↓　ランダム配置の追加
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ObstaclesManager::RandomImportCreate(){
-	for(auto it = randomImportArray_.begin(); it != randomImportArray_.end();) {
+void ObstaclesManager::RandomImportCreate() {
+	for (auto it = randomImportArray_.begin(); it != randomImportArray_.end();) {
 
 		float length = std::abs(it->pos_.x - playerPos_.x);
 
@@ -254,7 +254,7 @@ void ObstaclesManager::RandomImportCreate(){
 		float randTheta = 0.0f;
 		Vector3 direction{};
 
-		if(length < playerDrawLenght_) {
+		if (length < playerDrawLenght_) {
 			auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
 			Quaternion rotate = {
 				it->rotate_.x,
@@ -264,7 +264,7 @@ void ObstaclesManager::RandomImportCreate(){
 			};
 
 			Vector3 createPos = it->pos_;
-			switch(it->type_) {
+			switch (it->type_) {
 			case PlacementObjType::ROCK:
 
 				obj.reset(new Rock);
@@ -277,7 +277,7 @@ void ObstaclesManager::RandomImportCreate(){
 				obj.reset(new Fish);
 				fish = dynamic_cast<Fish*>(obj.get());
 				fishSize = FISH_SIZE(RandomInt(0, (int)FISH_SIZE::kFishSizeCount - 1));
-				
+
 				fish->Init();
 				fish->ApplyLoadData(it->scale_, rotate, createPos, it->subType_);
 				fish->IndividualFromCommon(it->subType_);
@@ -361,8 +361,8 @@ void ObstaclesManager::RandomImportCreate(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　引数の配列の中にあるファイルを取得
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void ObstaclesManager::SetObstacles(const std::vector<std::string>& stageInformation){
-	for(size_t oi = 0; oi < stageInformation.size(); ++oi) {
+void ObstaclesManager::SetObstacles(const std::vector<std::string>& stageInformation) {
+	for (size_t oi = 0; oi < stageInformation.size(); ++oi) {
 		Inport(stageInformation[oi], importLevel_);
 	}
 }
@@ -370,8 +370,8 @@ void ObstaclesManager::SetObstacles(const std::vector<std::string>& stageInforma
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // ↓　障害物を実際にリストに追加する
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
-	for(size_t oi = 0; oi < groupMap_[level][fileName].loadData_.size(); ++oi) {
+void ObstaclesManager::Inport(const std::string& fileName, uint32_t level) {
+	for (size_t oi = 0; oi < groupMap_[level][fileName].loadData_.size(); ++oi) {
 		auto& objData = groupMap_[level][fileName].loadData_;
 		auto& obj = obstaclesList_.emplace_back(std::make_unique<BasePlacementObject>());
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
@@ -379,7 +379,7 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 
 		createPos.x += playerPos_.x + playerDrawLenght_ + 100.0f;
 
-		switch(objData[oi].type_) {
+		switch (objData[oi].type_) {
 		case PlacementObjType::ROCK:
 			obj.reset(new Rock);
 			obj->Init();
@@ -394,10 +394,10 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 			obj.reset(new Bird);
 			obj->Init();
 			// 60.0f以上の高さにいたら少し上げる
-			if(pPlayer_->GetTransform()->GetTranslation().y >= birdAdjustmentHeight&& createPos.y>=30){
+			if (pPlayer_->GetTransform()->GetTranslation().y >= birdAdjustmentHeight && createPos.y >= 30) {
 				createPos.y += std::abs(pPlayer_->GetTransform()->GetTranslation().y - createPos.y) * birdPopYRaito_;
 			}
-			createPos.y = std::clamp(createPos.y, 11.0f,999.0f);
+			createPos.y = std::clamp(createPos.y, 11.0f, 999.0f);
 			obj->ApplyLoadData(objData[oi].scale_, rotate, createPos, objData[oi].subType_);
 
 			{
@@ -429,11 +429,11 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 // ↓　すべてのファイルの読み込みを行う
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ObstaclesManager::LoadAllFile(){
+void ObstaclesManager::LoadAllFile() {
 	groupMap_.clear();
 	fileNames_.clear();
 	levelFileName_.clear();
-	for(const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
+	for (const auto& entry : std::filesystem::directory_iterator(kDirectoryPath_)) {
 		std::string fileName = entry.path().stem().string();
 		fileNames_.push_back(fileName);
 		MergeMaps(LoadFile(fileName));
@@ -444,7 +444,7 @@ void ObstaclesManager::LoadAllFile(){
 // ↓　ファイルの読み込みを行う
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const std::string& fileName){
+std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const std::string& fileName) {
 	std::map<std::string, ObstaclesManager::Group> map;
 	// 読み込むjsonファイルのフルパスを合成する
 	std::string filePath = kDirectoryPath_ + fileName + ".json";
@@ -453,7 +453,7 @@ std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const 
 	// ファイルを読み込みように開く
 	ifs.open(filePath);
 
-	if(ifs.fail()) {
+	if (ifs.fail()) {
 		std::string message = "not Exist " + fileName + ".json";
 	}
 
@@ -463,9 +463,9 @@ std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const 
 	// ファイルを閉じる
 	ifs.close();
 
-	for(auto& [topKey, nestedData] : root.items()) {
-		for(auto& [key, value] : nestedData.items()) {
-			if(key == "level") {
+	for (auto& [topKey, nestedData] : root.items()) {
+		for (auto& [key, value] : nestedData.items()) {
+			if (key == "level") {
 				map[topKey].level = value;
 			} else {
 				PlacementObjType objType = value["objType"];
@@ -481,7 +481,7 @@ std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const 
 	}
 
 	auto& fileList = levelFileName_[map[fileName].level];
-	if(std::find(fileList.begin(), fileList.end(), fileName) == fileList.end()) {
+	if (std::find(fileList.begin(), fileList.end(), fileName) == fileList.end()) {
 		fileList.push_back(fileName);
 	}
 
@@ -492,8 +492,8 @@ std::map<std::string, ObstaclesManager::Group> ObstaclesManager::LoadFile(const 
 // ↓　読み込んだデータが入ったMapを結合させる
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ObstaclesManager::MergeMaps(const std::map<std::string, Group>& map){
-	for(const auto& pair : map) {
+void ObstaclesManager::MergeMaps(const std::map<std::string, Group>& map) {
+	for (const auto& pair : map) {
 		// map1にキーが存在しない場合は新しく挿入される
 		groupMap_[pair.second.level][pair.first].loadData_.insert(
 			groupMap_[pair.second.level][pair.first].loadData_.end(),
@@ -507,9 +507,9 @@ void ObstaclesManager::MergeMaps(const std::map<std::string, Group>& map){
 // ↓　debugようにランダムに配置する関数
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ObstaclesManager::RandomAddObject(){
+void ObstaclesManager::RandomAddObject() {
 
-	for(int32_t i = 0; i < int(StageInformation::stageWidth_ / 5.0f); i++) {
+	for (int32_t i = 0; i < int(StageInformation::stageWidth_ / 5.0f); i++) {
 
 		//////////////////////////////////////////////////////
 		//                   水中
@@ -519,7 +519,7 @@ void ObstaclesManager::RandomAddObject(){
 		int rand = RandomInt(1, 100);
 
 		// 10mごとに1/3の確率で配置
-		if(rand <= 33) {
+		if (rand <= 33) {
 
 			// 1/2で魚、アイテムを切り替える
 			//if (rand % 2 == 0) {
@@ -554,7 +554,7 @@ void ObstaclesManager::RandomAddObject(){
 		//              空中
 		////////////////////////////////////////////
 
-		if(rand < 20) {
+		if (rand < 20) {
 
 			// 10mに一回、1/5の確率で出現
 			float height = RandomFloat(0.0f, 60.0f);
@@ -577,7 +577,7 @@ void ObstaclesManager::RandomAddObject(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _DEBUG
-void ObstaclesManager::Debug_Gui(){
+void ObstaclesManager::Debug_Gui() {
 	ImGui::Begin("ObstaclesManager");
 	ImGui::Text("importLevel: %d", importLevel_);
 	ImGui::Text("objectNum: %d", static_cast<int>(obstaclesList_.size()));
@@ -585,25 +585,25 @@ void ObstaclesManager::Debug_Gui(){
 
 	ImGui::DragFloat("birdPopYRaito", &birdPopYRaito_, 0.1f);
 
-	if(ImGui::Button("Reload")) {
+	if (ImGui::Button("Reload")) {
 		LoadAllFile();
 	}
 
-	if(ImGui::Button("Clear")) {
+	if (ImGui::Button("Clear")) {
 		obstaclesList_.clear();
 	}
-	if(ImGui::Button("Add")) {
+	if (ImGui::Button("Add")) {
 		Inport(inportFileName_, debug_importLevel_);
 	}
 	ImGui::SameLine();
-	if(ImGui::Button("Inport")) {
+	if (ImGui::Button("Inport")) {
 		obstaclesList_.clear();
 		groupMap_.clear();
 		LoadAllFile();
 		Inport(inportFileName_, debug_importLevel_);
 	}
 
-	if(!fileNames_.empty()) {
+	if (!fileNames_.empty()) {
 		if (debug_importLevel_ < fileNames_.size()) {
 			inportFileName_ = fileNames_[debug_importLevel_];
 		}
@@ -626,20 +626,20 @@ void ObstaclesManager::Debug_Gui(){
 	//	ImGui::TreePop();
 	//} 
 
-	if(ImGui::TreeNode("Level")) {
-		if(ImGui::Button("-")) { debug_importLevel_--; }
+	if (ImGui::TreeNode("Level")) {
+		if (ImGui::Button("-")) { debug_importLevel_--; }
 		ImGui::SameLine();
-		if(ImGui::Button("+")) { debug_importLevel_++; }
+		if (ImGui::Button("+")) { debug_importLevel_++; }
 		ImGui::SameLine();
 		ImGui::Text(" level:%d", debug_importLevel_);
 		debug_importLevel_ = std::clamp(static_cast<int>(debug_importLevel_), 0, 10);
-		if(ImGui::BeginCombo("##InportFileName", &inportFileName_[0], ImGuiComboFlags_HeightLargest)) {
-			for(int i = 0; i < levelFileName_[debug_importLevel_].size(); i++) {
+		if (ImGui::BeginCombo("##InportFileName", &inportFileName_[0], ImGuiComboFlags_HeightLargest)) {
+			for (int i = 0; i < levelFileName_[debug_importLevel_].size(); i++) {
 				const bool isSelected = (inportIndex_ == i);
-				if(ImGui::Selectable(levelFileName_[debug_importLevel_][i].c_str(), isSelected)) {
+				if (ImGui::Selectable(levelFileName_[debug_importLevel_][i].c_str(), isSelected)) {
 					inportIndex_ = i;
 				}
-				if(isSelected) {
+				if (isSelected) {
 					ImGui::SetItemDefaultFocus();
 				}
 			}
