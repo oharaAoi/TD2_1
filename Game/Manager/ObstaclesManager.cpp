@@ -579,6 +579,7 @@ void ObstaclesManager::RandomAddObject(){
 #ifdef _DEBUG
 void ObstaclesManager::Debug_Gui(){
 	ImGui::Begin("ObstaclesManager");
+	ImGui::Text("importLevel: %d", importLevel_);
 	ImGui::Text("objectNum: %d", static_cast<int>(obstaclesList_.size()));
 	ImGui::DragFloat("drawLenght : %f", &playerDrawLenght_);
 
