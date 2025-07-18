@@ -485,11 +485,8 @@ void GameScene::Update(){
 
 	if(player_->GetMaxFlyingTime() > level3){
 		obstaclesManager_->SetLevel(3);
-
-
 	} else if(player_->GetMaxFlyingTime() > level2){
 		obstaclesManager_->SetLevel(2);
-
 	}
 
 
