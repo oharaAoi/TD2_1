@@ -139,7 +139,7 @@ void ObstaclesManager::Draw() const {
 	for (std::list<BasePlacementObject*>::const_iterator it = normalDrawList_.begin(); it != normalDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
 		// 描画範囲を伸ばすための500プラスデス
-		if (length < playerDrawLenght_ + 1000.0f) {
+		if (length < playerDrawLenght_ + 2000.0f) {
 			(*it)->Draw();
 		}
 		++it;
@@ -149,7 +149,7 @@ void ObstaclesManager::Draw() const {
 	for (std::list<BasePlacementObject*>::const_iterator it = animationDrawList_.begin(); it != animationDrawList_.end();) {
 		float length = std::abs((playerPos_ - (*it)->GetWorldTranslation()).Length());
 		// 描画範囲を伸ばすための500プラスデス
-		if(length < playerDrawLenght_ + 1000.0f) {
+		if(length < playerDrawLenght_ + 2000.0f) {
 			(*it)->Draw();
 		}
 		++it;
@@ -377,7 +377,7 @@ void ObstaclesManager::Inport(const std::string& fileName, uint32_t level){
 		Quaternion rotate = { objData[oi].rotate_.x,objData[oi].rotate_.y,objData[oi].rotate_.z,objData[oi].rotate_.w };
 		Vector3 createPos = objData[oi].pos_;
 
-		createPos.x += playerPos_.x + playerDrawLenght_;
+		createPos.x += playerPos_.x + playerDrawLenght_ + 100.0f;
 
 		switch(objData[oi].type_) {
 		case PlacementObjType::ROCK:

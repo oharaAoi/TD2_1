@@ -403,9 +403,9 @@ void GameScene::Update(){
 					player_->SetTutorialStartPosX();
 				} else{
 					currentState_ = GAME_STATE::GAME;
-					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(140, 0, 0), 1);
-					obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(250, 0, 0), 1);
-					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(450, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(150, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start2, player_->GetWorldTranslation() + Vector3(400, 0, 0), 1);
+					obstaclesManager_->TutorialImport(start1, player_->GetWorldTranslation() + Vector3(650, 0, 0), 1);
 					gameStartUI_->SetUI();
 					missionUI_->Start();
 					player_->SetIsTutorial(false);

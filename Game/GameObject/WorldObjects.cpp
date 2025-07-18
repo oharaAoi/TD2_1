@@ -251,9 +251,12 @@ void WorldObjects::CollisionPlayerToWaterSpace(Player* player) {
 	}
 }
 
+
+#ifdef _DEBUG
 void WorldObjects::Debug_Gui() {
 	ImGui::DragFloat("groundDepth", &StageInformation::groundDepth_, 0.1f);
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
 		grounds_[oi]->GetTransform()->SetTranslationY(StageInformation::groundDepth_);
 	}
 }
+#endif
