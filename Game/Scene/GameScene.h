@@ -121,8 +121,8 @@ private:
 	bool startSceneChange_;//シーン遷移が始まっているか
 	float BGM_volumeT_ = 1.0f;
 	float BGM_masterVolumeRate_ = 1.0f;
-	float level2=350;
-	float level3=650;
+	float level2=500;
+	float level3=1000;
 	float speedMeterAlpha_;
 	bool isStartupScene_ = true;
 	float maxHeight_ = 0.0f;
