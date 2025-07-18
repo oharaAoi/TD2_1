@@ -22,6 +22,12 @@ public:
 
 	void CollisionPlayerToWaterSpace(Player* player);
 
+#ifdef _DEBUG
+
+	void Debug_Gui();
+
+#endif
+
 private:
 
 	float playerPos_;
