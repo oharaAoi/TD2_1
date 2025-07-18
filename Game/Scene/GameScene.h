@@ -85,7 +85,6 @@ public:
 	void UpdateColliderList();
 
 public:
-	static float GetGroundDepth() { return groundDepth_; }
 	static GAME_STATE GetGameState() { return currentState_; }
 	static GAME_STATE GetPreGameState() { return preState_; }
 	void CheckAddSplash();
@@ -116,7 +115,6 @@ private:
 	float startSceneTime_ = 2.0f;
 	float stageWidth_ = 8000.0f;
 	float stageWidthEvery_ = 32.0f;
-	static float groundDepth_;
 	bool isEndAndInWater_ = false;
 	float fadeWaitTime_ = 0.5f;
 	float outgameWaitTime_ = 3.0f;

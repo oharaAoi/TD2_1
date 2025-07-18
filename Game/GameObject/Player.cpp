@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Game/Scene/GameScene.h"
 #include "Game/Attachment/PlayerAnimator.h"
+#include "Game/Information/StageInformation.h"
 
 Player::Player(){
 	Init();
@@ -383,7 +384,7 @@ void Player::Move(){
 void Player::MoveLimit(){
 	Vector3 translate = transform_->GetTranslation();
 	// 地面に接触したら
-	if(translate.y - radius_ <= GameScene::GetGroundDepth()){
+	if(translate.y - radius_ <= StageInformation::groundDepth_){
 		// 移動制限		
 		//transform_->SetTranslaion({ translate.x,GameScene::GetGroundDepth() + radius_,translate.z });
 		pressTime_ = 0.0f;
@@ -391,7 +392,7 @@ void Player::MoveLimit(){
 		temporaryAcceleration_ += ((kMinMoveSpeed_ - baseSpeed_) - temporaryAcceleration_) * 0.1f * GameTimer::DeltaTime();
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 	}
-	transform_->SetTranslaion({ translate.x,std::clamp(translate.y,GameScene::GetGroundDepth() + 2.0f,2000.0f),translate.z });
+	transform_->SetTranslaion({ translate.x,std::clamp(translate.y,StageInformation::groundDepth_ + 2.0f,2000.0f),translate.z });
 
 }
 
