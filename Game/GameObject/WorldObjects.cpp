@@ -254,6 +254,6 @@ void WorldObjects::CollisionPlayerToWaterSpace(Player* player) {
 void WorldObjects::Debug_Gui() {
 	ImGui::DragFloat("groundDepth", &StageInformation::groundDepth_, 0.1f);
 	for (uint32_t oi = 0; oi < kStageMax_; ++oi) {
-		grounds_[oi]->GetTransform()->SetTranslaion(Vector3(0.0f, StageInformation::groundDepth_, 0.0f));
+		grounds_[oi]->GetTransform()->SetTranslationY(StageInformation::groundDepth_);
 	}
 }

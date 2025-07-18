@@ -188,7 +188,7 @@ private:
 
 	// ---------- nextSceneを変える用 ---------- //
 	float notControlTime_;
-	float notControlTimeLimit_ = 5.0f;
+	float notControlTimeLimit_ = 10.0f;
 
 	//デバッグ用
 	std::unique_ptr<BaseGameObject> debugModel_;
