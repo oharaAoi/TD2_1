@@ -47,7 +47,7 @@ void Camera::Update(){
 	if(pPlayer_->GetTransform()->GetTranslation().y < 10.0f){
 		target_ = pPlayer_->GetAboveSurfaceTransform();
 		// ターゲットからの距離を水深に応じて更新
-		offsetLength_ = 80.0f + pPlayer_->GetSwimmingDepth() * 3.0f;
+		offsetLength_ = 80.0f + pPlayer_->GetSwimmingDepth() * 1.5f;
 
 	} else{
 		target_ = pPlayer_->GetTransform();
