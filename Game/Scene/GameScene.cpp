@@ -35,7 +35,7 @@ void GameScene::Init(){
 	JsonAdjustmentItem::GetInstance()->Init("GameScene");
 
 	gamePlayTimer_ = std::make_unique<GamePlayTimer>();
-	gamePlayTimer_->Init(50.0f);
+	gamePlayTimer_->Init(80.0f);
 
 	isGameStart_ = true;
 	notControlTime_ = 0.0f;

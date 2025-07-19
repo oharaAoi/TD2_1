@@ -98,7 +98,7 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 		if (playerSpeed >= (float)nowSpeedMission_) {
 			// タイムを増やす
 			if (!isSpeedCheck_) {
-				pGamePlayTimer_->AddTime(10.0f);
+				pGamePlayTimer_->AddTime(5.0f);
 				AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 			}
 			isSpeedCheck_ = true;
@@ -108,7 +108,7 @@ void MissionUI::Update(float playerSpeed, float playerPosY) {
 	if (isHeightAppearanceFinish_) {
 		if (playerPosY >= (float)nowHeightMission_) {
 			if (!isHeightCheck_) {
-				pGamePlayTimer_->AddTime(10.0f);
+				pGamePlayTimer_->AddTime(5.0f);
 				AudioPlayer::SinglShotPlay("missionClear.mp3", 0.3f);
 			}
 			isHeightCheck_ = true;
