@@ -178,9 +178,9 @@ private:
 	const float kMinBaseSpeed_ = 35;
 
 	// アイテム取得時などに追加する速度
-	float increaseVelocity_ = 10.0f;
+	float increaseVelocity_ = 15.0f;
 	float decreaseVelocity_ = -8.0f;
-	float accelerationResetSpeedRate_ = 0.25f;
+	float accelerationResetSpeedRate_ = 0.20f;
 
 	// プレイヤーが泳ぐ際のの角度決定に関する変数
 	float pressTime_;
