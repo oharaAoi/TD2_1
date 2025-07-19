@@ -878,7 +878,7 @@ void Player::MoveWater(){
 				}
 			}
 			seCoolTime -= GameTimer::DeltaTime();
-			if (seCoolTime <= 0 && (Input::IsTriggerKey(DIK_SPACE) || Input::GetIsPadTrigger(BUTTON_A))) {
+			if(seCoolTime <= 0 && (Input::IsTriggerKey(DIK_SPACE) || Input::GetIsPadTrigger(BUTTON_A))){
 				AudioPlayer::SinglShotPlay("MoveChangeUp.mp3", 0.1f);
 				seCoolTime = 0.25f;
 			}/*
@@ -891,10 +891,12 @@ void Player::MoveWater(){
 		}
 
 		// 一時加速、減速を徐々に元に戻す
-		if(temporaryAcceleration_ > 0.0f){
-			temporaryAcceleration_ -= (increaseVelocity_ * 0.5f) * GameTimer::DeltaTime();
-		} else{
-			temporaryAcceleration_ += (increaseVelocity_ * 0.5f) * GameTimer::DeltaTime();
+		if(!autoFlying_ || isCutIn_){
+			if(temporaryAcceleration_ > 0.0f){
+				temporaryAcceleration_ -= (increaseVelocity_ * accelerationResetSpeedRate_) * GameTimer::DeltaTime();
+			} else{
+				temporaryAcceleration_ += (increaseVelocity_ * accelerationResetSpeedRate_) * GameTimer::DeltaTime();
+			}
 		}
 		temporaryAcceleration_ = std::clamp(temporaryAcceleration_, kMinAcceleration_, kMaxAcceleration_);
 
@@ -946,9 +948,9 @@ void Player::MoveSky(){
 	//	}
 	//}
 
-	if (isTutorial_) {
-		if (autoFlying_) {
-			if (isFalling_) {
+	if(isTutorial_){
+		if(autoFlying_){
+			if(isFalling_){
 				flyingTutorialDisplay_ = true;
 			}
 		}
