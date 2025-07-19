@@ -165,10 +165,10 @@ private:
 	float baseSpeed_;// 加速しない状態での速度
 	float temporaryAcceleration_;// 一時的な加速度
 	const float defaultSpeed = 38.0f;
-	const float kMinMoveSpeed_ = 25.0f;
+	const float kMinMoveSpeed_ = 45.0f;
 	const float kMaxMoveSpeed_ = 150.0f;
 
-	const float kMinAcceleration_ = -30;
+	const float kMinAcceleration_ = -10;
 	const float kMaxAcceleration_ = 100;
 
 	//基礎速度のパラメーター
